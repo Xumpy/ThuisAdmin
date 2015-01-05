@@ -11,7 +11,7 @@
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd"
        xmlns:context="http://www.springframework.org/schema/context">
 
-    <context:component-scan base-package="com.xumpy.thuisadmin" />
+    <context:component-scan base-package="com.xumpy.thuisadmin.javaconfig" />
     
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
 
@@ -19,6 +19,7 @@
         <property name="mappings">
             <props>
                 <prop key="index">indexController</prop>
+                <prop key="login">loginController</prop>
             </props>
         </property>
     </bean>
@@ -31,5 +32,9 @@
     <bean name="indexController"
           class="org.springframework.web.servlet.mvc.ParameterizableViewController"
           p:viewName="index" />
+    
+    <bean name="loginController"
+          class="org.springframework.web.servlet.mvc.ParameterizableViewController"
+          p:viewName="login" />
 
 </beans>
