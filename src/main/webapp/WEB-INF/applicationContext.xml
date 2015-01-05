@@ -21,7 +21,7 @@
             <security:logout logout-success-url="/login" />
             <security:form-login 
 		    login-page="/login" 
-		    default-target-url="/users/index" 
+		    default-target-url="/users/overview" 
 			authentication-failure-url="/login?error" 
 			username-parameter="username"
 			password-parameter="password" />
