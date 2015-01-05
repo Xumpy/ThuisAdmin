@@ -4,7 +4,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd">
 
-<html>
+<html ng-app>
     <head>
         <script src="<c:url value="/resources/jquery-1.11.1.min.js" />"></script>
         <script src="<c:url value="/resources/angular.min.js" />"></script>
@@ -16,13 +16,16 @@
         <title>ThuisAdministratie</title>
     </head>
 
-    <body>
+    <body ng-controller="fController">
         <%@include file="/resources/template/header.html" %>
         <form class="form-horizontal">
             <div class="form-group">
                 <label for="rekening" class="col-lg-1 control-label">Rekening</label>
                 <div class="col-lg-2">
-                  <input class="form-control" id="rekening" placeholder="Rekening" type="text">
+                    <select class="form-control" ng-model="rekening"
+                            ng-options="item.naam for item in rekeningen track by rekeningen.pk_id">
+                        <option value="">--Kies Rekening--</option>
+                    </select>
                 </div>
                 <label for="beginDatum" class="col-lg-1 control-label">Begin Datum</label>
                 <div class="col-lg-2">
@@ -35,4 +38,12 @@
             </div>
         </form>
     </body>
+    
+    <script type="text/javascript">
+        function fController($scope, $http) {
+            $http.get('/ThuisAdmin/json/rekeningen').success(function(data){
+               $scope.rekeningen = data; 
+            });
+        }
+    </script>
 </html>
