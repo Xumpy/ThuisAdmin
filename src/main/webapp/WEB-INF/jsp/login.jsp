@@ -13,7 +13,7 @@
   </head>
   <body>
     <div tiles:fragment="content">
-        <form name="f" th:action="@{/login}" method="post">               
+        <form name="loginForm" action="<c:url value='j_spring_security_check' />" method="post">               
             <fieldset>
                 <legend>Please Login</legend>
                 <div th:if="${param.logout}" class="alert alert-success"> 
