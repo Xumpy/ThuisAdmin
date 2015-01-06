@@ -20,13 +20,6 @@
         <%@include file="/resources/template/header.html" %>
         <form class="form-horizontal" ng-submit="submitGraphiekData()">
             <div class="form-group">
-                <label for="rekening" class="col-lg-1 control-label">Rekening</label>
-                <div class="col-lg-2">
-                    <select id="rekening" class="form-control" ng-model="financeOverview.rekening"
-                            ng-options="rekening.naam for rekening in rekeningen track by rekening.pk_id">
-                        <option value="">--Kies Rekening--</option>
-                    </select>
-                </div>
                 <label for="beginDatum" class="col-lg-1 control-label">Begin Datum</label>
                 <div class="col-lg-2">
                     <input data-provide="datepicker" data-date-format="dd/mm/yyyy" class="form-control" id="beginDatum" placeholder="Begin Datum" 
@@ -88,11 +81,13 @@
         
         function drawChart(jsonData) {
           var dataGoogle = new google.visualization.DataTable();
+          var mapPkId = [];
           dataGoogle.addColumn('string', 'Groep');
           dataGoogle.addColumn('number', 'Opbrensten');
           dataGoogle.addColumn('number', 'Kosten');
 
           $.each(jsonData, function(key, value){
+              mapPkId[key] = value.groepId;
               dataGoogle.addRow([value.naam, value.totaal_opbrengsten, value.totaal_kosten]); 
           });
           
@@ -107,6 +102,18 @@
 
           var chart = new google.charts.Bar(document.getElementById('ex0'));
           chart.draw(dataGoogle, options);
+          
+          google.visualization.events.addListener(chart, 'select', selectHandler);
+          
+            function selectHandler() {
+                try{
+                    var selection = chart.getSelection();
+                    alert(mapPkId[selection[0].row]);
+                    // Column 1 = Opbrengsten
+                    // Column 2 = Kosten
+                    alert(selection[0].column);
+                } catch(err){}
+           }
         }
     </script>
 </html>

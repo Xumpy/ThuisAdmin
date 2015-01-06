@@ -6,16 +6,20 @@
 package com.xumpy.thuisadmin.model.view;
 
 import com.xumpy.thuisadmin.model.db.Rekeningen;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Nico
  */
+@Component
+@Scope("session")
 public class FinanceHeader {
     private String beginDatum;
     private String eindDatum;
     private Rekeningen rekening;
-    
+
     public Rekeningen getRekening() {
         return rekening;
     }

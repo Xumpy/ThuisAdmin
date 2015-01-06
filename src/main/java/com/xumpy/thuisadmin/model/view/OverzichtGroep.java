@@ -16,6 +16,15 @@ import javax.persistence.Id;
 @Entity
 public class OverzichtGroep implements Serializable{
     @Id
+    private Integer groepId;
+
+    public Integer getGroepId() {
+        return groepId;
+    }
+
+    public void setGroepId(Integer groepId) {
+        this.groepId = groepId;
+    }
     private String naam;
     private Double totaal_opbrengsten;
     private Double totaal_kosten;

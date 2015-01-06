@@ -55,7 +55,11 @@ public class BedragenDaoImpl extends HibernateDaoSupport implements BedragenDao{
                                           "            in_eind_datum => ?," +
                                           "            in_interval => 1)) " +
                                           "order by datum asc");
-        query.setInteger(0, rekening.getPk_id());
+        if (rekening == null){
+            query.setInteger(0, -1);
+        } else {
+            query.setInteger(0, rekening.getPk_id());
+        }
         query.setDate(1, beginDate);
         query.setDate(2, eindDate);
         
@@ -65,7 +69,8 @@ public class BedragenDaoImpl extends HibernateDaoSupport implements BedragenDao{
     @Override
     public List<OverzichtGroep> graphiekOverzichtGroep(Date beginDate, Date eindDate) {
         Session session = sessionFactory.openSession();
-        Query query = session.createSQLQuery("select ttg.naam," +
+        Query query = session.createSQLQuery("select ttg.pk_id as groepId," +
+                                             "       ttg.naam," +
                                              "       nvl(tot.totaal_bedrag_opbrengsten,0) as totaal_opbrengsten," + 
                                              "       nvl(tot.totaal_bedrag_kosten, 0) as totaal_kosten " +
                                              " from table(pkg_ta_rekening.fun_bedrag_groep(" +

@@ -9,7 +9,7 @@
     <link href="<c:url value="/resources/bootstrap/css/datepicker3.css" />" rel="stylesheet">
     <script src="<c:url value="/resources/bootstrap/js/bootstrap.min.js" />"></script>
     <script src="<c:url value="/resources/bootstrap/js/bootstrap-datepicker.js" />"></script>
-    <title tiles:fragment="title">Messages : Create</title>
+    <title tiles:fragment="title">Login ThuisAdmin</title>
   </head>
   <body>
         <div class="panel panel-default">

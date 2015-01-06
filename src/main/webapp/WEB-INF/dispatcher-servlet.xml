@@ -87,7 +87,5 @@
     </bean>
     
     <bean id="bedragenSrv" class="com.xumpy.thuisadmin.services.BedragenSrvImpl" />
-    
-    <bean id="financeOverview" class="com.xumpy.thuisadmin.model.view.FinanceOverview" />
-    <bean id="financeHeader" class="com.xumpy.thuisadmin.model.view.FinanceHeader" />
+   
 </beans>
