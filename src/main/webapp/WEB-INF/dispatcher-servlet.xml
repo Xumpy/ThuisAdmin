@@ -11,8 +11,7 @@
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd"
        xmlns:context="http://www.springframework.org/schema/context">
 
-    <context:component-scan base-package="com.xumpy.thuisadmin.javaconfig" />
-    <context:component-scan base-package="com.xumpy.thuisadmin.controller" />
+    <context:component-scan base-package="com.xumpy.thuisadmin" />
     
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
 
@@ -21,6 +20,7 @@
             <props>
                 <prop key="users/overview">indexController</prop>
                 <prop key="login">loginController</prop>
+                <prop key="users/overzichtPerGroep">overzichtPerGroepController</prop>
             </props>
         </property>
     </bean>
@@ -33,6 +33,10 @@
     <bean name="indexController"
           class="org.springframework.web.servlet.mvc.ParameterizableViewController"
           p:viewName="users/overview" />
+    
+    <bean name="overzichtPerGroepController"
+          class="org.springframework.web.servlet.mvc.ParameterizableViewController"
+          p:viewName="users/overzichtPerGroep" />
     
     <bean name="loginController"
           class="org.springframework.web.servlet.mvc.ParameterizableViewController"
@@ -63,6 +67,7 @@
         <property name="packagesToScan">
             <list>
                 <value>com.xumpy.thuisadmin.model.db</value>
+                <value>com.xumpy.thuisadmin.model.view</value>
             </list>
         </property>
     </bean>
@@ -84,4 +89,5 @@
     <bean id="bedragenSrv" class="com.xumpy.thuisadmin.services.BedragenSrvImpl" />
     
     <bean id="financeOverview" class="com.xumpy.thuisadmin.model.view.FinanceOverview" />
+    <bean id="financeHeader" class="com.xumpy.thuisadmin.model.view.FinanceHeader" />
 </beans>

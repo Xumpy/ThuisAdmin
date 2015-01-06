@@ -13,10 +13,9 @@
         <link href="<c:url value="/resources/bootstrap/css/datepicker3.css" />" rel="stylesheet">
         <script src="<c:url value="/resources/bootstrap/js/bootstrap.min.js" />"></script>
         <script src="<c:url value="/resources/bootstrap/js/bootstrap-datepicker.js" />"></script>
-        <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart']}]}"></script>
+        <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['bar']}]}"></script>
         <title>ThuisAdministratie</title>
     </head>
-
     <body ng-controller="fController">
         <%@include file="/resources/template/header.html" %>
         <form class="form-horizontal" ng-submit="submitGraphiekData()">
@@ -80,31 +79,33 @@
             });
             
             $scope.submitGraphiekData = function(){
-                var res = $http.post('/ThuisAdmin/json/graphiek_overview', $scope.financeOverview);
+                var res = $http.post('/ThuisAdmin/json/graphiek_overzicht_per_groep', $scope.financeOverview);
                 res.success(function(data) {
-                    drawChart(data);
+                    drawChart(data.overzichtGroep);
                 });
             }
         }
         
         function drawChart(jsonData) {
           var dataGoogle = new google.visualization.DataTable();
-          dataGoogle.addColumn('string', 'Datum');
-          dataGoogle.addColumn('number', 'Bedrag');
+          dataGoogle.addColumn('string', 'Groep');
+          dataGoogle.addColumn('number', 'Opbrensten');
+          dataGoogle.addColumn('number', 'Kosten');
 
-          dataGoogle.addRows(jsonData);
-
+          $.each(jsonData, function(key, value){
+              dataGoogle.addRow([value.naam, value.totaal_opbrengsten, value.totaal_kosten]); 
+          });
+          
           var options = {
-              width: 1500,
-              height: 600,
-              hAxis: {
-                title: 'Datum'
-              },
-              vAxis: {
-                title: 'Bedrag'
-              }
-          }
-          var chart = new google.visualization.LineChart(document.getElementById('ex0'));
+            width: 600,
+            height: 600,
+            chart: {
+              title: 'Kosten/Opbrengsten',
+            },
+            bars: 'horizontal' // Required for Material Bar Charts.
+          };
+
+          var chart = new google.charts.Bar(document.getElementById('ex0'));
           chart.draw(dataGoogle, options);
         }
     </script>

@@ -7,6 +7,7 @@ package com.xumpy.thuisadmin.services;
 
 import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
+import com.xumpy.thuisadmin.model.view.FinanceOverzichtGroep;
 import java.util.Date;
 import java.util.List;
 
@@ -21,4 +22,6 @@ public interface BedragenSrv {
     public List<Bedragen> graphiekBedrag(Rekeningen rekening,
                                          Date beginDate,
                                          Date eindDate);
+    public FinanceOverzichtGroep graphiekOverzichtGroep(Date beginDate,
+                                                        Date eindDate);
 }

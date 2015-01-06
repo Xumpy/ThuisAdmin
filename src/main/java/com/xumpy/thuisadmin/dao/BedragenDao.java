@@ -7,6 +7,7 @@ package com.xumpy.thuisadmin.dao;
 
 import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
+import com.xumpy.thuisadmin.model.view.OverzichtGroep;
 import java.util.Date;
 import java.util.List;
 
@@ -21,4 +22,6 @@ public interface BedragenDao {
     public List<Bedragen> graphiekBedrag(Rekeningen rekening,
                                          Date beginDate,
                                          Date eindDate);
+    public List<OverzichtGroep> graphiekOverzichtGroep(Date beginDate,
+                                                       Date eindDate);
 }

@@ -7,6 +7,8 @@ package com.xumpy.thuisadmin.controller;
 
 import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.view.FinanceOverview;
+import com.xumpy.thuisadmin.model.view.FinanceOverzichtGroep;
+import com.xumpy.thuisadmin.model.view.OverzichtGroep;
 import com.xumpy.thuisadmin.services.BedragenSrv;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -41,5 +43,18 @@ public class FetchGraphiekOverview {
         Date eindDate = format.parse(strEindDate);
         
         return bedragenSrv.graphiekBedrag(financeOverview.getRekening(), startDate, eindDate);
+    }
+    
+    @RequestMapping("/json/graphiek_overzicht_per_groep")
+    public @ResponseBody FinanceOverzichtGroep fetchGraphiekOverzichtPerGroep(@RequestBody FinanceOverview financeOverview) throws ParseException{
+        String strStartDate = financeOverview.getBeginDatum();
+        String strEindDate = financeOverview.getEindDatum();
+        
+        DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        
+        Date startDate = format.parse(strStartDate);
+        Date eindDate = format.parse(strEindDate);
+        
+        return bedragenSrv.graphiekOverzichtGroep(startDate, eindDate);
     }
 }
