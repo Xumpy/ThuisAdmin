@@ -44,7 +44,7 @@ public class BedragenDaoImpl extends HibernateDaoSupport implements BedragenDao{
     }
 
     @Override
-    public List<Bedragen> graphiekBedrag(Integer rekening_id, Date beginDate, Date eindDate) {
+    public List<Bedragen> graphiekBedrag(Rekeningen rekening, Date beginDate, Date eindDate) {
         Session session = sessionFactory.openSession();
         Query query = session.createSQLQuery("select to_char(datum, 'DD-MM-RRRR') as label," +
                                           "       rekening_bedrag as value " +
@@ -54,7 +54,7 @@ public class BedragenDaoImpl extends HibernateDaoSupport implements BedragenDao{
                                           "            in_eind_datum => ?," +
                                           "            in_interval => 1)) " +
                                           "order by datum asc");
-        query.setInteger(0, rekening_id);
+        query.setInteger(0, rekening.getPk_id());
         query.setDate(1, beginDate);
         query.setDate(2, eindDate);
         

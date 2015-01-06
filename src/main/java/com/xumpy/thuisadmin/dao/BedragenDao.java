@@ -18,7 +18,7 @@ public interface BedragenDao {
     void save(Bedragen bedragen);
     void update(Bedragen bedragen);
     void delete(Bedragen bedragen);
-    public List<Bedragen> graphiekBedrag(Integer rekening_id,
+    public List<Bedragen> graphiekBedrag(Rekeningen rekening,
                                          Date beginDate,
                                          Date eindDate);
 }

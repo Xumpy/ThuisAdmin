@@ -37,7 +37,7 @@ public class BedragenSrvImpl implements BedragenSrv{
     }
 
     @Override
-    public List<Bedragen> graphiekBedrag(Integer rekening_id, Date beginDate, Date eindDate) {
-        return bedragenDao.graphiekBedrag(rekening_id, beginDate, eindDate);
+    public List<Bedragen> graphiekBedrag(Rekeningen rekening, Date beginDate, Date eindDate) {
+        return bedragenDao.graphiekBedrag(rekening, beginDate, eindDate);
     }
 }
