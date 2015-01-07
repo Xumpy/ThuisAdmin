@@ -8,6 +8,7 @@ package com.xumpy.thuisadmin.services;
 import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.model.view.FinanceOverzichtGroep;
+import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragen;
 import java.util.Date;
 import java.util.List;
 
@@ -24,4 +25,8 @@ public interface BedragenSrv {
                                          Date eindDate);
     public FinanceOverzichtGroep graphiekOverzichtGroep(Date beginDate,
                                                         Date eindDate);
+    public List<OverzichtGroepBedragen> rapportOverzichtGroepBedragen(Integer typeGroepId, 
+                                                                      Integer typeGroepKostOpbrengst, 
+                                                                      Date beginDate, 
+                                                                      Date eindDate);
 }

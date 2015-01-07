@@ -4,7 +4,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd">
 
-<html ng-app>
+<html ng-app="myApp">
     <head>
         <script src="<c:url value="/resources/jquery-1.11.1.min.js" />"></script>
         <script src="<c:url value="/resources/angular.min.js" />"></script>
@@ -33,16 +33,47 @@
                 <input class="btn btn-primary" type="submit" value="Submit"/>
             </div>
         </form>
-        <div id="ex0"></div>
+        <div>
+            <div id="ex0" class="col-lg-5"></div>
+            <div class="col-lg-7">
+                <table st-safe-src="reportGroepBedragen" st-table="emptyGroepBedragen" class="table table-striped table-hover ">
+                <thead>
+                  <tr>
+                      <th st-sort="type_naam">Type Naam</th>
+                      <th st-sort="bedrag">Bedrag</th>
+                      <th st-sort="datum">Datum</th>
+                      <th st-sort="omschrijving">Omschrijving</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="overzicht in emptyGroepBedragen">
+                            <td>{{overzicht.type_naam}}</td>
+                            <td>{{overzicht.bedrag}}</td>
+                            <td>{{overzicht.datum}}</td>
+                            <td>{{overzicht.omschrijving}}</td>
+                    </tr>
+                </tbody>
+		<tfoot>
+			<tr>
+				<td colspan="4" class="text-center">
+					<div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="100"></div>
+				</td>
+			</tr>
+		</tfoot>
+                </table>
+            </div>
+        </div>
     </body>
     
     <script type="text/javascript">
-        function fController($scope, $http) {
+        var app = angular.module('myApp', ['smart-table']);
+        app.controller("fController", function($scope, $http) {
             // Begin Set Header Info
-            $scope.financeOverview = [];
-            $scope.financeOverview.beginDatum = "";
-            $scope.financeOverview.eindDatum = "";
-            $scope.financeOverview.rekening = "";
+            $scope.financeOverview = {
+                beginDatum: "",
+                eindDatum: "",
+                rekening: ""
+            };
             
             $http.get('/ThuisAdmin/json/getFinanceHeader').success(function(data){
                 $scope.financeOverview = data; 
@@ -51,21 +82,25 @@
                 }
             });
             
-            $scope.$watch('financeOverview.beginDatum', function() {
+            $scope.overzichtGroepBedragen = {
+                typeGroepId: "",
+                typeGroepKostOpbrengst: "",
+                beginDatum: $scope.financeOverview.beginDatum,
+                eindDatum: $scope.financeOverview.eindDatum,
+            };
+            
+            $scope.$watchCollection('financeOverview', function() {
                 if ($scope.financeOverview.beginDatum !== "")
                     $http.post('/ThuisAdmin/json/setFinanceHeader', $scope.financeOverview);
             });
-            
-            $scope.$watch('financeOverview.eindDatum', function() {
-                if ($scope.financeOverview.eindDatum !== "")
-                    $http.post('/ThuisAdmin/json/setFinanceHeader', $scope.financeOverview);
+
+            $scope.$watchCollection('overzichtGroepBedragen', function() {
+                if ($scope.overzichtGroepBedragen.typeGroepId !== "")
+                    var res = $http.post('/ThuisAdmin/json/report_overzicht_groep_bedragen', $scope.overzichtGroepBedragen);
+                    res.success(function(data){
+                       $scope.reportGroepBedragen = data; 
+                    });
             });
-            
-            $scope.$watch('financeOverview.rekening', function() {
-                if ($scope.financeOverview.rekening !== "")
-                    $http.post('/ThuisAdmin/json/setFinanceHeader', $scope.financeOverview);
-            });
-            // End Set Header Info
             
             $http.get('/ThuisAdmin/json/rekeningen').success(function(data){
                $scope.rekeningen = data; 
@@ -77,7 +112,9 @@
                     drawChart(data.overzichtGroep);
                 });
             }
-        }
+            
+            $scope.itemsByPage=10;
+        });
         
         function drawChart(jsonData) {
           var dataGoogle = new google.visualization.DataTable();
@@ -108,12 +145,19 @@
             function selectHandler() {
                 try{
                     var selection = chart.getSelection();
-                    alert(mapPkId[selection[0].row]);
                     // Column 1 = Opbrengsten
                     // Column 2 = Kosten
-                    alert(selection[0].column);
+                    var appElement = document.querySelector('[ng-controller="fController"]');
+                    var $scope = angular.element(appElement).scope();
+                    $scope.$apply(function() {
+                        $scope.overzichtGroepBedragen.typeGroepId = mapPkId[selection[0].row];
+                        $scope.overzichtGroepBedragen.typeGroepKostOpbrengst = selection[0].column;
+                        $scope.overzichtGroepBedragen.beginDatum = $scope.financeOverview.beginDatum;
+                        $scope.overzichtGroepBedragen.eindDatum = $scope.financeOverview.eindDatum;
+                    });
                 } catch(err){}
            }
         }
     </script>
+    <script src="<c:url value="/resources/smart-table.min.js" />"></script>
 </html>

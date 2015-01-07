@@ -8,7 +8,8 @@ package com.xumpy.thuisadmin.controller;
 import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.view.FinanceOverview;
 import com.xumpy.thuisadmin.model.view.FinanceOverzichtGroep;
-import com.xumpy.thuisadmin.model.view.OverzichtGroep;
+import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragen;
+import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragenInp;
 import com.xumpy.thuisadmin.services.BedragenSrv;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -35,28 +36,56 @@ public class FetchGraphiekOverview {
     
     @RequestMapping("/json/graphiek_overview")
     public @ResponseBody List<Bedragen> fetchGraphiekOverview(@RequestBody FinanceOverview financeOverview) throws ParseException{
+        if (financeOverview.getBeginDatum() != null){
+            String strStartDate = financeOverview.getBeginDatum();
+            String strEindDate = financeOverview.getEindDatum();
         
-        String strStartDate = financeOverview.getBeginDatum();
-        String strEindDate = financeOverview.getEindDatum();
+            DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         
-        DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        
-        Date startDate = format.parse(strStartDate);
-        Date eindDate = format.parse(strEindDate);
-        
-        return bedragenSrv.graphiekBedrag(financeOverview.getRekening(), startDate, eindDate);
+            Date startDate = format.parse(strStartDate);
+            Date eindDate = format.parse(strEindDate);
+            
+            return bedragenSrv.graphiekBedrag(financeOverview.getRekening(), startDate, eindDate);
+        } else {
+            return null;
+        }
     }
     
     @RequestMapping("/json/graphiek_overzicht_per_groep")
     public @ResponseBody FinanceOverzichtGroep fetchGraphiekOverzichtPerGroep(@RequestBody FinanceOverview financeOverview) throws ParseException{
-        String strStartDate = financeOverview.getBeginDatum();
-        String strEindDate = financeOverview.getEindDatum();
-        
-        DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        
-        Date startDate = format.parse(strStartDate);
-        Date eindDate = format.parse(strEindDate);
-        
-        return bedragenSrv.graphiekOverzichtGroep(startDate, eindDate);
+        if (financeOverview.getBeginDatum() != null){
+            String strStartDate = financeOverview.getBeginDatum();
+            String strEindDate = financeOverview.getEindDatum();
+
+            DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+
+            Date startDate = format.parse(strStartDate);
+            Date eindDate = format.parse(strEindDate);
+
+            return bedragenSrv.graphiekOverzichtGroep(startDate, eindDate);  
+        } else {
+            return null;
+        }
+    }
+    
+    @RequestMapping("/json/report_overzicht_groep_bedragen")
+    public @ResponseBody List<OverzichtGroepBedragen> fetchReportOverzichtGroepBedragen(@RequestBody OverzichtGroepBedragenInp overzichtGroepBedragenInp)
+            throws ParseException{
+        if (overzichtGroepBedragenInp.getBeginDatum() != null){
+            String strStartDate = overzichtGroepBedragenInp.getBeginDatum();
+            String strEindDate = overzichtGroepBedragenInp.getEindDatum();
+
+            DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+
+            Date startDate = format.parse(strStartDate);
+            Date eindDate = format.parse(strEindDate);
+            
+            return bedragenSrv.rapportOverzichtGroepBedragen(overzichtGroepBedragenInp.getTypeGroepId(), 
+                                                             overzichtGroepBedragenInp.getTypeGroepKostOpbrengst(),
+                                                             startDate,
+                                                             eindDate);
+        } else {
+            return null;
+        }
     }
 }

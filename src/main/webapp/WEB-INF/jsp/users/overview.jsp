@@ -47,10 +47,11 @@
     <script type="text/javascript">
         function fController($scope, $http) {
             // Begin Set Header Info
-            $scope.financeOverview = [];
-            $scope.financeOverview.beginDatum = "";
-            $scope.financeOverview.eindDatum = "";
-            $scope.financeOverview.rekening = "";
+            $scope.financeOverview = {
+                beginDatum: "",
+                eindDatum: "",
+                rekening: ""
+            };
             
             $http.get('/ThuisAdmin/json/getFinanceHeader').success(function(data){
                 $scope.financeOverview = data; 
@@ -59,21 +60,10 @@
                 }
             });
             
-            $scope.$watch('financeOverview.beginDatum', function() {
+            $scope.$watchCollection('financeOverview', function() {
                 if ($scope.financeOverview.beginDatum !== "")
                     $http.post('/ThuisAdmin/json/setFinanceHeader', $scope.financeOverview);
             });
-            
-            $scope.$watch('financeOverview.eindDatum', function() {
-                if ($scope.financeOverview.eindDatum !== "")
-                    $http.post('/ThuisAdmin/json/setFinanceHeader', $scope.financeOverview);
-            });
-            
-            $scope.$watch('financeOverview.rekening', function() {
-                if ($scope.financeOverview.rekening !== "")
-                    $http.post('/ThuisAdmin/json/setFinanceHeader', $scope.financeOverview);
-            });
-            // End Set Header Info
             
             $http.get('/ThuisAdmin/json/rekeningen').success(function(data){
                $scope.rekeningen = data; 

@@ -10,6 +10,7 @@ import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.model.view.FinanceOverzichtGroep;
 import com.xumpy.thuisadmin.model.view.OverzichtGroep;
+import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragen;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,5 +63,18 @@ public class BedragenSrvImpl implements BedragenSrv{
         financeOverzichtGroep.setOverzichtGroep(overzichtGroep);
         
         return financeOverzichtGroep;
+    }
+
+    @Override
+    public List<OverzichtGroepBedragen> rapportOverzichtGroepBedragen(Integer typeGroepId, Integer typeGroepKostOpbrengst, Date beginDate, Date eindDate) {
+        Integer negatief = 0;
+        
+        if (typeGroepKostOpbrengst.equals(1)){
+            negatief = 0;
+        } else {
+            negatief = 1;
+        }
+        
+        return bedragenDao.rapportOverzichtGroepBedragen(typeGroepId, negatief, beginDate, eindDate);
     }
 }

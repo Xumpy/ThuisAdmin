@@ -8,6 +8,7 @@ package com.xumpy.thuisadmin.dao;
 import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.model.view.OverzichtGroep;
+import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragen;
 import java.util.Date;
 import java.util.List;
 import org.hibernate.Query;
@@ -82,6 +83,31 @@ public class BedragenDaoImpl extends HibernateDaoSupport implements BedragenDao{
         query.setDate(0, beginDate);
         query.setDate(1, eindDate);
         
+        return query.list();
+    }
+
+    @Override
+    public List<OverzichtGroepBedragen> rapportOverzichtGroepBedragen(Integer typeGroepId, Integer negatief, Date beginDate, Date eindDate) {
+        Session session = sessionFactory.openSession();
+        Query query = session.createSQLQuery("select tb.pk_id as pk_id," +
+                                             "       ttg.naam as type_naam," +
+                                             "       tb.bedrag as bedrag," +
+                                             "       to_char(tb.datum, 'yyyy/mm/dd') as datum," +
+                                             "       tb.omschrijving as omschrijving," +
+                                             "       ttg.pk_id as fk_type_groep_id" +
+                                             " from ta_bedragen tb" +
+                                             " join ta_type_groep ttg" +
+                                             "   on (tb.fk_type_groep_id = ttg.pk_id)" +
+                                             " where pkg_ta_rekening.fun_groep_in_groep(in_groep => fk_type_groep_id," +
+                                             "                                          in_hoofd_groep => ?) = 1" +
+                                             "  and ttg.negatief = ?" +
+                                             "  and datum between ? and ?").addEntity(OverzichtGroepBedragen.class);
+        
+        query.setInteger(0, typeGroepId);
+        query.setInteger(1, negatief);
+        query.setDate(2, beginDate);
+        query.setDate(3, eindDate);
+
         return query.list();
     }
 }
