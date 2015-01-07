@@ -6,6 +6,7 @@
 package com.xumpy.thuisadmin.controller;
 
 import com.xumpy.thuisadmin.model.view.FinanceHeader;
+import java.io.Serializable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @Scope("session")
-public class CtrlFinanceHeader {
+public class CtrlFinanceHeader implements Serializable{
     
     @Autowired
     private FinanceHeader financeHeader;

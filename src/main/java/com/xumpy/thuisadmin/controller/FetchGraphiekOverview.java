@@ -8,9 +8,10 @@ package com.xumpy.thuisadmin.controller;
 import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.view.FinanceOverview;
 import com.xumpy.thuisadmin.model.view.FinanceOverzichtGroep;
-import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragen;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragenInp;
+import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragenTotal;
 import com.xumpy.thuisadmin.services.BedragenSrv;
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,7 +31,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @Scope("session")
-public class FetchGraphiekOverview {
+public class FetchGraphiekOverview  implements Serializable{
     @Autowired
     private BedragenSrv bedragenSrv;
     
@@ -69,7 +70,7 @@ public class FetchGraphiekOverview {
     }
     
     @RequestMapping("/json/report_overzicht_groep_bedragen")
-    public @ResponseBody List<OverzichtGroepBedragen> fetchReportOverzichtGroepBedragen(@RequestBody OverzichtGroepBedragenInp overzichtGroepBedragenInp)
+    public @ResponseBody OverzichtGroepBedragenTotal fetchReportOverzichtGroepBedragen(@RequestBody OverzichtGroepBedragenInp overzichtGroepBedragenInp)
             throws ParseException{
         if (overzichtGroepBedragenInp.getBeginDatum() != null){
             String strStartDate = overzichtGroepBedragenInp.getBeginDatum();

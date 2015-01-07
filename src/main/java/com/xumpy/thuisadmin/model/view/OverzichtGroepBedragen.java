@@ -6,6 +6,7 @@
 package com.xumpy.thuisadmin.model.view;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -19,7 +20,7 @@ public class OverzichtGroepBedragen implements Serializable{
     @Id
     private Integer pk_id;
     private String type_naam;
-    private Double bedrag;
+    private BigDecimal bedrag;
     private String datum;
     private String omschrijving;
 
@@ -39,11 +40,11 @@ public class OverzichtGroepBedragen implements Serializable{
         this.type_naam = type_naam;
     }
 
-    public Double getBedrag() {
+    public BigDecimal getBedrag() {
         return bedrag;
     }
 
-    public void setBedrag(Double bedrag) {
+    public void setBedrag(BigDecimal bedrag) {
         this.bedrag = bedrag;
     }
 

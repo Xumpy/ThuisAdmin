@@ -7,6 +7,7 @@ package com.xumpy.thuisadmin.controller;
 
 import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.services.RekeningenSrv;
+import java.io.Serializable;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @Scope("session")
-public class FetchRekeningen {
+public class FetchRekeningen  implements Serializable{
     
     @Autowired
     private RekeningenSrv rekeningenSrv;

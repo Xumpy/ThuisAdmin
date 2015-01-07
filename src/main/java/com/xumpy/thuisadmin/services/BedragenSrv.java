@@ -9,6 +9,7 @@ import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.model.view.FinanceOverzichtGroep;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragen;
+import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragenTotal;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public interface BedragenSrv {
                                          Date eindDate);
     public FinanceOverzichtGroep graphiekOverzichtGroep(Date beginDate,
                                                         Date eindDate);
-    public List<OverzichtGroepBedragen> rapportOverzichtGroepBedragen(Integer typeGroepId, 
+    public OverzichtGroepBedragenTotal rapportOverzichtGroepBedragen(Integer typeGroepId, 
                                                                       Integer typeGroepKostOpbrengst, 
                                                                       Date beginDate, 
                                                                       Date eindDate);

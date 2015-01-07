@@ -33,10 +33,14 @@
                 <input class="btn btn-primary" type="submit" value="Submit"/>
             </div>
         </form>
+        <div class="col-lg-12 form-group">
+            <b>Totaal Kosten: {{overzichtGroep.totaal_kosten}}<br/></b>
+            <b>Totaal Opbrengsten: {{overzichtGroep.totaal_opbrengsten}}</b>
+        </div>
         <div>
             <div id="ex0" class="col-lg-5"></div>
             <div class="col-lg-7">
-                <table st-safe-src="reportGroepBedragen" st-table="emptyGroepBedragen" class="table table-striped table-hover ">
+                <table st-safe-src="reportGroepBedragenTotal.overzichtGroepBedragen" st-table="emptyGroepBedragen" class="table table-striped table-hover ">
                 <thead>
                   <tr>
                       <th st-sort="type_naam">Type Naam</th>
@@ -54,11 +58,19 @@
                     </tr>
                 </tbody>
 		<tfoot>
-			<tr>
-				<td colspan="4" class="text-center">
-					<div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="100"></div>
-				</td>
-			</tr>
+                    <tr>
+                        <td> 
+                        </td>
+                        <td>
+                            <b>{{reportGroepBedragenTotal.somBedrag}}</b>
+                        </td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-center">
+                                <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="100"></div>
+                        </td>
+                    </tr>
 		</tfoot>
                 </table>
             </div>
@@ -98,7 +110,7 @@
                 if ($scope.overzichtGroepBedragen.typeGroepId !== "")
                     var res = $http.post('/ThuisAdmin/json/report_overzicht_groep_bedragen', $scope.overzichtGroepBedragen);
                     res.success(function(data){
-                       $scope.reportGroepBedragen = data; 
+                       $scope.reportGroepBedragenTotal = data; 
                     });
             });
             
@@ -109,7 +121,8 @@
             $scope.submitGraphiekData = function(){
                 var res = $http.post('/ThuisAdmin/json/graphiek_overzicht_per_groep', $scope.financeOverview);
                 res.success(function(data) {
-                    drawChart(data.overzichtGroep);
+                    $scope.overzichtGroep = data;
+                    drawChart($scope.overzichtGroep.overzichtGroep);
                 });
             }
             

@@ -11,6 +11,8 @@ import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.model.view.FinanceOverzichtGroep;
 import com.xumpy.thuisadmin.model.view.OverzichtGroep;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragen;
+import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragenTotal;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,8 +68,11 @@ public class BedragenSrvImpl implements BedragenSrv{
     }
 
     @Override
-    public List<OverzichtGroepBedragen> rapportOverzichtGroepBedragen(Integer typeGroepId, Integer typeGroepKostOpbrengst, Date beginDate, Date eindDate) {
+    public OverzichtGroepBedragenTotal rapportOverzichtGroepBedragen(Integer typeGroepId, Integer typeGroepKostOpbrengst, Date beginDate, Date eindDate) {
+        OverzichtGroepBedragenTotal overzichtGroepBedragenTotal = new OverzichtGroepBedragenTotal();
+        
         Integer negatief = 0;
+        BigDecimal somOverzicht = new BigDecimal(0);
         
         if (typeGroepKostOpbrengst.equals(1)){
             negatief = 0;
@@ -75,6 +80,15 @@ public class BedragenSrvImpl implements BedragenSrv{
             negatief = 1;
         }
         
-        return bedragenDao.rapportOverzichtGroepBedragen(typeGroepId, negatief, beginDate, eindDate);
+        List<OverzichtGroepBedragen> overzichtGroepBedragen = bedragenDao.rapportOverzichtGroepBedragen(typeGroepId, negatief, beginDate, eindDate);
+        
+        for (OverzichtGroepBedragen overzicht: overzichtGroepBedragen){
+            somOverzicht = somOverzicht.add(overzicht.getBedrag());
+        }
+        
+        overzichtGroepBedragenTotal.setSomBedrag(somOverzicht);
+        overzichtGroepBedragenTotal.setOverzichtGroepBedragen(overzichtGroepBedragen);
+        
+        return overzichtGroepBedragenTotal;
     }
 }
