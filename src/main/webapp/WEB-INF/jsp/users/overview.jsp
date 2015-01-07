@@ -66,7 +66,7 @@
             });
             
             $http.get('/ThuisAdmin/json/rekeningen').success(function(data){
-               $scope.rekeningen = data; 
+               $scope.rekeningen = data.rekeningen; 
             });
             
             $scope.submitGraphiekData = function(){

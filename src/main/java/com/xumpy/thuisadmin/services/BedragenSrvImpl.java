@@ -8,10 +8,12 @@ package com.xumpy.thuisadmin.services;
 import com.xumpy.thuisadmin.dao.BedragenDaoImpl;
 import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
+import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
 import com.xumpy.thuisadmin.model.view.FinanceOverzichtGroep;
 import com.xumpy.thuisadmin.model.view.OverzichtGroep;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragen;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragenTotal;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  * @author Nico
  */
-public class BedragenSrvImpl implements BedragenSrv{
+public class BedragenSrvImpl implements BedragenSrv, Serializable{
 
     @Autowired
     private BedragenDaoImpl bedragenDao;
@@ -90,5 +92,10 @@ public class BedragenSrvImpl implements BedragenSrv{
         overzichtGroepBedragenTotal.setOverzichtGroepBedragen(overzichtGroepBedragen);
         
         return overzichtGroepBedragenTotal;
+    }
+
+    @Override
+    public List<BeheerBedragenReport> reportBedragen(Rekeningen rekening) {
+        return bedragenDao.reportBedragen(rekening);
     }
 }

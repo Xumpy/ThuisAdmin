@@ -5,6 +5,7 @@
  */
 package com.xumpy.thuisadmin.model.db;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,7 +24,7 @@ public class Rekeningen {
     private Integer pk_id;
     
     @Column(name="WAARDE")
-    private Double waarde;
+    private BigDecimal waarde;
     
     @Column(name="NAAM")
     private String naam;
@@ -39,11 +40,11 @@ public class Rekeningen {
         this.pk_id = pk_id;
     }
 
-    public Double getWaarde() {
+    public BigDecimal getWaarde() {
         return waarde;
     }
 
-    public void setWaarde(Double waarde) {
+    public void setWaarde(BigDecimal waarde) {
         this.waarde = waarde;
     }
 

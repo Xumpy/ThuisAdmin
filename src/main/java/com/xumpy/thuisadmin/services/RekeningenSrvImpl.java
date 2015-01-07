@@ -7,6 +7,9 @@ package com.xumpy.thuisadmin.services;
 
 import com.xumpy.thuisadmin.dao.RekeningenDaoImpl;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
+import com.xumpy.thuisadmin.model.view.RekeningBedragTotal;
+import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  * @author Nico
  */
-public class RekeningenSrvImpl implements RekeningenSrv{
+public class RekeningenSrvImpl implements RekeningenSrv, Serializable{
 
     @Autowired
     private RekeningenDaoImpl rekeningenDao;
@@ -35,7 +38,19 @@ public class RekeningenSrvImpl implements RekeningenSrv{
     }
 
     @Override
-    public List<Rekeningen> findAllRekeningen() {
-        return rekeningenDao.findAllRekeningen();
+    public RekeningBedragTotal findAllRekeningen() {
+        RekeningBedragTotal rekeningBedragTotal = new RekeningBedragTotal();
+        List<Rekeningen> rekeningen = rekeningenDao.findAllRekeningen();
+        
+        BigDecimal totaal = new BigDecimal(0);
+        
+        for (Rekeningen rekening: rekeningen){
+            totaal = totaal.add(rekening.getWaarde());
+        }
+        
+        rekeningBedragTotal.setTotaal(totaal);
+        rekeningBedragTotal.setRekeningen(rekeningen);
+        
+        return rekeningBedragTotal;
     }
 }

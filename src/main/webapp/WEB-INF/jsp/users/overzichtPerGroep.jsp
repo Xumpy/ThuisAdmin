@@ -38,8 +38,8 @@
             <b>Totaal Opbrengsten: {{overzichtGroep.totaal_opbrengsten}}</b>
         </div>
         <div>
-            <div id="ex0" class="col-lg-5"></div>
-            <div class="col-lg-7">
+            <div id="ex0" class="col-lg-6"></div>
+            <div class="col-lg-6">
                 <table st-safe-src="reportGroepBedragenTotal.overzichtGroepBedragen" st-table="emptyGroepBedragen" class="table table-striped table-hover ">
                 <thead>
                   <tr>
@@ -143,7 +143,7 @@
           
           var options = {
             width: 600,
-            height: 600,
+            height: 500,
             chart: {
               title: 'Kosten/Opbrengsten',
             },

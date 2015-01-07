@@ -7,6 +7,7 @@ package com.xumpy.thuisadmin.dao;
 
 import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
+import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
 import com.xumpy.thuisadmin.model.view.OverzichtGroep;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragen;
 import java.util.Date;
@@ -108,6 +109,31 @@ public class BedragenDaoImpl extends HibernateDaoSupport implements BedragenDao{
         query.setDate(2, beginDate);
         query.setDate(3, eindDate);
 
+        return query.list();
+    }
+
+    @Override
+    public List<BeheerBedragenReport> reportBedragen(Rekeningen rekening) {
+        Session session = sessionFactory.openSession();
+        Query query = session.createSQLQuery("select tb.pk_id as pk_id," +
+                                             "       tt.pk_id as fk_type_groep_id," +
+                                             "       tt.naam as type_groep," +
+                                             "       tr.naam as rekening," +
+                                             "       tp.voornaam || ' ' || tp.naam as persoon," +
+                                             "       tb.bedrag as bedrag," +
+                                             "       to_char(tb.datum, 'dd/mm/yyyy') as datum," +
+                                             "       tb.omschrijving as omschrijving" +
+                                             " from ta_bedragen tb" +
+                                             " join ta_personen tp" +
+                                             "   on (tb.fk_persoon_id = tp.pk_id)" +
+                                             " join ta_rekeningen tr" +
+                                             "   on (tb.fk_rekening_id = tr.pk_id)" +
+                                             " join ta_type_groep tt" +
+                                             "   on (tb.fk_type_groep_id = tt.pk_id)" +
+                                             " where tb.fk_rekening_id = :rekeningId" + 
+                                             " order by tb.datum desc").addEntity(BeheerBedragenReport.class);
+        
+        query.setInteger("rekeningId", rekening.getPk_id());
         return query.list();
     }
 }

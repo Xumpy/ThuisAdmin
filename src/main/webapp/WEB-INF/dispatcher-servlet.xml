@@ -21,6 +21,7 @@
                 <prop key="users/overview">indexController</prop>
                 <prop key="login">loginController</prop>
                 <prop key="users/overzichtPerGroep">overzichtPerGroepController</prop>
+                <prop key="users/beheerBedragen">beheerBedragenController</prop>
             </props>
         </property>
     </bean>
@@ -37,6 +38,10 @@
     <bean name="overzichtPerGroepController"
           class="org.springframework.web.servlet.mvc.ParameterizableViewController"
           p:viewName="users/overzichtPerGroep" />
+    
+    <bean name="beheerBedragenController"
+          class="org.springframework.web.servlet.mvc.ParameterizableViewController"
+          p:viewName="users/beheerBedragen" />
     
     <bean name="loginController"
           class="org.springframework.web.servlet.mvc.ParameterizableViewController"

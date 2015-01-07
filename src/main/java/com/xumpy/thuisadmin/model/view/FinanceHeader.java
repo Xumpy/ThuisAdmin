@@ -6,6 +6,7 @@
 package com.xumpy.thuisadmin.model.view;
 
 import com.xumpy.thuisadmin.model.db.Rekeningen;
+import java.io.Serializable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("session")
-public class FinanceHeader {
+public class FinanceHeader implements Serializable{
     private String beginDatum;
     private String eindDatum;
     private Rekeningen rekening;

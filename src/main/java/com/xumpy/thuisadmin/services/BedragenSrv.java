@@ -7,6 +7,7 @@ package com.xumpy.thuisadmin.services;
 
 import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
+import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
 import com.xumpy.thuisadmin.model.view.FinanceOverzichtGroep;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragen;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragenTotal;
@@ -21,6 +22,8 @@ public interface BedragenSrv {
     void save(Bedragen bedragen);
     void update(Bedragen bedragen);
     void delete(Bedragen bedragen);
+    public List<BeheerBedragenReport> reportBedragen(Rekeningen rekening);
+    
     public List<Bedragen> graphiekBedrag(Rekeningen rekening,
                                          Date beginDate,
                                          Date eindDate);

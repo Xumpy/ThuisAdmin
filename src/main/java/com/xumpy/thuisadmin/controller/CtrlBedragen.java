@@ -5,12 +5,15 @@
  */
 package com.xumpy.thuisadmin.controller;
 
-import com.xumpy.thuisadmin.model.view.RekeningBedragTotal;
-import com.xumpy.thuisadmin.services.RekeningenSrv;
-import java.io.Serializable;
+import com.xumpy.thuisadmin.model.db.Rekeningen;
+import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
+import com.xumpy.thuisadmin.services.BedragenSrv;
+import java.text.ParseException;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -20,13 +23,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @Scope("session")
-public class FetchRekeningen  implements Serializable{
-    
+public class CtrlBedragen {
     @Autowired
-    private RekeningenSrv rekeningenSrv;
+    private BedragenSrv bedragenSrv;
     
-    @RequestMapping("/json/rekeningen")
-    public @ResponseBody RekeningBedragTotal fetchRekeningen(){
-        return rekeningenSrv.findAllRekeningen();
+    @RequestMapping("/json/fetch_bedragen")
+    public @ResponseBody List<BeheerBedragenReport> fetchBedragen(@RequestBody Rekeningen rekening) throws ParseException{
+        return bedragenSrv.reportBedragen(rekening);
     }
 }
