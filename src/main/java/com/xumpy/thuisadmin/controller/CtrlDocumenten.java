@@ -53,5 +53,9 @@ public class CtrlDocumenten implements Serializable {
         
         return null;
     }
-    
+ 
+    @RequestMapping("/json/fetch_bedrag_documenten/{bedragId}")
+     public @ResponseBody List<DocumentenReport> fetchBedragDocumenten(@PathVariable Integer bedragId){
+         return documentenSrv.fetchBedragDocumenten(bedragId);
+     }
 }

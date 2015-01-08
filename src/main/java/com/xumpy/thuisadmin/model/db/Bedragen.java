@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
 
 /**
  *
@@ -32,6 +33,7 @@ public class Bedragen {
     private Double bedrag;
     
     @Column(name="DATUM")
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date datum;
     
     @Column(name="OMSCHRIJVING")

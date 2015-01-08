@@ -24,4 +24,5 @@ public interface DocumentenSrv {
     
     public List<DocumentenReport> fetchDocumentenReport();
     public Documenten fetchDocument(Integer documentId);
+    public List<DocumentenReport> fetchBedragDocumenten(Integer bedragId);
 }

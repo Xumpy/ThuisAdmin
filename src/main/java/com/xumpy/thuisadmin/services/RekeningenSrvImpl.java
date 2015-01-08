@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Nico
  */
 @Service
-public class RekeningenSrvImpl implements RekeningenSrv, Serializable{
+public class RekeningenSrvImpl implements RekeningenSrv{
 
     @Autowired
     private RekeningenDaoImpl rekeningenDao;

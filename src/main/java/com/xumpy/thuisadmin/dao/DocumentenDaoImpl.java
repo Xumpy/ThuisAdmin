@@ -47,7 +47,7 @@ public class DocumentenDaoImpl implements DocumentenDao{
         
         Query query = session.createSQLQuery("select bd.pk_id," +
                                              "       tg.naam as typeGroep," +
-                                             "       to_char(bd.datum, 'yyyy/mm/dd') as datum," +
+                                             "       to_char(bd.datum, 'yyyy-mm-dd') as datum," +
                                              "       b.bedrag as bedrag," +
                                              "       nvl(bd.omschrijving, b.omschrijving) as omschrijving" +
                                              " from ta_bedrag_documenten bd" +
@@ -75,5 +75,22 @@ public class DocumentenDaoImpl implements DocumentenDao{
         query.setInteger("pk_id", documentId);
         
         return (Documenten)query.list().get(0);
+    }
+    
+    @Override
+    public List<DocumentenReport> fetchBedragDocumenten(Integer bedragId) {
+        Session session = sessionFactory.getCurrentSession();
+        
+        Query query = session.createSQLQuery("select pk_id," +
+                                             "       fk_bedrag_id," +
+                                             "       omschrijving," +
+                                             "       document," +
+                                             "       document_naam," +
+                                             "       document_mime" +
+                                             " from ta_bedrag_documenten" +
+                                             " where fk_bedrag_id = :bedrag_id").addEntity(Documenten.class);
+        query.setInteger("bedrag_id", bedragId);
+        
+        return query.list();
     }
 }

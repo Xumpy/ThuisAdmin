@@ -91,7 +91,7 @@ public class BedragenDaoImpl implements BedragenDao{
         Query query = session.createSQLQuery("select tb.pk_id as pk_id," +
                                              "       ttg.naam as type_naam," +
                                              "       tb.bedrag as bedrag," +
-                                             "       to_char(tb.datum, 'yyyy/mm/dd') as datum," +
+                                             "       to_char(tb.datum, 'yyyy-mm-dd') as datum," +
                                              "       tb.omschrijving as omschrijving," +
                                              "       ttg.pk_id as fk_type_groep_id" +
                                              " from ta_bedragen tb" +
@@ -119,7 +119,7 @@ public class BedragenDaoImpl implements BedragenDao{
                                              "       tr.naam as rekening," +
                                              "       tp.voornaam || ' ' || tp.naam as persoon," +
                                              "       tb.bedrag as bedrag," +
-                                             "       to_char(tb.datum, 'yyyy/mm/dd') as datum," +
+                                             "       to_char(tb.datum, 'yyyy-mm-dd') as datum," +
                                              "       tb.omschrijving as omschrijving" +
                                              " from ta_bedragen tb" +
                                              " join ta_personen tp" +

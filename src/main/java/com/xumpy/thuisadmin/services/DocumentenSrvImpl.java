@@ -59,4 +59,9 @@ public class DocumentenSrvImpl implements DocumentenSrv{
         Documenten documenten = documentenDao.fetchDocument(documentId);
         return documenten;
     }
+    
+    @Override
+    public List<DocumentenReport> fetchBedragDocumenten(Integer bedragId){
+        return documentenDao.fetchBedragDocumenten(bedragId);
+    }
 }

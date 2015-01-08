@@ -22,4 +22,5 @@ public interface DocumentenDao {
     public List<DocumentenReport> fetchDocumentenReport();
     
     public Documenten fetchDocument(Integer documentId);
+    public List<DocumentenReport> fetchBedragDocumenten(Integer bedragId);
 }

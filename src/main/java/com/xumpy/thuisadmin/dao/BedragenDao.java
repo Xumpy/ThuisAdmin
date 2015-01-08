@@ -10,7 +10,6 @@ import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
 import com.xumpy.thuisadmin.model.view.OverzichtGroep;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragen;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 

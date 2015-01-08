@@ -30,6 +30,11 @@
                             <input class="btn btn-primary" type="submit" value="Submit"/>
                         </div>
                     </form>
+                    <form class="form-horizontal" action="nieuwBedrag">
+                        <div class="col-lg-1">
+                            <input class="btn btn-primary" type="submit" value="Nieuw Bedrag"/>
+                        </div>
+                    </form>
                 </div>
                 <div class="col-lg-12">
                     <table st-safe-src="bedragen" st-table="emptyBedragen" class="table table-striped table-hover ">

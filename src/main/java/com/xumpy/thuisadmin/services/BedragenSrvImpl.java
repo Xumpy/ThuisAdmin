@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Nico
  */
 @Service
-public class BedragenSrvImpl implements BedragenSrv, Serializable{
+public class BedragenSrvImpl implements BedragenSrv{
 
     @Autowired
     private BedragenDaoImpl bedragenDao;

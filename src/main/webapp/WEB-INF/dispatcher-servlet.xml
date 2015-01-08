@@ -16,11 +16,7 @@
     <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
         <property name="mappings">
             <props>
-                <prop key="users/overview">indexController</prop>
                 <prop key="login">loginController</prop>
-                <prop key="users/overzichtPerGroep">overzichtPerGroepController</prop>
-                <prop key="users/beheerBedragen">beheerBedragenController</prop>
-                <prop key="users/documenten">documentenController</prop>
             </props>
         </property>
     </bean>
@@ -29,23 +25,7 @@
           class="org.springframework.web.servlet.view.InternalResourceViewResolver"
           p:prefix="/WEB-INF/jsp/"
           p:suffix=".jsp" />
-
-    <bean name="indexController"
-          class="org.springframework.web.servlet.mvc.ParameterizableViewController"
-          p:viewName="users/overview" />
-    
-    <bean name="overzichtPerGroepController"
-          class="org.springframework.web.servlet.mvc.ParameterizableViewController"
-          p:viewName="users/overzichtPerGroep" />
-    
-    <bean name="beheerBedragenController"
-          class="org.springframework.web.servlet.mvc.ParameterizableViewController"
-          p:viewName="users/beheerBedragen" />
-    
-    <bean name="documentenController"
-          class="org.springframework.web.servlet.mvc.ParameterizableViewController"
-          p:viewName="users/documenten" />
-    
+  
     <bean name="loginController"
           class="org.springframework.web.servlet.mvc.ParameterizableViewController"
           p:viewName="login" />
