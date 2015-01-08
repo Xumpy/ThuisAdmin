@@ -7,7 +7,6 @@ package com.xumpy.thuisadmin.services;
 
 import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.model.view.RekeningBedragTotal;
-import java.util.List;
 
 /**
  *
@@ -18,4 +17,5 @@ public interface RekeningenSrv {
     void update(Rekeningen rekeningen);
     void delete(Rekeningen rekeningen);
     public RekeningBedragTotal findAllRekeningen();
+    public Rekeningen findRekening(Integer rekeningId);
 }

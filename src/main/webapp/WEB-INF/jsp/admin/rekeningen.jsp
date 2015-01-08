@@ -17,9 +17,17 @@
     <body ng-controller="fController">
         <%@include file="/resources/template/header.html" %>
         <div class="col-lg-12">
+            <form class="form-horizontal" action="nieuwRekening">
+                <div class="col-lg-1">
+                    <input class="btn btn-primary" type="submit" value="Nieuw Rekening"/>
+                </div>
+            </form>
+        </div>
+        <div class="col-lg-12">
             <table st-safe-src="rekeningen" st-table="emptyRekeningen" class="table table-striped table-hover ">
             <thead>
               <tr>
+                  <td></th>
                   <th st-sort="waarde">Waarde</th>
                   <th st-sort="naam">Naam</th>
                   <th st-sort="laatst_bijgewerkt">Laatst Bijgewerkt</th>
@@ -27,6 +35,7 @@
             </thead>
             <tbody>
                 <tr ng-repeat="rekening in emptyRekeningen">
+                        <td><a href="nieuwRekening/{{rekening.pk_id}}">Edit</a></td>
                         <td>{{rekening.waarde}}</td>
                         <td>{{rekening.naam}}</td>
                         <td>{{rekening.laatst_bijgewerkt}}</td>

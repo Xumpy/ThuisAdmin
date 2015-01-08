@@ -6,6 +6,7 @@
 package com.xumpy.thuisadmin.dao;
 
 import com.xumpy.thuisadmin.model.db.Rekeningen;
+import java.math.BigDecimal;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -41,11 +42,31 @@ public class RekeningenDaoImpl implements RekeningenDao {
     }
     
     @Override
+    public Integer getNewPkId() {
+        Session session = sessionFactory.getCurrentSession();
+        
+        List<BigDecimal> list = session.createSQLQuery("select seq_ta_rekeningen.nextval from dual").list();
+        
+        Integer newPkId = list.get(0).intValue();
+        
+        return newPkId;
+    }
+    
+    @Override
     public List<Rekeningen> findAllRekeningen() {
         Session session = sessionFactory.getCurrentSession();
         
         List list = session.createQuery("from Rekeningen").list();
         
         return list;
+    }
+    
+    @Override
+    public Rekeningen findRekening(Integer rekeningId){
+        Session session = sessionFactory.getCurrentSession();
+        
+        Rekeningen rekening = (Rekeningen)session.get(Rekeningen.class, rekeningId);
+        
+        return rekening;
     }
 }

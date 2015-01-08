@@ -16,5 +16,7 @@ public interface RekeningenDao {
     void save(Rekeningen rekeningen);
     void update(Rekeningen rekeningen);
     void delete(Rekeningen rekeningen);
+    public Integer getNewPkId();
+    public Rekeningen findRekening(Integer rekeningId);
     public List<Rekeningen> findAllRekeningen();
 }

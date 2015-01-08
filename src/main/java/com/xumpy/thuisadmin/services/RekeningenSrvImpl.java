@@ -28,7 +28,12 @@ public class RekeningenSrvImpl implements RekeningenSrv{
     @Override
     @Transactional(readOnly=false)
     public void save(Rekeningen rekeningen) {
-        rekeningenDao.save(rekeningen);
+        if (rekeningen.getPk_id() == null){
+            rekeningen.setPk_id(rekeningenDao.getNewPkId());
+            rekeningenDao.save(rekeningen);
+        } else {
+            rekeningenDao.update(rekeningen);
+        }
     }
 
     @Override
@@ -59,5 +64,11 @@ public class RekeningenSrvImpl implements RekeningenSrv{
         rekeningBedragTotal.setRekeningen(rekeningen);
         
         return rekeningBedragTotal;
+    }
+    
+    @Override
+    @Transactional
+    public Rekeningen findRekening(Integer rekeningId){
+        return rekeningenDao.findRekening(rekeningId);
     }
 }
