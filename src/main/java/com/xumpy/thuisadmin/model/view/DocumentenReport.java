@@ -5,6 +5,7 @@
  */
 package com.xumpy.thuisadmin.model.view;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -16,14 +17,12 @@ import org.springframework.context.annotation.Scope;
  */
 @Entity
 @Scope("session")
-public class BeheerBedragenReport {
+public class DocumentenReport implements Serializable{
     @Id
     private Integer pk_id;
-    private String type_groep;
-    private String rekening;
-    private String persoon;
-    private BigDecimal bedrag;
+    private String typeGroep;
     private String datum;
+    private BigDecimal bedrag;
     private String omschrijving;
 
     public Integer getPk_id() {
@@ -34,36 +33,12 @@ public class BeheerBedragenReport {
         this.pk_id = pk_id;
     }
 
-    public String getType_groep() {
-        return type_groep;
+    public String getTypeGroep() {
+        return typeGroep;
     }
 
-    public void setType_groep(String type_groep) {
-        this.type_groep = type_groep;
-    }
-
-    public String getRekening() {
-        return rekening;
-    }
-
-    public void setRekening(String rekening) {
-        this.rekening = rekening;
-    }
-
-    public String getPersoon() {
-        return persoon;
-    }
-
-    public void setPersoon(String persoon) {
-        this.persoon = persoon;
-    }
-
-    public BigDecimal getBedrag() {
-        return bedrag;
-    }
-
-    public void setBedrag(BigDecimal bedrag) {
-        this.bedrag = bedrag;
+    public void setTypeGroep(String typeGroep) {
+        this.typeGroep = typeGroep;
     }
 
     public String getDatum() {
@@ -72,6 +47,14 @@ public class BeheerBedragenReport {
 
     public void setDatum(String datum) {
         this.datum = datum;
+    }
+
+    public BigDecimal getBedrag() {
+        return bedrag;
+    }
+
+    public void setBedrag(BigDecimal bedrag) {
+        this.bedrag = bedrag;
     }
 
     public String getOmschrijving() {

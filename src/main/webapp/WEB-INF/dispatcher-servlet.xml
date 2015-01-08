@@ -11,8 +11,6 @@
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd"
        xmlns:context="http://www.springframework.org/schema/context">
 
-    <context:component-scan base-package="com.xumpy.thuisadmin" />
-    
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
 
     <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
@@ -22,6 +20,7 @@
                 <prop key="login">loginController</prop>
                 <prop key="users/overzichtPerGroep">overzichtPerGroepController</prop>
                 <prop key="users/beheerBedragen">beheerBedragenController</prop>
+                <prop key="users/documenten">documentenController</prop>
             </props>
         </property>
     </bean>
@@ -42,6 +41,10 @@
     <bean name="beheerBedragenController"
           class="org.springframework.web.servlet.mvc.ParameterizableViewController"
           p:viewName="users/beheerBedragen" />
+    
+    <bean name="documentenController"
+          class="org.springframework.web.servlet.mvc.ParameterizableViewController"
+          p:viewName="users/documenten" />
     
     <bean name="loginController"
           class="org.springframework.web.servlet.mvc.ParameterizableViewController"
@@ -71,8 +74,7 @@
 
         <property name="packagesToScan">
             <list>
-                <value>com.xumpy.thuisadmin.model.db</value>
-                <value>com.xumpy.thuisadmin.model.view</value>
+                <value>com.xumpy.thuisadmin</value>
             </list>
         </property>
     </bean>
@@ -81,16 +83,7 @@
         <property name="sessionFactory" ref="sessionFactory" /> 
     </bean> 
 
-    <bean id="rekeningenDao" class="com.xumpy.thuisadmin.dao.RekeningenDaoImpl" >
-        <property name="sessionFactory" ref="sessionFactory"></property>
-    </bean>
-    
-    <bean id="rekeningenSrv" class="com.xumpy.thuisadmin.services.RekeningenSrvImpl" />
-    
-    <bean id="bedragenDao" class="com.xumpy.thuisadmin.dao.BedragenDaoImpl" >
-        <property name="sessionFactory" ref="sessionFactory"></property>
-    </bean>
-    
-    <bean id="bedragenSrv" class="com.xumpy.thuisadmin.services.BedragenSrvImpl" />
-   
+    <tx:annotation-driven transaction-manager="transactionManager"></tx:annotation-driven>
+    <context:component-scan base-package="com.xumpy.thuisadmin" />
+
 </beans>

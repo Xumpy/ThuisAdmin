@@ -18,37 +18,45 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author Nico
  */
+@Service
 public class BedragenSrvImpl implements BedragenSrv, Serializable{
 
     @Autowired
     private BedragenDaoImpl bedragenDao;
     
     @Override
+    @Transactional(readOnly=false)
     public void save(Bedragen bedragen) {
         bedragenDao.save(bedragen);
     }
 
     @Override
+    @Transactional(readOnly=false)
     public void update(Bedragen bedragen) {
         bedragenDao.update(bedragen);
     }
 
     @Override
+    @Transactional(readOnly=false)
     public void delete(Bedragen bedragen) {
         bedragenDao.delete(bedragen);
     }
 
     @Override
+    @Transactional
     public List<Bedragen> graphiekBedrag(Rekeningen rekening, Date beginDate, Date eindDate) {
         return bedragenDao.graphiekBedrag(rekening, beginDate, eindDate);
     }
 
     @Override
+    @Transactional
     public FinanceOverzichtGroep graphiekOverzichtGroep(Date beginDate, Date eindDate) {
         FinanceOverzichtGroep financeOverzichtGroep = new FinanceOverzichtGroep();
         
@@ -70,6 +78,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     }
 
     @Override
+    @Transactional
     public OverzichtGroepBedragenTotal rapportOverzichtGroepBedragen(Integer typeGroepId, Integer typeGroepKostOpbrengst, Date beginDate, Date eindDate) {
         OverzichtGroepBedragenTotal overzichtGroepBedragenTotal = new OverzichtGroepBedragenTotal();
         
@@ -95,6 +104,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     }
 
     @Override
+    @Transactional
     public List<BeheerBedragenReport> reportBedragen(Rekeningen rekening) {
         return bedragenDao.reportBedragen(rekening);
     }

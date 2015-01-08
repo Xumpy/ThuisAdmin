@@ -12,32 +12,39 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author Nico
  */
+@Service
 public class RekeningenSrvImpl implements RekeningenSrv, Serializable{
 
     @Autowired
     private RekeningenDaoImpl rekeningenDao;
     
     @Override
+    @Transactional(readOnly=false)
     public void save(Rekeningen rekeningen) {
         rekeningenDao.save(rekeningen);
     }
 
     @Override
+    @Transactional(readOnly=false)
     public void update(Rekeningen rekeningen) {
         rekeningenDao.update(rekeningen);
     }
 
     @Override
+    @Transactional(readOnly=false)
     public void delete(Rekeningen rekeningen) {
         rekeningenDao.delete(rekeningen);
     }
 
     @Override
+    @Transactional
     public RekeningBedragTotal findAllRekeningen() {
         RekeningBedragTotal rekeningBedragTotal = new RekeningBedragTotal();
         List<Rekeningen> rekeningen = rekeningenDao.findAllRekeningen();

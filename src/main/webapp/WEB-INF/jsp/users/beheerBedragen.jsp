@@ -6,6 +6,7 @@
     <head>
         <script src="<c:url value="/resources/jquery-1.11.1.min.js" />"></script>
         <script src="<c:url value="/resources/angular.min.js" />"></script>
+        <script src="<c:url value="/resources/smart-table.min.js" />"></script>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css" />" rel="stylesheet">
         <link href="<c:url value="/resources/bootstrap/css/datepicker3.css" />" rel="stylesheet">
@@ -34,11 +35,11 @@
                     <table st-safe-src="bedragen" st-table="emptyBedragen" class="table table-striped table-hover ">
                         <thead>
                             <tr>
-                                <th>Type Groep</th>
-                                <th>Persoon</th>
-                                <th>Bedrag</th>
-                                <th>Datum</th>
-                                <th>Omschrijving</th>
+                                <th st-sort="type_groep">Type Groep</th>
+                                <th st-sort="persoon">Persoon</th>
+                                <th st-sort="bedrag">Bedrag</th>
+                                <th st-sort="datum">Datum</th>
+                                <th st-sort="omschrijving">Omschrijving</th>
                             </tr>
                             <tr>
                                 <th colspan="5"><input st-search="" class="form-control" placeholder="Search" type="text"/></th>
@@ -108,5 +109,4 @@
             $scope.itemsByPage = 10;
         });
     </script>
-    <script src="<c:url value="/resources/smart-table.min.js" />"></script>
 </html>

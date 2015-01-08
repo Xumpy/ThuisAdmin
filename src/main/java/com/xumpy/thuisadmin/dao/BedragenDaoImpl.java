@@ -16,34 +16,32 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author Nico
  */
-public class BedragenDaoImpl extends HibernateDaoSupport implements BedragenDao{
+@Repository
+public class BedragenDaoImpl implements BedragenDao{
 
     @Autowired
     private SessionFactory sessionFactory;
     
     @Override
-    @Transactional(readOnly=false)
     public void save(Bedragen bedragen) {
-        getHibernateTemplate().save(bedragen);
+        sessionFactory.getCurrentSession().save(bedragen);
     }
 
     @Override
-    @Transactional(readOnly=false)
     public void update(Bedragen bedragen) {
-        getHibernateTemplate().update(bedragen);
+        sessionFactory.getCurrentSession().update(bedragen);
     }
 
     @Override
-    @Transactional(readOnly=false)
     public void delete(Bedragen bedragen) {
-        getHibernateTemplate().delete(bedragen);
+        sessionFactory.getCurrentSession().delete(bedragen);
     }
 
     @Override
@@ -121,7 +119,7 @@ public class BedragenDaoImpl extends HibernateDaoSupport implements BedragenDao{
                                              "       tr.naam as rekening," +
                                              "       tp.voornaam || ' ' || tp.naam as persoon," +
                                              "       tb.bedrag as bedrag," +
-                                             "       to_char(tb.datum, 'dd/mm/yyyy') as datum," +
+                                             "       to_char(tb.datum, 'yyyy/mm/dd') as datum," +
                                              "       tb.omschrijving as omschrijving" +
                                              " from ta_bedragen tb" +
                                              " join ta_personen tp" +

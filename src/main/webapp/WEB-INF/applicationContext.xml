@@ -12,7 +12,6 @@
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd">
-    <tx:annotation-driven />
     <mvc:resources location="/resources/" mapping="/resources/**"/>
     <mvc:annotation-driven />
     

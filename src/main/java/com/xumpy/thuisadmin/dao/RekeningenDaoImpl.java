@@ -7,37 +7,45 @@ package com.xumpy.thuisadmin.dao;
 
 import com.xumpy.thuisadmin.model.db.Rekeningen;
 import java.util.List;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author Nico
  */
-public class RekeningenDaoImpl extends HibernateDaoSupport implements RekeningenDao {
+@Repository
+public class RekeningenDaoImpl implements RekeningenDao {
 
+    @Autowired
+    private SessionFactory sessionFactory;
+    
     @Override
-    @Transactional(readOnly=false)
     public void save(Rekeningen rekeningen) {
-        getHibernateTemplate().save(rekeningen);
+        sessionFactory.getCurrentSession().save(rekeningen);
     }
 
     @Override
-    @Transactional(readOnly=false)
     public void update(Rekeningen rekeningen) {
-        getHibernateTemplate().update(rekeningen);
+        sessionFactory.getCurrentSession().update(rekeningen);
     }
 
     @Override
-    @Transactional(readOnly=false)
     public void delete(Rekeningen rekeningen) {
-        getHibernateTemplate().delete(rekeningen);
+        sessionFactory.getCurrentSession().delete(rekeningen);
     }
     
+    @Override
     public List<Rekeningen> findAllRekeningen() {
-        List list = getHibernateTemplate().find(
-                "from Rekeningen"
-        );
+        Session session = sessionFactory.getCurrentSession();
+        
+        List list = session.createQuery("from Rekeningen").list();
+        
         return list;
     }
 }
