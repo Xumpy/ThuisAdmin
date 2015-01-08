@@ -8,6 +8,9 @@ package com.xumpy.thuisadmin.services;
 import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Documenten;
 import com.xumpy.thuisadmin.model.view.DocumentenReport;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.sql.SQLException;
 import java.util.List;
 
 /**

@@ -5,7 +5,6 @@
  */
 package com.xumpy.thuisadmin.model.db;
 
-import java.sql.Blob;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -34,8 +33,30 @@ public class Documenten {
     
     @Column(name="DOCUMENT")
     @Lob
-    private Blob document;
+    private byte[] document;
 
+    @Column(name="DOCUMENT_NAAM")
+    private String document_naam;
+    
+    @Column(name="DOCUMENT_MIME")
+    private String document_mime;
+
+    public String getDocument_naam() {
+        return document_naam;
+    }
+
+    public void setDocument_naam(String document_naam) {
+        this.document_naam = document_naam;
+    }
+
+    public String getDocument_mime() {
+        return document_mime;
+    }
+
+    public void setDocument_mime(String document_mime) {
+        this.document_mime = document_mime;
+    }
+    
     public Integer getPk_id() {
         return pk_id;
     }
@@ -60,11 +81,11 @@ public class Documenten {
         this.omschrijving = omschrijving;
     }
 
-    public Blob getDocument() {
+    public byte[] getDocument() {
         return document;
     }
 
-    public void setDocument(Blob document) {
+    public void setDocument(byte[] document) {
         this.document = document;
     }
 }

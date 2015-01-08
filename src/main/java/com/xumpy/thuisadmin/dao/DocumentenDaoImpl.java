@@ -67,7 +67,9 @@ public class DocumentenDaoImpl implements DocumentenDao{
         Query query = session.createSQLQuery("select pk_id," +
                                              "       fk_bedrag_id," +
                                              "       omschrijving," +
-                                             "       document" +
+                                             "       document," +
+                                             "       document_naam," +
+                                             "       document_mime" +
                                              " from ta_bedrag_documenten" +
                                              " where pk_id = :pk_id").addEntity(Documenten.class);
         query.setInteger("pk_id", documentId);
