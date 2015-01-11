@@ -32,4 +32,38 @@ public class Admin {
         
         return "admin/nieuwRekening";
     }
+    
+    @RequestMapping(value = "admin/personen")
+    public String viewPersonen(){
+        return "admin/personen";
+    }
+    
+    @RequestMapping(value = "admin/nieuwPersoon")
+    public String viewNieuwPersoon(){
+        return "admin/nieuwPersoon";
+    }
+    
+    @RequestMapping(value = "admin/nieuwPersoon/{persoonId}")
+    public String viewNieuwPersoon(@PathVariable Integer persoonId, Model model){
+        model.addAttribute("pk_id", persoonId);
+        
+        return "admin/nieuwPersoon";
+    }
+    
+    @RequestMapping(value = "admin/groepen")
+    public String viewGroepen(){
+        return "admin/groepen";
+    }
+    
+    @RequestMapping(value = "admin/nieuwGroep")
+    public String viewNieuwGroep(){
+        return "admin/nieuwGroep";
+    }
+    
+    @RequestMapping(value = "admin/nieuwGroep/{groepId}")
+    public String viewNieuwGroep(@PathVariable Integer groepId, Model model){
+        model.addAttribute("pk_id", groepId);
+        
+        return "admin/nieuwGroep";
+    }
 }

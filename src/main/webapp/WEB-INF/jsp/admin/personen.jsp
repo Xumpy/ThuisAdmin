@@ -6,28 +6,26 @@
     <%@include file="/resources/template/header.html" %>
     <body ng-controller="fController">
         <div class="col-lg-12">
-            <form class="form-horizontal" action="nieuwRekening">
+            <form class="form-horizontal" action="nieuwPersoon">
                 <div class="col-lg-1">
-                    <input class="btn btn-primary" type="submit" value="Nieuw Rekening"/>
+                    <input class="btn btn-primary" type="submit" value="Nieuw Persoon"/>
                 </div>
             </form>
         </div>
         <div class="col-lg-12">
-            <table st-safe-src="rekeningen" st-table="emptyRekeningen" class="table table-striped table-hover ">
+            <table st-safe-src="personen" st-table="emptyPersonen" class="table table-striped table-hover ">
             <thead>
               <tr>
                   <td></th>
-                  <th st-sort="waarde">Waarde</th>
                   <th st-sort="naam">Naam</th>
-                  <th st-sort="laatst_bijgewerkt">Laatst Bijgewerkt</th>
+                  <th st-sort="voornaam">Voornaam</th>
               </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="rekening in emptyRekeningen">
-                        <td><a href="nieuwRekening/{{rekening.pk_id}}">Edit</a></td>
-                        <td>{{rekening.waarde}}</td>
-                        <td>{{rekening.naam}}</td>
-                        <td>{{rekening.laatst_bijgewerkt}}</td>
+                <tr ng-repeat="persoon in emptyPersonen">
+                        <td><a href="nieuwPersoon/{{persoon.pk_id}}">Edit</a></td>
+                        <td>{{persoon.naam}}</td>
+                        <td>{{persoon.voornaam}}</td>
                 </tr>
             </tbody>
             <tfoot>
@@ -42,8 +40,8 @@
     </body>
     <script type="text/javascript">
         app.controller("fController", function($scope, $http) {
-            $http.get("/ThuisAdmin/json/rekeningen").success( function(data){
-                $scope.rekeningen = data.rekeningen;
+            $http.get("/ThuisAdmin/json/personen").success( function(data){
+                $scope.personen = data;
             });
         });
     </script>

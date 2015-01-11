@@ -5,17 +5,7 @@
     "http://www.w3.org/TR/html4/loose.dtd">
 
 <html ng-app="myApp">
-    <head>
-        <script src="<c:url value="/resources/jquery-1.11.1.min.js" />"></script>
-        <script src="<c:url value="/resources/angular.min.js" />"></script>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css" />" rel="stylesheet">
-        <link href="<c:url value="/resources/bootstrap/css/datepicker3.css" />" rel="stylesheet">
-        <script src="<c:url value="/resources/bootstrap/js/bootstrap.min.js" />"></script>
-        <script src="<c:url value="/resources/bootstrap/js/bootstrap-datepicker.js" />"></script>
-        <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['bar']}]}"></script>
-        <title>ThuisAdministratie</title>
-    </head>
+    <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['bar']}]}"></script>
     <body ng-controller="fController">
         <%@include file="/resources/template/header.html" %>
         <form class="form-horizontal" ng-submit="submitGraphiekData()">
@@ -78,7 +68,6 @@
     </body>
     
     <script type="text/javascript">
-        var app = angular.module('myApp', ['smart-table']);
         app.controller("fController", function($scope, $http) {
             // Begin Set Header Info
             $scope.financeOverview = {

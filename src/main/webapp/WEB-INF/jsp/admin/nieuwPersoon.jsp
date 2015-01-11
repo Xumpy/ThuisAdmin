@@ -6,59 +6,55 @@
     <%@include file="/resources/template/header.html" %>
     <body ng-controller="fController">
         <div class="col-lg-12">
-            <form class="col-lg-1" ng-submit="saveRekening()">
+            <form class="col-lg-1" ng-submit="savePersoon()">
                 <input class="col-lg-12 btn btn-primary" type="submit" value="Save"/>
             </form>
-            <form ng-show="rekening.pk_id !== ''" class="col-lg-1" ng-submit="deleteRekening()">
+            <form ng-show="persoon.pk_id !== ''" class="col-lg-1" ng-submit="deletePersoon()">
                 <input class="col-lg-12 btn btn-primary" type="submit" value="Delete"/>
             </form>
         </div>
         <div class="col-lg-6 well">
             <div class="form-group col-lg-12">
-              <label for="inputWaarde" class="col-lg-2 control-label">Waarde</label>
+              <label for="inputNaam" class="col-lg-2 control-label">Naam</label>
               <div class="col-lg-4">
-                <input class="form-control" id="inputWaarde" ng-model="rekening.waarde" placeholder="Waarde" type="text">
+                <input class="form-control" id="inputNaam" ng-model="persoon.naam" placeholder="Naam" type="text">
               </div>
             </div>
             <div class="form-group col-lg-12">
-              <label for="inputNaam" class="col-lg-2 control-label">Naam</label>
+              <label for="inputVoornaam" class="col-lg-2 control-label">Voornaam</label>
               <div class="col-lg-4">
-                <input class="form-control" id="inputNaam" ng-model="rekening.naam" placeholder="Naam" type="text">
+                <input class="form-control" id="inputVoornaam" ng-model="persoon.voornaam" placeholder="Naam" type="text">
               </div>
             </div>
         </div>
     </body>
     <script type="text/javascript">
-        var today = new Date();
-        var datum = today.getFullYear() + "-" + ("0" + (today.getMonth()+1)).slice(-2) + "-" + ("0" + today.getDate()).slice(-2);
-        
         app.controller("fController", function($scope, $http) {
             if ("<c:out value="${pk_id}"/>" !== ""){
-              $http.get("/ThuisAdmin/json/rekeningen/<c:out value="${pk_id}"/>").success( function(data){
-                  $scope.rekening = data;
+              $http.get("/ThuisAdmin/json/personen/<c:out value="${pk_id}"/>").success( function(data){
+                  $scope.persoon = data;
               });  
             } else {
-              $scope.rekening = {
+              $scope.persoon = {
                   pk_id: "",
-                  waarde: "",
                   naam: "",
-                  laatst_bijgewerkt: datum
+                  voornaam: ""
               };
             }
             
-            $scope.saveRekening = (function(){
-                $http.post("/ThuisAdmin/json/saveRekening", $scope.rekening).success( function() {
-                    $(location).attr('href','/ThuisAdmin/admin/rekeningen');
+            $scope.savePersoon = (function(){
+                $http.post("/ThuisAdmin/json/savePersoon", $scope.persoon).success( function() {
+                    $(location).attr('href','/ThuisAdmin/admin/personen');
                 }).error( function() {
                     bootbox.alert("Error occured during save");
                 });
             });
             
-            $scope.deleteRekening = (function(){
-                 bootbox.confirm("Are you sure you want to delete this Rekening?", function(result) {
+            $scope.deletePersoon = (function(){
+                 bootbox.confirm("Are you sure you want to delete this Persoon?", function(result) {
                     if (result === true){
-                        $http.post("/ThuisAdmin/json/deleteRekening", $scope.rekening).success( function() {
-                            $(location).attr('href','/ThuisAdmin/admin/rekeningen');
+                        $http.post("/ThuisAdmin/json/deletePersoon", $scope.persoon).success( function() {
+                            $(location).attr('href','/ThuisAdmin/admin/personen');
                         }).error( function(){
                           bootbox.alert("Error occured during delete");
                         });
