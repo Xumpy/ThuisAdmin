@@ -31,20 +31,25 @@ public class DocumentenSrvImpl implements DocumentenSrv{
     
     @Override
     @Transactional(readOnly=false)
-    public void save(Bedragen bedragen) {
-        documentenDao.save(bedragen);
+    public void save(Documenten document) {
+        if (document.getPk_id() == null){
+            document.setPk_id(documentenDao.getNewPkId());
+            documentenDao.save(document);
+        } else {
+            documentenDao.update(document);
+        }
     }
 
     @Override
     @Transactional(readOnly=false)
-    public void update(Bedragen bedragen) {
-        documentenDao.update(bedragen);
+    public void update(Documenten document) {
+        documentenDao.update(document);
     }
 
     @Override
     @Transactional(readOnly=false)
-    public void delete(Bedragen bedragen) {
-        documentenDao.delete(bedragen);
+    public void delete(Documenten document) {
+        documentenDao.delete(document);
     }
 
     @Override
@@ -61,7 +66,8 @@ public class DocumentenSrvImpl implements DocumentenSrv{
     }
     
     @Override
-    public List<DocumentenReport> fetchBedragDocumenten(Integer bedragId){
-        return documentenDao.fetchBedragDocumenten(bedragId);
+    @Transactional
+    public List<Documenten> fetchDocumentByBedrag(Integer bedragId){
+        return documentenDao.fetchDocumentByBedrag(bedragId);
     }
 }

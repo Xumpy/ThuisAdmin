@@ -11,6 +11,7 @@ import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
 import com.xumpy.thuisadmin.model.view.FinanceOverzichtGroep;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragen;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragenTotal;
+import com.xumpy.thuisadmin.model.view.RekeningOverzicht;
 import java.util.Date;
 import java.util.List;
 
@@ -22,9 +23,9 @@ public interface BedragenSrv {
     void save(Bedragen bedragen);
     void update(Bedragen bedragen);
     void delete(Bedragen bedragen);
-    public List<BeheerBedragenReport> reportBedragen(Rekeningen rekening);
+    public List<BeheerBedragenReport> reportBedragen(Rekeningen rekening, Integer offset);
     
-    public List<Bedragen> graphiekBedrag(Rekeningen rekening,
+    public List<RekeningOverzicht> graphiekBedrag(Rekeningen rekening,
                                          Date beginDate,
                                          Date eindDate);
     public FinanceOverzichtGroep graphiekOverzichtGroep(Date beginDate,
@@ -33,4 +34,5 @@ public interface BedragenSrv {
                                                                       Integer typeGroepKostOpbrengst, 
                                                                       Date beginDate, 
                                                                       Date eindDate);
+    public Bedragen findBedrag(Integer bedragId);
 }

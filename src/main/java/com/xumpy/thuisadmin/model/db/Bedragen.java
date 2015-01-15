@@ -5,9 +5,11 @@
  */
 package com.xumpy.thuisadmin.model.db;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -26,11 +28,19 @@ public class Bedragen {
     private Integer pk_id;
     
     @ManyToOne
+    @JoinColumn(name="FK_TYPE_GROEP_ID")
+    private Groepen groep;
+    
+    @ManyToOne
+    @JoinColumn(name="FK_PERSOON_ID")
+    private Personen persoon;
+    
+    @ManyToOne
     @JoinColumn(name="FK_REKENING_ID")
     private Rekeningen rekening;
     
     @Column(name="BEDRAG")
-    private Double bedrag;
+    private BigDecimal bedrag;
     
     @Column(name="DATUM")
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -55,11 +65,11 @@ public class Bedragen {
         this.rekening = rekening;
     }
 
-    public Double getBedrag() {
+    public BigDecimal getBedrag() {
         return bedrag;
     }
 
-    public void setBedrag(Double bedrag) {
+    public void setBedrag(BigDecimal bedrag) {
         this.bedrag = bedrag;
     }
 
@@ -77,5 +87,21 @@ public class Bedragen {
 
     public void setOmschrijving(String omschrijving) {
         this.omschrijving = omschrijving;
+    }
+
+    public Groepen getGroep() {
+        return groep;
+    }
+
+    public void setGroep(Groepen groep) {
+        this.groep = groep;
+    }
+
+    public Personen getPersoon() {
+        return persoon;
+    }
+
+    public void setPersoon(Personen persoon) {
+        this.persoon = persoon;
     }
 }

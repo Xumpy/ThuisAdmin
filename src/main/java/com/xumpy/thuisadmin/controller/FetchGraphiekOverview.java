@@ -10,6 +10,7 @@ import com.xumpy.thuisadmin.model.view.FinanceOverview;
 import com.xumpy.thuisadmin.model.view.FinanceOverzichtGroep;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragenInp;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragenTotal;
+import com.xumpy.thuisadmin.model.view.RekeningOverzicht;
 import com.xumpy.thuisadmin.services.BedragenSrv;
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -36,7 +37,7 @@ public class FetchGraphiekOverview  implements Serializable{
     private BedragenSrv bedragenSrv;
     
     @RequestMapping("/json/graphiek_overview")
-    public @ResponseBody List<Bedragen> fetchGraphiekOverview(@RequestBody FinanceOverview financeOverview) throws ParseException{
+    public @ResponseBody List<RekeningOverzicht> fetchGraphiekOverview(@RequestBody FinanceOverview financeOverview) throws ParseException{
         if (financeOverview.getBeginDatum() != null){
             String strStartDate = financeOverview.getBeginDatum();
             String strEindDate = financeOverview.getEindDatum();

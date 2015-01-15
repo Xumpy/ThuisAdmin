@@ -10,6 +10,9 @@ import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
 import com.xumpy.thuisadmin.model.view.OverzichtGroep;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragen;
+import com.xumpy.thuisadmin.model.view.RekeningOverzicht;
+import com.xumpy.thuisadmin.model.view.graphiek.OverzichtBedrag;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -21,9 +24,9 @@ public interface BedragenDao{
     void save(Bedragen bedragen);
     void update(Bedragen bedragen);
     void delete(Bedragen bedragen);
-    public List<BeheerBedragenReport> reportBedragen(Rekeningen rekening);
+    public List<BeheerBedragenReport> reportBedragen(Rekeningen rekening, Integer offset);
     
-    public List<Bedragen> graphiekBedrag(Rekeningen rekening,
+    public List<RekeningOverzicht> graphiekBedrag(Rekeningen rekening,
                                          Date beginDate,
                                          Date eindDate);
     public List<OverzichtGroep> graphiekOverzichtGroep(Date beginDate,
@@ -32,4 +35,13 @@ public interface BedragenDao{
                                                                       Integer negatief,
                                                                       Date beginDate,
                                                                       Date eindDate);
+    public Integer getNewPkId();
+    public Bedragen findBedrag(Integer bedragId);
+    
+    public List<OverzichtBedrag> findAllBedragen();
+    public List<OverzichtBedrag> findAllBedragen(Date startDate, Date endDate);
+    public List<OverzichtBedrag> findBedragenRekening(Rekeningen rekening);
+    public List<OverzichtBedrag> findBedragenRekening(Rekeningen rekening, Date startDate, Date endDate);
+    public BigDecimal somBedragDatum(Rekeningen rekening, Date datum);
+    public BigDecimal somBedragDatum(Date datum);
 }

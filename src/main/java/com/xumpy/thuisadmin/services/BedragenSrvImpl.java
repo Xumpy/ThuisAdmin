@@ -6,6 +6,7 @@
 package com.xumpy.thuisadmin.services;
 
 import com.xumpy.thuisadmin.dao.BedragenDaoImpl;
+import com.xumpy.thuisadmin.dao.RekeningenDaoImpl;
 import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
@@ -13,10 +14,16 @@ import com.xumpy.thuisadmin.model.view.FinanceOverzichtGroep;
 import com.xumpy.thuisadmin.model.view.OverzichtGroep;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragen;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragenTotal;
-import java.io.Serializable;
+import com.xumpy.thuisadmin.model.view.RekeningOverzicht;
+import com.xumpy.thuisadmin.model.view.graphiek.OverzichtBedrag;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,10 +38,20 @@ public class BedragenSrvImpl implements BedragenSrv{
     @Autowired
     private BedragenDaoImpl bedragenDao;
     
+    @Autowired
+    private RekeningenDaoImpl rekeningenDao;
+    
+    static Logger log = Logger.getLogger(BedragenSrvImpl.class.getName());
+    
     @Override
     @Transactional(readOnly=false)
     public void save(Bedragen bedragen) {
-        bedragenDao.save(bedragen);
+        if (bedragen.getPk_id() == null){
+            bedragen.setPk_id(bedragenDao.getNewPkId());
+            bedragenDao.save(bedragen);
+        } else {
+            bedragenDao.update(bedragen);
+        }
     }
 
     @Override
@@ -51,13 +68,15 @@ public class BedragenSrvImpl implements BedragenSrv{
 
     @Override
     @Transactional
-    public List<Bedragen> graphiekBedrag(Rekeningen rekening, Date beginDate, Date eindDate) {
-        return bedragenDao.graphiekBedrag(rekening, beginDate, eindDate);
+    public List<RekeningOverzicht> graphiekBedrag(Rekeningen rekening, Date beginDate, Date eindDate) {
+        //return bedragenDao.graphiekBedrag(rekening, beginDate, eindDate);
+        return overzichtBedragen(rekening, beginDate, eindDate);
     }
 
     @Override
     @Transactional
     public FinanceOverzichtGroep graphiekOverzichtGroep(Date beginDate, Date eindDate) {
+
         FinanceOverzichtGroep financeOverzichtGroep = new FinanceOverzichtGroep();
         
         List<OverzichtGroep> overzichtGroep = bedragenDao.graphiekOverzichtGroep(beginDate, eindDate);
@@ -105,7 +124,65 @@ public class BedragenSrvImpl implements BedragenSrv{
 
     @Override
     @Transactional
-    public List<BeheerBedragenReport> reportBedragen(Rekeningen rekening) {
-        return bedragenDao.reportBedragen(rekening);
+    public List<BeheerBedragenReport> reportBedragen(Rekeningen rekening, Integer offset) {
+        return bedragenDao.reportBedragen(rekening, offset);
+    }
+
+    @Override
+    @Transactional
+    public Bedragen findBedrag(Integer bedragId) {
+        return bedragenDao.findBedrag(bedragId);
+    }
+    
+    private List<RekeningOverzicht> overzichtBedragen(Rekeningen rekening,
+                                                      Date beginDate,
+                                                      Date eindDate){
+        List<RekeningOverzicht> rekeningOverzichten = new ArrayList<RekeningOverzicht>();
+        List<OverzichtBedrag> overzichtBedrag = new ArrayList<OverzichtBedrag>();
+        BigDecimal totaalRekening = new BigDecimal(0);
+        
+        if (rekening == null){
+            overzichtBedrag = bedragenDao.findAllBedragen(beginDate, eindDate);
+            List<Rekeningen> rekeningen = rekeningenDao.findAllRekeningen();
+            
+            for (Rekeningen reken: rekeningen){
+                totaalRekening = totaalRekening.add(reken.getWaarde());
+            }
+            totaalRekening = totaalRekening.subtract(bedragenDao.somBedragDatum(beginDate));
+        } else {
+            overzichtBedrag = bedragenDao.findBedragenRekening(rekening, beginDate, eindDate);
+            totaalRekening = rekening.getWaarde();
+            totaalRekening = totaalRekening.subtract(bedragenDao.somBedragDatum(rekening, beginDate));
+        }
+        
+        Date old_date = overzichtBedrag.get(0).getDatum();
+        RekeningOverzicht rekeningOverzicht = new RekeningOverzicht();
+        for (int i = 0; i<overzichtBedrag.size(); i++){
+            OverzichtBedrag bedrag = overzichtBedrag.get(i);
+            
+            if (bedrag.getDatum().equals(old_date)){
+                totaalRekening = totaalRekening.add(bedrag.getBedrag());
+                if (i == (overzichtBedrag.size()-1)){
+                    rekeningOverzicht.setDatum(bedrag.getDatum());
+                    rekeningOverzicht.setBedrag(totaalRekening);
+                    rekeningOverzichten.add(rekeningOverzicht);
+                }
+            } else {
+                rekeningOverzicht.setDatum(old_date);
+                rekeningOverzicht.setBedrag(totaalRekening);
+                rekeningOverzichten.add(rekeningOverzicht);
+                totaalRekening = totaalRekening.add(bedrag.getBedrag());
+                rekeningOverzicht = new RekeningOverzicht();
+                if (i == (overzichtBedrag.size() -1)){
+                    rekeningOverzicht.setDatum(bedrag.getDatum());
+                    rekeningOverzicht.setBedrag(totaalRekening);
+                    rekeningOverzichten.add(rekeningOverzicht);
+                }
+            }
+            old_date = bedrag.getDatum();
+            rekeningOverzicht.setDatum(bedrag.getDatum());
+        }
+        
+        return rekeningOverzichten;
     }
 }

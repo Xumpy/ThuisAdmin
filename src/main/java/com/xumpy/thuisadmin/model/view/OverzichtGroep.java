@@ -18,13 +18,6 @@ public class OverzichtGroep implements Serializable{
     @Id
     private Integer groepId;
 
-    public Integer getGroepId() {
-        return groepId;
-    }
-
-    public void setGroepId(Integer groepId) {
-        this.groepId = groepId;
-    }
     private String naam;
     private Double totaal_opbrengsten;
     private Double totaal_kosten;
@@ -51,5 +44,13 @@ public class OverzichtGroep implements Serializable{
 
     public void setTotaal_kosten(Double totaal_kosten) {
         this.totaal_kosten = totaal_kosten;
+    }
+    
+    public Integer getGroepId() {
+        return groepId;
+    }
+
+    public void setGroepId(Integer groepId) {
+        this.groepId = groepId;
     }
 }

@@ -5,6 +5,8 @@
  */
 package com.xumpy.thuisadmin.model.db;
 
+import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
 
 /**
  *
@@ -19,7 +22,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="TA_BEDRAG_DOCUMENTEN")
-public class Documenten {
+public class Documenten implements Serializable {
     @Id
     @Column(name="PK_ID")
     private Integer pk_id;
@@ -40,7 +43,7 @@ public class Documenten {
     
     @Column(name="DOCUMENT_MIME")
     private String document_mime;
-
+    
     public String getDocument_naam() {
         return document_naam;
     }

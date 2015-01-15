@@ -8,6 +8,7 @@ package com.xumpy.thuisadmin.model.db;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,6 +20,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="TA_TYPE_GROEP")
+//@GeneratedValue(strategy = )
 public class Groepen implements Serializable {
     @Id
     @Column(name="PK_ID")

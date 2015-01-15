@@ -29,6 +29,7 @@
                     <table st-safe-src="bedragen" st-table="emptyBedragen" class="table table-striped table-hover ">
                         <thead>
                             <tr>
+                                <th></th>
                                 <th st-sort="type_groep">Type Groep</th>
                                 <th st-sort="persoon">Persoon</th>
                                 <th st-sort="bedrag">Bedrag</th>
@@ -41,6 +42,7 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="bedrag in emptyBedragen">
+                                <td><a href="nieuwBedrag/{{bedrag.pk_id}}">Edit</a></td>
                                 <td>{{bedrag.type_groep}}</td>
                                 <td>{{bedrag.persoon}}</td>
                                 <td>{{bedrag.bedrag}}</td>
@@ -51,7 +53,14 @@
                         <tfoot>
                             <tr>
                                 <td colspan="5" class="text-center">
-                                        <div st-pagination="" st-items-by-page="10" st-displayed-pages="100"></div>
+                                    <form ng-show="beheerBedragen.offset !== 0" ng-submit="previousBedrag()">
+                                        <input class="btn btn-primary" type="submit" value="Vorige"/>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form ng-submit="nextBedrag()">
+                                        <input class="btn btn-primary" type="submit" value="Volgende"/>
+                                    </form>
                                 </td>
                             </tr>
                         </tfoot>
@@ -82,10 +91,13 @@
     </body>
     <script type="text/javascript">
         app.controller("fController", function($scope, $http) {
-            $scope.beheerBedragen = {
-                rekening: "",
-                zoekOpdracht: ""
-            }
+            $http.get('/ThuisAdmin/json/fetch_beheer_bedragen').success(function(data){
+                $scope.beheerBedragen = data;
+                var res = $http.post("/ThuisAdmin/json/fetch_bedragen", $scope.beheerBedragen);
+                res.success(function(data){
+                   $scope.bedragen = data; 
+                });
+            });
             
             $http.get('/ThuisAdmin/json/rekeningen').success(function(data){
                 $scope.rekeningenTotaal = data;
@@ -93,7 +105,24 @@
             });
             
             $scope.submitRekening = function(){
-                var res = $http.post("/ThuisAdmin/json/fetch_bedragen", $scope.beheerBedragen.rekening);
+                $scope.beheerBedragen.offset = 0;
+                var res = $http.post("/ThuisAdmin/json/fetch_bedragen", $scope.beheerBedragen);
+                res.success(function(data){
+                   $scope.bedragen = data; 
+                });
+            }
+            
+            $scope.nextBedrag = function(){
+                $scope.beheerBedragen.offset++;
+                var res = $http.post("/ThuisAdmin/json/fetch_bedragen", $scope.beheerBedragen);
+                res.success(function(data){
+                   $scope.bedragen = data; 
+                });
+            }
+            
+            $scope.previousBedrag = function(){
+                $scope.beheerBedragen.offset--;
+                var res = $http.post("/ThuisAdmin/json/fetch_bedragen", $scope.beheerBedragen);
                 res.success(function(data){
                    $scope.bedragen = data; 
                 });

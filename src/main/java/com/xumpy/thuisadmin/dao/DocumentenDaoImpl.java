@@ -5,16 +5,15 @@
  */
 package com.xumpy.thuisadmin.dao;
 
-import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Documenten;
 import com.xumpy.thuisadmin.model.view.DocumentenReport;
+import java.math.BigDecimal;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -27,20 +26,29 @@ public class DocumentenDaoImpl implements DocumentenDao{
     private SessionFactory sessionFactory;
     
     @Override
-    public void save(Bedragen bedragen) {
-        sessionFactory.getCurrentSession().save(bedragen);
+    public void save(Documenten document) {
+        sessionFactory.getCurrentSession().save(document);
     }
 
     @Override
-    public void update(Bedragen bedragen) {
-        sessionFactory.getCurrentSession().update(bedragen);
+    public void update(Documenten document) {
+        sessionFactory.getCurrentSession().update(document);
     }
 
     @Override
-    public void delete(Bedragen bedragen) {
-        sessionFactory.getCurrentSession().delete(bedragen);
+    public void delete(Documenten document) {
+        sessionFactory.getCurrentSession().delete(document);
     }
 
+    @Override
+    public Integer getNewPkId() {
+        Session session = sessionFactory.getCurrentSession();
+        
+        BigDecimal pkId = (BigDecimal)session.createSQLQuery("select seq_ta_bedrag_documenten.nextval from dual").list().get(0);
+        
+        return pkId.intValue();
+    }
+    
     @Override
     public List<DocumentenReport> fetchDocumentenReport() {
         Session session = sessionFactory.getCurrentSession();
@@ -61,6 +69,16 @@ public class DocumentenDaoImpl implements DocumentenDao{
     }
 
     @Override
+    public List<Documenten> fetchDocumentByBedrag(Integer bedragId){
+        Session session = sessionFactory.getCurrentSession();
+        
+        Query query = session.createQuery("from Documenten where bedrag.pk_id = :bedragId");
+        query.setInteger("bedragId", bedragId);
+        
+        return query.list();
+    }
+    
+    @Override
     public Documenten fetchDocument(Integer documentId) {
         Session session = sessionFactory.getCurrentSession();
         
@@ -75,22 +93,5 @@ public class DocumentenDaoImpl implements DocumentenDao{
         query.setInteger("pk_id", documentId);
         
         return (Documenten)query.list().get(0);
-    }
-    
-    @Override
-    public List<DocumentenReport> fetchBedragDocumenten(Integer bedragId) {
-        Session session = sessionFactory.getCurrentSession();
-        
-        Query query = session.createSQLQuery("select pk_id," +
-                                             "       fk_bedrag_id," +
-                                             "       omschrijving," +
-                                             "       document," +
-                                             "       document_naam," +
-                                             "       document_mime" +
-                                             " from ta_bedrag_documenten" +
-                                             " where fk_bedrag_id = :bedrag_id").addEntity(Documenten.class);
-        query.setInteger("bedrag_id", bedragId);
-        
-        return query.list();
     }
 }

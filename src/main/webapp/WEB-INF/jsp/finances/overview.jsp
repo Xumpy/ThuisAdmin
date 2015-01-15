@@ -71,7 +71,9 @@
           dataGoogle.addColumn('string', 'Datum');
           dataGoogle.addColumn('number', 'Bedrag');
 
-          dataGoogle.addRows(jsonData);
+          $.each(jsonData, function(key, value){
+              dataGoogle.addRow([value.datum, value.bedrag]);
+          });
 
           var options = {
               width: 1500,

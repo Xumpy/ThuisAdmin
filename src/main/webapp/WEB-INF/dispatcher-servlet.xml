@@ -37,6 +37,10 @@
         <property name="password" value="pcat3900" />
     </bean>
 
+    <bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver"> 
+        <property name="maxUploadSize" value="50000000" /> 
+    </bean>
+
     <bean id="sessionFactory" 
           class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
  
@@ -48,7 +52,6 @@
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
-                <prop key="hibernate.show_sql">true</prop>
             </props>
         </property>    
 

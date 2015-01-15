@@ -71,9 +71,7 @@ public class GroepenDaoImpl implements GroepenDao{
                                              "       fk_personen_id," +
                                              "       code_id from ta_type_groep" +
                                              " where fk_hoofd_type_groep_id is null").addEntity(Groepen.class);
-//                                             "   (select pk_id from ta_type_groep where code_id = ?)").addEntity(Groepen.class);
-//        query.setString(0, "HOOFD");
-        
+
         return query.list();
     }
 

@@ -7,17 +7,20 @@ package com.xumpy.thuisadmin.controller;
 
 import com.xumpy.thuisadmin.model.db.Documenten;
 import com.xumpy.thuisadmin.model.view.DocumentenReport;
+import com.xumpy.thuisadmin.model.view.NieuwDocument;
 import com.xumpy.thuisadmin.services.DocumentenSrv;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -36,6 +39,18 @@ public class CtrlDocumenten implements Serializable {
      public @ResponseBody List<DocumentenReport> fetchDocumenten(){
          return documentenSrv.fetchDocumentenReport();
      }
+     
+    @RequestMapping("/json/delete_document")
+    public @ResponseBody String deleteDocument(@RequestBody NieuwDocument nieuwDocument){
+        Documenten document = new Documenten();
+        
+        document.setPk_id(nieuwDocument.getPk_id());
+        document.setOmschrijving(nieuwDocument.getOmschrijving());
+        
+        documentenSrv.delete(document);
+        
+        return "1";
+    }
     
     @RequestMapping(value="/json/fetch_document/{documentId}", method = RequestMethod.GET)
     public @ResponseBody String fetchDocumentBlob(@PathVariable Integer documentId, HttpServletResponse response) throws IOException, SQLException{
@@ -55,7 +70,21 @@ public class CtrlDocumenten implements Serializable {
     }
  
     @RequestMapping("/json/fetch_bedrag_documenten/{bedragId}")
-     public @ResponseBody List<DocumentenReport> fetchBedragDocumenten(@PathVariable Integer bedragId){
-         return documentenSrv.fetchBedragDocumenten(bedragId);
+     public @ResponseBody List<NieuwDocument> fetchDocumentByBedrag(@PathVariable Integer bedragId){
+         List<Documenten> documenten = documentenSrv.fetchDocumentByBedrag(bedragId);
+         
+         List<NieuwDocument> nieuwDocumenten = new ArrayList<NieuwDocument>();
+         
+         for(Documenten document: documenten){
+             NieuwDocument nieuwDocument = new NieuwDocument();
+             nieuwDocument.setBedrag_id(document.getBedrag().getPk_id());
+             //nieuwDocument.setDatum(document.getDatum());
+             nieuwDocument.setOmschrijving(document.getOmschrijving());
+             nieuwDocument.setPk_id(document.getPk_id());
+             
+             nieuwDocumenten.add(nieuwDocument);
+         }
+         
+         return nieuwDocumenten;
      }
 }

@@ -10,11 +10,15 @@ import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
 import com.xumpy.thuisadmin.model.view.OverzichtGroep;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragen;
+import com.xumpy.thuisadmin.model.view.RekeningOverzicht;
+import com.xumpy.thuisadmin.model.view.graphiek.OverzichtBedrag;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.StatelessSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -43,8 +47,9 @@ public class BedragenDaoImpl implements BedragenDao{
         sessionFactory.getCurrentSession().delete(bedragen);
     }
 
+    
     @Override
-    public List<Bedragen> graphiekBedrag(Rekeningen rekening, Date beginDate, Date eindDate) {
+    public List<RekeningOverzicht> graphiekBedrag(Rekeningen rekening, Date beginDate, Date eindDate) {
         Session session = sessionFactory.openSession();
         Query query = session.createSQLQuery("select to_char(datum, 'DD-MM-RRRR') as label," +
                                           "       rekening_bedrag as value " +
@@ -54,11 +59,9 @@ public class BedragenDaoImpl implements BedragenDao{
                                           "            in_eind_datum => ?," +
                                           "            in_interval => 1)) " +
                                           "order by datum asc");
-        if (rekening == null){
-            query.setInteger(0, -1);
-        } else {
-            query.setInteger(0, rekening.getPk_id());
-        }
+        
+        query.setInteger(0, rekening == null ? -1 : rekening.getPk_id()); 
+
         query.setDate(1, beginDate);
         query.setDate(2, eindDate);
         
@@ -110,7 +113,7 @@ public class BedragenDaoImpl implements BedragenDao{
     }
 
     @Override
-    public List<BeheerBedragenReport> reportBedragen(Rekeningen rekening) {
+    public List<BeheerBedragenReport> reportBedragen(Rekeningen rekening, Integer offset) {
         Session session = sessionFactory.openSession();
         Query query = session.createSQLQuery("select tb.pk_id as pk_id," +
                                              "       tt.pk_id as fk_type_groep_id," +
@@ -128,9 +131,89 @@ public class BedragenDaoImpl implements BedragenDao{
                                              " join ta_type_groep tt" +
                                              "   on (tb.fk_type_groep_id = tt.pk_id)" +
                                              " where tb.fk_rekening_id = :rekeningId" + 
-                                             " order by tb.datum desc").addEntity(BeheerBedragenReport.class);
+                                             " order by tb.datum desc, pk_id desc" +
+                                             " offset " + 10 * offset + " rows fetch next 10 rows only").addEntity(BeheerBedragenReport.class);
         
         query.setInteger("rekeningId", rekening.getPk_id());
         return query.list();
+    }
+
+    @Override
+    public Integer getNewPkId() {
+        return ((BigDecimal)sessionFactory.getCurrentSession().createSQLQuery("select seq_ta_bedragen.nextval from dual").list().get(0)).intValue();
+    }
+    
+    @Override
+    public Bedragen findBedrag(Integer bedragId){
+        return (Bedragen)sessionFactory.getCurrentSession().get(Bedragen.class, bedragId);
+    }
+    
+    @Override
+    public List<OverzichtBedrag> findAllBedragen(){
+        return sessionFactory.getCurrentSession().createQuery("select new com.xumpy.thuisadmin.model.view.graphiek.OverzichtBedrag(b.datum, b.bedrag, b.groep.negatief) " +
+                                                              "from Bedragen b order by datum asc").list();
+    }
+
+    @Override
+    public List<OverzichtBedrag> findAllBedragen(Date startDate, Date endDate){
+        Session session = sessionFactory.getCurrentSession();
+        
+        Query query = session.createQuery("select new com.xumpy.thuisadmin.model.view.graphiek.OverzichtBedrag(b.datum, b.bedrag, b.groep.negatief) " +
+                                          "from Bedragen b where datum between :start and :end order by datum asc");
+        
+        query.setDate("start", startDate);
+        query.setDate("end", endDate);
+        
+        return query.list();
+    }
+    
+    @Override
+    public List<OverzichtBedrag> findBedragenRekening(Rekeningen rekening) {
+        Session session = sessionFactory.getCurrentSession();
+        
+        Query query = session.createQuery("select new com.xumpy.thuisadmin.model.view.graphiek.OverzichtBedrag(b.datum, b.bedrag, b.groep.negatief) " +
+                                          "from Bedragen b where rekening.pk_id = :rekeningId order by datum asc, pk_id asc");
+        query.setInteger("rekeningId", rekening.getPk_id());
+        
+        return query.list();
+    }
+    
+    @Override
+    public List<OverzichtBedrag> findBedragenRekening(Rekeningen rekening, Date startDate, Date endDate) {
+        StatelessSession session = sessionFactory.openStatelessSession();
+        
+        //Query query = session.createQuery("from Bedragen where rekening.pk_id = :rekeningId and datum between :start and :end order by datum asc");
+        
+        Query query = session.createQuery("select new com.xumpy.thuisadmin.model.view.graphiek.OverzichtBedrag(b.datum, b.bedrag, b.groep.negatief) " +
+                                          "from Bedragen b" +
+                                          " where rekening.pk_id = :rekeningId " +
+                                          "   and datum between :start and :end order by datum asc, pk_id asc");
+        
+        query.setParameter("rekeningId", rekening.getPk_id());
+        query.setParameter("start", startDate);
+        query.setParameter("end", endDate);
+        
+        return query.list();
+    }
+
+    @Override
+    public BigDecimal somBedragDatum(Rekeningen rekening, Date datum) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("select sum( case b.groep.negatief when 1 then (b.bedrag * -1) else b.bedrag end) " +
+                                          " from Bedragen b where datum >= :datum and b.rekening.pk_id = :rekeningId");
+        query.setDate("datum", datum);
+        query.setInteger("rekeningId", rekening.getPk_id());
+        
+        return (BigDecimal)query.list().get(0);
+    }
+
+    @Override
+    public BigDecimal somBedragDatum(Date datum) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("select sum( case b.groep.negatief when 1 then (b.bedrag * -1) else b.bedrag end) " +
+                                          " from Bedragen b where datum >= :datum");
+        query.setDate("datum", datum);
+        
+        return (BigDecimal)query.list().get(0);
     }
 }

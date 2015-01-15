@@ -15,12 +15,13 @@ import java.util.List;
  * @author Nico
  */
 public interface DocumentenDao {
-    void save(Bedragen bedragen);
-    void update(Bedragen bedragen);
-    void delete(Bedragen bedragen);
+    void save(Documenten document);
+    void update(Documenten document);
+    void delete(Documenten document);
+    public Integer getNewPkId();
     
     public List<DocumentenReport> fetchDocumentenReport();
     
     public Documenten fetchDocument(Integer documentId);
-    public List<DocumentenReport> fetchBedragDocumenten(Integer bedragId);
+    public List<Documenten> fetchDocumentByBedrag(Integer bedragId);
 }
