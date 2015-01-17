@@ -216,4 +216,14 @@ public class BedragenDaoImpl implements BedragenDao{
         
         return (BigDecimal)query.list().get(0);
     }
+    
+    @Override
+    public BigDecimal getBedrag(Integer pk_id){
+        Session session = sessionFactory.getCurrentSession();
+        
+        Query query = session.createSQLQuery("select bedrag from ta_bedragen where pk_id = :pk_id");
+        query.setInteger("pk_id", pk_id);
+        
+        return (BigDecimal)query.list().get(0);
+    }
 }

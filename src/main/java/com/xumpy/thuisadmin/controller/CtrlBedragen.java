@@ -9,6 +9,7 @@ import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.model.view.BeheerBedragenInp;
 import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
+import com.xumpy.thuisadmin.model.view.NieuwBedrag;
 import com.xumpy.thuisadmin.services.BedragenSrv;
 import java.text.ParseException;
 import java.util.List;
@@ -44,7 +45,7 @@ public class CtrlBedragen {
     }
     
     @RequestMapping("/json/save_bedrag")
-    public @ResponseBody String saveBedragen(@RequestBody Bedragen bedrag) throws ParseException{
+    public @ResponseBody String saveBedragen(@RequestBody NieuwBedrag bedrag) throws ParseException{
         bedragenSrv.save(bedrag);
         
         return "1";
@@ -56,7 +57,7 @@ public class CtrlBedragen {
     }
     
     @RequestMapping("/json/delete_bedrag")
-    public @ResponseBody String deleteBedrag(@RequestBody Bedragen bedrag) throws ParseException{
+    public @ResponseBody String deleteBedrag(@RequestBody NieuwBedrag bedrag) throws ParseException{
         bedragenSrv.delete(bedrag);
         
         return "1";

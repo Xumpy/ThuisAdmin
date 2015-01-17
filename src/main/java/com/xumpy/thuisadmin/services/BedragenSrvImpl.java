@@ -11,17 +11,19 @@ import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
 import com.xumpy.thuisadmin.model.view.FinanceOverzichtGroep;
+import com.xumpy.thuisadmin.model.view.NieuwBedrag;
 import com.xumpy.thuisadmin.model.view.OverzichtGroep;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragen;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragenTotal;
 import com.xumpy.thuisadmin.model.view.RekeningOverzicht;
 import com.xumpy.thuisadmin.model.view.graphiek.OverzichtBedrag;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,29 +43,50 @@ public class BedragenSrvImpl implements BedragenSrv{
     @Autowired
     private RekeningenDaoImpl rekeningenDao;
     
-    static Logger log = Logger.getLogger(BedragenSrvImpl.class.getName());
+    static final Logger Log = Logger.getLogger(BedragenSrvImpl.class.getName());
     
     @Override
     @Transactional(readOnly=false)
-    public void save(Bedragen bedragen) {
+    public void save(NieuwBedrag nieuwBedrag) {
+        Bedragen bedragen = convertNieuwBedrag(nieuwBedrag);
+        
         if (bedragen.getPk_id() == null){
             bedragen.setPk_id(bedragenDao.getNewPkId());
+            
+            Rekeningen rekening = bedragen.getRekening();
+            rekening.setWaarde((rekening.getWaarde().subtract(bedragen.getBedrag())));
+            
             bedragenDao.save(bedragen);
+            rekeningenDao.update(rekening);
         } else {
-            bedragenDao.update(bedragen);
+            update(nieuwBedrag);
         }
     }
 
     @Override
     @Transactional(readOnly=false)
-    public void update(Bedragen bedragen) {
+    public void update(NieuwBedrag nieuwBedrag) {
+        Bedragen bedragen = convertNieuwBedrag(nieuwBedrag);
+        BigDecimal oldBedrag = bedragenDao.getBedrag(bedragen.getPk_id());
+        
+        Rekeningen rekening = bedragen.getRekening();
+        rekening.setWaarde((rekening.getWaarde().add(oldBedrag)));
+        rekening.setWaarde((rekening.getWaarde().subtract(bedragen.getBedrag())));
+        
         bedragenDao.update(bedragen);
+        rekeningenDao.update(rekening);
     }
 
     @Override
     @Transactional(readOnly=false)
-    public void delete(Bedragen bedragen) {
+    public void delete(NieuwBedrag nieuwBedrag) {
+        Bedragen bedragen = convertNieuwBedrag(nieuwBedrag);
+        
+        Rekeningen rekening = bedragen.getRekening();
+        rekening.setWaarde((rekening.getWaarde().add(bedragen.getBedrag())));
+        
         bedragenDao.delete(bedragen);
+        rekeningenDao.update(rekening);
     }
 
     @Override
@@ -184,5 +207,39 @@ public class BedragenSrvImpl implements BedragenSrv{
         }
         
         return rekeningOverzichten;
+    }
+    
+    public Bedragen convertNieuwBedrag(NieuwBedrag nieuwBedrag){
+        Bedragen bedragen = new Bedragen();
+        
+        bedragen.setPk_id(nieuwBedrag.getPk_id());
+        bedragen.setDatum(nieuwBedrag.getDatum());
+        bedragen.setGroep(nieuwBedrag.getGroep());
+        bedragen.setOmschrijving(nieuwBedrag.getOmschrijving());
+        bedragen.setPersoon(nieuwBedrag.getPersoon());
+        bedragen.setRekening(nieuwBedrag.getRekening());
+        
+        String bedrag = nieuwBedrag.getBedrag();
+        if (bedrag.contains(",")){
+            bedrag = bedrag.replace(".", "");
+            bedrag = bedrag.replace(",", ".");
+        } else {
+            if (nieuwBedrag.getBedrag().indexOf(".", nieuwBedrag.getBedrag().indexOf(".") + 1) != -1){
+                bedrag = bedrag.replace(".", "");
+            }
+        }
+        
+        Log.log(Level.INFO, "Bedrag transformed: {0}", bedrag);
+        
+        NumberFormat nf = NumberFormat.getInstance(new Locale("US"));
+        BigDecimal bigDecimalBedrag = new BigDecimal(0);
+        try {
+            bigDecimalBedrag = new BigDecimal(nf.parse(bedrag).doubleValue());
+        } catch (ParseException ex) {
+            Logger.getLogger(BedragenSrvImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        bedragen.setBedrag(bigDecimalBedrag);
+        
+        return bedragen;
     }
 }

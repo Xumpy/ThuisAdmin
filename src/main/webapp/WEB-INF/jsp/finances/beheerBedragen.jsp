@@ -36,9 +36,9 @@
                                 <th st-sort="datum">Datum</th>
                                 <th st-sort="omschrijving">Omschrijving</th>
                             </tr>
-                            <tr>
+                            <!--<tr>
                                 <th colspan="5"><input st-search="" class="form-control" placeholder="Search" type="text"/></th>
-                            </tr>
+                            </tr>-->
                         </thead>
                         <tbody>
                             <tr ng-repeat="bedrag in emptyBedragen">
