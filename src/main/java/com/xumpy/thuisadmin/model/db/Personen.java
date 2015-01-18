@@ -10,7 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
+import org.hibernate.validator.constraints.NotEmpty;
 /**
  *
  * @author Nico
@@ -23,9 +23,11 @@ public class Personen implements Serializable {
     private Integer pk_id;
     
     @Column(name="NAAM")
+    @NotEmpty
     private String naam;
     
     @Column(name="VOORNAAM")
+    @NotEmpty
     private String voornaam;
 
     public Integer getPk_id() {
