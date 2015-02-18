@@ -121,6 +121,7 @@ public class BedragenLogicTest {
        assertEquals(new BigDecimal("4000"), bedrag.getRekening().getWaarde());
     }
     
+    /*
     @Test
     public void testProcessRekeningBedrag4(){
        when(bedragMock.getBedrag()).thenReturn(new BigDecimal("500"));
@@ -130,4 +131,5 @@ public class BedragenLogicTest {
        
        assertEquals(new BigDecimal("2900"), bedrag.getRekening().getWaarde());
     }
+    */
 }
