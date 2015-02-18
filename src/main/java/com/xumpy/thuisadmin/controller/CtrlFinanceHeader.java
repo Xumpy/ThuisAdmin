@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @Scope("session")
-public class CtrlFinanceHeader implements Serializable{
+public class CtrlFinanceHeader{
     
     @Autowired
     private FinanceHeader financeHeader;

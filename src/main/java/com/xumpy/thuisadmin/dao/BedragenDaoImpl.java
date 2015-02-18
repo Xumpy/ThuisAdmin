@@ -13,12 +13,14 @@ import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragen;
 import com.xumpy.thuisadmin.model.view.RekeningOverzicht;
 import com.xumpy.thuisadmin.model.view.graphiek.OverzichtBedrag;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -140,7 +142,12 @@ public class BedragenDaoImpl implements BedragenDao{
 
     @Override
     public Integer getNewPkId() {
-        return ((BigDecimal)sessionFactory.getCurrentSession().createSQLQuery("select seq_ta_bedragen.nextval from dual").list().get(0)).intValue();
+        Session session = sessionFactory.getCurrentSession();
+        
+        List<BigInteger> list = session.createSQLQuery("select seq_ta_bedragen.nextval as num from dual")
+                .addScalar("num", StandardBasicTypes.BIG_INTEGER).list();
+        
+        return list.get(0).intValue();
     }
     
     @Override

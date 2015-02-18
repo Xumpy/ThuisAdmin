@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @Scope("session")
-public class FetchRekeningen  implements Serializable{
+public class FetchRekeningen{
     
     @Autowired
     private RekeningenSrv rekeningenSrv;
