@@ -82,7 +82,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-            <version>4.2.17.Final</version>
+            <version>4.2.7.SP1</version>
         </dependency>
         <dependency>
             <groupId>unknown.binary</groupId>
@@ -186,6 +186,12 @@
            <groupId>commons-fileupload</groupId>
            <artifactId>commons-fileupload</artifactId>
            <version>1.2.1</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.185</version>
         </dependency>
     </dependencies>
 

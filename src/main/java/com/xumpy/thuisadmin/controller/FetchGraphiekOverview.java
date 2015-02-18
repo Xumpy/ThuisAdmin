@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @Scope("session")
-public class FetchGraphiekOverview  implements Serializable{
+public class FetchGraphiekOverview{
     @Autowired
     private BedragenSrv bedragenSrv;
     

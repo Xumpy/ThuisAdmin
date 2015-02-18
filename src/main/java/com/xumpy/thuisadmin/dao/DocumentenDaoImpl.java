@@ -8,10 +8,12 @@ package com.xumpy.thuisadmin.dao;
 import com.xumpy.thuisadmin.model.db.Documenten;
 import com.xumpy.thuisadmin.model.view.DocumentenReport;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -44,9 +46,10 @@ public class DocumentenDaoImpl implements DocumentenDao{
     public Integer getNewPkId() {
         Session session = sessionFactory.getCurrentSession();
         
-        BigDecimal pkId = (BigDecimal)session.createSQLQuery("select seq_ta_bedrag_documenten.nextval from dual").list().get(0);
+        List<BigInteger> pkId = session.createSQLQuery("select seq_ta_bedrag_documenten.nextval as num from dual")
+                .addScalar("num", StandardBasicTypes.BIG_INTEGER).list();
         
-        return pkId.intValue();
+        return pkId.get(0).intValue();
     }
     
     @Override

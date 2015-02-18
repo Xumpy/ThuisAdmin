@@ -7,10 +7,12 @@ package com.xumpy.thuisadmin.dao;
 
 import com.xumpy.thuisadmin.model.db.Rekeningen;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
@@ -45,11 +47,13 @@ public class RekeningenDaoImpl implements RekeningenDao {
     public Integer getNewPkId() {
         Session session = sessionFactory.getCurrentSession();
         
-        List<BigDecimal> list = session.createSQLQuery("select seq_ta_rekeningen.nextval from dual").list();
+        List<BigInteger> list = session.createSQLQuery("select seq_ta_rekeningen.nextval as num from dual")
+                .addScalar("num", StandardBasicTypes.BIG_INTEGER).list();
         
         Integer newPkId = list.get(0).intValue();
         
         return newPkId;
+        
     }
     
     @Override
