@@ -57,11 +57,15 @@
                              return config;
                          },
                          response:function(config){
-                             usSpinnerService.stop('spinner-1');
+                             $timeout(function() {
+                                usSpinnerService.stop('spinner-1');
+                              }, 200);
                              return config;
                          },
                          responseError:function(config){
-                             usSpinnerService.stop('spinner-1');
+                             $timeout(function() {
+                                usSpinnerService.stop('spinner-1');
+                              }, 200);
                              return config;
                          }
                 };

@@ -7,6 +7,7 @@ package com.xumpy.thuisadmin.services;
 
 import com.xumpy.thuisadmin.dao.BedragenDaoImpl;
 import com.xumpy.thuisadmin.dao.RekeningenDaoImpl;
+import com.xumpy.thuisadmin.logic.BedragenLogic;
 import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
@@ -18,13 +19,9 @@ import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragenTotal;
 import com.xumpy.thuisadmin.model.view.RekeningOverzicht;
 import com.xumpy.thuisadmin.model.view.graphiek.OverzichtBedrag;
 import java.math.BigDecimal;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Nico
  */
 @Service
-public class BedragenSrvImpl implements BedragenSrv{
+public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
 
     @Autowired
     private BedragenDaoImpl bedragenDao;
@@ -53,8 +50,9 @@ public class BedragenSrvImpl implements BedragenSrv{
         if (bedragen.getPk_id() == null){
             bedragen.setPk_id(bedragenDao.getNewPkId());
             
+            bedragen = processRekeningBedrag(bedragen, INSERT);
+            
             Rekeningen rekening = bedragen.getRekening();
-            rekening.setWaarde((rekening.getWaarde().subtract(bedragen.getBedrag())));
             
             bedragenDao.save(bedragen);
             rekeningenDao.update(rekening);
@@ -67,11 +65,9 @@ public class BedragenSrvImpl implements BedragenSrv{
     @Transactional(readOnly=false)
     public void update(NieuwBedrag nieuwBedrag) {
         Bedragen bedragen = convertNieuwBedrag(nieuwBedrag);
-        BigDecimal oldBedrag = bedragenDao.getBedrag(bedragen.getPk_id());
+        bedragen = processRekeningBedrag(bedragen, UPDATE);
         
         Rekeningen rekening = bedragen.getRekening();
-        rekening.setWaarde((rekening.getWaarde().add(oldBedrag)));
-        rekening.setWaarde((rekening.getWaarde().subtract(bedragen.getBedrag())));
         
         bedragenDao.update(bedragen);
         rekeningenDao.update(rekening);
@@ -81,10 +77,10 @@ public class BedragenSrvImpl implements BedragenSrv{
     @Transactional(readOnly=false)
     public void delete(NieuwBedrag nieuwBedrag) {
         Bedragen bedragen = convertNieuwBedrag(nieuwBedrag);
-        
+
+        bedragen = processRekeningBedrag(bedragen, DELETE);
         Rekeningen rekening = bedragen.getRekening();
-        rekening.setWaarde((rekening.getWaarde().add(bedragen.getBedrag())));
-        
+
         bedragenDao.delete(bedragen);
         rekeningenDao.update(rekening);
     }
@@ -207,39 +203,5 @@ public class BedragenSrvImpl implements BedragenSrv{
         }
         
         return rekeningOverzichten;
-    }
-    
-    public Bedragen convertNieuwBedrag(NieuwBedrag nieuwBedrag){
-        Bedragen bedragen = new Bedragen();
-        
-        bedragen.setPk_id(nieuwBedrag.getPk_id());
-        bedragen.setDatum(nieuwBedrag.getDatum());
-        bedragen.setGroep(nieuwBedrag.getGroep());
-        bedragen.setOmschrijving(nieuwBedrag.getOmschrijving());
-        bedragen.setPersoon(nieuwBedrag.getPersoon());
-        bedragen.setRekening(nieuwBedrag.getRekening());
-        
-        String bedrag = nieuwBedrag.getBedrag();
-        if (bedrag.contains(",")){
-            bedrag = bedrag.replace(".", "");
-            bedrag = bedrag.replace(",", ".");
-        } else {
-            if (nieuwBedrag.getBedrag().indexOf(".", nieuwBedrag.getBedrag().indexOf(".") + 1) != -1){
-                bedrag = bedrag.replace(".", "");
-            }
-        }
-        
-        Log.log(Level.INFO, "Bedrag transformed: {0}", bedrag);
-        
-        NumberFormat nf = NumberFormat.getInstance(new Locale("US"));
-        BigDecimal bigDecimalBedrag = new BigDecimal(0);
-        try {
-            bigDecimalBedrag = new BigDecimal(nf.parse(bedrag).doubleValue());
-        } catch (ParseException ex) {
-            Logger.getLogger(BedragenSrvImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        bedragen.setBedrag(bigDecimalBedrag);
-        
-        return bedragen;
     }
 }
