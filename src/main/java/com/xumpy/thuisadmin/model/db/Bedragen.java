@@ -110,4 +110,32 @@ public class Bedragen implements Serializable {
     public void setPersoon(Personen persoon) {
         this.persoon = persoon;
     }
+    
+    @Override
+    public boolean equals(Object object) {
+        try{
+            Bedragen compareBedrag = (Bedragen)object;
+            if (!this.getBedrag().equals(compareBedrag.getBedrag())){
+                return false;
+            }
+            if (!this.getDatum().equals(compareBedrag.getDatum())){
+                return false;
+            }
+            if (!this.getGroep().equals(compareBedrag.getGroep())){
+                return false;
+            }
+            if (!this.getOmschrijving().equals(compareBedrag.getOmschrijving())){
+                return false;
+            }
+            if (!this.getPersoon().equals(compareBedrag.getPersoon())){
+                return false;
+            }
+            if (!this.getRekening().equals(compareBedrag.getRekening())){
+                return false;
+            }
+            return true;
+        } catch (Exception ex){
+            return false;
+        }
+    }
 }

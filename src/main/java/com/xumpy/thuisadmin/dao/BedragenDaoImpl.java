@@ -14,12 +14,19 @@ import com.xumpy.thuisadmin.model.view.RekeningOverzicht;
 import com.xumpy.thuisadmin.model.view.graphiek.OverzichtBedrag;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import javax.persistence.criteria.Expression;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -37,16 +44,19 @@ public class BedragenDaoImpl implements BedragenDao{
     @Override
     public void save(Bedragen bedragen) {
         sessionFactory.getCurrentSession().save(bedragen);
+        sessionFactory.getCurrentSession().flush();
     }
 
     @Override
     public void update(Bedragen bedragen) {
         sessionFactory.getCurrentSession().update(bedragen);
+        sessionFactory.getCurrentSession().flush();
     }
 
     @Override
     public void delete(Bedragen bedragen) {
         sessionFactory.getCurrentSession().delete(bedragen);
+        sessionFactory.getCurrentSession().flush();
     }
 
     
@@ -231,6 +241,56 @@ public class BedragenDaoImpl implements BedragenDao{
         Query query = session.createQuery("from Bedragen where pk_id = :pk_id");
         query.setInteger("pk_id", pk_id);
         
-        return (Bedragen)query.list().get(0);
+        if(query.list().size()>0){
+            return (Bedragen)query.list().get(0);
+        } else {
+            return null;
+        }
+    }
+
+    public List<Bedragen> BedragInPeriode(Date startDate, Date endDate){
+        Session session = sessionFactory.getCurrentSession();
+
+        Criteria criteria = session.createCriteria(Bedragen.class);
+        
+        criteria.add(Restrictions.between("datum", startDate, endDate));
+
+        return criteria.list();
+    }
+    
+    public BigDecimal getBedragAtDate(Date date, BigDecimal rekeningStand){
+        Session session = sessionFactory.getCurrentSession();
+        
+        Criteria criteria = session.createCriteria(Bedragen.class);
+        criteria.add(Restrictions.gt("datum", date));
+        
+        List<Bedragen> lstBedragen = criteria.list();
+        
+        for (Bedragen bedrag: lstBedragen){
+            if (bedrag.getGroep().getNegatief().equals(1)){
+                rekeningStand = rekeningStand.add(bedrag.getBedrag());
+            }
+            if (bedrag.getGroep().getNegatief().equals(0)){
+                rekeningStand = rekeningStand.subtract(bedrag.getBedrag());
+            }
+        }
+        
+        return rekeningStand;
+    }
+    
+    public Map OverviewRekeningData(List<Bedragen> bedragen, BigDecimal rekeningStand){
+        Map overviewRekeningData = new HashMap();
+        
+        for (Bedragen bedrag: bedragen){
+            if (bedrag.getGroep().getNegatief().equals(1)){
+                rekeningStand = rekeningStand.add(bedrag.getBedrag());
+            }
+            if (bedrag.getGroep().getNegatief().equals(0)){
+                rekeningStand = rekeningStand.subtract(bedrag.getBedrag());
+            }
+            
+        }
+        
+        return null;
     }
 }

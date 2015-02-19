@@ -31,16 +31,19 @@ public class GroepenDaoImpl implements GroepenDao{
     @Override
     public void save(Groepen groepen) {
         sessionFactory.getCurrentSession().save(groepen);
+        sessionFactory.getCurrentSession().flush();
     }
 
     @Override
     public void update(Groepen groepen) {
         sessionFactory.getCurrentSession().update(groepen);
+        sessionFactory.getCurrentSession().flush();
     }
 
     @Override
     public void delete(Groepen groepen) {
         sessionFactory.getCurrentSession().delete(groepen);
+        sessionFactory.getCurrentSession().flush();
     }
 
     @Override

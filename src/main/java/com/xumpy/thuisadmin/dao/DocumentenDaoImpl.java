@@ -30,16 +30,19 @@ public class DocumentenDaoImpl implements DocumentenDao{
     @Override
     public void save(Documenten document) {
         sessionFactory.getCurrentSession().save(document);
+        sessionFactory.getCurrentSession().flush();
     }
 
     @Override
     public void update(Documenten document) {
         sessionFactory.getCurrentSession().update(document);
+        sessionFactory.getCurrentSession().flush();
     }
 
     @Override
     public void delete(Documenten document) {
         sessionFactory.getCurrentSession().delete(document);
+        sessionFactory.getCurrentSession().flush();
     }
 
     @Override

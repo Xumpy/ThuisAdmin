@@ -27,16 +27,19 @@ public class PersonenDaoImpl implements PersonenDao{
     @Override
     public void save(Personen personen) {
         sessionFactory.getCurrentSession().save(personen);
+        sessionFactory.getCurrentSession().flush();
     }
 
     @Override
     public void update(Personen personen) {
         sessionFactory.getCurrentSession().update(personen);
+        sessionFactory.getCurrentSession().flush();
     }
 
     @Override
     public void delete(Personen personen) {
         sessionFactory.getCurrentSession().delete(personen);
+        sessionFactory.getCurrentSession().flush();
     }
 
     @Override

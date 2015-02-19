@@ -31,16 +31,19 @@ public class RekeningenDaoImpl implements RekeningenDao {
     @Override
     public void save(Rekeningen rekeningen) {
         sessionFactory.getCurrentSession().save(rekeningen);
+        sessionFactory.getCurrentSession().flush();
     }
 
     @Override
     public void update(Rekeningen rekeningen) {
         sessionFactory.getCurrentSession().update(rekeningen);
+        sessionFactory.getCurrentSession().flush();
     }
 
     @Override
     public void delete(Rekeningen rekeningen) {
         sessionFactory.getCurrentSession().delete(rekeningen);
+        sessionFactory.getCurrentSession().flush();
     }
     
     @Override
