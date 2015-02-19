@@ -10,8 +10,24 @@ Meervoud nooit gebruiken tenzij voor List
 http://www.sonarqube.org/downloads/
 Anypoint studio
 
+Soap UI: Soap services testen
+
 
 Consumer Key: pnDsAjGeWFPxHjqCsFKtS4C7P
 Consumer Secret (API Secret): CDtD7aTeIvzJJyJOBfLPYYbaf6C5Dx7bc3PaJwYoxvsoflT5k9
 Access Token: 128937408-WuH1gyG9jJQKkDmzgFh7VdGCqxAz9LbggAG2MrSG
 Access Token Secret: aW7Wx8luWnliSLU7UYNB7SLpXFRD2jwcuCQTzEZKmXL7q
+
+
+nf.parse(nieuwBedrag.getBedrag()).doubleValue()
+
+
+1.500,48
+1.500,48
+
+    if instr(in_bedrag, ',') != 0 then
+      l_bedrag := replace(in_bedrag, '.');
+      l_bedrag := replace(l_bedrag, ',', '.');
+    elsif instr(in_bedrag, '.', 1, 2) != 0 then
+      l_bedrag := replace(in_bedrag, '.');
+    end if;

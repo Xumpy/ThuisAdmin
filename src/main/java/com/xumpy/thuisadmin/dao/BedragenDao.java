@@ -44,5 +44,5 @@ public interface BedragenDao{
     public List<OverzichtBedrag> findBedragenRekening(Rekeningen rekening, Date startDate, Date endDate);
     public BigDecimal somBedragDatum(Rekeningen rekening, Date datum);
     public BigDecimal somBedragDatum(Date datum);
-    public BigDecimal getBedrag(Integer pk_id);
+    public Bedragen getBedrag(Integer pk_id);
 }

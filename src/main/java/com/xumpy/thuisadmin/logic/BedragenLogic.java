@@ -1,0 +1,108 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.xumpy.thuisadmin.logic;
+
+import com.xumpy.thuisadmin.dao.BedragenDaoImpl;
+import com.xumpy.thuisadmin.model.db.Bedragen;
+import com.xumpy.thuisadmin.model.db.Rekeningen;
+import com.xumpy.thuisadmin.model.view.NieuwBedrag;
+import com.xumpy.thuisadmin.services.BedragenSrvImpl;
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+
+/**
+ *
+ * @author Nico
+ */
+public abstract class BedragenLogic {
+    
+    @Autowired
+    private BedragenDaoImpl bedragenDao;
+    
+    public static final String UPDATE = "UPDATE";
+    public static final String INSERT = "INSERT";
+    public static final String DELETE = "DELETE";
+    
+    public Bedragen convertNieuwBedrag(NieuwBedrag nieuwBedrag){
+        Bedragen bedragen = new Bedragen();
+        
+        bedragen.setPk_id(nieuwBedrag.getPk_id());
+        bedragen.setDatum(nieuwBedrag.getDatum());
+        bedragen.setGroep(nieuwBedrag.getGroep());
+        bedragen.setOmschrijving(nieuwBedrag.getOmschrijving());
+        bedragen.setPersoon(nieuwBedrag.getPersoon());
+        bedragen.setRekening(nieuwBedrag.getRekening());
+        
+        String bedrag = nieuwBedrag.getBedrag();
+        if (bedrag.contains(",")){
+            bedrag = bedrag.replace(".", "");
+            bedrag = bedrag.replace(",", ".");
+        } else {
+            if (nieuwBedrag.getBedrag().indexOf(".", nieuwBedrag.getBedrag().indexOf(".") + 1) != -1){
+                bedrag = bedrag.replace(".", "");
+            }
+        }
+
+        NumberFormat nf = NumberFormat.getInstance(new Locale("US"));
+        BigDecimal bigDecimalBedrag = new BigDecimal(0);
+        try {
+            bigDecimalBedrag = new BigDecimal(nf.parse(bedrag).doubleValue());
+        } catch (ParseException ex) {
+            Logger.getLogger(BedragenSrvImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        bigDecimalBedrag = bigDecimalBedrag.setScale(2, BigDecimal.ROUND_HALF_UP);
+        
+        bedragen.setBedrag(bigDecimalBedrag);
+        
+        return bedragen;
+    }
+    
+    public Bedragen processRekeningBedrag(Bedragen bedrag, String transaction){
+        Rekeningen rekening = bedrag.getRekening();
+        
+        if (transaction.equals(INSERT)){
+            if (bedrag.getGroep().getNegatief().equals(1)){
+                rekening.setWaarde(rekening.getWaarde().subtract(bedrag.getBedrag()));
+            } else {
+                rekening.setWaarde(rekening.getWaarde().add(bedrag.getBedrag()));
+            }
+        } 
+        
+        if (transaction.equals(UPDATE)){
+            BigDecimal oldBedrag = bedragenDao.getBedrag(bedrag.getPk_id()).getBedrag();
+
+            if (bedrag.getGroep().getNegatief().equals(1)){
+                rekening.setWaarde((rekening.getWaarde().add(oldBedrag)));
+                rekening.setWaarde((rekening.getWaarde().subtract(bedrag.getBedrag())));
+            } else {
+                rekening.setWaarde((rekening.getWaarde().subtract(oldBedrag)));
+                rekening.setWaarde((rekening.getWaarde().add(bedrag.getBedrag())));
+            }
+        }
+        
+        if (transaction.equals(DELETE)){
+            if (bedrag.getGroep().getNegatief().equals(1)){
+                rekening.setWaarde((rekening.getWaarde().subtract(bedrag.getBedrag())));
+            } else {
+                rekening.setWaarde((rekening.getWaarde().add(bedrag.getBedrag())));
+            }
+        
+        }
+        
+        bedrag.setRekening(rekening);
+
+        return bedrag;
+    }
+    
+    public void setBedragenDao(BedragenDaoImpl bedragenDao){
+        this.bedragenDao = bedragenDao;
+    }
+}

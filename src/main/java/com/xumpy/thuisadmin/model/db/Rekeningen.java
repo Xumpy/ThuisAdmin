@@ -10,11 +10,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -28,9 +28,11 @@ public class Rekeningen implements Serializable {
     private Integer pk_id;
     
     @Column(name="WAARDE")
+    @NotNull
     private BigDecimal waarde;
     
     @Column(name="NAAM")
+    @NotEmpty
     private String naam;
     
     @Column(name="LAATST_BIJGEWERKT")

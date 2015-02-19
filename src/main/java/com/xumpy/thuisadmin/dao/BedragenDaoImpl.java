@@ -33,7 +33,7 @@ public class BedragenDaoImpl implements BedragenDao{
 
     @Autowired
     private SessionFactory sessionFactory;
-    
+
     @Override
     public void save(Bedragen bedragen) {
         sessionFactory.getCurrentSession().save(bedragen);
@@ -225,12 +225,12 @@ public class BedragenDaoImpl implements BedragenDao{
     }
     
     @Override
-    public BigDecimal getBedrag(Integer pk_id){
+    public Bedragen getBedrag(Integer pk_id){
         Session session = sessionFactory.getCurrentSession();
         
-        Query query = session.createSQLQuery("select bedrag from ta_bedragen where pk_id = :pk_id");
+        Query query = session.createQuery("from Bedragen where pk_id = :pk_id");
         query.setInteger("pk_id", pk_id);
         
-        return (BigDecimal)query.list().get(0);
+        return (Bedragen)query.list().get(0);
     }
 }

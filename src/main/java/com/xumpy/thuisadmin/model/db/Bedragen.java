@@ -5,16 +5,17 @@
  */
 package com.xumpy.thuisadmin.model.db;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -22,27 +23,32 @@ import javax.persistence.Temporal;
  */
 @Entity
 @Table(name="TA_BEDRAGEN")
-public class Bedragen {
+public class Bedragen implements Serializable {
     @Id
     @Column(name="PK_ID")
     private Integer pk_id;
     
     @ManyToOne
     @JoinColumn(name="FK_TYPE_GROEP_ID")
+    @NotNull
     private Groepen groep;
     
     @ManyToOne
     @JoinColumn(name="FK_PERSOON_ID")
+    @NotNull
     private Personen persoon;
     
     @ManyToOne
     @JoinColumn(name="FK_REKENING_ID")
+    @NotNull
     private Rekeningen rekening;
     
     @Column(name="BEDRAG")
+    @NotNull
     private BigDecimal bedrag;
     
     @Column(name="DATUM")
+    @NotNull
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datum;
     

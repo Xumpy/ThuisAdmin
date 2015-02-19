@@ -136,8 +136,12 @@
             }, false);
             
             $scope.saveBedrag = (function(){
-                $http.post("/ThuisAdmin/json/save_bedrag", $scope.bedrag).success( function() {
-                    $(location).attr('href','/ThuisAdmin/finances/beheerBedragen');
+                $http.post("/ThuisAdmin/json/save_bedrag", $scope.bedrag).success( function(data) {
+                    if (data==="1"){
+                        $(location).attr('href','/ThuisAdmin/finances/beheerBedragen');
+                    } else {
+                        bootbox.alert("Error occured during save");
+                    }
                 }).error( function() {
                     bootbox.alert("Error occured during save");
                 });
@@ -146,8 +150,12 @@
             $scope.deleteBedrag = (function(){
                  bootbox.confirm("Are you sure you want to delete this Bedrag?", function(result) {
                     if (result === true){
-                        $http.post("/ThuisAdmin/json/delete_bedrag", $scope.bedrag).success( function() {
-                            $(location).attr('href','/ThuisAdmin/finances/beheerBedragen');
+                        $http.post("/ThuisAdmin/json/delete_bedrag", $scope.bedrag).success( function(data) {
+                            if (data==="1"){
+                                $(location).attr('href','/ThuisAdmin/finances/beheerBedragen');
+                            } else {
+                                bootbox.alert("Error occured during delete");
+                            }
                         }).error( function(){
                           bootbox.alert("Error occured during delete");
                         });
