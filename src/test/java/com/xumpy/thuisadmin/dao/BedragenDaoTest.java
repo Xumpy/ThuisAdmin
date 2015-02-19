@@ -8,6 +8,7 @@ package com.xumpy.thuisadmin.dao;
 import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Groepen;
 import com.xumpy.thuisadmin.model.db.Personen;
+import com.xumpy.thuisadmin.model.db.Rekeningen;
 import java.math.BigDecimal;
 import java.util.Date;
 import static org.junit.Assert.assertEquals;
@@ -26,12 +27,14 @@ public class BedragenDaoTest extends H2InMemory{
     
     private Personen persoon;
     private Groepen groep;
+    private Rekeningen rekening;
     
     @Before
     @Transactional(readOnly=false)
     public void setUpBedragen(){
         persoon = personenDao.findPersoon(1);
         groep = groepenDao.findGroep(1);
+        rekening = rekeningenDao.findRekening(1);
     }
     
     @Test
@@ -45,12 +48,13 @@ public class BedragenDaoTest extends H2InMemory{
         bedrag.setGroep(groep);
         bedrag.setDatum(new Date());
         bedrag.setOmschrijving("test bedrag");
+        bedrag.setRekening(rekening);
         
         bedragenDao.save(bedrag);
         sessionFactoryH2.getCurrentSession().flush();
         
-        BigDecimal bedragTest = bedragenDao.getBedrag(1);
+        Bedragen bedragTest = bedragenDao.getBedrag(1);
         
-        assertEquals(new BigDecimal("200"), bedragTest);
+        assertEquals(bedrag, bedragTest);
     }
 }
