@@ -7,6 +7,7 @@ package com.xumpy.thuisadmin.model.db;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,7 +24,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name="TA_BEDRAGEN")
-public class Bedragen implements Serializable {
+public class Bedragen implements Serializable, Comparable<Bedragen> {
     @Id
     @Column(name="PK_ID")
     private Integer pk_id;
@@ -138,4 +139,18 @@ public class Bedragen implements Serializable {
             return false;
         }
     }
+
+    @Override
+    public int compareTo(Bedragen compBedrag) {
+        Long daysBetweenDate = compBedrag.getDatum().getTime() - this.datum.getTime();
+        
+        return daysBetweenDate.intValue();
+    }
+    
+    public static Comparator<Bedragen> bedragComparator = new Comparator<Bedragen>() {
+        @Override
+        public int compare(Bedragen bedrag1, Bedragen bedrag2) {
+            return bedrag1.compareTo(bedrag2);
+        }
+    };
 }

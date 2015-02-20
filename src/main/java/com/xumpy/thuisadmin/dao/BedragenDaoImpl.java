@@ -5,6 +5,7 @@
  */
 package com.xumpy.thuisadmin.dao;
 
+import com.google.common.collect.Iterables;
 import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
@@ -16,6 +17,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -281,6 +284,8 @@ public class BedragenDaoImpl implements BedragenDao{
     public Map OverviewRekeningData(List<Bedragen> bedragen, BigDecimal rekeningStand){
         Map overviewRekeningData = new HashMap();
         
+        Collections.sort(bedragen);
+        
         for (Bedragen bedrag: bedragen){
             if (bedrag.getGroep().getNegatief().equals(1)){
                 rekeningStand = rekeningStand.add(bedrag.getBedrag());
@@ -288,9 +293,9 @@ public class BedragenDaoImpl implements BedragenDao{
             if (bedrag.getGroep().getNegatief().equals(0)){
                 rekeningStand = rekeningStand.subtract(bedrag.getBedrag());
             }
-            
+            overviewRekeningData.put(bedrag.getDatum(), rekeningStand);
         }
         
-        return null;
+        return overviewRekeningData;
     }
 }
