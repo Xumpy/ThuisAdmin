@@ -17,11 +17,13 @@ import com.xumpy.thuisadmin.model.view.OverzichtGroep;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragen;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragenTotal;
 import com.xumpy.thuisadmin.model.view.RekeningOverzicht;
-import com.xumpy.thuisadmin.model.view.graphiek.OverzichtBedrag;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -88,8 +90,16 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
     @Override
     @Transactional
     public List<RekeningOverzicht> graphiekBedrag(Rekeningen rekening, Date beginDate, Date eindDate) {
-        //return bedragenDao.graphiekBedrag(rekening, beginDate, eindDate);
-        return overzichtBedragen(rekening, beginDate, eindDate);
+        Map overzichtBedragen = bedragenDao.OverviewRekeningData(bedragenDao.BedragInPeriode(beginDate, eindDate), rekening);
+        
+        Iterator entries = overzichtBedragen.entrySet().iterator();
+        List<RekeningOverzicht> rekeningOverzicht = new ArrayList<RekeningOverzicht>();
+        while(entries.hasNext()){
+            Entry entry = (Entry)entries.next();
+            rekeningOverzicht.add(new RekeningOverzicht(entry.getKey(), entry.getValue()));
+        }
+        
+        return rekeningOverzicht;
     }
 
     @Override
@@ -151,57 +161,5 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
     @Transactional
     public Bedragen findBedrag(Integer bedragId) {
         return bedragenDao.findBedrag(bedragId);
-    }
-    
-    private List<RekeningOverzicht> overzichtBedragen(Rekeningen rekening,
-                                                      Date beginDate,
-                                                      Date eindDate){
-        List<RekeningOverzicht> rekeningOverzichten = new ArrayList<RekeningOverzicht>();
-        List<OverzichtBedrag> overzichtBedrag = new ArrayList<OverzichtBedrag>();
-        BigDecimal totaalRekening = new BigDecimal(0);
-        
-        if (rekening == null){
-            overzichtBedrag = bedragenDao.findAllBedragen(beginDate, eindDate);
-            List<Rekeningen> rekeningen = rekeningenDao.findAllRekeningen();
-            
-            for (Rekeningen reken: rekeningen){
-                totaalRekening = totaalRekening.add(reken.getWaarde());
-            }
-            totaalRekening = totaalRekening.subtract(bedragenDao.somBedragDatum(beginDate));
-        } else {
-            overzichtBedrag = bedragenDao.findBedragenRekening(rekening, beginDate, eindDate);
-            totaalRekening = rekening.getWaarde();
-            totaalRekening = totaalRekening.subtract(bedragenDao.somBedragDatum(rekening, beginDate));
-        }
-        
-        Date old_date = overzichtBedrag.get(0).getDatum();
-        RekeningOverzicht rekeningOverzicht = new RekeningOverzicht();
-        for (int i = 0; i<overzichtBedrag.size(); i++){
-            OverzichtBedrag bedrag = overzichtBedrag.get(i);
-            
-            if (bedrag.getDatum().equals(old_date)){
-                totaalRekening = totaalRekening.add(bedrag.getBedrag());
-                if (i == (overzichtBedrag.size()-1)){
-                    rekeningOverzicht.setDatum(bedrag.getDatum());
-                    rekeningOverzicht.setBedrag(totaalRekening);
-                    rekeningOverzichten.add(rekeningOverzicht);
-                }
-            } else {
-                rekeningOverzicht.setDatum(old_date);
-                rekeningOverzicht.setBedrag(totaalRekening);
-                rekeningOverzichten.add(rekeningOverzicht);
-                totaalRekening = totaalRekening.add(bedrag.getBedrag());
-                rekeningOverzicht = new RekeningOverzicht();
-                if (i == (overzichtBedrag.size() -1)){
-                    rekeningOverzicht.setDatum(bedrag.getDatum());
-                    rekeningOverzicht.setBedrag(totaalRekening);
-                    rekeningOverzichten.add(rekeningOverzicht);
-                }
-            }
-            old_date = bedrag.getDatum();
-            rekeningOverzicht.setDatum(bedrag.getDatum());
-        }
-        
-        return rekeningOverzichten;
     }
 }

@@ -15,7 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.sql.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import static org.junit.Assert.assertEquals;
@@ -152,17 +152,17 @@ public class BedragenDaoTest extends H2InMemory{
     }
     
     @Test
-    public void testOverviewRekeningData(){
-        Map overviewRekeningTestData = new HashMap();
-        overviewRekeningTestData.put("2015-02-18", 450);
-        overviewRekeningTestData.put("2015-02-19", 300);
-        overviewRekeningTestData.put("2015-02-20", 2300);
-        overviewRekeningTestData.put("2015-02-21", 2190);
-        overviewRekeningTestData.put("2015-02-22", 2120);
-        overviewRekeningTestData.put("2015-02-23", 2080);
+    public void testOverviewRekeningData() throws ParseException{
+        Map overviewRekeningTestData = new LinkedHashMap();
+        overviewRekeningTestData.put(dt.parse("2015-02-18"), new BigDecimal(450));
+        overviewRekeningTestData.put(dt.parse("2015-02-19"), new BigDecimal(300));
+        overviewRekeningTestData.put(dt.parse("2015-02-20"), new BigDecimal(2300));
+        overviewRekeningTestData.put(dt.parse("2015-02-21"), new BigDecimal(2190));
+        overviewRekeningTestData.put(dt.parse("2015-02-22"), new BigDecimal(2120));
+        overviewRekeningTestData.put(dt.parse("2015-02-23"), new BigDecimal(2080));
         
-        Map overviewRekeningData = bedragenDao.OverviewRekeningData(bedragenDao.BedragInPeriode(startDate, endDate), rekening.getWaarde());
+        Map overviewRekeningData = bedragenDao.OverviewRekeningData(bedragenDao.BedragInPeriode(startDate, endDate), rekening);
         
-        assertEquals(overviewRekeningData, overviewRekeningTestData);
+        assertEquals(overviewRekeningTestData, overviewRekeningData);
     }
 }

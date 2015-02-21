@@ -142,7 +142,9 @@ public class Bedragen implements Serializable, Comparable<Bedragen> {
 
     @Override
     public int compareTo(Bedragen compBedrag) {
-        Long daysBetweenDate = compBedrag.getDatum().getTime() - this.datum.getTime();
+        Long daysBetweenDate = this.datum.getTime() - compBedrag.getDatum().getTime();
+        
+        System.out.println(daysBetweenDate);
         
         return daysBetweenDate.intValue();
     }

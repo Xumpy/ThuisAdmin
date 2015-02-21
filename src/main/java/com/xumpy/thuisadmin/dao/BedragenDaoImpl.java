@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.criteria.Expression;
@@ -281,21 +282,28 @@ public class BedragenDaoImpl implements BedragenDao{
         return rekeningStand;
     }
     
-    public Map OverviewRekeningData(List<Bedragen> bedragen, BigDecimal rekeningStand){
-        Map overviewRekeningData = new HashMap();
+    public Map OverviewRekeningData(List<Bedragen> bedragen, Rekeningen rekening){
+        Map overviewRekeningData = new LinkedHashMap();
         
-        Collections.sort(bedragen);
-        
-        for (Bedragen bedrag: bedragen){
-            if (bedrag.getGroep().getNegatief().equals(1)){
-                rekeningStand = rekeningStand.add(bedrag.getBedrag());
-            }
-            if (bedrag.getGroep().getNegatief().equals(0)){
-                rekeningStand = rekeningStand.subtract(bedrag.getBedrag());
-            }
-            overviewRekeningData.put(bedrag.getDatum(), rekeningStand);
+        for(Bedragen bedrag: bedragen){
+            System.out.println(bedrag.getDatum());
         }
         
+        Collections.sort(bedragen);
+        BigDecimal rekeningStand = getBedragAtDate(bedragen.get(0).getDatum(), rekening.getWaarde());
+        
+        overviewRekeningData.put(bedragen.get(0).getDatum(), rekeningStand);
+
+        for (Integer i=1; i<bedragen.size(); i++){
+            if (bedragen.get(i).getGroep().getNegatief().equals(1)){
+                rekeningStand = rekeningStand.subtract(bedragen.get(i).getBedrag());
+            }
+            if (bedragen.get(i).getGroep().getNegatief().equals(0)){
+                rekeningStand = rekeningStand.add(bedragen.get(i).getBedrag());
+            }
+            overviewRekeningData.put(bedragen.get(i).getDatum(), rekeningStand);
+        }
+
         return overviewRekeningData;
     }
 }

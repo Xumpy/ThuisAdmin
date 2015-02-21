@@ -17,6 +17,11 @@ public class RekeningOverzicht implements Serializable{
     private Date datum;
     private BigDecimal bedrag;
 
+    public RekeningOverzicht(Object key, Object value) {
+        this.datum = (Date) key;
+        this.bedrag = (BigDecimal) value;
+    }
+
     public Date getDatum() {
         return datum;
     }
