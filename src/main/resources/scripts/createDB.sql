@@ -1,8 +1,8 @@
-create sequence if not exists seq_ta_bedragen start with 1;
-create sequence if not exists seq_ta_bedrag_documenten start with 1;
-create sequence if not exists seq_ta_type_groep start with 1;
-create sequence if not exists seq_ta_personen start with 2;
-create sequence if not exists seq_ta_rekeningen start with 2;
+create sequence if not exists seq_ta_bedragen start with 100;
+create sequence if not exists seq_ta_bedrag_documenten start with 100;
+create sequence if not exists seq_ta_type_groep start with 100;
+create sequence if not exists seq_ta_personen start with 100;
+create sequence if not exists seq_ta_rekeningen start with 100;
 
 create table if not exists ta_personen(
 	pk_id int primary key,
@@ -55,7 +55,8 @@ select 1, 'Test Persoon 1', null
 ) x where not exists(select * from ta_personen);
 
 insert into ta_rekeningen select * from (
-select 1, 2000, 'Test Rekening 1', sysdate
+select 1, 2000, 'Test Rekening 1', sysdate union
+select 2, 250, 'Test Rekening 2', sysdate
 ) x where not exists(select * from ta_rekeningen);
 
 insert into ta_type_groep select * from (
@@ -76,7 +77,11 @@ select 8 as pk_id, 2 as fk_type_groep_id, 1 as fk_persoon_id, 1 as fk_rekening_i
 select 9 as pk_id, 2 as fk_type_groep_id, 1 as fk_persoon_id, 1 as fk_rekening_id, 20 as bedrag, DATE'2015-02-24' as datum, 'test' as omschrijving union
 select 10 as pk_id, 2 as fk_type_groep_id, 1 as fk_persoon_id, 1 as fk_rekening_id, 30 as bedrag, DATE'2015-02-24' as datum, 'test' as omschrijving union
 select 11 as pk_id, 2 as fk_type_groep_id, 1 as fk_persoon_id, 1 as fk_rekening_id, 20 as bedrag, DATE'2015-02-24' as datum, 'test' as omschrijving union
-select 12 as pk_id, 2 as fk_type_groep_id, 1 as fk_persoon_id, 1 as fk_rekening_id, 10 as bedrag, DATE'2015-02-25' as datum, 'test' as omschrijving
+select 12 as pk_id, 2 as fk_type_groep_id, 1 as fk_persoon_id, 1 as fk_rekening_id, 10 as bedrag, DATE'2015-02-25' as datum, 'test' as omschrijving union
+select 13 as pk_id, 2 as fk_type_groep_id, 1 as fk_persoon_id, 2 as fk_rekening_id, 50 as bedrag, DATE'2015-02-19' as datum, 'test rekening 2' as omschrijving union
+select 14 as pk_id, 2 as fk_type_groep_id, 1 as fk_persoon_id, 2 as fk_rekening_id, 100 as bedrag, DATE'2015-02-20' as datum, 'test rekening 2' as omschrijving union
+select 15 as pk_id, 2 as fk_type_groep_id, 1 as fk_persoon_id, 2 as fk_rekening_id, 40 as bedrag, DATE'2015-02-21' as datum, 'test rekening 2' as omschrijving union
+select 16 as pk_id, 2 as fk_type_groep_id, 1 as fk_persoon_id, 2 as fk_rekening_id, 180 as bedrag, DATE'2015-02-22' as datum, 'test rekening 2' as omschrijving
 ) x where not exists(select * from ta_bedragen);
 
 insert into ta_bedrag_documenten select * from(

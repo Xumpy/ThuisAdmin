@@ -90,7 +90,7 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
     @Override
     @Transactional
     public List<RekeningOverzicht> graphiekBedrag(Rekeningen rekening, Date beginDate, Date eindDate) {
-        Map overzichtBedragen = bedragenDao.OverviewRekeningData(bedragenDao.BedragInPeriode(beginDate, eindDate), rekening);
+        Map overzichtBedragen = bedragenDao.OverviewRekeningData(bedragenDao.BedragInPeriode(beginDate, eindDate, rekening), rekening);
         
         Iterator entries = overzichtBedragen.entrySet().iterator();
         List<RekeningOverzicht> rekeningOverzicht = new ArrayList<RekeningOverzicht>();

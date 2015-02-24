@@ -15,6 +15,7 @@ import com.xumpy.thuisadmin.model.view.RekeningOverzicht;
 import com.xumpy.thuisadmin.model.view.graphiek.OverzichtBedrag;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,12 +25,15 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.criteria.Expression;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -252,21 +256,32 @@ public class BedragenDaoImpl implements BedragenDao{
         }
     }
 
-    public List<Bedragen> BedragInPeriode(Date startDate, Date endDate){
+    public List<Bedragen> BedragInPeriode(Date startDate, Date endDate, Rekeningen rekening){
         Session session = sessionFactory.getCurrentSession();
 
         Criteria criteria = session.createCriteria(Bedragen.class);
         
-        criteria.add(Restrictions.between("datum", startDate, endDate));
-
+        criteria.add(Restrictions.ge("datum", startDate));
+        criteria.add(Restrictions.le("datum", endDate));
+        
+        criteria.add(Restrictions.eq("rekening", rekening));
+        
+        criteria.addOrder(Order.asc("datum"));
+        
         return criteria.list();
     }
     
-    public BigDecimal getBedragAtDate(Date date, BigDecimal rekeningStand){
+    public BigDecimal getBedragAtDate(Date date, Rekeningen rekening){
+        BigDecimal rekeningStand = rekening.getWaarde();
+        
         Session session = sessionFactory.getCurrentSession();
         
         Criteria criteria = session.createCriteria(Bedragen.class);
         criteria.add(Restrictions.gt("datum", date));
+        
+        if (rekening != null){
+            criteria.add(Restrictions.eq("rekening", rekening));
+        }
         
         List<Bedragen> lstBedragen = criteria.list();
         
@@ -284,24 +299,22 @@ public class BedragenDaoImpl implements BedragenDao{
     
     public Map OverviewRekeningData(List<Bedragen> bedragen, Rekeningen rekening){
         Map overviewRekeningData = new LinkedHashMap();
-        
-        for(Bedragen bedrag: bedragen){
-            System.out.println(bedrag.getDatum());
-        }
-        
+
         Collections.sort(bedragen);
-        BigDecimal rekeningStand = getBedragAtDate(bedragen.get(0).getDatum(), rekening.getWaarde());
+        BigDecimal rekeningStand = getBedragAtDate(bedragen.get(0).getDatum(), rekening);
         
         overviewRekeningData.put(bedragen.get(0).getDatum(), rekeningStand);
-
+        
         for (Integer i=1; i<bedragen.size(); i++){
-            if (bedragen.get(i).getGroep().getNegatief().equals(1)){
-                rekeningStand = rekeningStand.subtract(bedragen.get(i).getBedrag());
+            if (!bedragen.get(i).getDatum().equals(bedragen.get(0).getDatum())){
+                if (bedragen.get(i).getGroep().getNegatief().equals(1)){
+                    rekeningStand = rekeningStand.subtract(bedragen.get(i).getBedrag());
+                }
+                if (bedragen.get(i).getGroep().getNegatief().equals(0)){
+                    rekeningStand = rekeningStand.add(bedragen.get(i).getBedrag());
+                }
+                overviewRekeningData.put(bedragen.get(i).getDatum(), rekeningStand);
             }
-            if (bedragen.get(i).getGroep().getNegatief().equals(0)){
-                rekeningStand = rekeningStand.add(bedragen.get(i).getBedrag());
-            }
-            overviewRekeningData.put(bedragen.get(i).getDatum(), rekeningStand);
         }
 
         return overviewRekeningData;

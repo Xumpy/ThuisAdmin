@@ -39,7 +39,7 @@ public class BedragenDaoTest extends H2InMemory{
     private Rekeningen rekening;
     private Bedragen bedrag;
     
-    private static final Integer BEDRAG_PK_ID = 13;
+    private static final Integer BEDRAG_PK_ID = 20;
     
     private static final SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd"); 
     private Date startDate;
@@ -136,15 +136,15 @@ public class BedragenDaoTest extends H2InMemory{
     public void testBedragenInPeriode() throws ParseException{
         List<Bedragen> checkBedragen = fetchTestBedragen();
         
-        List<Bedragen> bedragInPeriode = bedragenDao.BedragInPeriode(startDate, endDate);
+        List<Bedragen> bedragInPeriode = bedragenDao.BedragInPeriode(startDate, endDate, rekening);
 
         assertEquals(checkBedragen, bedragInPeriode);
     }
     
     @Test
     public void testGetBedragAtDate(){
-        BigDecimal bedragAtStartDate = bedragenDao.getBedragAtDate(startDate, rekening.getWaarde());
-        BigDecimal bedragAtEndDate = bedragenDao.getBedragAtDate(endDate, rekening.getWaarde());
+        BigDecimal bedragAtStartDate = bedragenDao.getBedragAtDate(startDate, rekening);
+        BigDecimal bedragAtEndDate = bedragenDao.getBedragAtDate(endDate, rekening);
         
         assertEquals(bedragAtStartDate, new BigDecimal(450));
         assertEquals(bedragAtEndDate, new BigDecimal(2080));
@@ -161,7 +161,23 @@ public class BedragenDaoTest extends H2InMemory{
         overviewRekeningTestData.put(dt.parse("2015-02-22"), new BigDecimal(2120));
         overviewRekeningTestData.put(dt.parse("2015-02-23"), new BigDecimal(2080));
         
-        Map overviewRekeningData = bedragenDao.OverviewRekeningData(bedragenDao.BedragInPeriode(startDate, endDate), rekening);
+        Map overviewRekeningData = bedragenDao.OverviewRekeningData(bedragenDao.BedragInPeriode(startDate, endDate, rekening), rekening);
+        
+        assertEquals(overviewRekeningTestData, overviewRekeningData);
+    }
+    
+    @Test
+    public void testOverviewRekeningData2() throws ParseException{
+        Map overviewRekeningTestData = new LinkedHashMap();
+        overviewRekeningTestData.put(dt.parse("2015-02-19"), new BigDecimal(300));
+        overviewRekeningTestData.put(dt.parse("2015-02-20"), new BigDecimal(2300));
+        overviewRekeningTestData.put(dt.parse("2015-02-21"), new BigDecimal(2190));
+        overviewRekeningTestData.put(dt.parse("2015-02-22"), new BigDecimal(2120));
+        overviewRekeningTestData.put(dt.parse("2015-02-23"), new BigDecimal(2080));
+        
+        java.util.Date startDate = dt.parse("2015-02-19");
+        
+        Map overviewRekeningData = bedragenDao.OverviewRekeningData(bedragenDao.BedragInPeriode(startDate, endDate, rekening), rekening);
         
         assertEquals(overviewRekeningTestData, overviewRekeningData);
     }

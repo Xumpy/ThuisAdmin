@@ -17,6 +17,7 @@ import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -77,13 +78,21 @@ public abstract class BedragenLogic {
         } 
         
         if (transaction.equals(UPDATE)){
-            BigDecimal oldBedrag = bedragenDao.getBedrag(bedrag.getPk_id()).getBedrag();
+            Bedragen oldBedrag = bedragenDao.getBedrag(bedrag.getPk_id());
 
             if (bedrag.getGroep().getNegatief().equals(1)){
-                rekening.setWaarde((rekening.getWaarde().add(oldBedrag)));
+                if (oldBedrag.getGroep().getNegatief().equals(1)){
+                    rekening.setWaarde((rekening.getWaarde().add(oldBedrag.getBedrag())));
+                } else {
+                    rekening.setWaarde((rekening.getWaarde().subtract(oldBedrag.getBedrag())));
+                }
                 rekening.setWaarde((rekening.getWaarde().subtract(bedrag.getBedrag())));
             } else {
-                rekening.setWaarde((rekening.getWaarde().subtract(oldBedrag)));
+                if (oldBedrag.getGroep().getNegatief().equals(1)){
+                    rekening.setWaarde((rekening.getWaarde().add(oldBedrag.getBedrag())));
+                } else {
+                    rekening.setWaarde((rekening.getWaarde().subtract(oldBedrag.getBedrag())));
+                }
                 rekening.setWaarde((rekening.getWaarde().add(bedrag.getBedrag())));
             }
         }
