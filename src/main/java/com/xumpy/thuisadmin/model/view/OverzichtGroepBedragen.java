@@ -5,8 +5,11 @@
  */
 package com.xumpy.thuisadmin.model.view;
 
+import com.xumpy.thuisadmin.model.db.Bedragen;
+import com.xumpy.thuisadmin.model.db.Groepen;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -62,5 +65,16 @@ public class OverzichtGroepBedragen implements Serializable{
 
     public void setOmschrijving(String omschrijving) {
         this.omschrijving = omschrijving;
+    }
+    
+    public void setWithBedrag(Bedragen bedrag){
+        SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd"); 
+        
+        this.pk_id = bedrag.getPk_id();
+        this.type_naam = bedrag.getGroep().getNaam();
+        this.bedrag = bedrag.getBedrag();
+        this.datum = dt.format(bedrag.getDatum());
+        this.omschrijving = bedrag.getOmschrijving();
+
     }
 }

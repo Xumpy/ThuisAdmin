@@ -43,6 +43,9 @@ public class BedragenDaoTest extends H2InMemory{
     
     private static final Integer BEDRAG_PK_ID = 20;
     
+    private static final Integer GROEP_NEGATIEF_ID = 2;
+    private static final Integer GROEP_POSITIEF_ID = 3;
+    
     private static final SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd"); 
     private Date startDate;
     private Date endDate;
@@ -197,5 +200,32 @@ public class BedragenDaoTest extends H2InMemory{
         Map overviewRekeningData = bedragenDao.OverviewRekeningGroep(fetchTestBedragen());
         
         assertEquals(overviewRekeningData, overviewRekeningTestData);
+    }
+    
+    @Test
+    public void testBedragenInGroep() throws ParseException{
+        List<Bedragen> bedragen = fetchTestBedragen();
+        
+        List<Bedragen> bedragNegatief = new ArrayList<Bedragen>();
+        List<Bedragen> bedragPositief = new ArrayList<Bedragen>();
+        
+        for (Bedragen bedrag: bedragen){
+            if (bedrag.getGroep().equals(groepenDao.findGroep(GROEP_POSITIEF_ID))){
+                bedragPositief.add(bedrag);
+            } else {
+                bedragNegatief.add(bedrag);
+            }
+        }
+        
+        Groepen groepNegatief = groepenDao.findGroep(GROEP_NEGATIEF_ID);
+        Groepen groepPositief = groepenDao.findGroep(GROEP_POSITIEF_ID);
+        
+        assertEquals(bedragNegatief, bedragenDao.getBedragenInGroep(bedragenDao.BedragInPeriode(startDate, endDate, rekening), 
+                                                                    groepenDao.getHoofdGroep(groepNegatief), 
+                                                                    groepNegatief.getNegatief()));
+        
+        assertEquals(bedragPositief, bedragenDao.getBedragenInGroep(bedragenDao.BedragInPeriode(startDate, endDate, rekening), 
+                                                                    groepenDao.getHoofdGroep(groepPositief), 
+                                                                    groepPositief.getNegatief()));
     }
 }

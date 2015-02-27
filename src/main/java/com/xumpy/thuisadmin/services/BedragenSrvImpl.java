@@ -6,6 +6,7 @@
 package com.xumpy.thuisadmin.services;
 
 import com.xumpy.thuisadmin.dao.BedragenDaoImpl;
+import com.xumpy.thuisadmin.dao.GroepenDaoImpl;
 import com.xumpy.thuisadmin.dao.RekeningenDaoImpl;
 import com.xumpy.thuisadmin.logic.BedragenLogic;
 import com.xumpy.thuisadmin.model.db.Bedragen;
@@ -39,6 +40,8 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
 
     @Autowired
     private BedragenDaoImpl bedragenDao;
+    @Autowired
+    private GroepenDaoImpl groepenDao;
     
     @Autowired
     private RekeningenDaoImpl rekeningenDao;
@@ -146,9 +149,7 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
     @Transactional
     public OverzichtGroepBedragenTotal rapportOverzichtGroepBedragen(Integer typeGroepId, Integer typeGroepKostOpbrengst, Date beginDate, Date eindDate) {
         OverzichtGroepBedragenTotal overzichtGroepBedragenTotal = new OverzichtGroepBedragenTotal();
-        
-        Integer negatief = 0;
-        BigDecimal somOverzicht = new BigDecimal(0);
+        Integer negatief = new Integer(0);
         
         if (typeGroepKostOpbrengst.equals(1)){
             negatief = 0;
@@ -156,10 +157,18 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
             negatief = 1;
         }
         
-        List<OverzichtGroepBedragen> overzichtGroepBedragen = bedragenDao.rapportOverzichtGroepBedragen(typeGroepId, negatief, beginDate, eindDate);
+        List<Bedragen> lstBedragenInPeriode = bedragenDao.BedragInPeriode(beginDate, eindDate, null);
+        List<Bedragen> lstBedragen = bedragenDao.getBedragenInGroep(lstBedragenInPeriode, groepenDao.findGroep(typeGroepId), negatief);
+        List<OverzichtGroepBedragen> overzichtGroepBedragen = new ArrayList<OverzichtGroepBedragen>();
         
-        for (OverzichtGroepBedragen overzicht: overzichtGroepBedragen){
-            somOverzicht = somOverzicht.add(overzicht.getBedrag());
+        BigDecimal somOverzicht = new BigDecimal(0);
+        
+        for(Bedragen bedrag: lstBedragen){
+            OverzichtGroepBedragen overzichtGroepBedrag = new OverzichtGroepBedragen();
+            overzichtGroepBedrag.setWithBedrag(bedrag);
+            
+            overzichtGroepBedragen.add(overzichtGroepBedrag);
+            somOverzicht = somOverzicht.add(overzichtGroepBedrag.getBedrag());
         }
         
         overzichtGroepBedragenTotal.setSomBedrag(somOverzicht);

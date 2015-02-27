@@ -5,30 +5,20 @@
  */
 package com.xumpy.thuisadmin.dao;
 
-import com.google.common.collect.Iterables;
 import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Groepen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
-import com.xumpy.thuisadmin.model.view.OverzichtGroep;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragen;
-import com.xumpy.thuisadmin.model.view.RekeningOverzicht;
 import com.xumpy.thuisadmin.model.view.graphiek.OverzichtBedrag;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.persistence.criteria.Expression;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -69,31 +59,6 @@ public class BedragenDaoImpl implements BedragenDao{
     public void delete(Bedragen bedragen) {
         sessionFactory.getCurrentSession().delete(bedragen);
         sessionFactory.getCurrentSession().flush();
-    }
-
-    @Override
-    public List<OverzichtGroepBedragen> rapportOverzichtGroepBedragen(Integer typeGroepId, Integer negatief, Date beginDate, Date eindDate) {
-        Session session = sessionFactory.openSession();
-        Query query = session.createSQLQuery("select tb.pk_id as pk_id," +
-                                             "       ttg.naam as type_naam," +
-                                             "       tb.bedrag as bedrag," +
-                                             "       to_char(tb.datum, 'yyyy-mm-dd') as datum," +
-                                             "       tb.omschrijving as omschrijving," +
-                                             "       ttg.pk_id as fk_type_groep_id" +
-                                             " from ta_bedragen tb" +
-                                             " join ta_type_groep ttg" +
-                                             "   on (tb.fk_type_groep_id = ttg.pk_id)" +
-                                             " where pkg_ta_rekening.fun_groep_in_groep(in_groep => fk_type_groep_id," +
-                                             "                                          in_hoofd_groep => ?) = 1" +
-                                             "  and ttg.negatief = ?" +
-                                             "  and datum between ? and ?").addEntity(OverzichtGroepBedragen.class);
-        
-        query.setInteger(0, typeGroepId);
-        query.setInteger(1, negatief);
-        query.setDate(2, beginDate);
-        query.setDate(3, eindDate);
-
-        return query.list();
     }
 
     @Override
@@ -314,5 +279,17 @@ public class BedragenDaoImpl implements BedragenDao{
         }
         
         return overviewRekeningGroep;
+    }
+    
+    public List<Bedragen> getBedragenInGroep(List<Bedragen> bedragen, Groepen hoofdGroep, Integer negatief){
+        List<Bedragen> bedragenInGroep = new ArrayList<Bedragen>();
+        
+        for(Bedragen bedrag: bedragen){
+            if (GroepenDaoImpl.getHoofdGroep(bedrag.getGroep()).equals(hoofdGroep)  && bedrag.getGroep().getNegatief().equals(negatief)){
+                bedragenInGroep.add(bedrag);
+            }
+        }
+        
+        return bedragenInGroep;
     }
 }

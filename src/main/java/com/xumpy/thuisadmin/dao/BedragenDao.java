@@ -25,10 +25,6 @@ public interface BedragenDao{
     void update(Bedragen bedragen);
     void delete(Bedragen bedragen);
     public List<BeheerBedragenReport> reportBedragen(Rekeningen rekening, Integer offset);
-    public List<OverzichtGroepBedragen> rapportOverzichtGroepBedragen(Integer typeGroepId,
-                                                                      Integer negatief,
-                                                                      Date beginDate,
-                                                                      Date eindDate);
     public Integer getNewPkId();
     public Bedragen findBedrag(Integer bedragId);
     
