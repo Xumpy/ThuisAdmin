@@ -16,6 +16,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,9 @@ public class BedragenDaoImpl implements BedragenDao{
     @Autowired
     private SessionFactory sessionFactory;
 
+    @Autowired
+    private RekeningenDaoImpl rekeningenDao;
+    
     @Override
     public void save(Bedragen bedragen) {
         sessionFactory.getCurrentSession().save(bedragen);
@@ -202,7 +206,7 @@ public class BedragenDaoImpl implements BedragenDao{
     }
     
     public BigDecimal getBedragAtDate(Date date, Rekeningen rekening){
-        BigDecimal rekeningStand = rekening.getWaarde();
+        BigDecimal rekeningStand = new BigDecimal(0);
         
         Session session = sessionFactory.getCurrentSession();
         
@@ -210,7 +214,10 @@ public class BedragenDaoImpl implements BedragenDao{
         criteria.add(Restrictions.gt("datum", date));
         
         if (rekening != null){
+            rekeningStand = rekening.getWaarde();
             criteria.add(Restrictions.eq("rekening", rekening));
+        } else {
+            rekeningStand = rekeningenDao.totalAllRekeningen();
         }
         
         List<Bedragen> lstBedragen = criteria.list();
@@ -227,11 +234,50 @@ public class BedragenDaoImpl implements BedragenDao{
         return rekeningStand;
     }
     
+    public BigDecimal getTotalRekeningBedragen(List<Bedragen> bedragen){
+        BigDecimal totaalRekeningen = new BigDecimal(0);
+        List<Rekeningen> rekeningen = new ArrayList<Rekeningen>();
+        
+        for(Bedragen bedrag: bedragen){
+            if (!rekeningen.contains(bedrag.getRekening())){
+                rekeningen.add(bedrag.getRekening());
+            }
+        }
+        
+        for(Rekeningen rekening: rekeningen){
+            totaalRekeningen = totaalRekeningen.add(rekening.getWaarde());
+        }
+        
+        return totaalRekeningen;
+    }
+    
+    public boolean isRekeningUnique(List<Bedragen> bedragen){
+        List<Rekeningen> rekeningen = new ArrayList<Rekeningen>();
+        
+        for(Bedragen bedrag: bedragen){
+            if (!rekeningen.contains(bedrag.getRekening())){
+                rekeningen.add(bedrag.getRekening());
+            }
+        }
+        
+        if (rekeningen.size() == 1){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     public Map OverviewRekeningData(List<Bedragen> bedragen){
         Map overviewRekeningData = new LinkedHashMap();
 
         Collections.sort(bedragen);
-        BigDecimal rekeningStand = getBedragAtDate(bedragen.get(0).getDatum(), bedragen.get(0).getRekening());
+        
+        BigDecimal rekeningStand = new BigDecimal(0);
+        if (isRekeningUnique(bedragen)){
+            rekeningStand = getBedragAtDate(bedragen.get(0).getDatum(), bedragen.get(0).getRekening());
+        } else {
+            rekeningStand = getBedragAtDate(bedragen.get(0).getDatum(), null);
+        }
         
         overviewRekeningData.put(bedragen.get(0).getDatum(), rekeningStand);
         

@@ -228,4 +228,19 @@ public class BedragenDaoTest extends H2InMemory{
                                                                     groepenDao.getHoofdGroep(groepPositief), 
                                                                     groepPositief.getNegatief()));
     }
+    
+    @Test
+    public void testGetTotalRekeningBedragen() throws ParseException{
+        List<Bedragen> bedragen = fetchTestBedragen();
+        BigDecimal totalRekeningBedragen = bedragenDao.getTotalRekeningBedragen(bedragen);
+        
+        assertEquals(totalRekeningBedragen, new BigDecimal(2000));
+    }
+    
+    @Test
+    public void testIsRekeningUnique() throws ParseException{
+        List<Bedragen> bedragen = fetchTestBedragen();
+        
+        assertEquals(bedragenDao.isRekeningUnique(bedragen), true);
+    }
 }

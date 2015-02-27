@@ -9,9 +9,12 @@ import com.xumpy.thuisadmin.model.db.Rekeningen;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
@@ -75,5 +78,18 @@ public class RekeningenDaoImpl implements RekeningenDao {
         Rekeningen rekening = (Rekeningen)session.get(Rekeningen.class, rekeningId);
         
         return rekening;
+    }
+    
+    public BigDecimal totalAllRekeningen(){
+        Session session = sessionFactory.getCurrentSession();
+        
+        Criteria criteria = session.createCriteria(Rekeningen.class);
+        ProjectionList projectionList = Projections.projectionList();
+        projectionList.add(Projections.sum("waarde"));
+        criteria.setProjection(projectionList);
+        
+        BigDecimal result = (BigDecimal)criteria.list().get(0);
+        
+        return result;
     }
 }
