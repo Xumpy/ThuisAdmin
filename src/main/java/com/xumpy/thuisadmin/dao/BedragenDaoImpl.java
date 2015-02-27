@@ -7,6 +7,7 @@ package com.xumpy.thuisadmin.dao;
 
 import com.google.common.collect.Iterables;
 import com.xumpy.thuisadmin.model.db.Bedragen;
+import com.xumpy.thuisadmin.model.db.Groepen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
 import com.xumpy.thuisadmin.model.view.OverzichtGroep;
@@ -46,6 +47,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class BedragenDaoImpl implements BedragenDao{
 
+    public static final String NEGATIEF = "NEGATIEF";
+    public static final String POSITIEF = "POSITIEF";
+    
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -57,7 +61,7 @@ public class BedragenDaoImpl implements BedragenDao{
 
     @Override
     public void update(Bedragen bedragen) {
-        sessionFactory.getCurrentSession().update(bedragen);
+        sessionFactory.getCurrentSession().merge(bedragen);
         sessionFactory.getCurrentSession().flush();
     }
 
@@ -65,46 +69,6 @@ public class BedragenDaoImpl implements BedragenDao{
     public void delete(Bedragen bedragen) {
         sessionFactory.getCurrentSession().delete(bedragen);
         sessionFactory.getCurrentSession().flush();
-    }
-
-    
-    @Override
-    public List<RekeningOverzicht> graphiekBedrag(Rekeningen rekening, Date beginDate, Date eindDate) {
-        Session session = sessionFactory.openSession();
-        Query query = session.createSQLQuery("select to_char(datum, 'DD-MM-RRRR') as label," +
-                                          "       rekening_bedrag as value " +
-                                          "from table(pkg_ta_rekening.fun_overzicht(" +
-                                          "            in_fk_rekening_id => ?," +
-                                          "            in_start_datum => ?," +
-                                          "            in_eind_datum => ?," +
-                                          "            in_interval => 1)) " +
-                                          "order by datum asc");
-        
-        query.setInteger(0, rekening == null ? -1 : rekening.getPk_id()); 
-
-        query.setDate(1, beginDate);
-        query.setDate(2, eindDate);
-        
-        return query.list();
-    }
-
-    @Override
-    public List<OverzichtGroep> graphiekOverzichtGroep(Date beginDate, Date eindDate) {
-        Session session = sessionFactory.openSession();
-        Query query = session.createSQLQuery("select ttg.pk_id as groepId," +
-                                             "       ttg.naam," +
-                                             "       nvl(tot.totaal_bedrag_opbrengsten,0) as totaal_opbrengsten," + 
-                                             "       nvl(tot.totaal_bedrag_kosten, 0) as totaal_kosten " +
-                                             " from table(pkg_ta_rekening.fun_bedrag_groep(" +
-                                             "  in_fk_hoofd_type_groep_id => null," +
-                                             "  in_start_datum => ?," +
-                                             "  in_eind_datum => ?)) tot " +
-                                             " join ta_type_groep ttg" +
-                                             "  on (tot.fk_type_groep_id = ttg.pk_id)").addEntity(OverzichtGroep.class);
-        query.setDate(0, beginDate);
-        query.setDate(1, eindDate);
-        
-        return query.list();
     }
 
     @Override
@@ -263,8 +227,9 @@ public class BedragenDaoImpl implements BedragenDao{
         
         criteria.add(Restrictions.ge("datum", startDate));
         criteria.add(Restrictions.le("datum", endDate));
-        
-        criteria.add(Restrictions.eq("rekening", rekening));
+        if (rekening != null){
+            criteria.add(Restrictions.eq("rekening", rekening));
+        }
         
         criteria.addOrder(Order.asc("datum"));
         
@@ -297,11 +262,11 @@ public class BedragenDaoImpl implements BedragenDao{
         return rekeningStand;
     }
     
-    public Map OverviewRekeningData(List<Bedragen> bedragen, Rekeningen rekening){
+    public Map OverviewRekeningData(List<Bedragen> bedragen){
         Map overviewRekeningData = new LinkedHashMap();
 
         Collections.sort(bedragen);
-        BigDecimal rekeningStand = getBedragAtDate(bedragen.get(0).getDatum(), rekening);
+        BigDecimal rekeningStand = getBedragAtDate(bedragen.get(0).getDatum(), bedragen.get(0).getRekening());
         
         overviewRekeningData.put(bedragen.get(0).getDatum(), rekeningStand);
         
@@ -318,5 +283,36 @@ public class BedragenDaoImpl implements BedragenDao{
         }
 
         return overviewRekeningData;
+    }
+
+    public Map<Groepen, Map> OverviewRekeningGroep(List<Bedragen> bedragen){
+        Map<Groepen, Map> overviewRekeningGroep = new LinkedHashMap<Groepen, Map>();
+        
+        for (Bedragen bedrag: bedragen){
+            Groepen hoofdGroep =  GroepenDaoImpl.getHoofdGroep(bedrag.getGroep());
+            Map<String, BigDecimal> bedragInGroep = (Map)overviewRekeningGroep.get(hoofdGroep);
+            
+            if (bedragInGroep == null){
+                bedragInGroep = new LinkedHashMap<String, BigDecimal>();
+                bedragInGroep.put(POSITIEF, new BigDecimal(0));
+                bedragInGroep.put(NEGATIEF, new BigDecimal(0));
+            }
+            
+            BigDecimal bedragNegatief = (BigDecimal)bedragInGroep.get(NEGATIEF);
+            BigDecimal bedragPositief = (BigDecimal)bedragInGroep.get(POSITIEF);
+            
+            if (bedrag.getGroep().getNegatief().equals(1)){
+                bedragNegatief = bedragNegatief.add(bedrag.getBedrag());
+            } else {
+                bedragPositief = bedragPositief.add(bedrag.getBedrag());
+            }
+            
+            bedragInGroep.put(POSITIEF, bedragPositief);
+            bedragInGroep.put(NEGATIEF, bedragNegatief);
+            
+            overviewRekeningGroep.put(hoofdGroep, bedragInGroep);
+        }
+        
+        return overviewRekeningGroep;
     }
 }

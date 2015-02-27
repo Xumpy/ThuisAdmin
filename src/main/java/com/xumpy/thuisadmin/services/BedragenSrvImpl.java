@@ -9,6 +9,7 @@ import com.xumpy.thuisadmin.dao.BedragenDaoImpl;
 import com.xumpy.thuisadmin.dao.RekeningenDaoImpl;
 import com.xumpy.thuisadmin.logic.BedragenLogic;
 import com.xumpy.thuisadmin.model.db.Bedragen;
+import com.xumpy.thuisadmin.model.db.Groepen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
 import com.xumpy.thuisadmin.model.view.FinanceOverzichtGroep;
@@ -90,7 +91,7 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
     @Override
     @Transactional
     public List<RekeningOverzicht> graphiekBedrag(Rekeningen rekening, Date beginDate, Date eindDate) {
-        Map overzichtBedragen = bedragenDao.OverviewRekeningData(bedragenDao.BedragInPeriode(beginDate, eindDate, rekening), rekening);
+        Map overzichtBedragen = bedragenDao.OverviewRekeningData(bedragenDao.BedragInPeriode(beginDate, eindDate, rekening));
         
         Iterator entries = overzichtBedragen.entrySet().iterator();
         List<RekeningOverzicht> rekeningOverzicht = new ArrayList<RekeningOverzicht>();
@@ -105,22 +106,38 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
     @Override
     @Transactional
     public FinanceOverzichtGroep graphiekOverzichtGroep(Date beginDate, Date eindDate) {
-
         FinanceOverzichtGroep financeOverzichtGroep = new FinanceOverzichtGroep();
         
-        List<OverzichtGroep> overzichtGroep = bedragenDao.graphiekOverzichtGroep(beginDate, eindDate);
+        List<Bedragen> lstBedragen = bedragenDao.BedragInPeriode(beginDate, eindDate, null);
+        System.out.println(lstBedragen.size());
         
-        Double totaal_kosten = 0.0;
-        Double totaal_opbrengsten = 0.0;
+        Map<Groepen, Map> bedragenOverzicht = bedragenDao.OverviewRekeningGroep(bedragenDao.BedragInPeriode(beginDate, eindDate, null));
         
-        for (OverzichtGroep groep : overzichtGroep){
-           totaal_kosten += groep.getTotaal_kosten();
-           totaal_opbrengsten += groep.getTotaal_opbrengsten();
+        BigDecimal totaalKosten = new BigDecimal(0);
+        BigDecimal totaalOpbrengsten = new BigDecimal(0);
+        
+        List<OverzichtGroep> overzichtGroepen = new ArrayList<OverzichtGroep>();
+        for (Entry entry: bedragenOverzicht.entrySet()){
+            
+            Groepen groep = (Groepen)entry.getKey();
+            
+            OverzichtGroep overzichtGroep = new OverzichtGroep();
+            overzichtGroep.setGroepId(groep.getPk_id());
+            overzichtGroep.setNaam(groep.getNaam());
+            
+            Map<String, BigDecimal> bedragen = (Map<String, BigDecimal>)entry.getValue();
+            overzichtGroep.setTotaal_kosten(bedragen.get(bedragenDao.NEGATIEF).doubleValue());
+            overzichtGroep.setTotaal_opbrengsten(bedragen.get(bedragenDao.POSITIEF).doubleValue());
+            
+            overzichtGroepen.add(overzichtGroep);
+            
+            totaalKosten = totaalKosten.add(bedragen.get(bedragenDao.NEGATIEF));
+            totaalOpbrengsten = totaalOpbrengsten.add(bedragen.get(bedragenDao.POSITIEF));
         }
+        financeOverzichtGroep.setTotaal_kosten(totaalKosten.doubleValue());
+        financeOverzichtGroep.setTotaal_opbrengsten(totaalOpbrengsten.doubleValue());
         
-        financeOverzichtGroep.setTotaal_kosten(totaal_kosten);
-        financeOverzichtGroep.setTotaal_opbrengsten(totaal_opbrengsten);
-        financeOverzichtGroep.setOverzichtGroep(overzichtGroep);
+        financeOverzichtGroep.setOverzichtGroep(overzichtGroepen);
         
         return financeOverzichtGroep;
     }

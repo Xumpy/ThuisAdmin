@@ -36,7 +36,7 @@ public class RekeningenDaoImpl implements RekeningenDao {
 
     @Override
     public void update(Rekeningen rekeningen) {
-        sessionFactory.getCurrentSession().update(rekeningen);
+        sessionFactory.getCurrentSession().merge(rekeningen);
         sessionFactory.getCurrentSession().flush();
     }
 

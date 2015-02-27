@@ -18,8 +18,10 @@ import java.sql.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -161,7 +163,7 @@ public class BedragenDaoTest extends H2InMemory{
         overviewRekeningTestData.put(dt.parse("2015-02-22"), new BigDecimal(2120));
         overviewRekeningTestData.put(dt.parse("2015-02-23"), new BigDecimal(2080));
         
-        Map overviewRekeningData = bedragenDao.OverviewRekeningData(bedragenDao.BedragInPeriode(startDate, endDate, rekening), rekening);
+        Map overviewRekeningData = bedragenDao.OverviewRekeningData(bedragenDao.BedragInPeriode(startDate, endDate, rekening));
         
         assertEquals(overviewRekeningTestData, overviewRekeningData);
     }
@@ -177,8 +179,23 @@ public class BedragenDaoTest extends H2InMemory{
         
         java.util.Date startDate = dt.parse("2015-02-19");
         
-        Map overviewRekeningData = bedragenDao.OverviewRekeningData(bedragenDao.BedragInPeriode(startDate, endDate, rekening), rekening);
+        Map overviewRekeningData = bedragenDao.OverviewRekeningData(bedragenDao.BedragInPeriode(startDate, endDate, rekening));
         
         assertEquals(overviewRekeningTestData, overviewRekeningData);
+    }
+    
+    @Test
+    public void testOverviewRekeningGroep() throws ParseException{
+        Map overviewRekeningTestData = new LinkedHashMap();
+        Map bedrag = new LinkedHashMap();
+        
+        bedrag.put(bedragenDao.NEGATIEF, new BigDecimal(570));
+        bedrag.put(bedragenDao.POSITIEF, new BigDecimal(2000));
+        
+        overviewRekeningTestData.put(groepenDao.findGroep(1), bedrag);
+        
+        Map overviewRekeningData = bedragenDao.OverviewRekeningGroep(fetchTestBedragen());
+        
+        assertEquals(overviewRekeningData, overviewRekeningTestData);
     }
 }

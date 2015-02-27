@@ -91,4 +91,21 @@ public class GroepenDaoImpl implements GroepenDao{
         
         return query.list();
     }
+    
+    public static Groepen getHoofdGroep(Groepen groep){
+        if (groep.getHoofdGroep() == null){
+            return groep;
+        } else {
+            Groepen hoofdGroep = groep.getHoofdGroep();
+            
+            while(true){
+                if (hoofdGroep.getHoofdGroep() != null){
+                    hoofdGroep = hoofdGroep.getHoofdGroep();
+                } else {
+                    return hoofdGroep;
+                }
+            }
+        }
+    }
+    
 }

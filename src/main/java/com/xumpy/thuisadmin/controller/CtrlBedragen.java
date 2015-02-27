@@ -45,7 +45,7 @@ public class CtrlBedragen {
     }
     
     @RequestMapping("/json/save_bedrag")
-    public @ResponseBody String saveBedragen(@RequestBody NieuwBedrag bedrag) throws ParseException{
+    public @ResponseBody String saveBedragen(@RequestBody NieuwBedrag bedrag) throws ParseException, Exception{
         bedragenSrv.save(bedrag);
         
         return "1";
@@ -57,7 +57,7 @@ public class CtrlBedragen {
     }
     
     @RequestMapping("/json/delete_bedrag")
-    public @ResponseBody String deleteBedrag(@RequestBody NieuwBedrag bedrag) throws ParseException{
+    public @ResponseBody String deleteBedrag(@RequestBody NieuwBedrag bedrag) throws ParseException, Exception{
         bedragenSrv.delete(bedrag);
         
         return "1";

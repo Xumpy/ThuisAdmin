@@ -99,9 +99,9 @@ public abstract class BedragenLogic {
         
         if (transaction.equals(DELETE)){
             if (bedrag.getGroep().getNegatief().equals(1)){
-                rekening.setWaarde((rekening.getWaarde().subtract(bedrag.getBedrag())));
-            } else {
                 rekening.setWaarde((rekening.getWaarde().add(bedrag.getBedrag())));
+            } else {
+                rekening.setWaarde((rekening.getWaarde().subtract(bedrag.getBedrag())));
             }
         
         }

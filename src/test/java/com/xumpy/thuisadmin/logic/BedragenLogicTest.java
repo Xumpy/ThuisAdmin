@@ -131,4 +131,19 @@ public class BedragenLogicTest {
        assertEquals(new BigDecimal("2900"), bedrag.getRekening().getWaarde());
     }
     
+    @Test
+    public void testProcessRekeningBedragDelete(){
+        when(bedragMock.getBedrag()).thenReturn(new BigDecimal("500"));
+        when(groepMock.getNegatief()).thenReturn(0);
+        Bedragen bedrag = bedragenLogic.processRekeningBedrag(bedragMock, bedragenLogic.DELETE);
+        assertEquals(new BigDecimal("1500"), bedrag.getRekening().getWaarde());
+    }
+    
+    @Test
+    public void testProcessRekeningBedragDelete2(){
+        when(bedragMock.getBedrag()).thenReturn(new BigDecimal("500"));
+        when(groepMock.getNegatief()).thenReturn(1);
+        Bedragen bedrag = bedragenLogic.processRekeningBedrag(bedragMock, bedragenLogic.DELETE);
+        assertEquals(new BigDecimal("2500"), bedrag.getRekening().getWaarde());
+    }
 }
