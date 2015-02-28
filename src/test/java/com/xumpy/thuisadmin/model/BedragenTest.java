@@ -36,9 +36,4 @@ public class BedragenTest {
         Collections.sort(lstBedragen);
         
     }
-    
-    @Test
-    public void dummyTest(){
-        Assert.assertEquals("dummy", "dummy");
-    }
 }

@@ -6,6 +6,8 @@
 package com.xumpy.thuisadmin.logic;
 
 import com.xumpy.thuisadmin.dao.BedragenDaoImpl;
+import com.xumpy.thuisadmin.dao.H2InMemory;
+import com.xumpy.thuisadmin.dao.RekeningenDaoImpl;
 import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Groepen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
@@ -15,6 +17,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.when;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -25,9 +28,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  */
 
 @RunWith(MockitoJUnitRunner.class)
-public class BedragenLogicTest {
-    
-    BedragenLogic bedragenLogic = new BedragenLogic(){};
+public class BedragenLogicTest{
     
     @Mock NieuwBedrag nieuwBedragMock;
     @Mock BedragenDaoImpl bedragenDaoMock;
@@ -37,21 +38,28 @@ public class BedragenLogicTest {
     @Mock Bedragen oldBedragMock;
     @Mock Groepen oldGroepMock;
     
+    @Mock BedragenDaoImpl bedragenDao;
+    @Mock RekeningenDaoImpl rekeningenDao;
+    
+    @InjectMocks BedragenLogic bedragenLogic;
+    Rekeningen rekening;
+    
     @Before
-    public void setUp(){
-        Rekeningen rekening = new Rekeningen();
+    public void setUp2(){
+        rekening = new Rekeningen();
         rekening.setWaarde(new BigDecimal("2000"));
         
         when(bedragMock.getRekening()).thenReturn(rekening);
         when(bedragMock.getGroep()).thenReturn(groepMock);
         
-        bedragenLogic.setBedragenDao(bedragenDaoMock);
         when(bedragMock.getPk_id()).thenReturn(1);
         
         when(oldBedragMock.getGroep()).thenReturn(oldGroepMock);
+        when(oldBedragMock.getRekening()).thenReturn(rekening);
         when(oldBedragMock.getBedrag()).thenReturn(new BigDecimal("400"));
         when(oldGroepMock.getNegatief()).thenReturn(1);
-        when(bedragenDaoMock.getBedrag(1)).thenReturn(oldBedragMock);
+        
+        when(bedragenDao.getBedrag(1)).thenReturn(oldBedragMock);
     }
     
     @Test
@@ -106,6 +114,9 @@ public class BedragenLogicTest {
         when(bedragMock.getBedrag()).thenReturn(new BigDecimal("800"));
         when(groepMock.getNegatief()).thenReturn(1);
         
+        Bedragen oldBedrag = new Bedragen(); 
+        oldBedrag.setRekening(rekening);
+        
         Bedragen bedrag = bedragenLogic.processRekeningBedrag(bedragMock, bedragenLogic.UPDATE);
         
         assertEquals(new BigDecimal("1600"), bedrag.getRekening().getWaarde());
@@ -145,5 +156,20 @@ public class BedragenLogicTest {
         when(groepMock.getNegatief()).thenReturn(1);
         Bedragen bedrag = bedragenLogic.processRekeningBedrag(bedragMock, bedragenLogic.DELETE);
         assertEquals(new BigDecimal("2500"), bedrag.getRekening().getWaarde());
+    }
+    
+    @Test
+    public void testMoveBedragFromOneRekeningToAnother(){
+        Rekeningen newRekening = new Rekeningen();
+        newRekening.setPk_id(2);
+        newRekening.setWaarde(new BigDecimal(2000));
+        
+        when(bedragMock.getBedrag()).thenReturn(new BigDecimal("500"));
+        when(rekeningenDao.findRekening(2)).thenReturn(newRekening);
+        
+        newRekening = bedragenLogic.moveBedragToRekening(bedragMock, newRekening);
+        
+        assertEquals(new BigDecimal(1500), bedragMock.getRekening().getWaarde());
+        assertEquals(new BigDecimal(2500), newRekening.getWaarde());
     }
 }

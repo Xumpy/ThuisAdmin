@@ -6,6 +6,7 @@
 package com.xumpy.thuisadmin.logic;
 
 import com.xumpy.thuisadmin.dao.BedragenDaoImpl;
+import com.xumpy.thuisadmin.dao.RekeningenDaoImpl;
 import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.model.view.NieuwBedrag;
@@ -23,10 +24,13 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Nico
  */
-public abstract class BedragenLogic {
+public class BedragenLogic {
     
     @Autowired
     private BedragenDaoImpl bedragenDao;
+    
+    @Autowired
+    private RekeningenDaoImpl rekeningenDao;
     
     public static final String UPDATE = "UPDATE";
     public static final String INSERT = "INSERT";
@@ -79,7 +83,12 @@ public abstract class BedragenLogic {
         
         if (transaction.equals(UPDATE)){
             Bedragen oldBedrag = bedragenDao.getBedrag(bedrag.getPk_id());
-
+            
+            if (!oldBedrag.getRekening().equals(bedrag.getRekening())){
+                rekening = moveBedragToRekening(oldBedrag, rekening);
+            }
+            System.out.println(rekening.getWaarde());
+            
             if (bedrag.getGroep().getNegatief().equals(1)){
                 if (oldBedrag.getGroep().getNegatief().equals(1)){
                     rekening.setWaarde((rekening.getWaarde().add(oldBedrag.getBedrag())));
@@ -110,8 +119,19 @@ public abstract class BedragenLogic {
 
         return bedrag;
     }
-    
-    public void setBedragenDao(BedragenDaoImpl bedragenDao){
-        this.bedragenDao = bedragenDao;
+
+    public Rekeningen moveBedragToRekening(Bedragen bedrag, Rekeningen rekening2) {
+        if (bedrag.getGroep().getNegatief().equals(0)){
+            bedrag.getRekening().setWaarde(bedrag.getRekening().getWaarde().subtract(bedrag.getBedrag()));
+            rekeningenDao.save(bedrag.getRekening());
+            rekening2 = rekeningenDao.findRekening(rekening2.getPk_id());
+            rekening2.setWaarde(rekening2.getWaarde().add(bedrag.getBedrag()));
+        } else {
+            bedrag.getRekening().setWaarde(bedrag.getRekening().getWaarde().add(bedrag.getBedrag()));
+            rekeningenDao.save(bedrag.getRekening());
+            rekening2 = rekeningenDao.findRekening(rekening2.getPk_id());
+            rekening2.setWaarde(rekening2.getWaarde().subtract(bedrag.getBedrag()));
+        }
+        return rekening2;
     }
 }

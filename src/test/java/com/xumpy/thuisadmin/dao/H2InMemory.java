@@ -35,11 +35,11 @@ public abstract class H2InMemory {
     protected static SessionFactory sessionFactoryH2;
     private Transaction transaction;
     
-    @InjectMocks PersonenDaoImpl personenDao;
-    @InjectMocks GroepenDaoImpl groepenDao;
-    @InjectMocks RekeningenDaoImpl rekeningenDao;
-    @InjectMocks DocumentenDaoImpl documentenDao;
-    @InjectMocks BedragenDaoImpl bedragenDao;
+    @InjectMocks public PersonenDaoImpl personenDao;
+    @InjectMocks public GroepenDaoImpl groepenDao;
+    @InjectMocks public RekeningenDaoImpl rekeningenDao;
+    @InjectMocks public DocumentenDaoImpl documentenDao;
+    @InjectMocks public BedragenDaoImpl bedragenDao;
     
     @BeforeClass
     public static void setUp(){
