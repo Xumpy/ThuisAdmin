@@ -6,6 +6,7 @@
 package com.xumpy.thuisadmin.services;
 
 import com.xumpy.thuisadmin.model.db.Bedragen;
+import com.xumpy.thuisadmin.model.db.Groepen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
 import com.xumpy.thuisadmin.model.view.FinanceOverzichtGroep;
@@ -36,4 +37,7 @@ public interface BedragenSrv {
                                                                       Date beginDate, 
                                                                       Date eindDate);
     public Bedragen findBedrag(Integer bedragId);
+    
+    public OverzichtGroepBedragenTotal filterOverzichtGroepBedragenTotalGroep(Groepen groep);
+    public OverzichtGroepBedragenTotal filterOverzichtGroepBedragenTotalFilter(String filter);
 }

@@ -6,6 +6,8 @@
 package com.xumpy.thuisadmin.services;
 
 import com.xumpy.thuisadmin.dao.BedragenDaoImpl;
+import static com.xumpy.thuisadmin.dao.BedragenDaoImpl.NEGATIEF;
+import static com.xumpy.thuisadmin.dao.BedragenDaoImpl.POSITIEF;
 import com.xumpy.thuisadmin.dao.GroepenDaoImpl;
 import com.xumpy.thuisadmin.dao.RekeningenDaoImpl;
 import com.xumpy.thuisadmin.logic.BedragenLogic;
@@ -21,8 +23,10 @@ import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragenTotal;
 import com.xumpy.thuisadmin.model.view.RekeningOverzicht;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -45,6 +49,8 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
     
     @Autowired
     private RekeningenDaoImpl rekeningenDao;
+    
+    @Autowired OverzichtGroepBedragenTotal overzichtGroepBedragenTotal;
     
     static final Logger Log = Logger.getLogger(BedragenSrvImpl.class.getName());
     
@@ -94,7 +100,7 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
     @Override
     @Transactional
     public List<RekeningOverzicht> graphiekBedrag(Rekeningen rekening, Date beginDate, Date eindDate) {
-        Map overzichtBedragen = bedragenDao.OverviewRekeningData(bedragenDao.BedragInPeriode(beginDate, eindDate, rekening));
+        Map overzichtBedragen = OverviewRekeningData(bedragenDao.BedragInPeriode(beginDate, eindDate, rekening));
         
         Iterator entries = overzichtBedragen.entrySet().iterator();
         List<RekeningOverzicht> rekeningOverzicht = new ArrayList<RekeningOverzicht>();
@@ -114,7 +120,7 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
         List<Bedragen> lstBedragen = bedragenDao.BedragInPeriode(beginDate, eindDate, null);
         System.out.println(lstBedragen.size());
         
-        Map<Groepen, Map> bedragenOverzicht = bedragenDao.OverviewRekeningGroep(bedragenDao.BedragInPeriode(beginDate, eindDate, null));
+        Map<Groepen, Map> bedragenOverzicht = OverviewRekeningGroep(bedragenDao.BedragInPeriode(beginDate, eindDate, null));
         
         BigDecimal totaalKosten = new BigDecimal(0);
         BigDecimal totaalOpbrengsten = new BigDecimal(0);
@@ -148,7 +154,6 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
     @Override
     @Transactional
     public OverzichtGroepBedragenTotal rapportOverzichtGroepBedragen(Integer typeGroepId, Integer typeGroepKostOpbrengst, Date beginDate, Date eindDate) {
-        OverzichtGroepBedragenTotal overzichtGroepBedragenTotal = new OverzichtGroepBedragenTotal();
         Integer negatief = new Integer(0);
         
         if (typeGroepKostOpbrengst.equals(1)){
@@ -158,7 +163,7 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
         }
         
         List<Bedragen> lstBedragenInPeriode = bedragenDao.BedragInPeriode(beginDate, eindDate, null);
-        List<Bedragen> lstBedragen = bedragenDao.getBedragenInGroep(lstBedragenInPeriode, groepenDao.findGroep(typeGroepId), negatief);
+        List<Bedragen> lstBedragen = getBedragenInGroep(lstBedragenInPeriode, groepenDao.findGroep(typeGroepId), negatief);
         List<OverzichtGroepBedragen> overzichtGroepBedragen = new ArrayList<OverzichtGroepBedragen>();
         
         BigDecimal somOverzicht = new BigDecimal(0);
@@ -187,5 +192,159 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
     @Transactional
     public Bedragen findBedrag(Integer bedragId) {
         return bedragenDao.findBedrag(bedragId);
+    }
+    
+    public BigDecimal getTotalRekeningBedragen(List<Bedragen> bedragen){
+        BigDecimal totaalRekeningen = new BigDecimal(0);
+        List<Rekeningen> rekeningen = new ArrayList<Rekeningen>();
+        
+        for(Bedragen bedrag: bedragen){
+            if (!rekeningen.contains(bedrag.getRekening())){
+                rekeningen.add(bedrag.getRekening());
+            }
+        }
+        
+        for(Rekeningen rekening: rekeningen){
+            totaalRekeningen = totaalRekeningen.add(rekening.getWaarde());
+        }
+        
+        return totaalRekeningen;
+    }
+    
+    public boolean isRekeningUnique(List<Bedragen> bedragen){
+        List<Rekeningen> rekeningen = new ArrayList<Rekeningen>();
+        
+        for(Bedragen bedrag: bedragen){
+            if (!rekeningen.contains(bedrag.getRekening())){
+                rekeningen.add(bedrag.getRekening());
+            }
+        }
+        
+        if (rekeningen.size() == 1){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public Map OverviewRekeningData(List<Bedragen> bedragen){
+        Map overviewRekeningData = new LinkedHashMap();
+
+        Collections.sort(bedragen);
+        
+        BigDecimal rekeningStand;
+        if (isRekeningUnique(bedragen)){
+            rekeningStand = bedragenDao.getBedragAtDate(bedragen.get(0).getDatum(), bedragen.get(0).getRekening());
+        } else {
+            rekeningStand = bedragenDao.getBedragAtDate(bedragen.get(0).getDatum(), null);
+        }
+        
+        overviewRekeningData.put(bedragen.get(0).getDatum(), rekeningStand);
+        
+        for (Integer i=1; i<bedragen.size(); i++){
+            if (!bedragen.get(i).getDatum().equals(bedragen.get(0).getDatum())){
+                if (bedragen.get(i).getGroep().getNegatief().equals(1)){
+                    rekeningStand = rekeningStand.subtract(bedragen.get(i).getBedrag());
+                }
+                if (bedragen.get(i).getGroep().getNegatief().equals(0)){
+                    rekeningStand = rekeningStand.add(bedragen.get(i).getBedrag());
+                }
+                overviewRekeningData.put(bedragen.get(i).getDatum(), rekeningStand);
+            }
+        }
+
+        return overviewRekeningData;
+    }
+
+    public Map<Groepen, Map> OverviewRekeningGroep(List<Bedragen> bedragen){
+        Map<Groepen, Map> overviewRekeningGroep = new LinkedHashMap<Groepen, Map>();
+        
+        for (Bedragen bedrag: bedragen){
+            Groepen hoofdGroep =  GroepenDaoImpl.getHoofdGroep(bedrag.getGroep());
+            Map<String, BigDecimal> bedragInGroep = (Map)overviewRekeningGroep.get(hoofdGroep);
+            
+            if (bedragInGroep == null){
+                bedragInGroep = new LinkedHashMap<String, BigDecimal>();
+                bedragInGroep.put(POSITIEF, new BigDecimal(0));
+                bedragInGroep.put(NEGATIEF, new BigDecimal(0));
+            }
+            
+            BigDecimal bedragNegatief = (BigDecimal)bedragInGroep.get(NEGATIEF);
+            BigDecimal bedragPositief = (BigDecimal)bedragInGroep.get(POSITIEF);
+            
+            if (bedrag.getGroep().getNegatief().equals(1)){
+                bedragNegatief = bedragNegatief.add(bedrag.getBedrag());
+            } else {
+                bedragPositief = bedragPositief.add(bedrag.getBedrag());
+            }
+            
+            bedragInGroep.put(POSITIEF, bedragPositief);
+            bedragInGroep.put(NEGATIEF, bedragNegatief);
+            
+            overviewRekeningGroep.put(hoofdGroep, bedragInGroep);
+        }
+        
+        return overviewRekeningGroep;
+    }
+    
+    public List<Bedragen> getBedragenInGroep(List<Bedragen> bedragen, Groepen hoofdGroep, Integer negatief){
+        List<Bedragen> bedragenInGroep = new ArrayList<Bedragen>();
+        
+        for(Bedragen bedrag: bedragen){
+            if (GroepenDaoImpl.getHoofdGroep(bedrag.getGroep()).equals(hoofdGroep)  && bedrag.getGroep().getNegatief().equals(negatief)){
+                bedragenInGroep.add(bedrag);
+            }
+        }
+        
+        return bedragenInGroep;
+    }
+    
+    @Override
+    public OverzichtGroepBedragenTotal filterOverzichtGroepBedragenTotalGroep(Groepen groep){
+        List<OverzichtGroepBedragen> overzichtGroepBedragen = new ArrayList<OverzichtGroepBedragen>();
+        BigDecimal newSomBedrag = new BigDecimal(0);
+        
+        OverzichtGroepBedragenTotal newOverzichtGroepBedragenTotal = new OverzichtGroepBedragenTotal();
+        
+        for (OverzichtGroepBedragen overzichtGroepBedrag: overzichtGroepBedragenTotal.getOverzichtGroepBedragen()){
+            if (overzichtGroepBedrag.getType_naam().equals(groep.getNaam())){
+                overzichtGroepBedragen.add(overzichtGroepBedrag);
+                newSomBedrag = newSomBedrag.add(overzichtGroepBedrag.getBedrag());
+            }
+        }
+        newOverzichtGroepBedragenTotal.setSomBedrag(newSomBedrag);
+        newOverzichtGroepBedragenTotal.setOverzichtGroepBedragen(overzichtGroepBedragen);
+        
+        return newOverzichtGroepBedragenTotal;
+    }
+    
+    @Override
+    public OverzichtGroepBedragenTotal filterOverzichtGroepBedragenTotalFilter(String filter){
+        List<OverzichtGroepBedragen> overzichtGroepBedragen = new ArrayList<OverzichtGroepBedragen>();
+        BigDecimal newSomBedrag = new BigDecimal(0);
+        
+        OverzichtGroepBedragenTotal newOverzichtGroepBedragenTotal = new OverzichtGroepBedragenTotal();
+        
+        for (OverzichtGroepBedragen overzichtGroepBedrag: overzichtGroepBedragenTotal.getOverzichtGroepBedragen()){
+            if (overzichtGroepBedrag.getBedrag() != null && overzichtGroepBedrag.getBedrag().toString().contains(filter)) {
+                overzichtGroepBedragen.add(overzichtGroepBedrag);
+                newSomBedrag = newSomBedrag.add(overzichtGroepBedrag.getBedrag());
+            } else {
+            
+                if (overzichtGroepBedrag.getOmschrijving() != null && overzichtGroepBedrag.getOmschrijving().toLowerCase().contains(filter.toLowerCase())) {
+                    overzichtGroepBedragen.add(overzichtGroepBedrag);
+                    newSomBedrag = newSomBedrag.add(overzichtGroepBedrag.getBedrag());
+                } else {
+                    if (overzichtGroepBedrag.getDatum() != null && overzichtGroepBedrag.getDatum().toLowerCase().contains(filter.toLowerCase())) {
+                        overzichtGroepBedragen.add(overzichtGroepBedrag);
+                        newSomBedrag = newSomBedrag.add(overzichtGroepBedrag.getBedrag());
+                    }
+                }
+            }
+        }
+        newOverzichtGroepBedragenTotal.setSomBedrag(newSomBedrag);
+        newOverzichtGroepBedragenTotal.setOverzichtGroepBedragen(overzichtGroepBedragen);
+        
+        return newOverzichtGroepBedragenTotal;
     }
 }

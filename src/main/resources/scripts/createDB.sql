@@ -65,7 +65,9 @@ select 2 as pk_id, 1 as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Test' as n
 select 3 as pk_id, 1 as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Test Positief' as naam, null as omschrijving, 0 as negatief, null as code_id union
 select 4 as pk_id, null as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Inter Rekening' as naam, null as omschrijving, 0 as negatief, 'INTER_REKENING' as code_id union
 select 5 as pk_id, 4 as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Afhalen' as naam, null as omschrijving, 1 as negatief, 'INTER_REKENING' as code_id union
-select 6 as pk_id, 4 as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Bijzetten' as naam, null as omschrijving, 0 as negatief, 'INTER_REKENING' as code_id
+select 6 as pk_id, 4 as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Bijzetten' as naam, null as omschrijving, 0 as negatief, 'INTER_REKENING' as code_id union
+select 7 as pk_id, null as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Hoofdgroep 2' as naam, null as omschrijving, 0 as negatief, null as code_id union
+select 8 as pk_id, 7 as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Hoofdgroep 2 Test' as naam, null as omschrijving, 1 as negatief, null as code_id
 ) x where not exists(select * from ta_type_groep);
 
 insert into ta_bedragen select * from(
@@ -86,7 +88,11 @@ select 14 as pk_id, 2 as fk_type_groep_id, 1 as fk_persoon_id, 2 as fk_rekening_
 select 15 as pk_id, 2 as fk_type_groep_id, 1 as fk_persoon_id, 2 as fk_rekening_id, 40 as bedrag, DATE'2015-02-21' as datum, 'test rekening 2' as omschrijving union
 select 16 as pk_id, 2 as fk_type_groep_id, 1 as fk_persoon_id, 2 as fk_rekening_id, 180 as bedrag, DATE'2015-02-22' as datum, 'test rekening 2' as omschrijving union
 select 17 as pk_id, 5 as fk_type_groep_id, 1 as fk_persoon_id, 1 as fk_rekening_id, 100 as bedrag, DATE'2015-02-24' as datum, 'Betaling VISA' as omschrijving union
-select 18 as pk_id, 6 as fk_type_groep_id, 1 as fk_persoon_id, 2 as fk_rekening_id, 100 as bedrag, DATE'2015-02-24' as datum, 'Betaling VISA' as omschrijving
+select 18 as pk_id, 6 as fk_type_groep_id, 1 as fk_persoon_id, 2 as fk_rekening_id, 100 as bedrag, DATE'2015-02-24' as datum, 'Betaling VISA' as omschrijving union
+select 19 as pk_id, 7 as fk_type_groep_id, 1 as fk_persoon_id, 1 as fk_rekening_id, 20 as bedrag, DATE'2015-02-01' as datum, 'test' as omschrijving union
+select 20 as pk_id, 8 as fk_type_groep_id, 1 as fk_persoon_id, 1 as fk_rekening_id, 30 as bedrag, DATE'2015-02-02' as datum, 'test' as omschrijving union
+select 21 as pk_id, 8 as fk_type_groep_id, 1 as fk_persoon_id, 1 as fk_rekening_id, 20 as bedrag, DATE'2015-02-02' as datum, 'test' as omschrijving union
+select 22 as pk_id, 8 as fk_type_groep_id, 1 as fk_persoon_id, 1 as fk_rekening_id, 10 as bedrag, DATE'2015-02-02' as datum, 'test' as omschrijving
 ) x where not exists(select * from ta_bedragen);
 
 insert into ta_bedrag_documenten select * from(

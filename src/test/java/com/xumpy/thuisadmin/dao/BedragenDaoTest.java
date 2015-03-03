@@ -41,7 +41,7 @@ public class BedragenDaoTest extends H2InMemory{
     private Rekeningen rekening;
     private Bedragen bedrag;
     
-    private static final Integer BEDRAG_PK_ID = 20;
+    private static final Integer BEDRAG_PK_ID = 30;
     
     private static final Integer GROEP_NEGATIEF_ID = 2;
     private static final Integer GROEP_POSITIEF_ID = 3;
@@ -153,7 +153,6 @@ public class BedragenDaoTest extends H2InMemory{
         
         assertEquals(bedragAtStartDate, new BigDecimal(550));
         assertEquals(bedragAtEndDate, new BigDecimal(2180));
-
     }
     
     @Test
