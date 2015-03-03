@@ -10,6 +10,7 @@ import com.xumpy.thuisadmin.model.db.Groepen;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -69,12 +70,45 @@ public class OverzichtGroepBedragen implements Serializable{
     
     public void setWithBedrag(Bedragen bedrag){
         SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd"); 
-        
         this.pk_id = bedrag.getPk_id();
         this.type_naam = bedrag.getGroep().getNaam();
         this.bedrag = bedrag.getBedrag();
         this.datum = dt.format(bedrag.getDatum());
         this.omschrijving = bedrag.getOmschrijving();
+    }
+    
+    public OverzichtGroepBedragen(){
+        
+    }
+    
+    public OverzichtGroepBedragen(Bedragen bedrag){
+        setWithBedrag(bedrag);
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        boolean nullPk_id = false;
+        boolean nullBedrag = false;
+        boolean nullDatum = false ;
+        boolean nullOmschrijving = false;
+        boolean nullType_naam = false;
+        
+        OverzichtGroepBedragen overzichtGroepBedragen = (OverzichtGroepBedragen)o;
+        
+        nullPk_id = (this.pk_id == null && overzichtGroepBedragen.getPk_id() == null);
+        nullBedrag = (this.bedrag == null && overzichtGroepBedragen.getBedrag() == null);
+        nullDatum = (this.datum == null && overzichtGroepBedragen.getDatum() == null);
+        nullOmschrijving = (this.omschrijving == null && overzichtGroepBedragen.getOmschrijving() == null);
+        nullType_naam = (this.type_naam == null && overzichtGroepBedragen.getType_naam() == null);
+        
+        if ((nullPk_id || getPk_id().equals(overzichtGroepBedragen.getPk_id())) && 
+            (nullBedrag || getBedrag().equals(overzichtGroepBedragen.getBedrag())) &&
+            (nullDatum || getDatum().equals(overzichtGroepBedragen.getDatum())) &&
+            (nullOmschrijving || getOmschrijving().equals(overzichtGroepBedragen.getOmschrijving())) &&
+            (nullType_naam || getType_naam().equals(overzichtGroepBedragen.getType_naam()))){
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -104,14 +104,20 @@
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
-            <scope>test</scope>
+            <version>20030203.000129</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>com.google.collections</groupId>
             <artifactId>google-collections</artifactId>
             <version>1.0</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>junit-addons</groupId>
+            <artifactId>junit-addons</artifactId>
+            <version>1.4</version>
+            <scope>test</scope>
             <type>jar</type>
         </dependency>
         <dependency>

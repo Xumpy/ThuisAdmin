@@ -5,14 +5,17 @@
  */
 package com.xumpy.thuisadmin.model.view;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
-
+import org.springframework.stereotype.Service;
 /**
  *
  * @author Nico
  */
-public class OverzichtGroepBedragenTotal {
+
+@Service
+public class OverzichtGroepBedragenTotal implements Serializable{
     private BigDecimal somBedrag;
     private List<OverzichtGroepBedragen> overzichtGroepBedragen;
 

@@ -6,6 +6,7 @@
 package com.xumpy.thuisadmin.controller;
 
 import com.xumpy.thuisadmin.model.db.Bedragen;
+import com.xumpy.thuisadmin.model.view.FilterReportBedragenInGroep;
 import com.xumpy.thuisadmin.model.view.FinanceOverview;
 import com.xumpy.thuisadmin.model.view.FinanceOverzichtGroep;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragenInp;
@@ -89,5 +90,10 @@ public class FetchGraphiekOverview{
         } else {
             return null;
         }
+    }
+    
+    @RequestMapping("/json/report_overzicht_groep_bedragen_filter")
+    public @ResponseBody OverzichtGroepBedragenTotal fetchReportOverzichtGroepBedragenWithFilter(@RequestBody FilterReportBedragenInGroep filterReportBedragenInGroep) {
+        return bedragenSrv.filterOverzichtGroepBedragenTotalFilter(filterReportBedragenInGroep.getSearchTekst());
     }
 }

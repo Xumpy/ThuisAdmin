@@ -30,6 +30,10 @@
         <div>
             <div id="ex0" class="col-lg-6"></div>
             <div class="col-lg-6">
+                <input class="form-control" id="beginDatum" placeholder="Search" 
+                           type="text" ng-model="filterReport.searchTekst">
+            </div>
+            <div class="col-lg-6">
                 <table st-safe-src="reportGroepBedragenTotal.overzichtGroepBedragen" st-table="emptyGroepBedragen" class="table table-striped table-hover ">
                 <thead>
                   <tr>
@@ -76,6 +80,10 @@
                 rekening: ""
             };
             
+            $scope.filterReport = {
+                searchTekst: ""
+            }
+            
             $http.get('/ThuisAdmin/json/getFinanceHeader').success(function(data){
                 $scope.financeOverview = data; 
                 if ($scope.financeOverview.beginDatum !== ""){
@@ -101,6 +109,13 @@
                     res.success(function(data){
                        $scope.reportGroepBedragenTotal = data; 
                     });
+            });
+            
+            $scope.$watchCollection('filterReport', function(){
+                var res = $http.post('/ThuisAdmin/json/report_overzicht_groep_bedragen_filter', $scope.filterReport);
+                res.success(function(data){
+                   $scope.reportGroepBedragenTotal = data;
+                });
             });
             
             $http.get('/ThuisAdmin/json/rekeningen').success(function(data){
