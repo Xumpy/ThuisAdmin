@@ -300,28 +300,30 @@ public class BedragenDaoImpl implements BedragenDao{
         Map<Groepen, Map> overviewRekeningGroep = new LinkedHashMap<Groepen, Map>();
         
         for (Bedragen bedrag: bedragen){
-            Groepen hoofdGroep =  GroepenDaoImpl.getHoofdGroep(bedrag.getGroep());
-            Map<String, BigDecimal> bedragInGroep = (Map)overviewRekeningGroep.get(hoofdGroep);
-            
-            if (bedragInGroep == null){
-                bedragInGroep = new LinkedHashMap<String, BigDecimal>();
-                bedragInGroep.put(POSITIEF, new BigDecimal(0));
-                bedragInGroep.put(NEGATIEF, new BigDecimal(0));
+            if (bedrag.getGroep().getCodeId() == null || !bedrag.getGroep().getCodeId().equals("INTER_REKENING")){
+                Groepen hoofdGroep =  GroepenDaoImpl.getHoofdGroep(bedrag.getGroep());
+                Map<String, BigDecimal> bedragInGroep = (Map)overviewRekeningGroep.get(hoofdGroep);
+
+                if (bedragInGroep == null){
+                    bedragInGroep = new LinkedHashMap<String, BigDecimal>();
+                    bedragInGroep.put(POSITIEF, new BigDecimal(0));
+                    bedragInGroep.put(NEGATIEF, new BigDecimal(0));
+                }
+
+                BigDecimal bedragNegatief = (BigDecimal)bedragInGroep.get(NEGATIEF);
+                BigDecimal bedragPositief = (BigDecimal)bedragInGroep.get(POSITIEF);
+
+                if (bedrag.getGroep().getNegatief().equals(1)){
+                    bedragNegatief = bedragNegatief.add(bedrag.getBedrag());
+                } else {
+                    bedragPositief = bedragPositief.add(bedrag.getBedrag());
+                }
+
+                bedragInGroep.put(POSITIEF, bedragPositief);
+                bedragInGroep.put(NEGATIEF, bedragNegatief);
+
+                overviewRekeningGroep.put(hoofdGroep, bedragInGroep);   
             }
-            
-            BigDecimal bedragNegatief = (BigDecimal)bedragInGroep.get(NEGATIEF);
-            BigDecimal bedragPositief = (BigDecimal)bedragInGroep.get(POSITIEF);
-            
-            if (bedrag.getGroep().getNegatief().equals(1)){
-                bedragNegatief = bedragNegatief.add(bedrag.getBedrag());
-            } else {
-                bedragPositief = bedragPositief.add(bedrag.getBedrag());
-            }
-            
-            bedragInGroep.put(POSITIEF, bedragPositief);
-            bedragInGroep.put(NEGATIEF, bedragNegatief);
-            
-            overviewRekeningGroep.put(hoofdGroep, bedragInGroep);
         }
         
         return overviewRekeningGroep;
