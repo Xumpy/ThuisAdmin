@@ -30,6 +30,12 @@ public class Personen implements Serializable {
     @NotEmpty
     private String voornaam;
 
+    @Column(name="USER_NAME")
+    private String username;
+    
+    @Column(name="MD5_PASSWORD")
+    private String md5_password;
+    
     public Integer getPk_id() {
         return pk_id;
     }
@@ -52,5 +58,21 @@ public class Personen implements Serializable {
 
     public void setVoornaam(String voornaam) {
         this.voornaam = voornaam;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getMd5_password() {
+        return md5_password;
+    }
+
+    public void setMd5_password(String md5_password) {
+        this.md5_password = md5_password;
     }
 }

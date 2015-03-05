@@ -8,9 +8,12 @@ package com.xumpy.thuisadmin.model.db;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
@@ -39,6 +42,11 @@ public class Rekeningen implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date laatst_bijgewerkt;
 
+    @ManyToOne
+    @JoinColumn(name="FK_PERSONEN_ID")
+    @NotNull
+    private Personen persoon;
+    
     public Integer getPk_id() {
         return pk_id;
     }
@@ -69,5 +77,13 @@ public class Rekeningen implements Serializable {
 
     public void setLaatst_bijgewerkt(Date laatst_bijgewerkt) {
         this.laatst_bijgewerkt = laatst_bijgewerkt;
+    }
+
+    public Personen getPersoon() {
+        return persoon;
+    }
+
+    public void setPersoon(Personen persoon) {
+        this.persoon = persoon;
     }
 }

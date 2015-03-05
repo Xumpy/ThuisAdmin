@@ -7,6 +7,7 @@ package com.xumpy.thuisadmin.dao;
 
 import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Groepen;
+import com.xumpy.thuisadmin.model.db.Personen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragen;
@@ -47,6 +48,9 @@ public class BedragenDaoImpl implements BedragenDao{
     @Autowired
     private RekeningenDaoImpl rekeningenDao;
     
+    @Autowired
+    private Personen persoon;
+    
     @Override
     public void save(Bedragen bedragen) {
         sessionFactory.getCurrentSession().save(bedragen);
@@ -84,10 +88,12 @@ public class BedragenDaoImpl implements BedragenDao{
                                              " join ta_type_groep tt" +
                                              "   on (tb.fk_type_groep_id = tt.pk_id)" +
                                              " where tb.fk_rekening_id = :rekeningId" + 
+                                             "   and tb.fk_persoon_id = : persoonId" +
                                              " order by tb.datum desc, pk_id desc" +
                                              " offset " + 10 * offset + " rows fetch next 10 rows only").addEntity(BeheerBedragenReport.class);
         
         query.setInteger("rekeningId", rekening.getPk_id());
+        query.setInteger("persoonId", persoon.getPk_id());
         return query.list();
     }
 
@@ -108,8 +114,11 @@ public class BedragenDaoImpl implements BedragenDao{
     
     @Override
     public List<OverzichtBedrag> findAllBedragen(){
-        return sessionFactory.getCurrentSession().createQuery("select new com.xumpy.thuisadmin.model.view.graphiek.OverzichtBedrag(b.datum, b.bedrag, b.groep.negatief) " +
-                                                              "from Bedragen b order by datum asc").list();
+        Query query = sessionFactory.getCurrentSession().createQuery("select new com.xumpy.thuisadmin.model.view.graphiek.OverzichtBedrag(b.datum, b.bedrag, b.groep.negatief) " +
+                                                                     "from Bedragen b where b.persoon.pk_id = :persoonId order by datum asc");
+        query.setInteger("persoonId", persoon.getPk_id());
+        
+        return query.list();
     }
 
     @Override
@@ -117,10 +126,11 @@ public class BedragenDaoImpl implements BedragenDao{
         Session session = sessionFactory.getCurrentSession();
         
         Query query = session.createQuery("select new com.xumpy.thuisadmin.model.view.graphiek.OverzichtBedrag(b.datum, b.bedrag, b.groep.negatief) " +
-                                          "from Bedragen b where datum between :start and :end order by datum asc");
+                                          "from Bedragen b where datum between :start and :end and b.persoon.pk_id = :persoonId order by datum asc");
         
         query.setDate("start", startDate);
         query.setDate("end", endDate);
+        query.setInteger("persoonId", persoon.getPk_id());
         
         return query.list();
     }
@@ -165,16 +175,6 @@ public class BedragenDaoImpl implements BedragenDao{
         return (BigDecimal)query.list().get(0);
     }
 
-    @Override
-    public BigDecimal somBedragDatum(Date datum) {
-        Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("select sum( case b.groep.negatief when 1 then (b.bedrag * -1) else b.bedrag end) " +
-                                          " from Bedragen b where datum >= :datum");
-        query.setDate("datum", datum);
-        
-        return (BigDecimal)query.list().get(0);
-    }
-    
     @Override
     public Bedragen getBedrag(Integer pk_id){
         Session session = sessionFactory.getCurrentSession();
