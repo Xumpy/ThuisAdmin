@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -130,18 +131,24 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
             
             Groepen groep = (Groepen)entry.getKey();
             
-            OverzichtGroep overzichtGroep = new OverzichtGroep();
-            overzichtGroep.setGroepId(groep.getPk_id());
-            overzichtGroep.setNaam(groep.getNaam());
+            if (groep.getCodeId() == null){
+                groep.setCodeId("NULL");
+            }
             
-            Map<String, BigDecimal> bedragen = (Map<String, BigDecimal>)entry.getValue();
-            overzichtGroep.setTotaal_kosten(bedragen.get(bedragenDao.NEGATIEF).doubleValue());
-            overzichtGroep.setTotaal_opbrengsten(bedragen.get(bedragenDao.POSITIEF).doubleValue());
-            
-            overzichtGroepen.add(overzichtGroep);
-            
-            totaalKosten = totaalKosten.add(bedragen.get(bedragenDao.NEGATIEF));
-            totaalOpbrengsten = totaalOpbrengsten.add(bedragen.get(bedragenDao.POSITIEF));
+            if (!groep.getCodeId().equals("INTER_REKENING")){
+                OverzichtGroep overzichtGroep = new OverzichtGroep();
+                overzichtGroep.setGroepId(groep.getPk_id());
+                overzichtGroep.setNaam(groep.getNaam());
+
+                Map<String, BigDecimal> bedragen = (Map<String, BigDecimal>)entry.getValue();
+                overzichtGroep.setTotaal_kosten(bedragen.get(bedragenDao.NEGATIEF).doubleValue());
+                overzichtGroep.setTotaal_opbrengsten(bedragen.get(bedragenDao.POSITIEF).doubleValue());
+
+                overzichtGroepen.add(overzichtGroep);
+
+                totaalKosten = totaalKosten.add(bedragen.get(bedragenDao.NEGATIEF));
+                totaalOpbrengsten = totaalOpbrengsten.add(bedragen.get(bedragenDao.POSITIEF));
+            }
         }
         financeOverzichtGroep.setTotaal_kosten(totaalKosten.doubleValue());
         financeOverzichtGroep.setTotaal_opbrengsten(totaalOpbrengsten.doubleValue());
@@ -325,19 +332,21 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
         
         OverzichtGroepBedragenTotal newOverzichtGroepBedragenTotal = new OverzichtGroepBedragenTotal();
         
-        for (OverzichtGroepBedragen overzichtGroepBedrag: overzichtGroepBedragenTotal.getOverzichtGroepBedragen()){
-            if (overzichtGroepBedrag.getBedrag() != null && overzichtGroepBedrag.getBedrag().toString().contains(filter)) {
-                overzichtGroepBedragen.add(overzichtGroepBedrag);
-                newSomBedrag = newSomBedrag.add(overzichtGroepBedrag.getBedrag());
-            } else {
-            
-                if (overzichtGroepBedrag.getOmschrijving() != null && overzichtGroepBedrag.getOmschrijving().toLowerCase().contains(filter.toLowerCase())) {
+        if (overzichtGroepBedragenTotal.getOverzichtGroepBedragen() != null){
+            for (OverzichtGroepBedragen overzichtGroepBedrag: overzichtGroepBedragenTotal.getOverzichtGroepBedragen()){
+                if (overzichtGroepBedrag.getBedrag() != null && overzichtGroepBedrag.getBedrag().toString().contains(filter)) {
                     overzichtGroepBedragen.add(overzichtGroepBedrag);
                     newSomBedrag = newSomBedrag.add(overzichtGroepBedrag.getBedrag());
                 } else {
-                    if (overzichtGroepBedrag.getDatum() != null && overzichtGroepBedrag.getDatum().toLowerCase().contains(filter.toLowerCase())) {
+
+                    if (overzichtGroepBedrag.getOmschrijving() != null && overzichtGroepBedrag.getOmschrijving().toLowerCase().contains(filter.toLowerCase())) {
                         overzichtGroepBedragen.add(overzichtGroepBedrag);
                         newSomBedrag = newSomBedrag.add(overzichtGroepBedrag.getBedrag());
+                    } else {
+                        if (overzichtGroepBedrag.getDatum() != null && overzichtGroepBedrag.getDatum().toLowerCase().contains(filter.toLowerCase())) {
+                            overzichtGroepBedragen.add(overzichtGroepBedrag);
+                            newSomBedrag = newSomBedrag.add(overzichtGroepBedrag.getBedrag());
+                        }
                     }
                 }
             }

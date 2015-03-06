@@ -10,10 +10,12 @@ import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.model.view.BeheerBedragenInp;
 import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
 import com.xumpy.thuisadmin.model.view.NieuwBedrag;
+import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragenTotal;
 import com.xumpy.thuisadmin.services.BedragenSrv;
 import java.text.ParseException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -61,5 +63,10 @@ public class CtrlBedragen {
         bedragenSrv.delete(bedrag);
         
         return "1";
+    }
+    
+    @Bean
+    public OverzichtGroepBedragenTotal overzichtGroepBedragenTotal(){
+        return new OverzichtGroepBedragenTotal();
     }
 }
