@@ -88,7 +88,7 @@ public class BedragenDaoImpl implements BedragenDao{
                                              " join ta_type_groep tt" +
                                              "   on (tb.fk_type_groep_id = tt.pk_id)" +
                                              " where tb.fk_rekening_id = :rekeningId" + 
-                                             "   and tb.fk_persoon_id = : persoonId" +
+                                             "   and tb.fk_persoon_id = :persoonId" +
                                              " order by tb.datum desc, pk_id desc" +
                                              " offset " + 10 * offset + " rows fetch next 10 rows only").addEntity(BeheerBedragenReport.class);
         

@@ -151,19 +151,19 @@ public class BedragenDaoTest extends H2InMemory{
         BigDecimal bedragAtStartDate = bedragenDao.getBedragAtDate(startDate, rekening);
         BigDecimal bedragAtEndDate = bedragenDao.getBedragAtDate(endDate, rekening);
         
-        assertEquals(bedragAtStartDate, new BigDecimal(550));
-        assertEquals(bedragAtEndDate, new BigDecimal(2180));
+        assertEquals(bedragAtStartDate, new BigDecimal(450));
+        assertEquals(bedragAtEndDate, new BigDecimal(2080));
     }
     
     @Test
     public void testOverviewRekeningData() throws ParseException{
         Map overviewRekeningTestData = new LinkedHashMap();
-        overviewRekeningTestData.put(dt.parse("2015-02-18"), new BigDecimal(550));
-        overviewRekeningTestData.put(dt.parse("2015-02-19"), new BigDecimal(400));
-        overviewRekeningTestData.put(dt.parse("2015-02-20"), new BigDecimal(2400));
-        overviewRekeningTestData.put(dt.parse("2015-02-21"), new BigDecimal(2290));
-        overviewRekeningTestData.put(dt.parse("2015-02-22"), new BigDecimal(2220));
-        overviewRekeningTestData.put(dt.parse("2015-02-23"), new BigDecimal(2180));
+        overviewRekeningTestData.put(dt.parse("2015-02-18"), new BigDecimal(450));
+        overviewRekeningTestData.put(dt.parse("2015-02-19"), new BigDecimal(300));
+        overviewRekeningTestData.put(dt.parse("2015-02-20"), new BigDecimal(2300));
+        overviewRekeningTestData.put(dt.parse("2015-02-21"), new BigDecimal(2190));
+        overviewRekeningTestData.put(dt.parse("2015-02-22"), new BigDecimal(2120));
+        overviewRekeningTestData.put(dt.parse("2015-02-23"), new BigDecimal(2080));
         
         Map overviewRekeningData = bedragenDao.OverviewRekeningData(bedragenDao.BedragInPeriode(startDate, endDate, rekening));
         
@@ -173,11 +173,11 @@ public class BedragenDaoTest extends H2InMemory{
     @Test
     public void testOverviewRekeningData2() throws ParseException{
         Map overviewRekeningTestData = new LinkedHashMap();
-        overviewRekeningTestData.put(dt.parse("2015-02-19"), new BigDecimal(400));
-        overviewRekeningTestData.put(dt.parse("2015-02-20"), new BigDecimal(2400));
-        overviewRekeningTestData.put(dt.parse("2015-02-21"), new BigDecimal(2290));
-        overviewRekeningTestData.put(dt.parse("2015-02-22"), new BigDecimal(2220));
-        overviewRekeningTestData.put(dt.parse("2015-02-23"), new BigDecimal(2180));
+        overviewRekeningTestData.put(dt.parse("2015-02-19"), new BigDecimal(300));
+        overviewRekeningTestData.put(dt.parse("2015-02-20"), new BigDecimal(2300));
+        overviewRekeningTestData.put(dt.parse("2015-02-21"), new BigDecimal(2190));
+        overviewRekeningTestData.put(dt.parse("2015-02-22"), new BigDecimal(2120));
+        overviewRekeningTestData.put(dt.parse("2015-02-23"), new BigDecimal(2080));
         
         java.util.Date startDate = dt.parse("2015-02-19");
         
