@@ -6,9 +6,11 @@
 package com.xumpy.thuisadmin.dao;
 
 import com.xumpy.thuisadmin.model.db.Documenten;
+import com.xumpy.thuisadmin.model.db.Personen;
 import com.xumpy.thuisadmin.model.view.DocumentenReport;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -26,6 +28,9 @@ public class DocumentenDaoImpl implements DocumentenDao{
 
     @Autowired
     private SessionFactory sessionFactory;
+    
+    @Autowired
+    private Personen persoon;
     
     @Override
     public void save(Documenten document) {
@@ -59,19 +64,16 @@ public class DocumentenDaoImpl implements DocumentenDao{
     public List<DocumentenReport> fetchDocumentenReport() {
         Session session = sessionFactory.getCurrentSession();
         
-        Query query = session.createSQLQuery("select bd.pk_id," +
-                                             "       tg.naam as typeGroep," +
-                                             "       to_char(bd.datum, 'yyyy-mm-dd') as datum," +
-                                             "       b.bedrag as bedrag," +
-                                             "       nvl(bd.omschrijving, b.omschrijving) as omschrijving" +
-                                             " from ta_bedrag_documenten bd" +
-                                             " left join ta_bedragen b" +
-                                             "   on (b.pk_id = bd.fk_bedrag_id)" +
-                                             " left join ta_type_groep tg" +
-                                             "   on (tg.pk_id = bd.fk_type_groep_id)" +
-                                             " order by nvl(datum, to_date('19001201', 'yyyymmdd')) desc").addEntity(DocumentenReport.class);
+        Query query = session.createQuery("from Documenten where bedrag.persoon.pk_id = :persoonId");
+        query.setInteger("persoonId", persoon.getPk_id());
         
-        return query.list();
+        List<Documenten> documenten = query.list();
+        
+        List<DocumentenReport> documentReport = new ArrayList<DocumentenReport>();
+        for(Documenten document: documenten){
+          documentReport.add(new DocumentenReport(document));
+        }
+        return documentReport;
     }
 
     @Override

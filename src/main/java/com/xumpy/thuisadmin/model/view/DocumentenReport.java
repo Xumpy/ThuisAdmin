@@ -5,8 +5,10 @@
  */
 package com.xumpy.thuisadmin.model.view;
 
+import com.xumpy.thuisadmin.model.db.Documenten;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import org.springframework.context.annotation.Scope;
@@ -21,7 +23,7 @@ public class DocumentenReport implements Serializable{
     @Id
     private Integer pk_id;
     private String typeGroep;
-    private String datum;
+    private Date datum;
     private BigDecimal bedrag;
     private String omschrijving;
 
@@ -41,11 +43,11 @@ public class DocumentenReport implements Serializable{
         this.typeGroep = typeGroep;
     }
 
-    public String getDatum() {
+    public Date getDatum() {
         return datum;
     }
 
-    public void setDatum(String datum) {
+    public void setDatum(Date datum) {
         this.datum = datum;
     }
 
@@ -63,5 +65,17 @@ public class DocumentenReport implements Serializable{
 
     public void setOmschrijving(String omschrijving) {
         this.omschrijving = omschrijving;
+    }
+    
+    public DocumentenReport(Documenten document){
+        this.pk_id = document.getPk_id();
+        this.datum = document.getBedrag().getDatum();
+        if (document.getOmschrijving() != null){
+            this.omschrijving = document.getOmschrijving();
+        } else {
+            this.omschrijving = document.getBedrag().getOmschrijving();
+        }
+        this.typeGroep = document.getBedrag().getGroep().getNaam();
+        this.bedrag = document.getBedrag().getBedrag();
     }
 }

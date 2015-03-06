@@ -69,7 +69,6 @@ public class RekeningenDaoImpl implements RekeningenDao {
     
     @Override
     public List<Rekeningen> findAllRekeningen() {
-        System.out.println("Persoon ID: " + persoon.getPk_id());
         Session session = sessionFactory.getCurrentSession();
         
         Criteria criteria = session.createCriteria(Rekeningen.class);

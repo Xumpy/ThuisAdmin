@@ -5,12 +5,12 @@
  */
 package com.xumpy.security;
 
-import com.xumpy.thuisadmin.model.db.Personen;
 import java.util.Properties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -65,5 +65,14 @@ public class DispatcherConfig extends WebMvcConfigurerAdapter{
         ParameterizableViewController parameterizableViewController = new ParameterizableViewController();
         parameterizableViewController.setViewName("login");
         return parameterizableViewController;
-  }
+    }
+    
+    @Bean
+    public CommonsMultipartResolver multipartResolver(){
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+        
+        multipartResolver.setMaxUploadSize(500000);
+        
+        return multipartResolver;
+    }
 }

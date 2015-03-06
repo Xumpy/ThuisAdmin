@@ -42,10 +42,7 @@ public class UserService implements UserDetailsService {
         Session session = sessionFactory.openSession();
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
         authorities.add(new SimpleGrantedAuthority("USER"));
-        
-        
-        //Personen internalPersoon = (Personen)session.get(Personen.class, 1);
-        
+
         Query query = session.createQuery("From Personen where lower(username) = :username");
         query.setString("username", username.toLowerCase());
         
