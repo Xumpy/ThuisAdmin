@@ -64,9 +64,4 @@ public class CtrlBedragen {
         
         return "1";
     }
-    
-    @Bean
-    public OverzichtGroepBedragenTotal overzichtGroepBedragenTotal(){
-        return new OverzichtGroepBedragenTotal();
-    }
 }

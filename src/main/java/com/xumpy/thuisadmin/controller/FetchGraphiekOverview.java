@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,6 +37,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class FetchGraphiekOverview{
     @Autowired
     private BedragenSrv bedragenSrv;
+
+    @Autowired public OverzichtGroepBedragenTotal overzichtGroepBedragenTotal;
     
     @RequestMapping("/json/graphiek_overview")
     public @ResponseBody List<RekeningOverzicht> fetchGraphiekOverview(@RequestBody FinanceOverview financeOverview) throws ParseException{
@@ -94,6 +97,6 @@ public class FetchGraphiekOverview{
     
     @RequestMapping("/json/report_overzicht_groep_bedragen_filter")
     public @ResponseBody OverzichtGroepBedragenTotal fetchReportOverzichtGroepBedragenWithFilter(@RequestBody FilterReportBedragenInGroep filterReportBedragenInGroep) {
-        return bedragenSrv.filterOverzichtGroepBedragenTotalFilter(filterReportBedragenInGroep.getSearchTekst());
+        return bedragenSrv.filterOverzichtGroepBedragenTotalFilter(overzichtGroepBedragenTotal, filterReportBedragenInGroep.getSearchTekst());
     }
 }

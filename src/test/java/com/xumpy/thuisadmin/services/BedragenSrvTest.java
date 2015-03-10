@@ -187,7 +187,7 @@ public class BedragenSrvTest {
         overzichtGroepBedragenTotal.setSomBedrag(new BigDecimal(1300));
         overzichtGroepBedragenTotal.setOverzichtGroepBedragen(overzichtGroepBedragen);
         
-        OverzichtGroepBedragenTotal overzichtGroepBedragenTotalTestOutput = bedragenSrv.filterOverzichtGroepBedragenTotalGroep(groepNegatief);
+        OverzichtGroepBedragenTotal overzichtGroepBedragenTotalTestOutput = bedragenSrv.filterOverzichtGroepBedragenTotalGroep(overzichtGroepBedragenTotal, groepNegatief);
         
         assertEquals(new BigDecimal(300), overzichtGroepBedragenTotalTestOutput.getSomBedrag());
         assertEquals(overzichtGroepBedragenTotalTest.getOverzichtGroepBedragen(), overzichtGroepBedragenTotalTestOutput.getOverzichtGroepBedragen());
@@ -216,7 +216,7 @@ public class BedragenSrvTest {
         overzichtGroepBedragenTotal.setSomBedrag(new BigDecimal(1300));
         overzichtGroepBedragenTotal.setOverzichtGroepBedragen(overzichtGroepBedragen);
         
-        OverzichtGroepBedragenTotal overzichtGroepBedragenTotalTestOutput = bedragenSrv.filterOverzichtGroepBedragenTotalFilter("100");
+        OverzichtGroepBedragenTotal overzichtGroepBedragenTotalTestOutput = bedragenSrv.filterOverzichtGroepBedragenTotalFilter(overzichtGroepBedragenTotal, "100");
         
         assertEquals(new BigDecimal(1100), overzichtGroepBedragenTotalTestOutput.getSomBedrag());
         assertEquals(overzichtGroepBedragenTotalTest.getOverzichtGroepBedragen(), overzichtGroepBedragenTotalTestOutput.getOverzichtGroepBedragen());
@@ -247,7 +247,7 @@ public class BedragenSrvTest {
         overzichtGroepBedragenTotal.setSomBedrag(new BigDecimal(1300));
         overzichtGroepBedragenTotal.setOverzichtGroepBedragen(overzichtGroepBedragen);
 
-        OverzichtGroepBedragenTotal overzichtGroepBedragenTotalTestOutput = bedragenSrv.filterOverzichtGroepBedragenTotalFilter("banaan");
+        OverzichtGroepBedragenTotal overzichtGroepBedragenTotalTestOutput = bedragenSrv.filterOverzichtGroepBedragenTotalFilter(overzichtGroepBedragenTotal, "banaan");
         
         assertEquals(new BigDecimal(1200), overzichtGroepBedragenTotalTestOutput.getSomBedrag());
         assertEquals(overzichtGroepBedragenTotalTest.getOverzichtGroepBedragen(), overzichtGroepBedragenTotalTestOutput.getOverzichtGroepBedragen());
@@ -278,7 +278,7 @@ public class BedragenSrvTest {
         overzichtGroepBedragenTotal.setSomBedrag(new BigDecimal(1300));
         overzichtGroepBedragenTotal.setOverzichtGroepBedragen(overzichtGroepBedragen);
 
-        OverzichtGroepBedragenTotal overzichtGroepBedragenTotalTestOutput = bedragenSrv.filterOverzichtGroepBedragenTotalFilter("12-01-2015");
+        OverzichtGroepBedragenTotal overzichtGroepBedragenTotalTestOutput = bedragenSrv.filterOverzichtGroepBedragenTotalFilter(overzichtGroepBedragenTotal, "12-01-2015");
         
         assertEquals(new BigDecimal(300), overzichtGroepBedragenTotalTestOutput.getSomBedrag());
         assertEquals(overzichtGroepBedragenTotalTest.getOverzichtGroepBedragen(), overzichtGroepBedragenTotalTestOutput.getOverzichtGroepBedragen());
@@ -310,7 +310,7 @@ public class BedragenSrvTest {
         overzichtGroepBedragenTotal.setSomBedrag(new BigDecimal(1300));
         overzichtGroepBedragenTotal.setOverzichtGroepBedragen(overzichtGroepBedragen);
 
-        OverzichtGroepBedragenTotal overzichtGroepBedragenTotalTestOutput = bedragenSrv.filterOverzichtGroepBedragenTotalFilter("");
+        OverzichtGroepBedragenTotal overzichtGroepBedragenTotalTestOutput = bedragenSrv.filterOverzichtGroepBedragenTotalFilter(overzichtGroepBedragenTotal, "");
         
         assertEquals(new BigDecimal(1300), overzichtGroepBedragenTotalTestOutput.getSomBedrag());
         assertEquals(overzichtGroepBedragenTotalTest.getOverzichtGroepBedragen(), overzichtGroepBedragenTotalTestOutput.getOverzichtGroepBedragen());

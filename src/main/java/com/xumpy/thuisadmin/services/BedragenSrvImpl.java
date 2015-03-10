@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
+import javax.enterprise.context.SessionScoped;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -50,8 +51,6 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
     
     @Autowired
     private RekeningenDaoImpl rekeningenDao;
-    
-    @Autowired OverzichtGroepBedragenTotal overzichtGroepBedragenTotal;
     
     static final Logger Log = Logger.getLogger(BedragenSrvImpl.class.getName());
     
@@ -161,6 +160,8 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
     @Override
     @Transactional
     public OverzichtGroepBedragenTotal rapportOverzichtGroepBedragen(Integer typeGroepId, Integer typeGroepKostOpbrengst, Date beginDate, Date eindDate) {
+        OverzichtGroepBedragenTotal overzichtGroepBedragenTotal = new OverzichtGroepBedragenTotal();
+        
         Integer negatief = new Integer(0);
         
         if (typeGroepKostOpbrengst.equals(1)){
@@ -307,7 +308,7 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
     }
     
     @Override
-    public OverzichtGroepBedragenTotal filterOverzichtGroepBedragenTotalGroep(Groepen groep){
+    public OverzichtGroepBedragenTotal filterOverzichtGroepBedragenTotalGroep(OverzichtGroepBedragenTotal overzichtGroepBedragenTotal, Groepen groep){
         List<OverzichtGroepBedragen> overzichtGroepBedragen = new ArrayList<OverzichtGroepBedragen>();
         BigDecimal newSomBedrag = new BigDecimal(0);
         
@@ -326,7 +327,7 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
     }
     
     @Override
-    public OverzichtGroepBedragenTotal filterOverzichtGroepBedragenTotalFilter(String filter){
+    public OverzichtGroepBedragenTotal filterOverzichtGroepBedragenTotalFilter(OverzichtGroepBedragenTotal overzichtGroepBedragenTotal, String filter){
         List<OverzichtGroepBedragen> overzichtGroepBedragen = new ArrayList<OverzichtGroepBedragen>();
         BigDecimal newSomBedrag = new BigDecimal(0);
         

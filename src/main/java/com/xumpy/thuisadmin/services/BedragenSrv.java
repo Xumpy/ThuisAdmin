@@ -38,6 +38,6 @@ public interface BedragenSrv {
                                                                       Date eindDate);
     public Bedragen findBedrag(Integer bedragId);
     
-    public OverzichtGroepBedragenTotal filterOverzichtGroepBedragenTotalGroep(Groepen groep);
-    public OverzichtGroepBedragenTotal filterOverzichtGroepBedragenTotalFilter(String filter);
+    public OverzichtGroepBedragenTotal filterOverzichtGroepBedragenTotalGroep(OverzichtGroepBedragenTotal overzichtGroepBedragenTotal, Groepen groep);
+    public OverzichtGroepBedragenTotal filterOverzichtGroepBedragenTotalFilter(OverzichtGroepBedragenTotal overzichtGroepBedragenTotal, String filter);
 }
