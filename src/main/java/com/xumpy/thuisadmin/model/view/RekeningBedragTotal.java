@@ -6,6 +6,7 @@
 package com.xumpy.thuisadmin.model.view;
 
 import com.xumpy.thuisadmin.model.db.Rekeningen;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
  *
  * @author Nico
  */
-public class RekeningBedragTotal {
+public class RekeningBedragTotal implements Serializable {
     private BigDecimal totaal;
     private List<Rekeningen> rekeningen;
 

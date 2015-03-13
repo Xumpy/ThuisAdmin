@@ -70,31 +70,47 @@ public class BedragenDaoImpl implements BedragenDao{
     }
 
     @Override
-    public List<BeheerBedragenReport> reportBedragen(Rekeningen rekening, Integer offset) {
+    public List<BeheerBedragenReport> reportBedragen(Rekeningen rekening, Integer offset, String searchText) {
         Session session = sessionFactory.openSession();
-        Query query = session.createSQLQuery("select tb.pk_id as pk_id," +
-                                             "       tt.pk_id as fk_type_groep_id," +
-                                             "       tt.naam as type_groep," +
-                                             "       tr.naam as rekening," +
-                                             "       tp.voornaam || ' ' || tp.naam as persoon," +
-                                             "       tb.bedrag as bedrag," +
-                                             "       to_char(tb.datum, 'yyyy-mm-dd') as datum," +
-                                             "       tb.omschrijving as omschrijving" +
-                                             " from ta_bedragen tb" +
-                                             " join ta_personen tp" +
-                                             "   on (tb.fk_persoon_id = tp.pk_id)" +
-                                             " join ta_rekeningen tr" +
-                                             "   on (tb.fk_rekening_id = tr.pk_id)" +
-                                             " join ta_type_groep tt" +
-                                             "   on (tb.fk_type_groep_id = tt.pk_id)" +
-                                             " where tb.fk_rekening_id = :rekeningId" + 
-                                             "   and tb.fk_persoon_id = :persoonId" +
-                                             " order by tb.datum desc, pk_id desc" +
-                                             " offset " + 10 * offset + " rows fetch next 10 rows only").addEntity(BeheerBedragenReport.class);
         
-        query.setInteger("rekeningId", rekening.getPk_id());
-        query.setInteger("persoonId", persoon.getPk_id());
-        return query.list();
+        Criteria criteria = session.createCriteria(Bedragen.class);
+        
+        if (rekening != null){
+            criteria.add(Restrictions.eq("rekening", rekening));
+        }
+        criteria.add(Restrictions.eq("persoon.pk_id", persoon.getPk_id()));
+        
+        searchText = "%" + searchText + "%";
+        System.out.println(searchText);
+        
+        criteria.createAlias("groep", "groep");
+        criteria.createAlias("rekening", "rekening");
+        criteria.createAlias("persoon", "persoon");
+
+        criteria.add(Restrictions.or(
+                Restrictions.ilike("groep.naam", searchText),
+                Restrictions.ilike("rekening.naam", searchText),
+                Restrictions.ilike("persoon.naam", searchText),
+                Restrictions.ilike("persoon.voornaam", searchText),
+                Restrictions.("cast(bedrag as char)", searchText),
+                Restrictions.ilike("cast(datum as char)", searchText),
+                Restrictions.ilike("omschrijving", searchText)
+        ));
+        
+        criteria.setFirstResult(offset * 10);
+        criteria.setMaxResults(10);
+        
+        criteria.addOrder(Order.desc("datum"));
+        
+        List<Bedragen> bedragen = criteria.list();
+        
+        List<BeheerBedragenReport> beheerBedragenReport = new ArrayList<BeheerBedragenReport>();
+        
+        for (Bedragen bedrag: bedragen){
+            beheerBedragenReport.add(new BeheerBedragenReport(bedrag));
+        }
+        
+        return beheerBedragenReport;
     }
 
     @Override
@@ -149,9 +165,7 @@ public class BedragenDaoImpl implements BedragenDao{
     @Override
     public List<OverzichtBedrag> findBedragenRekening(Rekeningen rekening, Date startDate, Date endDate) {
         StatelessSession session = sessionFactory.openStatelessSession();
-        
-        //Query query = session.createQuery("from Bedragen where rekening.pk_id = :rekeningId and datum between :start and :end order by datum asc");
-        
+
         Query query = session.createQuery("select new com.xumpy.thuisadmin.model.view.graphiek.OverzichtBedrag(b.datum, b.bedrag, b.groep.negatief) " +
                                           "from Bedragen b" +
                                           " where rekening.pk_id = :rekeningId " +

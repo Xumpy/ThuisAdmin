@@ -26,6 +26,9 @@
                     </form>
                 </div>
                 <div class="col-lg-12">
+                    <div class="col-lg-12">
+                        <input class="form-control" placeholder="Search" type="text" ng-model="filterReport.searchTekst">
+                    </div>
                     <table st-safe-src="bedragen" st-table="emptyBedragen" class="table table-striped table-hover ">
                         <thead>
                             <tr>
@@ -91,6 +94,10 @@
     </body>
     <script type="text/javascript">
         app.controller("fController", function($scope, $http) {
+            $scope.filterReport = {
+                searchTekst: ""
+            }
+            
             $http.get('/ThuisAdmin/json/fetch_beheer_bedragen').success(function(data){
                 $scope.beheerBedragen = data;
                 var res = $http.post("/ThuisAdmin/json/fetch_bedragen", $scope.beheerBedragen);
@@ -127,6 +134,15 @@
                    $scope.bedragen = data; 
                 });
             }
+            
+            $scope.$watchCollection('filterReport', function(){
+                $scope.beheerBedragen.zoekOpdracht = $scope.filterReport.searchTekst;
+                
+                var res = $http.post('/ThuisAdmin/json/fetch_bedragen', $scope.beheerBedragen);
+                res.success(function(data){
+                   $scope.bedragen = data; 
+                });
+            });
             
             $scope.itemsByPage = 10;
         });

@@ -5,7 +5,10 @@
  */
 package com.xumpy.thuisadmin.model.view;
 
+import com.xumpy.thuisadmin.model.db.Bedragen;
+import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import org.springframework.context.annotation.Scope;
@@ -16,7 +19,10 @@ import org.springframework.context.annotation.Scope;
  */
 @Entity
 @Scope("session")
-public class BeheerBedragenReport {
+public class BeheerBedragenReport implements Serializable{
+    
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    
     @Id
     private Integer pk_id;
     private String type_groep;
@@ -77,8 +83,23 @@ public class BeheerBedragenReport {
     public String getOmschrijving() {
         return omschrijving;
     }
+        
 
     public void setOmschrijving(String omschrijving) {
         this.omschrijving = omschrijving;
+    }
+    
+    public BeheerBedragenReport(){
+        
+    }
+    
+    public BeheerBedragenReport(Bedragen bedrag){
+        this.pk_id = bedrag.getPk_id();
+        this.type_groep = bedrag.getGroep().getNaam();
+        this.rekening = bedrag.getRekening().getNaam();
+        this.persoon = bedrag.getPersoon().getVoornaam() + " " + bedrag.getPersoon().getNaam();
+        this.bedrag = bedrag.getBedrag();
+        this.datum = simpleDateFormat.format(bedrag.getDatum());
+        this.omschrijving = bedrag.getOmschrijving();
     }
 }

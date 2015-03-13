@@ -29,6 +29,7 @@
         </div>
         <div>
             <div id="ex0" class="col-lg-6"></div>
+            
             <div class="col-lg-6">
                 <input class="form-control" id="beginDatum" placeholder="Search" 
                            type="text" ng-model="filterReport.searchTekst">

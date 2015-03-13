@@ -21,7 +21,7 @@ public interface BedragenDao{
     void save(Bedragen bedragen);
     void update(Bedragen bedragen);
     void delete(Bedragen bedragen);
-    public List<BeheerBedragenReport> reportBedragen(Rekeningen rekening, Integer offset);
+    public List<BeheerBedragenReport> reportBedragen(Rekeningen rekening, Integer offset, String searchText);
     public Integer getNewPkId();
     public Bedragen findBedrag(Integer bedragId);
     

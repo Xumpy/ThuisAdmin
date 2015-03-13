@@ -99,4 +99,9 @@ public class FetchGraphiekOverview{
     public @ResponseBody OverzichtGroepBedragenTotal fetchReportOverzichtGroepBedragenWithFilter(@RequestBody FilterReportBedragenInGroep filterReportBedragenInGroep) {
         return bedragenSrv.filterOverzichtGroepBedragenTotalFilter(overzichtGroepBedragenTotal, filterReportBedragenInGroep.getSearchTekst());
     }
+    
+    @Bean
+    public OverzichtGroepBedragenTotal overzichtGroepBedragenTotal(){
+        return new OverzichtGroepBedragenTotal();
+    }
 }

@@ -5,6 +5,7 @@
  */
 package com.xumpy.thuisadmin.model.view;
 
+import java.io.Serializable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("session")
-public class FilterReportBedragenInGroep {
+public class FilterReportBedragenInGroep implements Serializable {
     private String searchTekst;
 
     public String getSearchTekst() {

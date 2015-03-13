@@ -6,16 +6,16 @@
 package com.xumpy.thuisadmin.controller;
 
 import com.xumpy.thuisadmin.model.db.Bedragen;
-import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.model.view.BeheerBedragenInp;
 import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
+import com.xumpy.thuisadmin.model.view.FilterReportBedragenInGroep;
 import com.xumpy.thuisadmin.model.view.NieuwBedrag;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragenTotal;
 import com.xumpy.thuisadmin.services.BedragenSrv;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @Scope("session")
-public class CtrlBedragen {
+public class CtrlBedragen{
     @Autowired
     private BedragenSrv bedragenSrv;
     
@@ -43,7 +43,7 @@ public class CtrlBedragen {
     @RequestMapping("/json/fetch_bedragen")
     public @ResponseBody List<BeheerBedragenReport> fetchBedragen(@RequestBody BeheerBedragenInp beheerBedragenInp) throws ParseException{
         this.beheerBedragenInp = beheerBedragenInp;
-        return bedragenSrv.reportBedragen(beheerBedragenInp.getRekening(), beheerBedragenInp.getOffset());
+        return bedragenSrv.reportBedragen(beheerBedragenInp.getRekening(), beheerBedragenInp.getOffset(), beheerBedragenInp.getZoekOpdracht());
     }
     
     @RequestMapping("/json/save_bedrag")

@@ -33,7 +33,6 @@ import java.util.Map.Entry;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -192,8 +191,8 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
 
     @Override
     @Transactional
-    public List<BeheerBedragenReport> reportBedragen(Rekeningen rekening, Integer offset) {
-        return bedragenDao.reportBedragen(rekening, offset);
+    public List<BeheerBedragenReport> reportBedragen(Rekeningen rekening, Integer offset, String searchText) {
+        return bedragenDao.reportBedragen(rekening, offset, searchText);
     }
 
     @Override
@@ -335,20 +334,9 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
         
         if (overzichtGroepBedragenTotal.getOverzichtGroepBedragen() != null){
             for (OverzichtGroepBedragen overzichtGroepBedrag: overzichtGroepBedragenTotal.getOverzichtGroepBedragen()){
-                if (overzichtGroepBedrag.getBedrag() != null && overzichtGroepBedrag.getBedrag().toString().contains(filter)) {
+                if (overzichtGroepBedrag.contains(filter)){
                     overzichtGroepBedragen.add(overzichtGroepBedrag);
                     newSomBedrag = newSomBedrag.add(overzichtGroepBedrag.getBedrag());
-                } else {
-
-                    if (overzichtGroepBedrag.getOmschrijving() != null && overzichtGroepBedrag.getOmschrijving().toLowerCase().contains(filter.toLowerCase())) {
-                        overzichtGroepBedragen.add(overzichtGroepBedrag);
-                        newSomBedrag = newSomBedrag.add(overzichtGroepBedrag.getBedrag());
-                    } else {
-                        if (overzichtGroepBedrag.getDatum() != null && overzichtGroepBedrag.getDatum().toLowerCase().contains(filter.toLowerCase())) {
-                            overzichtGroepBedragen.add(overzichtGroepBedrag);
-                            newSomBedrag = newSomBedrag.add(overzichtGroepBedrag.getBedrag());
-                        }
-                    }
                 }
             }
         }

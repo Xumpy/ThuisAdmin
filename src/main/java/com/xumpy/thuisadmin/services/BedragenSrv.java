@@ -25,7 +25,7 @@ public interface BedragenSrv {
     void save(NieuwBedrag bedragen);
     void update(NieuwBedrag bedragen);
     void delete(NieuwBedrag bedragen);
-    public List<BeheerBedragenReport> reportBedragen(Rekeningen rekening, Integer offset);
+    public List<BeheerBedragenReport> reportBedragen(Rekeningen rekening, Integer offset, String searchText);
     
     public List<RekeningOverzicht> graphiekBedrag(Rekeningen rekening,
                                          Date beginDate,

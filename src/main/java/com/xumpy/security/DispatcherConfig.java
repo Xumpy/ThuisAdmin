@@ -6,11 +6,10 @@
 package com.xumpy.security;
 
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragenTotal;
+import java.text.SimpleDateFormat;
 import java.util.Properties;
 import javax.enterprise.context.SessionScoped;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.config.java.annotation.aop.ScopedProxy;
-import org.springframework.config.java.util.DefaultScopes;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -85,5 +84,10 @@ public class DispatcherConfig extends WebMvcConfigurerAdapter{
     @Bean
     public OverzichtGroepBedragenTotal overzichtGroepBedragenTotal(){
         return new OverzichtGroepBedragenTotal();
+    }
+    
+    @Bean
+    public SimpleDateFormat simpleDateFormat(){
+        return new SimpleDateFormat("yyyy-MM-dd");
     }
 }

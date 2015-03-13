@@ -6,12 +6,9 @@
 package com.xumpy.thuisadmin.model.view;
 
 import com.xumpy.thuisadmin.model.db.Bedragen;
-import com.xumpy.thuisadmin.model.db.Groepen;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Comparator;
-import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -110,5 +107,15 @@ public class OverzichtGroepBedragen implements Serializable{
         } else {
             return false;
         }
+    }
+    
+    public boolean contains(String searchText){
+        if (pk_id != null && pk_id.toString().toLowerCase().contains(searchText.toLowerCase())) return true;
+        if (type_naam != null && type_naam.toLowerCase().contains(searchText.toLowerCase())) return true;
+        if (bedrag != null && bedrag.toString().toLowerCase().contains(searchText.toLowerCase())) return true;
+        if (datum != null && datum.toLowerCase().contains(searchText.toLowerCase())) return true;
+        if (omschrijving != null && omschrijving.toLowerCase().contains(searchText.toLowerCase())) return true;
+        
+        return false;
     }
 }

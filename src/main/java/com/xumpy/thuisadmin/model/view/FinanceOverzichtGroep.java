@@ -5,13 +5,14 @@
  */
 package com.xumpy.thuisadmin.model.view;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  *
  * @author Nico
  */
-public class FinanceOverzichtGroep {
+public class FinanceOverzichtGroep implements Serializable {
     private Double totaal_opbrengsten;
     private Double totaal_kosten;
     private List<OverzichtGroep> overzichtGroep;

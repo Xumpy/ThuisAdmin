@@ -6,12 +6,13 @@
 package com.xumpy.thuisadmin.model.view;
 
 import com.xumpy.thuisadmin.model.db.Rekeningen;
+import java.io.Serializable;
 
 /**
  *
  * @author Nico
  */
-public class BeheerBedragenInp {
+public class BeheerBedragenInp implements Serializable{
     private Integer offset;
     private Rekeningen rekening;
     private String zoekOpdracht;

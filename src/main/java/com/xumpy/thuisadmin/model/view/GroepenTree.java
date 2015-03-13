@@ -6,13 +6,14 @@
 package com.xumpy.thuisadmin.model.view;
 
 import com.xumpy.thuisadmin.model.db.Groepen;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  *
  * @author Nico
  */
-public class GroepenTree {
+public class GroepenTree  implements Serializable{
     private Groepen groep;
     private List<GroepenTree> subGroep;
     private String collapsed;
