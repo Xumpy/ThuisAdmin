@@ -92,7 +92,7 @@ public class BedragenDaoImpl implements BedragenDao{
                 Restrictions.ilike("rekening.naam", searchText),
                 Restrictions.ilike("persoon.naam", searchText),
                 Restrictions.ilike("persoon.voornaam", searchText),
-                Restrictions.("cast(bedrag as char)", searchText),
+                Restrictions.ilike("cast(bedrag as char)", searchText),
                 Restrictions.ilike("cast(datum as char)", searchText),
                 Restrictions.ilike("omschrijving", searchText)
         ));
