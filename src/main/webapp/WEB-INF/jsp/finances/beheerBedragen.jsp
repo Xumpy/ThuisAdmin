@@ -26,13 +26,14 @@
                     </form>
                 </div>
                 <div class="col-lg-12">
-                    <div class="col-lg-12">
+                    <div class="row col-lg-12" style="margin-top:20px;">
                         <input class="form-control" placeholder="Search" type="text" ng-model="filterReport.searchTekst">
                     </div>
                     <table st-safe-src="bedragen" st-table="emptyBedragen" class="table table-striped table-hover ">
                         <thead>
                             <tr>
                                 <th></th>
+                                <th st-sort="rekening">Rekening</th>
                                 <th st-sort="type_groep">Type Groep</th>
                                 <th st-sort="persoon">Persoon</th>
                                 <th st-sort="bedrag">Bedrag</th>
@@ -46,6 +47,7 @@
                         <tbody>
                             <tr ng-repeat="bedrag in emptyBedragen">
                                 <td><a href="nieuwBedrag/{{bedrag.pk_id}}">Edit</a></td>
+                                <td>{{bedrag.rekening}}</td>
                                 <td>{{bedrag.type_groep}}</td>
                                 <td>{{bedrag.persoon}}</td>
                                 <td>{{bedrag.bedrag}}</td>
@@ -94,6 +96,11 @@
     </body>
     <script type="text/javascript">
         app.controller("fController", function($scope, $http) {
+            $scope.beheerBedragen = {
+                offset: 0,
+                rekening: null
+            }
+            
             $scope.filterReport = {
                 searchTekst: ""
             }

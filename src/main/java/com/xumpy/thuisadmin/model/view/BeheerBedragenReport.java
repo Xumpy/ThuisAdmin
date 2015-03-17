@@ -102,4 +102,52 @@ public class BeheerBedragenReport implements Serializable{
         this.datum = simpleDateFormat.format(bedrag.getDatum());
         this.omschrijving = bedrag.getOmschrijving();
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 83 * hash + (this.pk_id != null ? this.pk_id.hashCode() : 0);
+        hash = 83 * hash + (this.type_groep != null ? this.type_groep.hashCode() : 0);
+        hash = 83 * hash + (this.rekening != null ? this.rekening.hashCode() : 0);
+        hash = 83 * hash + (this.persoon != null ? this.persoon.hashCode() : 0);
+        hash = 83 * hash + (this.bedrag != null ? this.bedrag.hashCode() : 0);
+        hash = 83 * hash + (this.datum != null ? this.datum.hashCode() : 0);
+        hash = 83 * hash + (this.omschrijving != null ? this.omschrijving.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final BeheerBedragenReport other = (BeheerBedragenReport) obj;
+        if (this.pk_id != other.pk_id && (this.pk_id == null || !this.pk_id.equals(other.pk_id))) {
+            return false;
+        }
+        if ((this.type_groep == null) ? (other.type_groep != null) : !this.type_groep.equals(other.type_groep)) {
+            return false;
+        }
+        if ((this.rekening == null) ? (other.rekening != null) : !this.rekening.equals(other.rekening)) {
+            return false;
+        }
+        if ((this.persoon == null) ? (other.persoon != null) : !this.persoon.equals(other.persoon)) {
+            return false;
+        }
+        if (this.bedrag != other.bedrag && (this.bedrag == null || !this.bedrag.equals(other.bedrag))) {
+            return false;
+        }
+        if ((this.datum == null) ? (other.datum != null) : !this.datum.equals(other.datum)) {
+            return false;
+        }
+        if ((this.omschrijving == null) ? (other.omschrijving != null) : !this.omschrijving.equals(other.omschrijving)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 }

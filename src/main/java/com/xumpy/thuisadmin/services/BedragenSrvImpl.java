@@ -158,9 +158,11 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
 
     @Override
     @Transactional
-    public OverzichtGroepBedragenTotal rapportOverzichtGroepBedragen(Integer typeGroepId, Integer typeGroepKostOpbrengst, Date beginDate, Date eindDate) {
-        OverzichtGroepBedragenTotal overzichtGroepBedragenTotal = new OverzichtGroepBedragenTotal();
-        
+    public OverzichtGroepBedragenTotal rapportOverzichtGroepBedragen(OverzichtGroepBedragenTotal overzichtGroepBedragenTotal,
+                                                                     Integer typeGroepId, 
+                                                                     Integer typeGroepKostOpbrengst, 
+                                                                     Date beginDate, 
+                                                                     Date eindDate) {
         Integer negatief = new Integer(0);
         
         if (typeGroepKostOpbrengst.equals(1)){

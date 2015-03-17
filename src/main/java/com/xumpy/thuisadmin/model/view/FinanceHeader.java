@@ -7,6 +7,9 @@ package com.xumpy.thuisadmin.model.view;
 
 import com.xumpy.thuisadmin.model.db.Rekeningen;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -44,4 +47,20 @@ public class FinanceHeader implements Serializable{
     public void setEindDatum(String eindDatum) {
         this.eindDatum = eindDatum;
     }
+    
+    public FinanceHeader(){
+        SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy"); 
+        
+        Date dateToday = new Date();
+        
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dateToday);
+        cal.add(Calendar.MONTH, -1);
+        
+        Date prevMonth = cal.getTime();
+        
+        this.beginDatum = dt.format(prevMonth);
+        this.eindDatum = dt.format(dateToday);
+    }
 }
+

@@ -86,7 +86,8 @@ public class FetchGraphiekOverview{
             Date startDate = format.parse(strStartDate);
             Date eindDate = format.parse(strEindDate);
             
-            return bedragenSrv.rapportOverzichtGroepBedragen(overzichtGroepBedragenInp.getTypeGroepId(), 
+            return bedragenSrv.rapportOverzichtGroepBedragen(overzichtGroepBedragenTotal,
+                                                             overzichtGroepBedragenInp.getTypeGroepId(), 
                                                              overzichtGroepBedragenInp.getTypeGroepKostOpbrengst(),
                                                              startDate,
                                                              eindDate);

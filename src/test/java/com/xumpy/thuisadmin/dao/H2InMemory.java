@@ -6,6 +6,8 @@
 package com.xumpy.thuisadmin.dao;
 
 import com.xumpy.thuisadmin.model.db.*;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -20,7 +22,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.when;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
@@ -31,11 +32,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public abstract class H2InMemory {
     @Mock SessionFactory sessionFactory;
-    @Mock Personen persoon;
     
     private static ServiceRegistry serviceRegistry;
     protected static SessionFactory sessionFactoryH2;
     private Transaction transaction;
+    
+    @Mock protected Personen persoon;
     
     @InjectMocks public PersonenDaoImpl personenDao;
     @InjectMocks public GroepenDaoImpl groepenDao;

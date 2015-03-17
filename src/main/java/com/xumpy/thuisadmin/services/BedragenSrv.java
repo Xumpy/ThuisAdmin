@@ -32,10 +32,11 @@ public interface BedragenSrv {
                                          Date eindDate);
     public FinanceOverzichtGroep graphiekOverzichtGroep(Date beginDate,
                                                         Date eindDate);
-    public OverzichtGroepBedragenTotal rapportOverzichtGroepBedragen(Integer typeGroepId, 
-                                                                      Integer typeGroepKostOpbrengst, 
-                                                                      Date beginDate, 
-                                                                      Date eindDate);
+    public OverzichtGroepBedragenTotal rapportOverzichtGroepBedragen(OverzichtGroepBedragenTotal overzichtGroepBedragenTotal,
+                                                                     Integer typeGroepId, 
+                                                                     Integer typeGroepKostOpbrengst, 
+                                                                     Date beginDate, 
+                                                                     Date eindDate);
     public Bedragen findBedrag(Integer bedragId);
     
     public OverzichtGroepBedragenTotal filterOverzichtGroepBedragenTotalGroep(OverzichtGroepBedragenTotal overzichtGroepBedragenTotal, Groepen groep);

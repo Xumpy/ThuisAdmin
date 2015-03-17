@@ -9,6 +9,7 @@ import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Groepen;
 import com.xumpy.thuisadmin.model.db.Personen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
+import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.ParseException;
@@ -25,6 +26,7 @@ import static org.junit.Assert.assertSame;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import static org.mockito.Mockito.when;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -36,7 +38,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class BedragenDaoTest extends H2InMemory{
     
-    private Personen persoon;
+    private Personen personen;
     private Groepen groep;
     private Rekeningen rekening;
     private Bedragen bedrag;
@@ -57,14 +59,14 @@ public class BedragenDaoTest extends H2InMemory{
 
     @Before
     public void setUpBedragen(){
-        persoon = personenDao.findPersoon(1);
+        personen = personenDao.findPersoon(1);
         groep = groepenDao.findGroep(1);
         rekening = rekeningenDao.findRekening(1);
         
         bedrag = new Bedragen();
         bedrag.setPk_id(BEDRAG_PK_ID);
         bedrag.setBedrag(new BigDecimal(200));
-        bedrag.setPersoon(persoon);
+        bedrag.setPersoon(personen);
         bedrag.setGroep(groep); 
         bedrag.setDatum(new Date(new java.util.Date().getTime()));
         bedrag.setOmschrijving("test bedrag");
@@ -97,7 +99,7 @@ public class BedragenDaoTest extends H2InMemory{
                         break;
             }
             
-            bedrag.setPersoon(persoon);
+            bedrag.setPersoon(personen);
             bedrag.setRekening(rekening);
             bedrag.setOmschrijving("test");
             
@@ -241,5 +243,28 @@ public class BedragenDaoTest extends H2InMemory{
         List<Bedragen> bedragen = fetchTestBedragen();
         
         assertEquals(bedragenDao.isRekeningUnique(bedragen), true);
+    }
+    
+    @Test
+    public void testReportBedragen() throws ParseException{
+        List<BeheerBedragenReport> lstBeheerBedragenExpected = new ArrayList<BeheerBedragenReport>();
+        
+        bedrag = bedragenDao.getBedrag(24);
+        lstBeheerBedragenExpected.add(new BeheerBedragenReport(bedrag));
+        
+        when(persoon.getPk_id()).thenReturn(2);
+        rekening = rekeningenDao.findRekening(3);
+        List<BeheerBedragenReport> lstBeheerBedragenResult = bedragenDao.reportBedragen(rekening, 0, "nog een test");
+        
+        assertEquals(lstBeheerBedragenExpected, lstBeheerBedragenResult);
+    }
+    
+    @Test
+    public void testReportBedragenNull() throws ParseException{
+        when(persoon.getPk_id()).thenReturn(2);
+        rekening = rekeningenDao.findRekening(3);
+        List<BeheerBedragenReport> lstBeheerBedragenResult = bedragenDao.reportBedragen(rekening, 0, null);
+        
+        assertEquals(true, (lstBeheerBedragenResult.size() > 0)); // No Error occured
     }
 }

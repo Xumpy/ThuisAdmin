@@ -71,7 +71,7 @@ public class BedragenDaoImpl implements BedragenDao{
 
     @Override
     public List<BeheerBedragenReport> reportBedragen(Rekeningen rekening, Integer offset, String searchText) {
-        Session session = sessionFactory.openSession();
+        Session session = sessionFactory.getCurrentSession();
         
         Criteria criteria = session.createCriteria(Bedragen.class);
         
@@ -80,22 +80,26 @@ public class BedragenDaoImpl implements BedragenDao{
         }
         criteria.add(Restrictions.eq("persoon.pk_id", persoon.getPk_id()));
         
-        searchText = "%" + searchText + "%";
         System.out.println(searchText);
+        System.out.println(persoon.getPk_id());
         
-        criteria.createAlias("groep", "groep");
-        criteria.createAlias("rekening", "rekening");
-        criteria.createAlias("persoon", "persoon");
+        if (searchText != null){
+            searchText = "%" + searchText + "%";
+            
+            criteria.createAlias("groep", "groep");
+            criteria.createAlias("rekening", "rekening");
+            criteria.createAlias("persoon", "persoon");
 
-        criteria.add(Restrictions.or(
-                Restrictions.ilike("groep.naam", searchText),
-                Restrictions.ilike("rekening.naam", searchText),
-                Restrictions.ilike("persoon.naam", searchText),
-                Restrictions.ilike("persoon.voornaam", searchText),
-                Restrictions.ilike("cast(bedrag as char)", searchText),
-                Restrictions.ilike("cast(datum as char)", searchText),
-                Restrictions.ilike("omschrijving", searchText)
-        ));
+            criteria.add(Restrictions.or(
+                    Restrictions.ilike("groep.naam", searchText),
+                    Restrictions.ilike("rekening.naam", searchText),
+                    Restrictions.ilike("persoon.naam", searchText),
+                    Restrictions.ilike("persoon.voornaam", searchText),
+                    Restrictions.sqlRestriction("cast(bedrag as char) like '" + searchText + "'"),
+                    Restrictions.sqlRestriction("cast(datum as char) like '" + searchText + "'"),
+                    Restrictions.ilike("omschrijving", searchText)
+            ));
+        }
         
         criteria.setFirstResult(offset * 10);
         criteria.setMaxResults(10);
