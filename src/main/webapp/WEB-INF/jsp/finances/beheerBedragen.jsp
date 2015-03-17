@@ -8,15 +8,12 @@
         <div class="col-lg-12">
             <div class="col-lg-10">
                 <div class="col-lg-12">
-                    <form class="form-horizontal" ng-submit="submitRekening()">
+                    <form class="form-horizontal">
                         <div class="col-lg-2">
                             <select id="rekening" class="form-control" ng-model="beheerBedragen.rekening"
                                     ng-options="rekening.naam for rekening in rekeningen track by rekening.pk_id">
                                 <option value="">--Kies Rekening--</option>
                             </select>
-                        </div>
-                        <div class="col-lg-1">
-                            <input class="btn btn-primary" type="submit" value="Submit"/>
                         </div>
                     </form>
                     <form class="form-horizontal" action="nieuwBedrag">

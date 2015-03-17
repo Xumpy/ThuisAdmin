@@ -75,6 +75,11 @@ public class BedragenDaoImpl implements BedragenDao{
         
         String queryBedragen = "from Bedragen " +
                                "where persoon.pk_id = :persoonId ";
+                
+        if (rekening != null){
+            queryBedragen = queryBedragen + "  and rekening.pk_id = :rekeningId ";
+        }
+        
         Query query;
         if (searchText != null){
             query = session.createQuery(queryBedragen +
@@ -93,6 +98,10 @@ public class BedragenDaoImpl implements BedragenDao{
         }
         
         query.setInteger("persoonId", persoon.getPk_id());
+        
+        if (rekening != null){
+            query.setInteger("rekeningId", rekening.getPk_id());
+        }
         
         query.setMaxResults(10);
         query.setFirstResult(offset * 10);
