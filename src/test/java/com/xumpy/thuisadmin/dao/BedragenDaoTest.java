@@ -256,6 +256,8 @@ public class BedragenDaoTest extends H2InMemory{
         rekening = rekeningenDao.findRekening(3);
         List<BeheerBedragenReport> lstBeheerBedragenResult = bedragenDao.reportBedragen(rekening, 0, "nog een test");
         
+        System.out.println(lstBeheerBedragenResult.size());
+        
         assertEquals(lstBeheerBedragenExpected, lstBeheerBedragenResult);
     }
     

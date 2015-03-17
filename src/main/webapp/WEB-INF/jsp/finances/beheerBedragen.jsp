@@ -27,7 +27,7 @@
                 </div>
                 <div class="col-lg-12">
                     <div class="row col-lg-12" style="margin-top:20px;">
-                        <input class="form-control" placeholder="Search" type="text" ng-model="filterReport.searchTekst">
+                        <input class="form-control" placeholder="Search" type="text" ng-model="beheerBedragen.zoekOpdracht">
                     </div>
                     <table st-safe-src="bedragen" st-table="emptyBedragen" class="table table-striped table-hover ">
                         <thead>
@@ -98,20 +98,13 @@
         app.controller("fController", function($scope, $http) {
             $scope.beheerBedragen = {
                 offset: 0,
-                rekening: null
+                rekening: null,
+                zoekOpdracht: ""
             }
             
             $scope.filterReport = {
                 searchTekst: ""
             }
-            
-            $http.get('/ThuisAdmin/json/fetch_beheer_bedragen').success(function(data){
-                $scope.beheerBedragen = data;
-                var res = $http.post("/ThuisAdmin/json/fetch_bedragen", $scope.beheerBedragen);
-                res.success(function(data){
-                   $scope.bedragen = data; 
-                });
-            });
             
             $http.get('/ThuisAdmin/json/rekeningen').success(function(data){
                 $scope.rekeningenTotaal = data;
@@ -142,9 +135,7 @@
                 });
             }
             
-            $scope.$watchCollection('filterReport', function(){
-                $scope.beheerBedragen.zoekOpdracht = $scope.filterReport.searchTekst;
-                
+            $scope.$watchCollection('beheerBedragen', function(){
                 var res = $http.post('/ThuisAdmin/json/fetch_bedragen', $scope.beheerBedragen);
                 res.success(function(data){
                    $scope.bedragen = data; 

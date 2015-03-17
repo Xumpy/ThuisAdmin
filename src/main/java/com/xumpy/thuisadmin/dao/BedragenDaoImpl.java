@@ -73,40 +73,31 @@ public class BedragenDaoImpl implements BedragenDao{
     public List<BeheerBedragenReport> reportBedragen(Rekeningen rekening, Integer offset, String searchText) {
         Session session = sessionFactory.getCurrentSession();
         
-        Criteria criteria = session.createCriteria(Bedragen.class);
-        
-        if (rekening != null){
-            criteria.add(Restrictions.eq("rekening", rekening));
-        }
-        criteria.add(Restrictions.eq("persoon.pk_id", persoon.getPk_id()));
-        
-        System.out.println(searchText);
-        System.out.println(persoon.getPk_id());
-        
+        String queryBedragen = "from Bedragen " +
+                               "where persoon.pk_id = :persoonId ";
+        Query query;
         if (searchText != null){
-            searchText = "%" + searchText + "%";
-            
-            criteria.createAlias("groep", "groep");
-            criteria.createAlias("rekening", "rekening");
-            criteria.createAlias("persoon", "persoon");
-
-            criteria.add(Restrictions.or(
-                    Restrictions.ilike("groep.naam", searchText),
-                    Restrictions.ilike("rekening.naam", searchText),
-                    Restrictions.ilike("persoon.naam", searchText),
-                    Restrictions.ilike("persoon.voornaam", searchText),
-                    Restrictions.sqlRestriction("cast(bedrag as char) like '" + searchText + "'"),
-                    Restrictions.sqlRestriction("cast(datum as char) like '" + searchText + "'"),
-                    Restrictions.ilike("omschrijving", searchText)
-            ));
+            query = session.createQuery(queryBedragen +
+                                              "  and (lower(groep.naam) like :searchText " +
+                                              "  or lower(rekening.naam) like :searchText " +
+                                              "  or lower(persoon.naam) like :searchText " +
+                                              "  or lower(persoon.voornaam) like :searchText " +
+                                              "  or cast(bedrag as string) like :searchText " +
+                                              "  or cast(datum as string) like :searchText " +
+                                              "  or lower(omschrijving) like :searchText)" + 
+                                              "  order by datum desc");
+            query.setString("searchText", "%" + searchText.toLowerCase() + "%");
+        } else {
+            query = session.createQuery(queryBedragen + 
+                               " order by datum desc");
         }
         
-        criteria.setFirstResult(offset * 10);
-        criteria.setMaxResults(10);
+        query.setInteger("persoonId", persoon.getPk_id());
         
-        criteria.addOrder(Order.desc("datum"));
+        query.setMaxResults(10);
+        query.setFirstResult(offset * 10);
         
-        List<Bedragen> bedragen = criteria.list();
+        List<Bedragen> bedragen = query.list();
         
         List<BeheerBedragenReport> beheerBedragenReport = new ArrayList<BeheerBedragenReport>();
         
