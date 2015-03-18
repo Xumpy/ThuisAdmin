@@ -5,6 +5,7 @@
  */
 package com.xumpy.thuisadmin.controller;
 
+import com.xumpy.thuisadmin.model.view.BeheerBedragenInp;
 import com.xumpy.thuisadmin.model.view.FinanceHeader;
 import java.io.Serializable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @Scope("session")
-public class CtrlFinanceHeader{
+public class CtrlHeaders{
     
     @Autowired
     private FinanceHeader financeHeader;
-    
+
     @RequestMapping("/json/getFinanceHeader")
     public @ResponseBody FinanceHeader getFinanceHeader(){
         return financeHeader;

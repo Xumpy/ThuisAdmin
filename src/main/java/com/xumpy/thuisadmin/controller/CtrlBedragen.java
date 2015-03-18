@@ -33,6 +33,7 @@ public class CtrlBedragen{
     @Autowired
     private BedragenSrv bedragenSrv;
     
+    @Autowired
     private BeheerBedragenInp beheerBedragenInp;
     
     @RequestMapping("/json/fetch_beheer_bedragen")

@@ -7,11 +7,15 @@ package com.xumpy.thuisadmin.model.view;
 
 import com.xumpy.thuisadmin.model.db.Rekeningen;
 import java.io.Serializable;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Nico
  */
+@Component
+@Scope("session")
 public class BeheerBedragenInp implements Serializable{
     private Integer offset;
     private Rekeningen rekening;
@@ -39,5 +43,9 @@ public class BeheerBedragenInp implements Serializable{
 
     public void setOffset(Integer offset) {
         this.offset = offset;
+    }
+    
+    public BeheerBedragenInp(){
+        this.offset = 0;
     }
 }

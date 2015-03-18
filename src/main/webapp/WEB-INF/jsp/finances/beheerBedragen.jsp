@@ -93,11 +93,9 @@
     </body>
     <script type="text/javascript">
         app.controller("fController", function($scope, $http) {
-            $scope.beheerBedragen = {
-                offset: 0,
-                rekening: null,
-                zoekOpdracht: ""
-            }
+            $http.post("/ThuisAdmin/json/fetch_beheer_bedragen").success(function(data){
+                $scope.beheerBedragen = data;
+            });
             
             $scope.filterReport = {
                 searchTekst: ""
@@ -107,14 +105,6 @@
                 $scope.rekeningenTotaal = data;
                 $scope.rekeningen = $scope.rekeningenTotaal.rekeningen;
             });
-            
-            $scope.submitRekening = function(){
-                $scope.beheerBedragen.offset = 0;
-                var res = $http.post("/ThuisAdmin/json/fetch_bedragen", $scope.beheerBedragen);
-                res.success(function(data){
-                   $scope.bedragen = data; 
-                });
-            }
             
             $scope.nextBedrag = function(){
                 $scope.beheerBedragen.offset++;
@@ -132,11 +122,13 @@
                 });
             }
             
-            $scope.$watchCollection('beheerBedragen', function(){
-                var res = $http.post('/ThuisAdmin/json/fetch_bedragen', $scope.beheerBedragen);
-                res.success(function(data){
-                   $scope.bedragen = data; 
-                });
+            $scope.$watchCollection('beheerBedragen', function(newValue, oldValue){
+                if (newValue !== oldValue){
+                    var res = $http.post('/ThuisAdmin/json/fetch_bedragen', $scope.beheerBedragen);
+                    res.success(function(data){
+                       $scope.bedragen = data; 
+                    });
+                }
             });
             
             $scope.itemsByPage = 10;
