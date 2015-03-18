@@ -14,6 +14,9 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.dialect.Dialect;
+import org.hibernate.dialect.Oracle10gDialect;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -50,10 +53,18 @@ public class GroepenDaoImpl implements GroepenDao{
     public Integer getNewPkId() {
         Session session = sessionFactory.getCurrentSession();
         
-        List<BigInteger> pkId = session.createSQLQuery("select seq_ta_type_groep.nextval as num from dual")
-                .addScalar("num", StandardBasicTypes.BIG_INTEGER).list();
+        Dialect dialect= ((SessionFactoryImplementor) sessionFactory).getDialect();
         
-        return pkId.get(0).intValue();
+        if (dialect instanceof Oracle10gDialect){
+            List<BigInteger> pkId = session.createSQLQuery("select seq_ta_type_groep.nextval as num from dual")
+                    .addScalar("num", StandardBasicTypes.BIG_INTEGER).list();
+
+            return pkId.get(0).intValue();
+        } else {
+            Query query = session.createQuery("select max(pk_id) as pk_id from Groepen");
+            Integer maxPkId = (Integer)query.list().get(0);
+            return maxPkId + 1;
+        }
     }
 
     @Override
@@ -69,15 +80,7 @@ public class GroepenDaoImpl implements GroepenDao{
     @Override
     public List<Groepen> findAllHoofdGroepen() {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createSQLQuery("select pk_id," +
-                                             "       fk_hoofd_type_groep_id," +
-                                             "       naam," +
-                                             "       omschrijving," +
-                                             "       negatief," +
-                                             "       fk_personen_id," +
-                                             "       code_id from ta_type_groep" +
-                                             " where fk_hoofd_type_groep_id is null").addEntity(Groepen.class);
-
+        Query query = session.createQuery("from Groepen where fk_hoofd_type_groep_id is null");
         return query.list();
     }
 

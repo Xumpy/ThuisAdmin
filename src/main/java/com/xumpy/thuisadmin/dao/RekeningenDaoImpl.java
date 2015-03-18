@@ -11,12 +11,16 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.dialect.Dialect;
+import org.hibernate.dialect.Oracle10gDialect;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
@@ -57,14 +61,21 @@ public class RekeningenDaoImpl implements RekeningenDao {
     @Override
     public Integer getNewPkId() {
         Session session = sessionFactory.getCurrentSession();
+                
+        Dialect dialect= ((SessionFactoryImplementor) sessionFactory).getDialect();
         
-        List<BigInteger> list = session.createSQLQuery("select seq_ta_rekeningen.nextval as num from dual")
-                .addScalar("num", StandardBasicTypes.BIG_INTEGER).list();
-        
-        Integer newPkId = list.get(0).intValue();
-        
-        return newPkId;
-        
+        if (dialect instanceof Oracle10gDialect){
+            List<BigInteger> list = session.createSQLQuery("select seq_ta_rekeningen.nextval as num from dual")
+                    .addScalar("num", StandardBasicTypes.BIG_INTEGER).list();
+
+            Integer newPkId = list.get(0).intValue();
+
+            return newPkId;
+        } else {
+            Query query = session.createQuery("select max(pk_id) as pk_id from Rekeningen");
+            Integer maxPkId = (Integer)query.list().get(0);
+            return maxPkId + 1;
+        }
     }
     
     @Override

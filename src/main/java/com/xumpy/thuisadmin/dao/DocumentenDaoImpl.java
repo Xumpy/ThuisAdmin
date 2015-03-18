@@ -15,6 +15,9 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.dialect.Dialect;
+import org.hibernate.dialect.Oracle10gDialect;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -54,10 +57,18 @@ public class DocumentenDaoImpl implements DocumentenDao{
     public Integer getNewPkId() {
         Session session = sessionFactory.getCurrentSession();
         
-        List<BigInteger> pkId = session.createSQLQuery("select seq_ta_bedrag_documenten.nextval as num from dual")
-                .addScalar("num", StandardBasicTypes.BIG_INTEGER).list();
+        Dialect dialect= ((SessionFactoryImplementor) sessionFactory).getDialect();
         
-        return pkId.get(0).intValue();
+        if (dialect instanceof Oracle10gDialect){
+            List<BigInteger> pkId = session.createSQLQuery("select seq_ta_bedrag_documenten.nextval as num from dual")
+                    .addScalar("num", StandardBasicTypes.BIG_INTEGER).list();
+
+            return pkId.get(0).intValue();
+        } else {
+            Query query = session.createQuery("select max(pk_id) as pk_id from Documenten");
+            Integer maxPkId = (Integer)query.list().get(0);
+            return maxPkId + 1;
+        }
     }
     
     @Override
@@ -90,14 +101,7 @@ public class DocumentenDaoImpl implements DocumentenDao{
     public Documenten fetchDocument(Integer documentId) {
         Session session = sessionFactory.getCurrentSession();
         
-        Query query = session.createSQLQuery("select pk_id," +
-                                             "       fk_bedrag_id," +
-                                             "       omschrijving," +
-                                             "       document," +
-                                             "       document_naam," +
-                                             "       document_mime" +
-                                             " from ta_bedrag_documenten" +
-                                             " where pk_id = :pk_id").addEntity(Documenten.class);
+        Query query = session.createQuery("from Documenten where pk_id = :pk_id");
         query.setInteger("pk_id", documentId);
         
         return (Documenten)query.list().get(0);

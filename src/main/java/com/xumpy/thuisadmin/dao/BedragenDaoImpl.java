@@ -28,6 +28,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.dialect.Dialect;
+import org.hibernate.dialect.Oracle10gDialect;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -121,10 +124,18 @@ public class BedragenDaoImpl implements BedragenDao{
     public Integer getNewPkId() {
         Session session = sessionFactory.getCurrentSession();
         
-        List<BigInteger> list = session.createSQLQuery("select seq_ta_bedragen.nextval as num from dual")
-                .addScalar("num", StandardBasicTypes.BIG_INTEGER).list();
+        Dialect dialect= ((SessionFactoryImplementor) sessionFactory).getDialect();
         
-        return list.get(0).intValue();
+        if (dialect instanceof Oracle10gDialect){
+            List<BigInteger> list = session.createSQLQuery("select seq_ta_bedragen.nextval as num from dual")
+                    .addScalar("num", StandardBasicTypes.BIG_INTEGER).list();
+
+            return list.get(0).intValue();
+        } else {
+            Query query = session.createQuery("select max(pk_id) as pk_id from Bedragen");
+            Integer maxPkId = (Integer)query.list().get(0);
+            return maxPkId + 1;
+        }
     }
     
     @Override

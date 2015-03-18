@@ -44,6 +44,11 @@ public class InitDatabase {
     @PropertySource("classpath:prd-database.properties")
     static class prd{ }
     
+    @Configuration
+    @Profile("tst_local")
+    @PropertySource("classpath:tst_local-database.properties")
+    static class tst_local{ }
+    
     @Value("${jdbc.driverclass}") private String driverClassName;
     @Value("${jdbc.url}") private String url;
     @Value("${jdbc.username}") private String username;
