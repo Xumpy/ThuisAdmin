@@ -8,6 +8,7 @@ package com.xumpy.thuisadmin.controller;
 import com.xumpy.thuisadmin.model.db.Groepen;
 import com.xumpy.thuisadmin.model.view.GroepenTree;
 import com.xumpy.thuisadmin.services.GroepenSrv;
+import java.io.Serializable;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author Nico
  */
 @Controller
-public class GroepenCtrl {
+public class GroepenCtrl implements Serializable{
     @Autowired
     private GroepenSrv groepenSrv;
     

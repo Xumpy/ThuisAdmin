@@ -7,6 +7,7 @@ package com.xumpy.thuisadmin.controller;
 
 import com.xumpy.thuisadmin.model.db.Personen;
 import com.xumpy.thuisadmin.services.PersonenSrv;
+import java.io.Serializable;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @Scope("session")
-public class PersonenCtrl {
+public class PersonenCtrl implements Serializable{
     @Autowired
     private PersonenSrv personenSrv;
     

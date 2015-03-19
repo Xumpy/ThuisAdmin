@@ -5,16 +5,14 @@
  */
 package com.xumpy.thuisadmin.controller;
 
+import com.xumpy.thuisadmin.logic.BeheerBedragenButtons;
 import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.view.BeheerBedragenInp;
-import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
-import com.xumpy.thuisadmin.model.view.FilterReportBedragenInGroep;
+import com.xumpy.thuisadmin.model.view.BeheerBedragenReportLst;
 import com.xumpy.thuisadmin.model.view.NieuwBedrag;
-import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragenTotal;
 import com.xumpy.thuisadmin.services.BedragenSrv;
 import java.io.Serializable;
 import java.text.ParseException;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -29,12 +27,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @Scope("session")
-public class CtrlBedragen{
+public class CtrlBedragen implements Serializable{
     @Autowired
     private BedragenSrv bedragenSrv;
     
     @Autowired
     private BeheerBedragenInp beheerBedragenInp;
+    
+    @Autowired
+    private BeheerBedragenReportLst beheerBedragenReportLst;
     
     @RequestMapping("/json/fetch_beheer_bedragen")
     public @ResponseBody BeheerBedragenInp fetchBeheerBedragen() throws ParseException{
@@ -42,9 +43,14 @@ public class CtrlBedragen{
     }
     
     @RequestMapping("/json/fetch_bedragen")
-    public @ResponseBody List<BeheerBedragenReport> fetchBedragen(@RequestBody BeheerBedragenInp beheerBedragenInp) throws ParseException{
+    public @ResponseBody BeheerBedragenReportLst fetchBedragen(@RequestBody BeheerBedragenInp beheerBedragenInp) throws ParseException{
+        if (this.beheerBedragenInp.getOffset().equals(beheerBedragenInp.getOffset())) beheerBedragenInp.setOffset(0);
         this.beheerBedragenInp = beheerBedragenInp;
-        return bedragenSrv.reportBedragen(beheerBedragenInp.getRekening(), beheerBedragenInp.getOffset(), beheerBedragenInp.getZoekOpdracht());
+
+        beheerBedragenReportLst = bedragenSrv.reportBedragen(beheerBedragenReportLst, beheerBedragenInp.getOffset(), beheerBedragenInp.getRekening(), beheerBedragenInp.getZoekOpdracht());
+        beheerBedragenReportLst = BeheerBedragenButtons.setButtons(beheerBedragenReportLst, beheerBedragenInp);
+        
+        return beheerBedragenReportLst;
     }
     
     @RequestMapping("/json/save_bedrag")

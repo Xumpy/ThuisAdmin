@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @Scope("session")
-public class CtrlDocumenten{
+public class CtrlDocumenten implements Serializable{
     @Autowired
     private DocumentenSrv documentenSrv;
     

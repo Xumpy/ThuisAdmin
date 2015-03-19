@@ -20,7 +20,7 @@ public class BeheerBedragenInp implements Serializable{
     private Integer offset;
     private Rekeningen rekening;
     private String zoekOpdracht;
-
+    
     public Rekeningen getRekening() {
         return rekening;
     }

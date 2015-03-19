@@ -15,6 +15,7 @@ import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Groepen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
+import com.xumpy.thuisadmin.model.view.BeheerBedragenReportLst;
 import com.xumpy.thuisadmin.model.view.FinanceOverzichtGroep;
 import com.xumpy.thuisadmin.model.view.NieuwBedrag;
 import com.xumpy.thuisadmin.model.view.OverzichtGroep;
@@ -31,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
-import javax.enterprise.context.SessionScoped;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -193,8 +193,10 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
 
     @Override
     @Transactional
-    public List<BeheerBedragenReport> reportBedragen(Rekeningen rekening, Integer offset, String searchText) {
-        return bedragenDao.reportBedragen(rekening, offset, searchText);
+    public BeheerBedragenReportLst reportBedragen(BeheerBedragenReportLst beheerBedragenReportLst, Integer offset, Rekeningen rekening, String searchText) {
+        beheerBedragenReportLst.setBeheerBedragenReport(bedragenDao.reportBedragen(rekening, offset, searchText));
+        
+        return beheerBedragenReportLst;
     }
 
     @Override

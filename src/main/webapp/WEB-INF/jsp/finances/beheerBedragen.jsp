@@ -55,12 +55,12 @@
                         <tfoot>
                             <tr>
                                 <td colspan="5" class="text-center">
-                                    <form ng-show="beheerBedragen.offset !== 0" ng-submit="previousBedrag()">
+                                    <form ng-show="showPrevious === true" ng-submit="previousBedrag()">
                                         <input class="btn btn-primary" type="submit" value="Vorige"/>
                                     </form>
                                 </td>
                                 <td>
-                                    <form ng-submit="nextBedrag()">
+                                    <form ng-show="showNext === true" ng-submit="nextBedrag()">
                                         <input class="btn btn-primary" type="submit" value="Volgende"/>
                                     </form>
                                 </td>
@@ -108,25 +108,23 @@
             
             $scope.nextBedrag = function(){
                 $scope.beheerBedragen.offset++;
-                var res = $http.post("/ThuisAdmin/json/fetch_bedragen", $scope.beheerBedragen);
-                res.success(function(data){
-                   $scope.bedragen = data; 
-                });
             }
             
             $scope.previousBedrag = function(){
                 $scope.beheerBedragen.offset--;
-                var res = $http.post("/ThuisAdmin/json/fetch_bedragen", $scope.beheerBedragen);
-                res.success(function(data){
-                   $scope.bedragen = data; 
-                });
             }
             
             $scope.$watchCollection('beheerBedragen', function(newValue, oldValue){
                 if (newValue !== oldValue){
                     var res = $http.post('/ThuisAdmin/json/fetch_bedragen', $scope.beheerBedragen);
                     res.success(function(data){
-                       $scope.bedragen = data; 
+                       $scope.showNext = data.showNext;
+                       $scope.showPrevious = data.showPrevious;
+                       $scope.bedragen = data.beheerBedragenReport; 
+                       
+                       if ($scope.showPrevious===false){
+                           $scope.beheerBedragen.offset = 0;
+                       }
                     });
                 }
             });

@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @Scope("session")
-public class FetchGraphiekOverview{
+public class FetchGraphiekOverview implements Serializable{
     @Autowired
     private BedragenSrv bedragenSrv;
 
