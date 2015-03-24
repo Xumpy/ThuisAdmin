@@ -6,6 +6,7 @@
 package com.xumpy.thuisadmin.controller;
 
 import com.xumpy.thuisadmin.model.db.Personen;
+import com.xumpy.thuisadmin.model.view.RegisterUserPage;
 import com.xumpy.thuisadmin.services.PersonenSrv;
 import java.io.Serializable;
 import java.util.List;
@@ -49,5 +50,17 @@ public class PersonenCtrl implements Serializable{
         personenSrv.delete(persoon);
         
         return "saved";
+    }
+    
+    @RequestMapping("/register/registerUser")
+    public @ResponseBody String insertUser(@RequestBody RegisterUserPage registerUser){
+        personenSrv.save(personenSrv.createRegisterUser(registerUser));
+        
+        return "saved";
+    }
+    
+    @RequestMapping("/json/whoami")
+    public @ResponseBody Personen getWhoAmI(){
+        return personenSrv.getWhoAmI();
     }
 }

@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 /**
@@ -39,6 +38,8 @@ public class AppConfig extends WebSecurityConfigurerAdapter{
                 .antMatchers("/finances/**").hasAnyAuthority("USER")
                 .antMatchers("/json/**").hasAnyAuthority("USER")
                 .antMatchers("/admin/**").hasAnyAuthority("USER")
+                .antMatchers("/register/**").permitAll()
+                .antMatchers("/resources/**").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .formLogin()
@@ -54,14 +55,6 @@ public class AppConfig extends WebSecurityConfigurerAdapter{
                     .logoutUrl("/j_spring_security_logout")
                     .logoutSuccessUrl("/login");		
     }
-    
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web
-          .ignoring()
-             .antMatchers("/resources/**");
-    }
-
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {

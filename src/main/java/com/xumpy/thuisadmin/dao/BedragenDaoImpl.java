@@ -225,6 +225,7 @@ public class BedragenDaoImpl implements BedragenDao{
         
         criteria.add(Restrictions.ge("datum", startDate));
         criteria.add(Restrictions.le("datum", endDate));
+        criteria.add(Restrictions.eq("persoon.pk_id", persoon.getPk_id()));
         if (rekening != null){
             criteria.add(Restrictions.eq("rekening", rekening));
         }
@@ -241,6 +242,7 @@ public class BedragenDaoImpl implements BedragenDao{
         
         Criteria criteria = session.createCriteria(Bedragen.class);
         criteria.add(Restrictions.gt("datum", date));
+        criteria.add(Restrictions.eq("persoon.pk_id", persoon.getPk_id()));
         
         if (rekening != null){
             rekeningStand = rekening.getWaarde();

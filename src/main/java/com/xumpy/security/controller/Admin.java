@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.xumpy.thuisadmin.view.controller;
+package com.xumpy.security.controller;
 
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
@@ -35,7 +35,7 @@ public class Admin {
     
     @RequestMapping(value = "admin/personen")
     public String viewPersonen(){
-        return "admin/personen";
+        return "admin/nieuwPersoon";
     }
     
     @RequestMapping(value = "admin/nieuwPersoon")

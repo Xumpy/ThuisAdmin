@@ -93,6 +93,7 @@
     </body>
     <script type="text/javascript">
         app.controller("fController", function($scope, $http) {
+            <%@include file="/resources/template/globalScope.html" %>
             $http.post("/ThuisAdmin/json/fetch_beheer_bedragen").success(function(data){
                 $scope.beheerBedragen = data;
             });

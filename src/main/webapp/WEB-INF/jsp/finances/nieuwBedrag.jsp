@@ -33,14 +33,6 @@
                 </div>
                 <div class="form-group col-lg-12">
                   <div class="col-lg-3">
-                      <select id="rekening" class="form-control" ng-model="bedrag.persoon"
-                              ng-options="persoon.voornaam + ' ' + persoon.naam for persoon in personen track by persoon.pk_id">
-                          <option value="">--Kies Persoon--</option>
-                      </select>
-                  </div>
-                </div>
-                <div class="form-group col-lg-12">
-                  <div class="col-lg-3">
                     <input class="form-control" id="inputNegatief" placeholder="bedrag" ng-model="bedrag.bedrag" type="text">
                   </div>
                 </div>
@@ -93,6 +85,7 @@
     </body>
     <script text="text/javascript">
         app.controller("fController", function($scope, $http) {
+            <%@include file="/resources/template/globalScope.html" %>
             if ("<c:out value="${pk_id}"/>" !== ""){
               $http.get("/ThuisAdmin/json/find_bedrag/<c:out value="${pk_id}"/>").success( function(dataBedrag){
                   $scope.bedrag = dataBedrag;

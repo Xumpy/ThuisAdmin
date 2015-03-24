@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.xumpy.thuisadmin.view.controller;
+package com.xumpy.security.controller;
 
 import com.xumpy.thuisadmin.model.db.Documenten;
 import com.xumpy.thuisadmin.model.view.NieuwDocument;

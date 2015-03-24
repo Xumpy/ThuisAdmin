@@ -74,6 +74,7 @@
     
     <script type="text/javascript">
         app.controller("fController", function($scope, $http) {
+            <%@include file="/resources/template/globalScope.html" %>
             // Begin Set Header Info
             $scope.financeOverview = {
                 beginDatum: "",
@@ -106,16 +107,14 @@
 
             $scope.$watchCollection('overzichtGroepBedragen', function() {
                 if ($scope.overzichtGroepBedragen.typeGroepId !== "")
-                    var res = $http.post('/ThuisAdmin/json/report_overzicht_groep_bedragen', $scope.overzichtGroepBedragen);
-                    res.success(function(data){
-                       $scope.reportGroepBedragenTotal = data; 
-                    });
+                   $http.post('/ThuisAdmin/json/report_overzicht_groep_bedragen', $scope.overzichtGroepBedragen).success( function(data) {
+                        $scope.reportGroepBedragenTotal = data; 
+                });
             });
             
             $scope.$watchCollection('filterReport', function(){
-                var res = $http.post('/ThuisAdmin/json/report_overzicht_groep_bedragen_filter', $scope.filterReport);
-                res.success(function(data){
-                   $scope.reportGroepBedragenTotal = data;
+                var res = $http.post('/ThuisAdmin/json/report_overzicht_groep_bedragen_filter', $scope.filterReport).success( function(data) {
+                    $scope.reportGroepBedragenTotal = data;
                 });
             });
             

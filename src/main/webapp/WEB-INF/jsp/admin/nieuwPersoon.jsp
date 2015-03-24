@@ -9,9 +9,6 @@
             <form class="col-lg-1" ng-submit="savePersoon()">
                 <input class="col-lg-12 btn btn-primary" type="submit" value="Save"/>
             </form>
-            <form ng-show="persoon.pk_id !== ''" class="col-lg-1" ng-submit="deletePersoon()">
-                <input class="col-lg-12 btn btn-primary" type="submit" value="Delete"/>
-            </form>
         </div>
         <div class="col-lg-6 well">
             <div class="form-group col-lg-12">
@@ -30,17 +27,10 @@
     </body>
     <script type="text/javascript">
         app.controller("fController", function($scope, $http) {
-            if ("<c:out value="${pk_id}"/>" !== ""){
-              $http.get("/ThuisAdmin/json/personen/<c:out value="${pk_id}"/>").success( function(data){
-                  $scope.persoon = data;
-              });  
-            } else {
-              $scope.persoon = {
-                  pk_id: "",
-                  naam: "",
-                  voornaam: ""
-              };
-            }
+            <%@include file="/resources/template/globalScope.html" %>
+            $scope.$watchCollection('registeredPersoon', function(newValue, oldValue){
+                $scope.persoon = newValue;
+            });
             
             $scope.savePersoon = (function(){
                 $http.post("/ThuisAdmin/json/savePersoon", $scope.persoon).success( function() {
@@ -48,18 +38,6 @@
                 }).error( function() {
                     bootbox.alert("Error occured during save");
                 });
-            });
-            
-            $scope.deletePersoon = (function(){
-                 bootbox.confirm("Are you sure you want to delete this Persoon?", function(result) {
-                    if (result === true){
-                        $http.post("/ThuisAdmin/json/deletePersoon", $scope.persoon).success( function() {
-                            $(location).attr('href','/ThuisAdmin/admin/personen');
-                        }).error( function(){
-                          bootbox.alert("Error occured during delete");
-                        });
-                    }
-                }); 
             });
         });
     </script>

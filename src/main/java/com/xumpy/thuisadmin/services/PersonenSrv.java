@@ -6,6 +6,7 @@
 package com.xumpy.thuisadmin.services;
 
 import com.xumpy.thuisadmin.model.db.Personen;
+import com.xumpy.thuisadmin.model.view.RegisterUserPage;
 import java.util.List;
 
 /**
@@ -18,4 +19,6 @@ public interface PersonenSrv {
     void delete(Personen personen);
     public List<Personen> findAllPersonen();
     public Personen findPersoon(Integer persoonId);
+    public Personen createRegisterUser(RegisterUserPage registerUserPage);
+    public Personen getWhoAmI();
 }

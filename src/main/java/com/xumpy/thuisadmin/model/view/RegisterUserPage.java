@@ -3,30 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.xumpy.migration.model;
+package com.xumpy.thuisadmin.model.view;
 
-import com.xumpy.thuisadmin.model.view.RegisterUserPage;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.io.Serializable;
+import org.springframework.context.annotation.Scope;
 
 /**
  *
  * @author nicom
  */
-public class Personen {
-    private Integer pk_id;
+
+@Scope("session")
+public class RegisterUserPage implements Serializable{
     private String naam;
     private String voornaam;
     private String username;
-    private String md5_password;
-
-    public Integer getPk_id() {
-        return pk_id;
-    }
-
-    public void setPk_id(Integer pk_id) {
-        this.pk_id = pk_id;
-    }
+    private String password;
 
     public String getNaam() {
         return naam;
@@ -52,11 +44,11 @@ public class Personen {
         this.username = username;
     }
 
-    public String getMd5_password() {
-        return md5_password;
+    public String getPassword() {
+        return password;
     }
 
-    public void setMd5_password(String md5_password) {
-        this.md5_password = md5_password;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

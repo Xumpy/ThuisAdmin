@@ -37,17 +37,8 @@
             <div class="form-group col-lg-12">
               <label for="inputNegatief" class="col-lg-2 control-label">Negatief</label>
               <div class="col-lg-4">
-                <input id="inputNegatief" ng-model="groep.negatief" type="checkbox" ng-true-value=1 ng-false-value=1>
+                <input id="inputNegatief" ng-model="groep.negatief" type="checkbox">
               </div>
-            </div>
-            <div class="form-group col-lg-12">
-                <label for="inputPersonen" class="col-lg-2 control-label">Personen</label>
-                <div class="col-lg-4">
-                    <select id="rekening" class="form-control" ng-model="groep.persoon"
-                            ng-options="persoon.voornaam + ' ' + persoon.naam for persoon in personen track by persoon.pk_id">
-                        <option value="">--Kies Persoon--</option>
-                    </select>
-                </div>
             </div>
         </div>
         <div class="col-lg-12">
@@ -68,7 +59,7 @@
                         <td>{{groep.hoofdGroep.naam}}</td>
                         <td>{{groep.naam}}</td>
                         <td>{{groep.omschrijving}}</td>
-                        <td>{{groep.negatief === 0 ? "Positief" : "Negatief"}}</td>
+                        <td>{{groep.negatief}}</td>
                         <td>{{groep.persoon.voornaam}} {{groep.persoon.naam}}</td>
                 </tr>
             </tbody>
@@ -84,6 +75,7 @@
     </body>
     <script text="text/javascript">
         app.controller("fController", function($scope, $http, usSpinnerService) {
+            <%@include file="/resources/template/globalScope.html" %>
             $http.get("/ThuisAdmin/json/personen").success( function(data){
                $scope.personen = data; 
             });
@@ -98,6 +90,12 @@
               $http.get("/ThuisAdmin/json/groepen/<c:out value="${pk_id}"/>").success( function(data){
                   $scope.groep = data;
                   
+                  if ($scope.groep.negatief === 1){
+                      $scope.groep.negatief = true;
+                  } else {
+                      $scope.groep.negatief = false;
+                  }
+                  
                   if ($scope.groep.hoofdGroep === null){
                     $http.get("/ThuisAdmin/json/groepTree").success( function(data){
                         $scope.groepTreeData = data;
@@ -108,9 +106,7 @@
                         $scope.groepTreeData = data;
                     });
                 }
-                  
                   var pkId = "<c:out value="${pk_id}"/>";
-                  
                   $http.get("/ThuisAdmin/json/subGroepen/" + pkId).success( function(data){
                       $scope.groepen = data;
                   });
@@ -132,6 +128,11 @@
             }
             
             $scope.saveGroep = (function(){
+                if ($scope.groep.negatief === true){
+                    $scope.groep.negatief = 1;
+                } else {
+                    $scope.groep.negatief = 0;
+                }
                 $http.post("/ThuisAdmin/json/saveGroep", $scope.groep).success( function() {
                     $(location).attr('href','/ThuisAdmin/admin/groepen');
                 }).error( function() {
@@ -142,6 +143,11 @@
             $scope.deleteGroep = (function(){
                  bootbox.confirm("Are you sure you want to delete this Groep?", function(result) {
                     if (result === true){
+                        if ($scope.groep.negatief === true){
+                            $scope.groep.negatief = 1;
+                        } else {
+                            $scope.groep.negatief = 0;
+                        }
                         $http.post("/ThuisAdmin/json/deleteGroep", $scope.groep).success( function() {
                             $(location).attr('href','/ThuisAdmin/admin/groepen');
                         }).error( function(){

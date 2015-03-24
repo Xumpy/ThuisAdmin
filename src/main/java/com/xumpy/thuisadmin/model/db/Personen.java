@@ -5,7 +5,10 @@
  */
 package com.xumpy.thuisadmin.model.db;
 
+import com.xumpy.thuisadmin.model.view.RegisterUserPage;
 import java.io.Serializable;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;

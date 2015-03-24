@@ -33,6 +33,7 @@
         var datum = today.getFullYear() + "-" + ("0" + (today.getMonth()+1)).slice(-2) + "-" + ("0" + today.getDate()).slice(-2);
         
         app.controller("fController", function($scope, $http) {
+            <%@include file="/resources/template/globalScope.html" %>
             if ("<c:out value="${pk_id}"/>" !== ""){
               $http.get("/ThuisAdmin/json/rekeningen/<c:out value="${pk_id}"/>").success( function(data){
                   $scope.rekening = data;

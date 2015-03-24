@@ -33,6 +33,7 @@
     </body>
     <script text="text/javascript">
         app.controller("fController", function($scope, $http) {
+            <%@include file="/resources/template/globalScope.html" %>
             $scope.document = {
                 pk_id: '<c:out value="${document.pk_id}"/>',
                 bedrag_id: '<c:out value="${bedragId}"/>',

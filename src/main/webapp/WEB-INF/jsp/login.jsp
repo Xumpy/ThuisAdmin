@@ -17,26 +17,29 @@
                 <h3>Please Login</h3>
             </div>
         </div>
-        <form class="form-horizontal" name="loginForm" action="<c:url value='j_spring_security_check' />" method="post">               
+        <form class="form-horizontal col-lg-12" name="loginForm" action="<c:url value='j_spring_security_check' />" method="post">               
             <fieldset>
                 <div th:if="${param.logout}" class="alert alert-warning"> 
                     You have been logged out.
                 </div>
-                <div class="form-group">
+                <div class="form-group col-lg-12">
                     <label class="col-lg-1 control-label" for="username">Username</label>
                     <div class="col-lg-2">
                         <input class="form-control" placeholder="Username"type="text" id="username" name="username"/>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group col-lg-12">
                     <label class="col-lg-1 control-label" for="password">Password</label></td>
                     <div class="col-lg-2">
                         <input class="form-control" placeholder="Password" type="password" id="password" name="password"/>
                     </div>
                 </div>
-                <div class="form-group">
-                    <div class="col-lg-offset-1 col-lg-2">
+                <div class="form-group col-lg-12">
+                    <div class="col-lg-offset-1 col-lg-1">
                         <button type="submit" class="btn-primary btn">Log in</button>
+                    </div>
+                    <div class="col-lg-1">
+                        <a class="btn-primary btn" href="register/register_user">Register</a>
                     </div>
                 </div>
             </fieldset>

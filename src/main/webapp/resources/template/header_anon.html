@@ -1,29 +1,10 @@
 <%@include file="/resources/template/head.html" %>
-<body class="nested" ng-controller="fController">
+<body>
     <span us-spinner spinner-key="spinner-1"></span>
     <div class="navbar navbar-default">
         <div class="navbar-collapse collapse navbar-responsive-collapse">
             <ul class="nav navbar-nav">
-              <li class="dropdown">
-                <a aria-expanded="false" href="/ThuisAdmin/finances/overview" class="dropdown-toggle" data-toggle="dropdown">Finances <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li><a href="/ThuisAdmin/finances/overview">Overview</a></li>
-                  <li><a href="/ThuisAdmin/finances/overzichtPerGroep">Overzicht Per Groep</a></li>
-                  <li><a href="/ThuisAdmin/finances/beheerBedragen">Beheer Bedragen</a></li>
-                  <li><a href="/ThuisAdmin/finances/documenten">Documenten</a></li>
-                </ul>
-              </li>
-              <li class="dropdown">
-                <a aria-expanded="false" href="/ThuisAdmin/admin/rekeningen" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li><a href="/ThuisAdmin/admin/rekeningen">Rekeningen</a></li>
-                  <li><a href="/ThuisAdmin/admin/groepen">Groepen</a></li>
-                  <li><a href="/ThuisAdmin/admin/personen">{{registeredPersoon.username}}</a></li>
-                </ul>
-              </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-              <li><a href="<c:url value="/j_spring_security_logout" />" > Logout</a></li>
+              
             </ul>
         </div>
     </div>

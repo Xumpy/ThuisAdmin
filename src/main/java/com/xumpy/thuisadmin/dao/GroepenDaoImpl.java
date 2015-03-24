@@ -6,10 +6,8 @@
 package com.xumpy.thuisadmin.dao;
 
 import com.xumpy.thuisadmin.model.db.Groepen;
-import com.xumpy.thuisadmin.model.view.GroepenTree;
-import java.math.BigDecimal;
+import com.xumpy.thuisadmin.model.db.Personen;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -30,6 +28,9 @@ public class GroepenDaoImpl implements GroepenDao{
 
     @Autowired
     private SessionFactory sessionFactory;
+    
+    @Autowired
+    private Personen persoon;
     
     @Override
     public void save(Groepen groepen) {
@@ -69,7 +70,11 @@ public class GroepenDaoImpl implements GroepenDao{
 
     @Override
     public List<Groepen> findAllGroepen() {
-        return sessionFactory.getCurrentSession().createQuery("from Groepen").list();
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Groepen where persoon.pk_id = :personenId");
+        query.setInteger("personenId", persoon.getPk_id());
+        return query.list();
+        
     }
 
     @Override
@@ -80,7 +85,8 @@ public class GroepenDaoImpl implements GroepenDao{
     @Override
     public List<Groepen> findAllHoofdGroepen() {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Groepen where fk_hoofd_type_groep_id is null");
+        Query query = session.createQuery("from Groepen where fk_hoofd_type_groep_id is null and persoon.pk_id = :personenId");
+        query.setInteger("personenId", persoon.getPk_id());
         return query.list();
     }
 

@@ -19,4 +19,5 @@ public interface PersonenDao {
     public Integer getNewPkId();
     public List<Personen> findAllPersonen();
     public Personen findPersoon(Integer persoonId);
+    public Personen findPersoonByUsername(String username);
 }

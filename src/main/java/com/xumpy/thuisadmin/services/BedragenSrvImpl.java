@@ -13,6 +13,7 @@ import com.xumpy.thuisadmin.dao.RekeningenDaoImpl;
 import com.xumpy.thuisadmin.logic.BedragenLogic;
 import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Groepen;
+import com.xumpy.thuisadmin.model.db.Personen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
 import com.xumpy.thuisadmin.model.view.BeheerBedragenReportLst;
@@ -51,11 +52,15 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
     @Autowired
     private RekeningenDaoImpl rekeningenDao;
     
+    @Autowired
+    private Personen persoon;
+    
     static final Logger Log = Logger.getLogger(BedragenSrvImpl.class.getName());
     
     @Override
     @Transactional(readOnly=false)
     public void save(NieuwBedrag nieuwBedrag) {
+        nieuwBedrag.setPersoon(persoon);
         Bedragen bedragen = convertNieuwBedrag(nieuwBedrag);
         
         if (bedragen.getPk_id() == null){
@@ -75,6 +80,7 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
     @Override
     @Transactional(readOnly=false)
     public void update(NieuwBedrag nieuwBedrag) {
+        nieuwBedrag.setPersoon(persoon);
         Bedragen bedragen = convertNieuwBedrag(nieuwBedrag);
         bedragen = processRekeningBedrag(bedragen, UPDATE);
         
@@ -87,6 +93,7 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
     @Override
     @Transactional(readOnly=false)
     public void delete(NieuwBedrag nieuwBedrag) {
+        nieuwBedrag.setPersoon(persoon);
         Bedragen bedragen = convertNieuwBedrag(nieuwBedrag);
 
         bedragen = processRekeningBedrag(bedragen, DELETE);

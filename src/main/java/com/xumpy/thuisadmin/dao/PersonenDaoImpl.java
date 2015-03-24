@@ -6,9 +6,13 @@
 package com.xumpy.thuisadmin.dao;
 
 import com.xumpy.thuisadmin.model.db.Personen;
+import com.xumpy.thuisadmin.model.view.RegisterUserPage;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -72,5 +76,14 @@ public class PersonenDaoImpl implements PersonenDao{
     @Override
     public Personen findPersoon(Integer persoonId) {
         return (Personen)sessionFactory.getCurrentSession().get(Personen.class, persoonId);
+    }
+    
+    @Override
+    public Personen findPersoonByUsername(String username){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Personen where username = :username");
+        query.setString("username", username);
+        
+        return (Personen)query.list().get(0);
     }
 }

@@ -51,6 +51,8 @@ public class UserService implements UserDetailsService {
         persoon.setPk_id(internalPersoon.getPk_id());
         persoon.setUsername(internalPersoon.getUsername());
         persoon.setMd5_password(internalPersoon.getMd5_password());
+        persoon.setNaam(internalPersoon.getNaam());
+        persoon.setVoornaam(internalPersoon.getVoornaam());
         
         User user = new User(persoon.getUsername(), persoon.getMd5_password(), authorities);
         

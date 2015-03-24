@@ -46,6 +46,7 @@
     </body>
     <script type="text/javascript">
         app.controller("fController", function($scope, $http) {
+            <%@include file="/resources/template/globalScope.html" %>
             $http.get("/ThuisAdmin/json/hoofdGroepen").success( function(data){
                 $scope.groepen = data;
             });

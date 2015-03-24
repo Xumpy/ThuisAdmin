@@ -8,12 +8,9 @@ package com.xumpy.security;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragenTotal;
 import java.text.SimpleDateFormat;
 import java.util.Properties;
-import javax.enterprise.context.SessionScoped;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -30,7 +27,7 @@ import org.springframework.web.servlet.view.JstlView;
  */
 @EnableWebMvc
 @Configuration
-@ComponentScan({ "com.xumpy.thuisadmin.*" })
+@ComponentScan({ "com.xumpy.thuisadmin.*", "com.xumpy.security.*" })
 @EnableTransactionManagement
 public class DispatcherConfig extends WebMvcConfigurerAdapter{
  
