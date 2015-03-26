@@ -40,6 +40,12 @@
                 <input id="inputNegatief" ng-model="groep.negatief" type="checkbox">
               </div>
             </div>
+            <div class="form-group col-lg-12">
+              <label for="inputNegatief" class="col-lg-2 control-label">Verberg Groep in Grahpiek</label>
+              <div class="col-lg-4">
+                <input id="inputNegatief" ng-model="hide_groep" type="checkbox">
+              </div>
+            </div>
         </div>
         <div class="col-lg-12">
             <table st-safe-src="groepen" st-table="emptyGroepen" class="table table-striped table-hover ">
@@ -96,6 +102,12 @@
                       $scope.groep.negatief = false;
                   }
                   
+                  if ($scope.groep.codeId === "INTER_REKENING"){
+                      $scope.hide_groep = true;
+                  } else {
+                      $scope.hide_groep = false;
+                  }
+                  
                   if ($scope.groep.hoofdGroep === null){
                     $http.get("/ThuisAdmin/json/groepTree").success( function(data){
                         $scope.groepTreeData = data;
@@ -133,6 +145,13 @@
                 } else {
                     $scope.groep.negatief = 0;
                 }
+                
+                if ($scope.hide_groep === true){
+                    $scope.groep.codeId = "INTER_REKENING";
+                } else {
+                    $scope.groep.codeId = null;
+                }
+
                 $http.post("/ThuisAdmin/json/saveGroep", $scope.groep).success( function() {
                     $(location).attr('href','/ThuisAdmin/admin/groepen');
                 }).error( function() {
