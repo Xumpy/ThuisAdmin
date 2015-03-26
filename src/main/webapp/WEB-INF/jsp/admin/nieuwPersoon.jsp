@@ -23,6 +23,18 @@
                 <input class="form-control" id="inputVoornaam" ng-model="persoon.voornaam" placeholder="Naam" type="text">
               </div>
             </div>
+            <div class="form-group col-lg-12">
+              <label for="inputUsername" class="col-lg-2 control-label">Gebruikersnaam</label>
+              <div class="col-lg-4">
+                <input class="form-control" id="inputUsername" ng-model="persoon.username" placeholder="Gebruikersnaam" type="text">
+              </div>
+            </div>
+            <div class="form-group col-lg-12">
+              <label for="inputPassword" class="col-lg-2 control-label">Wachtwoord</label>
+              <div class="col-lg-4">
+                <input class="form-control" id="inputPassword" ng-model="persoon.md5_password" placeholder="Wachtwoord" type="password">
+              </div>
+            </div>
         </div>
     </body>
     <script type="text/javascript">

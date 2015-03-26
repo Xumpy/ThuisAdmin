@@ -1,3 +1,4 @@
 $http.get('/ThuisAdmin/json/whoami').success( function(data){
+  data.md5_password = "";
   $scope.registeredPersoon = data;
 });

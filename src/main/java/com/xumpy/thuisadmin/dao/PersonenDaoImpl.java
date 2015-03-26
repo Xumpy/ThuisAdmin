@@ -40,8 +40,23 @@ public class PersonenDaoImpl implements PersonenDao{
 
     @Override
     public void update(Personen personen) {
-        sessionFactory.getCurrentSession().update(personen);
-        sessionFactory.getCurrentSession().flush();
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("update Personen set naam = :naam," +
+                                          "                    voornaam = :voornaam," +
+                                          "                    username = :username," +
+                                          "                    md5_password = coalesce(:password, md5_password) " + 
+                                          "where pk_id = :pk_id");
+        query.setString("naam", personen.getNaam());
+        query.setString("voornaam", personen.getVoornaam());
+        query.setString("username", personen.getUsername());
+        if (personen.getMd5_password().isEmpty()){
+            query.setString("password", null);
+        } else {
+            query.setString("password", personen.getMd5_password());
+        }
+        query.setInteger("pk_id", personen.getPk_id());
+        
+        query.executeUpdate();
     }
 
     @Override

@@ -35,6 +35,7 @@ public class PersonenSrvTest {
         System.out.println("Test");
         
         Personen persoon = personenSrv.createRegisterUser(registerUser);
+        persoon.set_password(persoon.getMd5_password());
         
         assertEquals(persoon.getUsername(), "test123");
         assertEquals(persoon.getMd5_password(), "cc03e747a6afbbcbf8be7668acfebee5");

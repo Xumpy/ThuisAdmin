@@ -8,12 +8,7 @@ package com.xumpy.thuisadmin.services;
 import com.xumpy.thuisadmin.dao.PersonenDaoImpl;
 import com.xumpy.thuisadmin.model.db.Personen;
 import com.xumpy.thuisadmin.model.view.RegisterUserPage;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +29,10 @@ public class PersonenSrvImpl implements PersonenSrv{
     @Override
     @Transactional(readOnly=false)
     public void save(Personen personen) {
+        if (!personen.getMd5_password().isEmpty()){
+            personen.set_password(personen.getMd5_password());
+        }
+        
         if (personen.getPk_id() == null){
             personen.setPk_id(personenDao.getNewPkId());
             personenDao.save(personen);
@@ -70,21 +69,14 @@ public class PersonenSrvImpl implements PersonenSrv{
     
     @Override
     public Personen createRegisterUser(RegisterUserPage registerUserPage){
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            Personen persoon = new Personen();
-            
-            persoon.setNaam(registerUserPage.getNaam());
-            persoon.setVoornaam(registerUserPage.getVoornaam());
-            persoon.setUsername(registerUserPage.getUsername());
-            persoon.setMd5_password((new HexBinaryAdapter()).marshal(md.digest(registerUserPage.getPassword().getBytes())).toLowerCase());
-            
-            return persoon;
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(PersonenSrvImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return null;
+        Personen persoon = new Personen();
+
+        persoon.setNaam(registerUserPage.getNaam());
+        persoon.setVoornaam(registerUserPage.getVoornaam());
+        persoon.setUsername(registerUserPage.getUsername());
+        persoon.setMd5_password(registerUserPage.getPassword());
+
+        return persoon;
     }
     
     @Override

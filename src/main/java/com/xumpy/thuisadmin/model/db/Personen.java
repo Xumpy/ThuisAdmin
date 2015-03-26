@@ -9,10 +9,13 @@ import com.xumpy.thuisadmin.model.view.RegisterUserPage;
 import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import org.hibernate.validator.constraints.NotEmpty;
 /**
  *
@@ -77,5 +80,14 @@ public class Personen implements Serializable {
 
     public void setMd5_password(String md5_password) {
         this.md5_password = md5_password;
+    }
+    
+    public void set_password(String password){
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            this.md5_password = (new HexBinaryAdapter()).marshal(md.digest(md5_password.getBytes())).toLowerCase();
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(Personen.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
