@@ -17,7 +17,8 @@ public class Groepen {
     private Integer negatief;
     private Integer fk_persoon_id;
     private String code_id;
-
+    private Integer publicGroep;
+    
     public Integer getPk_id() {
         return pk_id;
     }
@@ -72,5 +73,13 @@ public class Groepen {
 
     public void setCode_id(String code_id) {
         this.code_id = code_id;
+    }
+
+    public Integer getPublicGroep() {
+        return publicGroep;
+    }
+
+    public void setPublicGroep(Integer publicGroep) {
+        this.publicGroep = publicGroep;
     }
 }

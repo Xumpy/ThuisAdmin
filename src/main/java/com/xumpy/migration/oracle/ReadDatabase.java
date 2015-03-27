@@ -103,6 +103,7 @@ public class ReadDatabase{
             groep.setNaam(rs.getString("NAAM"));
             groep.setNegatief(rs.getInt("NEGATIEF"));
             groep.setOmschrijving(rs.getString("OMSCHRIJVING"));
+            groep.setPublicGroep(rs.getInt("PUBLIC_GROEP"));
             if (rs.wasNull()){
                 groep.setOmschrijving(null);
             }

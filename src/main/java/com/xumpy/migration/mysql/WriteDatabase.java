@@ -11,7 +11,6 @@ import com.xumpy.migration.model.Documenten;
 import com.xumpy.migration.model.Personen;
 import com.xumpy.migration.model.Groepen;
 import com.xumpy.migration.model.Rekeningen;
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -54,8 +53,8 @@ public class WriteDatabase {
         }
         stmt.executeBatch();
         
-        String insertTypeGroep = "INSERT INTO TA_TYPE_GROEP(PK_ID, FK_HOOFD_TYPE_GROEP_ID, FK_PERSONEN_ID, NAAM, OMSCHRIJVING, NEGATIEF, CODE_ID)" +
-                                 " VALUES(?,?,?,?,?,?,?)";
+        String insertTypeGroep = "INSERT INTO TA_TYPE_GROEP(PK_ID, FK_HOOFD_TYPE_GROEP_ID, FK_PERSONEN_ID, NAAM, OMSCHRIJVING, NEGATIEF, CODE_ID, PUBLIC_GROEP)" +
+                                 " VALUES(?,?,?,?,?,?,?,?)";
         stmt = connection.prepareStatement(insertTypeGroep);
         
         for(Groepen groep: database.getAllGroepen()){
@@ -77,6 +76,11 @@ public class WriteDatabase {
                 stmt.setString(7, groep.getCode_id());
             } else {
                 stmt.setNull(7, Types.INTEGER);
+            }
+            if (groep.getPublicGroep() != null){
+                stmt.setInt(8, groep.getPublicGroep());
+            } else {
+                stmt.setNull(8, Types.INTEGER);
             }
             
             stmt.addBatch();

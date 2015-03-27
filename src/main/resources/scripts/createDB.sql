@@ -28,7 +28,8 @@ create table if not exists ta_type_groep(
 	naam varchar,
 	omschrijving varchar,
 	negatief int,
-	code_id varchar);
+	code_id varchar,
+        public_groep int);
 	
 alter table ta_type_groep add foreign key(fk_hoofd_type_groep_id) references public.ta_type_groep(pk_id);
 alter table ta_type_groep add foreign key(fk_personen_id) references public.ta_personen(pk_id);
@@ -68,18 +69,18 @@ select 3 as pk_id, 2 as fk_personen_id, 2000 as waarde, 'Test2 Rekening 1' as na
 ) x where not exists(select * from ta_rekeningen);
 
 insert into ta_type_groep select * from (
-select 1 as pk_id, null as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Hoofdgroep' as naam, null as omschrijving, 0 as negatief, null as code_id union
-select 2 as pk_id, 1 as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Test' as naam, null as omschrijving, 1 as negatief, null as code_id union
-select 3 as pk_id, 1 as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Test Positief' as naam, null as omschrijving, 0 as negatief, null as code_id union
-select 4 as pk_id, null as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Inter Rekening' as naam, null as omschrijving, 0 as negatief, 'INTER_REKENING' as code_id union
-select 5 as pk_id, 4 as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Afhalen' as naam, null as omschrijving, 1 as negatief, 'INTER_REKENING' as code_id union
-select 6 as pk_id, 4 as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Bijzetten' as naam, null as omschrijving, 0 as negatief, 'INTER_REKENING' as code_id union
-select 7 as pk_id, null as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Hoofdgroep 2' as naam, null as omschrijving, 0 as negatief, null as code_id
+select 1 as pk_id, null as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Hoofdgroep' as naam, null as omschrijving, 0 as negatief, null as code_id, 0 as public_groep union
+select 4 as pk_id, null as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Inter Rekening' as naam, null as omschrijving, 0 as negatief, 'INTER_REKENING' as code_id, 0 as public_groep union
+select 7 as pk_id, null as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Hoofdgroep 2' as naam, null as omschrijving, 0 as negatief, null as code_id, 0 as public_groep
 ) x where not exists(select * from ta_type_groep);
 
 insert into ta_type_groep select * from (
-select 8 as pk_id, 7 as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Hoofdgroep 2 Test' as naam, null as omschrijving, 1 as negatief, null as code_id union
-select 9 as pk_id, 7 as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Hoofdgroep 2 Test Positief' as naam, null as omschrijving, 0 as negatief, null as code_id
+select 2 as pk_id, 1 as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Test' as naam, null as omschrijving, 1 as negatief, null as code_id, 0 as public_groep union
+select 3 as pk_id, 1 as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Test Positief' as naam, null as omschrijving, 0 as negatief, null as code_id, 0 as public_groep union
+select 5 as pk_id, 4 as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Afhalen' as naam, null as omschrijving, 1 as negatief, 'INTER_REKENING' as code_id, 0 as public_groep union
+select 6 as pk_id, 4 as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Bijzetten' as naam, null as omschrijving, 0 as negatief, 'INTER_REKENING' as code_id, 0 as public_groep union
+select 8 as pk_id, 7 as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Hoofdgroep 2 Test' as naam, null as omschrijving, 1 as negatief, null as code_id, 0 as public_groep union
+select 9 as pk_id, 7 as fk_hoofd_type_groep_id, 1 as fk_personen_id, 'Hoofdgroep 2 Test Positief' as naam, null as omschrijving, 0 as negatief, null as code_id, 0 as public_groep
 ) x where not exists(select * from ta_type_groep where pk_id in(8,9));
 
 insert into ta_bedragen select * from(

@@ -32,21 +32,22 @@ public class GroepenSrvImpl implements GroepenSrv{
     @Override
     @Transactional(readOnly=false)
     public void save(Groepen groepen) {
-        groepen.setPersoon(userInfo.getPersoon());
-        
         if (groepen.getPk_id() == null){
             groepen.setPk_id(groepenDao.getNewPkId());
             groepenDao.save(groepen);
         } else {
-            groepenDao.update(groepen);
+            if (groepen.getPersoon().getUsername().equals(userInfo.getPersoon().getUsername())){
+                groepenDao.update(groepen);
+            }
         }
     }
 
     @Override
     @Transactional(readOnly=false)
     public void update(Groepen groepen) {
-        groepen.setPersoon(userInfo.getPersoon());
-        groepenDao.update(groepen);
+        if (groepen.getPersoon().getUsername().equals(userInfo.getPersoon().getUsername())){
+            groepenDao.update(groepen);
+        }
     }
 
     @Override

@@ -46,6 +46,12 @@
                 <input id="inputNegatief" ng-model="hide_groep" type="checkbox">
               </div>
             </div>
+            <div class="form-group col-lg-12">
+              <label for="inputNegatief" class="col-lg-2 control-label">Public Groep</label>
+              <div class="col-lg-4">
+                <input id="inputNegatief" ng-model="public_groep" type="checkbox">
+              </div>
+            </div>
         </div>
         <div class="col-lg-12">
             <table st-safe-src="groepen" st-table="emptyGroepen" class="table table-striped table-hover ">
@@ -108,6 +114,12 @@
                       $scope.hide_groep = false;
                   }
                   
+                  if ($scope.groep.publicGroep === 1){
+                      $scope.public_groep = true;
+                  } else {
+                      $scope.public_groep = false;
+                  }
+                  
                   if ($scope.groep.hoofdGroep === null){
                     $http.get("/ThuisAdmin/json/groepTree").success( function(data){
                         $scope.groepTreeData = data;
@@ -151,6 +163,12 @@
                 } else {
                     $scope.groep.codeId = null;
                 }
+                
+                if ($scope.public_groep === true){
+                    $scope.groep.publicGroep = 1;
+                } else {
+                    $scope.groep.publicGroep = 0;
+                }
 
                 $http.post("/ThuisAdmin/json/saveGroep", $scope.groep).success( function() {
                     $(location).attr('href','/ThuisAdmin/admin/groepen');
@@ -173,7 +191,7 @@
                           bootbox.alert("Error occured during delete");
                         });
                     }
-                }); 
+            }); 
             });
         });
     </script>

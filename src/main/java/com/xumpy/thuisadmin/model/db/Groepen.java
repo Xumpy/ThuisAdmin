@@ -21,7 +21,6 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 @Entity
 @Table(name="TA_TYPE_GROEP")
-//@GeneratedValue(strategy = )
 public class Groepen implements Serializable {
     @Id
     @Column(name="PK_ID")
@@ -49,6 +48,9 @@ public class Groepen implements Serializable {
     @Column(name="CODE_ID")
     private String codeId;
 
+    @Column(name="PUBLIC_GROEP")
+    private Integer publicGroep;
+    
     public String getCodeId() {
         return codeId;
     }
@@ -103,5 +105,13 @@ public class Groepen implements Serializable {
 
     public void setPersoon(Personen persoon) {
         this.persoon = persoon;
+    }
+
+    public Integer getPublicGroep() {
+        return publicGroep;
+    }
+
+    public void setPublicGroep(Integer publicGroep) {
+        this.publicGroep = publicGroep;
     }
 }
