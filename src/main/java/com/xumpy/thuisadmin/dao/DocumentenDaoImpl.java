@@ -5,10 +5,9 @@
  */
 package com.xumpy.thuisadmin.dao;
 
+import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.model.db.Documenten;
-import com.xumpy.thuisadmin.model.db.Personen;
 import com.xumpy.thuisadmin.model.view.DocumentenReport;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,7 @@ public class DocumentenDaoImpl implements DocumentenDao{
     private SessionFactory sessionFactory;
     
     @Autowired
-    private Personen persoon;
+    private UserInfo userInfo;
     
     @Override
     public void save(Documenten document) {
@@ -76,7 +75,7 @@ public class DocumentenDaoImpl implements DocumentenDao{
         Session session = sessionFactory.getCurrentSession();
         
         Query query = session.createQuery("from Documenten where bedrag.persoon.pk_id = :persoonId");
-        query.setInteger("persoonId", persoon.getPk_id());
+        query.setInteger("persoonId", userInfo.getPersoon().getPk_id());
         
         List<Documenten> documenten = query.list();
         

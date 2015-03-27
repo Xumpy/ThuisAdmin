@@ -5,6 +5,7 @@
  */
 package com.xumpy.thuisadmin.services;
 
+import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.dao.RekeningenDaoImpl;
 import com.xumpy.thuisadmin.model.db.Personen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
@@ -27,12 +28,12 @@ public class RekeningenSrvImpl implements RekeningenSrv{
     private RekeningenDaoImpl rekeningenDao;
 
     @Autowired
-    private Personen persoon;
+    private UserInfo userInfo;
     
     @Override
     @Transactional(readOnly=false)
     public void save(Rekeningen rekeningen) {
-        rekeningen.setPersoon(persoon);
+        rekeningen.setPersoon(userInfo.getPersoon());
         
         if (rekeningen.getPk_id() == null){
             rekeningen.setPk_id(rekeningenDao.getNewPkId());
@@ -45,7 +46,7 @@ public class RekeningenSrvImpl implements RekeningenSrv{
     @Override
     @Transactional(readOnly=false)
     public void update(Rekeningen rekeningen) {
-        rekeningen.setPersoon(persoon);
+        rekeningen.setPersoon(userInfo.getPersoon());
         
         rekeningenDao.update(rekeningen);
     }

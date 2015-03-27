@@ -5,12 +5,14 @@
  */
 package com.xumpy.thuisadmin.services;
 
+import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.model.db.Personen;
 import com.xumpy.thuisadmin.model.view.RegisterUserPage;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import static org.mockito.Mockito.when;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -21,6 +23,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class PersonenSrvTest {
+    @Mock UserInfo userInfo;
     @Spy Personen persoon = new Personen();
     @Spy RegisterUserPage registerUser = new RegisterUserPage();
     @InjectMocks PersonenSrvImpl personenSrv = new PersonenSrvImpl();
@@ -43,6 +46,7 @@ public class PersonenSrvTest {
     
     @Test
     public void testWhoAmI(){
+        when(userInfo.getPersoon()).thenReturn(persoon);
         when(persoon.getNaam()).thenReturn("Nico");
         
         Personen persoonFetch = personenSrv.getWhoAmI();

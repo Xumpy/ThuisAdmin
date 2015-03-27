@@ -5,6 +5,7 @@
  */
 package com.xumpy.thuisadmin.dao;
 
+import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.model.db.Personen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
 import java.math.BigDecimal;
@@ -36,7 +37,7 @@ public class RekeningenDaoImpl implements RekeningenDao {
     private SessionFactory sessionFactory;
     
     @Autowired
-    private Personen persoon;
+    private UserInfo userInfo;
     
     @Override
     public void save(Rekeningen rekeningen) {
@@ -81,7 +82,7 @@ public class RekeningenDaoImpl implements RekeningenDao {
         Session session = sessionFactory.getCurrentSession();
         
         Criteria criteria = session.createCriteria(Rekeningen.class);
-        criteria.add(Restrictions.eq("persoon.pk_id", persoon.getPk_id()));
+        criteria.add(Restrictions.eq("persoon.pk_id", userInfo.getPersoon().getPk_id()));
         
         
         List list = criteria.list();
@@ -102,7 +103,7 @@ public class RekeningenDaoImpl implements RekeningenDao {
         Session session = sessionFactory.getCurrentSession();
         
         Criteria criteria = session.createCriteria(Rekeningen.class);
-        criteria.add(Restrictions.eq("persoon.pk_id", persoon.getPk_id()));
+        criteria.add(Restrictions.eq("persoon.pk_id", userInfo.getPersoon().getPk_id()));
         ProjectionList projectionList = Projections.projectionList();
         projectionList.add(Projections.sum("waarde"));
         criteria.setProjection(projectionList);

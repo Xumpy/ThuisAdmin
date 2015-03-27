@@ -5,12 +5,12 @@
  */
 package com.xumpy.thuisadmin.services;
 
+import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.dao.PersonenDaoImpl;
 import com.xumpy.thuisadmin.model.db.Personen;
 import com.xumpy.thuisadmin.model.view.RegisterUserPage;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,14 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Nico
  */
 @Service
-@Scope("session")
 public class PersonenSrvImpl implements PersonenSrv{
 
     @Autowired
     private PersonenDaoImpl personenDao;
     
     @Autowired
-    private Personen persoon;
+    private UserInfo userInfo;
     
     @Override
     @Transactional(readOnly=false)
@@ -41,14 +40,14 @@ public class PersonenSrvImpl implements PersonenSrv{
         } else {
             personenDao.update(personen);
         }
-        persoon = personen;
+        userInfo.updateBean(personen);
     }
 
     @Override
     @Transactional(readOnly=false)
     public void update(Personen personen) {
         personenDao.update(personen);
-        persoon = personen;
+        userInfo.updateBean(personen);
     }
 
     @Override
@@ -72,7 +71,7 @@ public class PersonenSrvImpl implements PersonenSrv{
     @Override
     public Personen createRegisterUser(RegisterUserPage registerUserPage){
         Personen persoon = new Personen();
-
+        
         persoon.setNaam(registerUserPage.getNaam());
         persoon.setVoornaam(registerUserPage.getVoornaam());
         persoon.setUsername(registerUserPage.getUsername());
@@ -83,17 +82,6 @@ public class PersonenSrvImpl implements PersonenSrv{
     
     @Override
     public Personen getWhoAmI(){
-        // Transfer object to new Personen object because json can't handle the session scope
-        // This is necessary because Personen is not only a session object but also proxied because it is set
-        // in the Application Context
-        
-        Personen returnPersoon = new Personen();
-        returnPersoon.setNaam(persoon.getNaam());
-        returnPersoon.setVoornaam(persoon.getVoornaam());
-        returnPersoon.setUsername(persoon.getUsername());
-        returnPersoon.setMd5_password(persoon.getMd5_password());
-        returnPersoon.setPk_id(persoon.getPk_id());
-        
-        return returnPersoon;
+        return userInfo.getPersoon();
     }
 }

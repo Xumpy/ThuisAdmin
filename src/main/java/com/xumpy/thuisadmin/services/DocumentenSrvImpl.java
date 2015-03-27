@@ -6,14 +6,9 @@
 package com.xumpy.thuisadmin.services;
 
 import com.xumpy.thuisadmin.dao.DocumentenDaoImpl;
-import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Documenten;
 import com.xumpy.thuisadmin.model.view.DocumentenReport;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.sql.SQLException;
 import java.util.List;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

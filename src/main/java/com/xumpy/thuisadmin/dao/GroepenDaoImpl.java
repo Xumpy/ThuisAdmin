@@ -5,6 +5,7 @@
  */
 package com.xumpy.thuisadmin.dao;
 
+import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.model.db.Groepen;
 import com.xumpy.thuisadmin.model.db.Personen;
 import java.math.BigInteger;
@@ -30,7 +31,7 @@ public class GroepenDaoImpl implements GroepenDao{
     private SessionFactory sessionFactory;
     
     @Autowired
-    private Personen persoon;
+    private UserInfo userInfo;
     
     @Override
     public void save(Groepen groepen) {
@@ -72,7 +73,7 @@ public class GroepenDaoImpl implements GroepenDao{
     public List<Groepen> findAllGroepen() {
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from Groepen where persoon.pk_id = :personenId");
-        query.setInteger("personenId", persoon.getPk_id());
+        query.setInteger("personenId", userInfo.getPersoon().getPk_id());
         return query.list();
         
     }
@@ -86,7 +87,7 @@ public class GroepenDaoImpl implements GroepenDao{
     public List<Groepen> findAllHoofdGroepen() {
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from Groepen where fk_hoofd_type_groep_id is null and persoon.pk_id = :personenId");
-        query.setInteger("personenId", persoon.getPk_id());
+        query.setInteger("personenId", userInfo.getPersoon().getPk_id());
         return query.list();
     }
 

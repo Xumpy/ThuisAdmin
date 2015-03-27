@@ -86,7 +86,7 @@ public class DispatcherConfig extends WebMvcConfigurerAdapter{
     }
 
     @Bean
-    @Scope(value="session")
+    @Scope(value="session", proxyMode=ScopedProxyMode.TARGET_CLASS)
     public OverzichtGroepBedragenTotal overzichtGroepBedragenTotal(){
         return new OverzichtGroepBedragenTotal();
     }

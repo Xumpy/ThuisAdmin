@@ -5,7 +5,7 @@
  */
 package com.xumpy.security;
 
-import com.xumpy.thuisadmin.model.db.Personen;
+import com.xumpy.security.model.UserInfo;
 import javax.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,8 +26,8 @@ public class AppConfig extends WebSecurityConfigurerAdapter{
 
     @Bean
     @Scope(value="session", proxyMode=ScopedProxyMode.TARGET_CLASS)
-    public Personen persoon(){
-        return new Personen();
+    public UserInfo userInfo(){
+        return new UserInfo();
     }
     
     @Resource(name="userService") 

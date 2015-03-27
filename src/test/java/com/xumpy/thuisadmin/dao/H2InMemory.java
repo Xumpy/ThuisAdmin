@@ -5,6 +5,7 @@
  */
 package com.xumpy.thuisadmin.dao;
 
+import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.model.db.*;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -37,6 +38,7 @@ public abstract class H2InMemory {
     protected static SessionFactory sessionFactoryH2;
     private Transaction transaction;
     
+    @Mock protected UserInfo userInfo;
     @Mock protected Personen persoon;
     
     @InjectMocks public PersonenDaoImpl personenDao;
@@ -67,6 +69,7 @@ public abstract class H2InMemory {
     public void setUpTest(){
         transaction = sessionFactoryH2.getCurrentSession().beginTransaction();
         when(sessionFactory.getCurrentSession()).thenReturn(sessionFactoryH2.getCurrentSession());
+        when(userInfo.getPersoon()).thenReturn(persoon);
         when(persoon.getPk_id()).thenReturn(1);
     }
     

@@ -61,6 +61,7 @@ public class PersonenCtrl implements Serializable{
     
     @RequestMapping("/json/whoami")
     public @ResponseBody Personen getWhoAmI(){
+        System.out.println("--- Class: " + personenSrv.getWhoAmI().getClass());
         return personenSrv.getWhoAmI();
     }
 }

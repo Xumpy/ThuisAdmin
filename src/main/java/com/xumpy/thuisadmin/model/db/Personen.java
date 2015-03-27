@@ -5,7 +5,8 @@
  */
 package com.xumpy.thuisadmin.model.db;
 
-import com.xumpy.thuisadmin.model.view.RegisterUserPage;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -23,7 +24,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 @Entity
 @Table(name="TA_PERSONEN")
-public class Personen implements Serializable {
+public class Personen implements Serializable{
     @Id
     @Column(name="PK_ID")
     private Integer pk_id;

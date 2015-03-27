@@ -5,6 +5,7 @@
  */
 package com.xumpy.thuisadmin.services;
 
+import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.dao.BedragenDaoImpl;
 import static com.xumpy.thuisadmin.dao.BedragenDaoImpl.NEGATIEF;
 import static com.xumpy.thuisadmin.dao.BedragenDaoImpl.POSITIEF;
@@ -15,7 +16,6 @@ import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Groepen;
 import com.xumpy.thuisadmin.model.db.Personen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
-import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
 import com.xumpy.thuisadmin.model.view.BeheerBedragenReportLst;
 import com.xumpy.thuisadmin.model.view.FinanceOverzichtGroep;
 import com.xumpy.thuisadmin.model.view.NieuwBedrag;
@@ -23,6 +23,7 @@ import com.xumpy.thuisadmin.model.view.OverzichtGroep;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragen;
 import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragenTotal;
 import com.xumpy.thuisadmin.model.view.RekeningOverzicht;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,7 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Nico
  */
 @Service
-public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
+public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv, Serializable{
 
     @Autowired
     private BedragenDaoImpl bedragenDao;
@@ -53,7 +54,7 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
     private RekeningenDaoImpl rekeningenDao;
     
     @Autowired
-    private Personen persoon;
+    private UserInfo userInfo;
     
     @Autowired public OverzichtGroepBedragenTotal overzichtGroepBedragenTotal;
     
@@ -62,7 +63,7 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
     @Override
     @Transactional(readOnly=false)
     public void save(NieuwBedrag nieuwBedrag) {
-        nieuwBedrag.setPersoon(persoon);
+        nieuwBedrag.setPersoon(userInfo.getPersoon());
         Bedragen bedragen = convertNieuwBedrag(nieuwBedrag);
         
         if (bedragen.getPk_id() == null){
@@ -82,7 +83,7 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
     @Override
     @Transactional(readOnly=false)
     public void update(NieuwBedrag nieuwBedrag) {
-        nieuwBedrag.setPersoon(persoon);
+        nieuwBedrag.setPersoon(userInfo.getPersoon());
         Bedragen bedragen = convertNieuwBedrag(nieuwBedrag);
         bedragen = processRekeningBedrag(bedragen, UPDATE);
         
@@ -95,7 +96,7 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
     @Override
     @Transactional(readOnly=false)
     public void delete(NieuwBedrag nieuwBedrag) {
-        nieuwBedrag.setPersoon(persoon);
+        nieuwBedrag.setPersoon(userInfo.getPersoon());
         Bedragen bedragen = convertNieuwBedrag(nieuwBedrag);
 
         bedragen = processRekeningBedrag(bedragen, DELETE);

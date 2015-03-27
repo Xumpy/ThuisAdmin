@@ -5,19 +5,18 @@
  */
 package com.xumpy.thuisadmin.dao;
 
+import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.db.Groepen;
 import com.xumpy.thuisadmin.model.db.Personen;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
 import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
-import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragen;
 import com.xumpy.thuisadmin.model.view.graphiek.OverzichtBedrag;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +51,7 @@ public class BedragenDaoImpl implements BedragenDao{
     private RekeningenDaoImpl rekeningenDao;
     
     @Autowired
-    private Personen persoon;
+    private UserInfo userInfo;
     
     @Override
     public void save(Bedragen bedragen) {
@@ -100,7 +99,7 @@ public class BedragenDaoImpl implements BedragenDao{
                                " order by datum desc");
         }
         
-        query.setInteger("persoonId", persoon.getPk_id());
+        query.setInteger("persoonId", userInfo.getPersoon().getPk_id());
         
         if (rekening != null){
             query.setInteger("rekeningId", rekening.getPk_id());
@@ -147,7 +146,7 @@ public class BedragenDaoImpl implements BedragenDao{
     public List<OverzichtBedrag> findAllBedragen(){
         Query query = sessionFactory.getCurrentSession().createQuery("select new com.xumpy.thuisadmin.model.view.graphiek.OverzichtBedrag(b.datum, b.bedrag, b.groep.negatief) " +
                                                                      "from Bedragen b where b.persoon.pk_id = :persoonId order by datum asc");
-        query.setInteger("persoonId", persoon.getPk_id());
+        query.setInteger("persoonId", userInfo.getPersoon().getPk_id());
         
         return query.list();
     }
@@ -161,7 +160,7 @@ public class BedragenDaoImpl implements BedragenDao{
         
         query.setDate("start", startDate);
         query.setDate("end", endDate);
-        query.setInteger("persoonId", persoon.getPk_id());
+        query.setInteger("persoonId", userInfo.getPersoon().getPk_id());
         
         return query.list();
     }
@@ -225,7 +224,7 @@ public class BedragenDaoImpl implements BedragenDao{
         
         criteria.add(Restrictions.ge("datum", startDate));
         criteria.add(Restrictions.le("datum", endDate));
-        criteria.add(Restrictions.eq("persoon.pk_id", persoon.getPk_id()));
+        criteria.add(Restrictions.eq("persoon.pk_id", userInfo.getPersoon().getPk_id()));
         if (rekening != null){
             criteria.add(Restrictions.eq("rekening", rekening));
         }
@@ -242,7 +241,7 @@ public class BedragenDaoImpl implements BedragenDao{
         
         Criteria criteria = session.createCriteria(Bedragen.class);
         criteria.add(Restrictions.gt("datum", date));
-        criteria.add(Restrictions.eq("persoon.pk_id", persoon.getPk_id()));
+        criteria.add(Restrictions.eq("persoon.pk_id", userInfo.getPersoon().getPk_id()));
         
         if (rekening != null){
             rekeningStand = rekening.getWaarde();

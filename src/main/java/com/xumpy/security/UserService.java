@@ -5,6 +5,7 @@
  */
 package com.xumpy.security;
 
+import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.model.db.Personen;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +13,6 @@ import org.hibernate.Session;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -29,7 +27,7 @@ import org.springframework.stereotype.Service;
 @Service("userService")
 public class UserService implements UserDetailsService {
     
-    @Autowired Personen persoon;
+    @Autowired UserInfo userInfo;
     
     @Autowired
     private SessionFactory sessionFactory;
@@ -45,13 +43,9 @@ public class UserService implements UserDetailsService {
         
         Personen internalPersoon = (Personen)query.list().get(0);
         
-        persoon.setPk_id(internalPersoon.getPk_id());
-        persoon.setUsername(internalPersoon.getUsername());
-        persoon.setMd5_password(internalPersoon.getMd5_password());
-        persoon.setNaam(internalPersoon.getNaam());
-        persoon.setVoornaam(internalPersoon.getVoornaam());
+        userInfo.setPersoon(internalPersoon);
         
-        User user = new User(persoon.getUsername(), persoon.getMd5_password(), authorities);
+        User user = new User(userInfo.getPersoon().getUsername(), userInfo.getPersoon().getMd5_password(), authorities);
         
         session.close();
         return user;

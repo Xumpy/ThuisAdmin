@@ -5,6 +5,7 @@
  */
 package com.xumpy.thuisadmin.services;
 
+import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.dao.GroepenDaoImpl;
 import com.xumpy.thuisadmin.model.db.Groepen;
 import com.xumpy.thuisadmin.model.db.Personen;
@@ -26,12 +27,12 @@ public class GroepenSrvImpl implements GroepenSrv{
     private GroepenDaoImpl groepenDao;
     
     @Autowired
-    private Personen persoon;
+    private UserInfo userInfo;
     
     @Override
     @Transactional(readOnly=false)
     public void save(Groepen groepen) {
-        groepen.setPersoon(persoon);
+        groepen.setPersoon(userInfo.getPersoon());
         
         if (groepen.getPk_id() == null){
             groepen.setPk_id(groepenDao.getNewPkId());
@@ -44,7 +45,7 @@ public class GroepenSrvImpl implements GroepenSrv{
     @Override
     @Transactional(readOnly=false)
     public void update(Groepen groepen) {
-        groepen.setPersoon(persoon);
+        groepen.setPersoon(userInfo.getPersoon());
         groepenDao.update(groepen);
     }
 
