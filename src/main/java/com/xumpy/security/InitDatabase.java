@@ -25,8 +25,6 @@ import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
  * @author nicom
  */
 
-
-
 @ComponentScan({"com.xumpy.thuisadmin.dao.*"})
 public class InitDatabase { 
     @Configuration

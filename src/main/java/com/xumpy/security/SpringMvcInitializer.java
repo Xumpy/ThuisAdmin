@@ -5,6 +5,9 @@
  */
 package com.xumpy.security;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 /**
@@ -15,7 +18,7 @@ public class SpringMvcInitializer extends AbstractAnnotationConfigDispatcherServ
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[] { InitDatabase.class, AppConfig.class };
+        return new Class[] { InitDatabase.class, UserService.class, AppConfig.class };
     }
 
     @Override
@@ -28,5 +31,9 @@ public class SpringMvcInitializer extends AbstractAnnotationConfigDispatcherServ
         return new String[] { "/" };
     }
 
-    
+    @Override
+    public void onStartup(ServletContext servletContext) throws ServletException {
+        servletContext.addListener(new RequestContextListener());
+        super.onStartup(servletContext);
+    }
 }

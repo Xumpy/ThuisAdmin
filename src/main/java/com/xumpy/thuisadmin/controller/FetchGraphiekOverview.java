@@ -86,8 +86,7 @@ public class FetchGraphiekOverview implements Serializable{
             Date startDate = format.parse(strStartDate);
             Date eindDate = format.parse(strEindDate);
             
-            return bedragenSrv.rapportOverzichtGroepBedragen(overzichtGroepBedragenTotal,
-                                                             overzichtGroepBedragenInp.getTypeGroepId(), 
+            return bedragenSrv.rapportOverzichtGroepBedragen(overzichtGroepBedragenInp.getTypeGroepId(), 
                                                              overzichtGroepBedragenInp.getTypeGroepKostOpbrengst(),
                                                              startDate,
                                                              eindDate);
@@ -98,11 +97,11 @@ public class FetchGraphiekOverview implements Serializable{
     
     @RequestMapping("/json/report_overzicht_groep_bedragen_filter")
     public @ResponseBody OverzichtGroepBedragenTotal fetchReportOverzichtGroepBedragenWithFilter(@RequestBody FilterReportBedragenInGroep filterReportBedragenInGroep) {
-        return bedragenSrv.filterOverzichtGroepBedragenTotalFilter(overzichtGroepBedragenTotal, filterReportBedragenInGroep.getSearchTekst());
-    }
-    
-    @Bean
-    public OverzichtGroepBedragenTotal overzichtGroepBedragenTotal(){
-        return new OverzichtGroepBedragenTotal();
+        OverzichtGroepBedragenTotal overzicht = new OverzichtGroepBedragenTotal();
+        OverzichtGroepBedragenTotal overzichtGroep = bedragenSrv.filterOverzichtGroepBedragenTotalFilter(overzichtGroepBedragenTotal, filterReportBedragenInGroep.getSearchTekst());
+        overzicht.setOverzichtGroepBedragen(overzichtGroep.getOverzichtGroepBedragen());
+        overzicht.setSomBedrag(overzichtGroep.getSomBedrag());
+        
+        return overzicht;
     }
 }

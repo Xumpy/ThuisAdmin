@@ -10,6 +10,7 @@ import com.xumpy.thuisadmin.model.db.Personen;
 import com.xumpy.thuisadmin.model.view.RegisterUserPage;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Nico
  */
 @Service
+@Scope("session")
 public class PersonenSrvImpl implements PersonenSrv{
 
     @Autowired
@@ -81,6 +83,17 @@ public class PersonenSrvImpl implements PersonenSrv{
     
     @Override
     public Personen getWhoAmI(){
-        return persoon;
+        // Transfer object to new Personen object because json can't handle the session scope
+        // This is necessary because Personen is not only a session object but also proxied because it is set
+        // in the Application Context
+        
+        Personen returnPersoon = new Personen();
+        returnPersoon.setNaam(persoon.getNaam());
+        returnPersoon.setVoornaam(persoon.getVoornaam());
+        returnPersoon.setUsername(persoon.getUsername());
+        returnPersoon.setMd5_password(persoon.getMd5_password());
+        returnPersoon.setPk_id(persoon.getPk_id());
+        
+        return returnPersoon;
     }
 }

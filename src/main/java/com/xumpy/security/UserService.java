@@ -12,30 +12,27 @@ import org.hibernate.Session;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 /**
  *
  * @author nicom
  */
+@Service("userService")
 public class UserService implements UserDetailsService {
     
-    @Autowired 
-    private Personen persoon;
+    @Autowired Personen persoon;
     
+    @Autowired
     private SessionFactory sessionFactory;
-    
-    public void setPersonen(Personen persoon){
-        this.persoon = persoon;
-    }
-    
-    public  void setSessionFactory(SessionFactory sessionFactory){
-        this.sessionFactory = sessionFactory;
-    }
     
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

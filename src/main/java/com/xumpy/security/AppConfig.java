@@ -6,10 +6,11 @@
 package com.xumpy.security;
 
 import com.xumpy.thuisadmin.model.db.Personen;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,14 +23,15 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableWebSecurity
 public class AppConfig extends WebSecurityConfigurerAdapter{
-        
+
     @Bean
+    @Scope(value="session", proxyMode=ScopedProxyMode.TARGET_CLASS)
     public Personen persoon(){
         return new Personen();
     }
     
-    @Autowired
-    private SessionFactory sessionFactory;
+    @Resource(name="userService") 
+    UserService userService;
     
     @Override 
     protected void configure(HttpSecurity http) throws Exception {
@@ -40,6 +42,7 @@ public class AppConfig extends WebSecurityConfigurerAdapter{
                 .antMatchers("/admin/**").hasAnyAuthority("USER")
                 .antMatchers("/register/**").permitAll()
                 .antMatchers("/resources/**").permitAll()
+                .antMatchers("/login").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .formLogin()
@@ -55,13 +58,9 @@ public class AppConfig extends WebSecurityConfigurerAdapter{
                     .logoutUrl("/j_spring_security_logout")
                     .logoutSuccessUrl("/login");		
     }
-
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        UserService userService = new UserService();
-        userService.setSessionFactory(sessionFactory);
-        userService.setPersonen(persoon());
-        
+    
+    @Override
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(new Md5PasswordEncoder());
     }
 }

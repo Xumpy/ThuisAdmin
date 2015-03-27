@@ -55,6 +55,8 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
     @Autowired
     private Personen persoon;
     
+    @Autowired public OverzichtGroepBedragenTotal overzichtGroepBedragenTotal;
+    
     static final Logger Log = Logger.getLogger(BedragenSrvImpl.class.getName());
     
     @Override
@@ -165,8 +167,7 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
 
     @Override
     @Transactional
-    public OverzichtGroepBedragenTotal rapportOverzichtGroepBedragen(OverzichtGroepBedragenTotal overzichtGroepBedragenTotal,
-                                                                     Integer typeGroepId, 
+    public OverzichtGroepBedragenTotal rapportOverzichtGroepBedragen(Integer typeGroepId, 
                                                                      Integer typeGroepKostOpbrengst, 
                                                                      Date beginDate, 
                                                                      Date eindDate) {
@@ -194,7 +195,7 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv{
         
         overzichtGroepBedragenTotal.setSomBedrag(somOverzicht);
         overzichtGroepBedragenTotal.setOverzichtGroepBedragen(overzichtGroepBedragen);
-        
+
         return overzichtGroepBedragenTotal;
     }
 
