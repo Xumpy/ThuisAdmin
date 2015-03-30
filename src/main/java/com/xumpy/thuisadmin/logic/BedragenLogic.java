@@ -36,22 +36,12 @@ public class BedragenLogic {
     public static final String INSERT = "INSERT";
     public static final String DELETE = "DELETE";
     
-    public Bedragen convertNieuwBedrag(NieuwBedrag nieuwBedrag){
-        Bedragen bedragen = new Bedragen();
-        
-        bedragen.setPk_id(nieuwBedrag.getPk_id());
-        bedragen.setDatum(nieuwBedrag.getDatum());
-        bedragen.setGroep(nieuwBedrag.getGroep());
-        bedragen.setOmschrijving(nieuwBedrag.getOmschrijving());
-        bedragen.setPersoon(nieuwBedrag.getPersoon());
-        bedragen.setRekening(nieuwBedrag.getRekening());
-        
-        String bedrag = nieuwBedrag.getBedrag();
+    public static BigDecimal convertComma(String bedrag){
         if (bedrag.contains(",")){
             bedrag = bedrag.replace(".", "");
             bedrag = bedrag.replace(",", ".");
         } else {
-            if (nieuwBedrag.getBedrag().indexOf(".", nieuwBedrag.getBedrag().indexOf(".") + 1) != -1){
+            if (bedrag.indexOf(".", bedrag.indexOf(".") + 1) != -1){
                 bedrag = bedrag.replace(".", "");
             }
         }
@@ -64,6 +54,21 @@ public class BedragenLogic {
             Logger.getLogger(BedragenSrvImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         bigDecimalBedrag = bigDecimalBedrag.setScale(2, BigDecimal.ROUND_HALF_UP);
+        
+        return bigDecimalBedrag;
+    }
+    
+    public Bedragen convertNieuwBedrag(NieuwBedrag nieuwBedrag){
+        Bedragen bedragen = new Bedragen();
+        
+        bedragen.setPk_id(nieuwBedrag.getPk_id());
+        bedragen.setDatum(nieuwBedrag.getDatum());
+        bedragen.setGroep(nieuwBedrag.getGroep());
+        bedragen.setOmschrijving(nieuwBedrag.getOmschrijving());
+        bedragen.setPersoon(nieuwBedrag.getPersoon());
+        bedragen.setRekening(nieuwBedrag.getRekening());
+
+        BigDecimal bigDecimalBedrag = convertComma(nieuwBedrag.getBedrag());
         
         bedragen.setBedrag(bigDecimalBedrag);
         

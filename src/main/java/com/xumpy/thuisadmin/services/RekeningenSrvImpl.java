@@ -7,10 +7,10 @@ package com.xumpy.thuisadmin.services;
 
 import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.dao.RekeningenDaoImpl;
-import com.xumpy.thuisadmin.model.db.Personen;
+import com.xumpy.thuisadmin.logic.BedragenLogic;
 import com.xumpy.thuisadmin.model.db.Rekeningen;
+import com.xumpy.thuisadmin.model.view.NieuwRekening;
 import com.xumpy.thuisadmin.model.view.RekeningBedragTotal;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,22 +32,26 @@ public class RekeningenSrvImpl implements RekeningenSrv{
     
     @Override
     @Transactional(readOnly=false)
-    public void save(Rekeningen rekeningen) {
-        rekeningen.setPersoon(userInfo.getPersoon());
+    public void save(NieuwRekening nieuwRekening) {
+        Rekeningen rekening = new Rekeningen();
         
-        if (rekeningen.getPk_id() == null){
-            rekeningen.setPk_id(rekeningenDao.getNewPkId());
-            rekeningenDao.save(rekeningen);
+        rekening.setNaam(nieuwRekening.getNaam());
+        rekening.setPersoon(userInfo.getPersoon());
+        rekening.setLaatst_bijgewerkt(nieuwRekening.getLaatst_bijgewerkt());
+        rekening.setWaarde(BedragenLogic.convertComma(nieuwRekening.getWaarde()));
+        
+        if (nieuwRekening.getPk_id() == null){
+            rekening.setPk_id(rekeningenDao.getNewPkId());
+            rekeningenDao.save(rekening);
         } else {
-            rekeningenDao.update(rekeningen);
+            rekening.setPk_id(nieuwRekening.getPk_id());
+            rekeningenDao.update(rekening);
         }
     }
 
     @Override
     @Transactional(readOnly=false)
     public void update(Rekeningen rekeningen) {
-        rekeningen.setPersoon(userInfo.getPersoon());
-        
         rekeningenDao.update(rekeningen);
     }
 

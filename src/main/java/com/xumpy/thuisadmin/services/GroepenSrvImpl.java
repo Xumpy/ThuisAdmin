@@ -34,6 +34,7 @@ public class GroepenSrvImpl implements GroepenSrv{
     public void save(Groepen groepen) {
         if (groepen.getPk_id() == null){
             groepen.setPk_id(groepenDao.getNewPkId());
+            groepen.setPersoon(userInfo.getPersoon());
             groepenDao.save(groepen);
         } else {
             if (groepen.getPersoon().getUsername().equals(userInfo.getPersoon().getUsername())){

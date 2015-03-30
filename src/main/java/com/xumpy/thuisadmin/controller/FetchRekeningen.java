@@ -6,6 +6,7 @@
 package com.xumpy.thuisadmin.controller;
 
 import com.xumpy.thuisadmin.model.db.Rekeningen;
+import com.xumpy.thuisadmin.model.view.NieuwRekening;
 import com.xumpy.thuisadmin.model.view.RekeningBedragTotal;
 import com.xumpy.thuisadmin.services.RekeningenSrv;
 import java.io.Serializable;
@@ -39,7 +40,7 @@ public class FetchRekeningen implements Serializable{
     }
     
     @RequestMapping("/json/saveRekening")
-    public @ResponseBody String saveRekening(@RequestBody Rekeningen rekening){
+    public @ResponseBody String saveRekening(@RequestBody NieuwRekening rekening){
         rekeningenSrv.save(rekening);
         
         return "saved";
