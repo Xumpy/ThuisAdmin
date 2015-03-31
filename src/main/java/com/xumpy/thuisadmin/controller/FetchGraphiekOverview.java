@@ -5,7 +5,6 @@
  */
 package com.xumpy.thuisadmin.controller;
 
-import com.xumpy.thuisadmin.model.db.Bedragen;
 import com.xumpy.thuisadmin.model.view.FilterReportBedragenInGroep;
 import com.xumpy.thuisadmin.model.view.FinanceOverview;
 import com.xumpy.thuisadmin.model.view.FinanceOverzichtGroep;
@@ -20,7 +19,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,7 +66,7 @@ public class FetchGraphiekOverview implements Serializable{
             Date startDate = format.parse(strStartDate);
             Date eindDate = format.parse(strEindDate);
 
-            return bedragenSrv.graphiekOverzichtGroep(startDate, eindDate);  
+            return bedragenSrv.graphiekOverzichtGroep(startDate, eindDate, financeOverview.isShowPublicGroep());  
         } else {
             return null;
         }
@@ -89,7 +87,8 @@ public class FetchGraphiekOverview implements Serializable{
             return bedragenSrv.rapportOverzichtGroepBedragen(overzichtGroepBedragenInp.getTypeGroepId(), 
                                                              overzichtGroepBedragenInp.getTypeGroepKostOpbrengst(),
                                                              startDate,
-                                                             eindDate);
+                                                             eindDate,
+                                                             overzichtGroepBedragenInp.isShowPublicGroep());
         } else {
             return null;
         }

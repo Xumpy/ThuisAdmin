@@ -20,6 +20,7 @@ public class FinanceOverview implements Serializable {
     private Rekeningen rekening;
     private String beginDatum;
     private String eindDatum;
+    private boolean showPublicGroep;
     
     public Rekeningen getRekening() {
         return rekening;
@@ -43,5 +44,13 @@ public class FinanceOverview implements Serializable {
 
     public void setEindDatum(String eindDatum) {
         this.eindDatum = eindDatum;
+    }
+
+    public boolean isShowPublicGroep() {
+        return showPublicGroep;
+    }
+
+    public void setShowPublicGroep(boolean showPublicGroep) {
+        this.showPublicGroep = showPublicGroep;
     }
 }

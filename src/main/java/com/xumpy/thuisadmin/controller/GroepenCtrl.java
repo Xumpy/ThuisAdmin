@@ -36,6 +36,11 @@ public class GroepenCtrl implements Serializable{
         return groepenSrv.findAllHoofdGroepen();
     }
     
+    @RequestMapping("/json/hoofdGroep")
+    public @ResponseBody Integer fetchHoofdGroep(@RequestBody Groepen groep){
+        return -1;
+    }
+    
     @RequestMapping("/json/subGroepen/{hoofdGroepId}")
     public @ResponseBody List<Groepen> fetchSubGroepen(@PathVariable Integer hoofdGroepId){
         return groepenSrv.findAllGroepen(hoofdGroepId);

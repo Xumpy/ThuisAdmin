@@ -20,7 +20,8 @@ public class OverzichtGroepBedragenInp implements Serializable{
     private Integer typeGroepKostOpbrengst;
     private String beginDatum;
     private String eindDatum;
-
+    private boolean showPublicGroep;
+    
     public Integer getTypeGroepId() {
         return typeGroepId;
     }
@@ -51,5 +52,13 @@ public class OverzichtGroepBedragenInp implements Serializable{
 
     public void setEindDatum(String eindDatum) {
         this.eindDatum = eindDatum;
+    }
+
+    public boolean isShowPublicGroep() {
+        return showPublicGroep;
+    }
+
+    public void setShowPublicGroep(boolean showPublicGroep) {
+        this.showPublicGroep = showPublicGroep;
     }
 }

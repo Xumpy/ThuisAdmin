@@ -143,7 +143,7 @@ public class BedragenDaoTest extends H2InMemory{
     public void testBedragenInPeriode() throws ParseException{
         List<Bedragen> checkBedragen = fetchTestBedragen();
         
-        List<Bedragen> bedragInPeriode = bedragenDao.BedragInPeriode(startDate, endDate, rekening);
+        List<Bedragen> bedragInPeriode = bedragenDao.BedragInPeriode(startDate, endDate, rekening, false);
 
         assertEquals(checkBedragen, bedragInPeriode);
     }
@@ -167,7 +167,7 @@ public class BedragenDaoTest extends H2InMemory{
         overviewRekeningTestData.put(dt.parse("2015-02-22"), new BigDecimal(2120));
         overviewRekeningTestData.put(dt.parse("2015-02-23"), new BigDecimal(2080));
         
-        Map overviewRekeningData = bedragenDao.OverviewRekeningData(bedragenDao.BedragInPeriode(startDate, endDate, rekening));
+        Map overviewRekeningData = bedragenDao.OverviewRekeningData(bedragenDao.BedragInPeriode(startDate, endDate, rekening, false));
         
         assertEquals(overviewRekeningTestData, overviewRekeningData);
     }
@@ -183,7 +183,29 @@ public class BedragenDaoTest extends H2InMemory{
         
         java.util.Date startDate = dt.parse("2015-02-19");
         
-        Map overviewRekeningData = bedragenDao.OverviewRekeningData(bedragenDao.BedragInPeriode(startDate, endDate, rekening));
+        Map overviewRekeningData = bedragenDao.OverviewRekeningData(bedragenDao.BedragInPeriode(startDate, endDate, rekening, false));
+        
+        assertEquals(overviewRekeningTestData, overviewRekeningData);
+    }
+
+    @Test
+    public void testOverviewRekeningData3() throws ParseException{
+        Map overviewRekeningTestData = new LinkedHashMap();
+        overviewRekeningTestData.put(dt.parse("2015-02-19"), new BigDecimal(300));
+        overviewRekeningTestData.put(dt.parse("2015-02-20"), new BigDecimal(2300));
+        overviewRekeningTestData.put(dt.parse("2015-02-21"), new BigDecimal(2190));
+        overviewRekeningTestData.put(dt.parse("2015-02-22"), new BigDecimal(2120));
+        overviewRekeningTestData.put(dt.parse("2015-02-23"), new BigDecimal(2280));
+                
+        java.util.Date startDate = dt.parse("2015-02-19");
+        
+        List<Bedragen> bedragInPeriode = bedragenDao.BedragInPeriode(startDate, endDate, rekening, true);
+        
+        for(Bedragen bedrag: bedragInPeriode){
+            System.out.println(bedrag.getBedrag());
+        }
+        
+        Map overviewRekeningData = bedragenDao.OverviewRekeningData(bedragInPeriode);
         
         assertEquals(overviewRekeningTestData, overviewRekeningData);
     }
@@ -221,11 +243,11 @@ public class BedragenDaoTest extends H2InMemory{
         Groepen groepNegatief = groepenDao.findGroep(GROEP_NEGATIEF_ID);
         Groepen groepPositief = groepenDao.findGroep(GROEP_POSITIEF_ID);
         
-        assertEquals(bedragNegatief, bedragenDao.getBedragenInGroep(bedragenDao.BedragInPeriode(startDate, endDate, rekening), 
+        assertEquals(bedragNegatief, bedragenDao.getBedragenInGroep(bedragenDao.BedragInPeriode(startDate, endDate, rekening, false), 
                                                                     groepenDao.getHoofdGroep(groepNegatief), 
                                                                     groepNegatief.getNegatief()));
         
-        assertEquals(bedragPositief, bedragenDao.getBedragenInGroep(bedragenDao.BedragInPeriode(startDate, endDate, rekening), 
+        assertEquals(bedragPositief, bedragenDao.getBedragenInGroep(bedragenDao.BedragInPeriode(startDate, endDate, rekening, false), 
                                                                     groepenDao.getHoofdGroep(groepPositief), 
                                                                     groepPositief.getNegatief()));
     }

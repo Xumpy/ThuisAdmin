@@ -109,7 +109,9 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv, Seria
     @Override
     @Transactional
     public List<RekeningOverzicht> graphiekBedrag(Rekeningen rekening, Date beginDate, Date eindDate) {
-        Map overzichtBedragen = OverviewRekeningData(bedragenDao.BedragInPeriode(beginDate, eindDate, rekening));
+        boolean showBedragPublicGroep = false;
+        
+        Map overzichtBedragen = OverviewRekeningData(bedragenDao.BedragInPeriode(beginDate, eindDate, rekening, showBedragPublicGroep));
         
         Iterator entries = overzichtBedragen.entrySet().iterator();
         List<RekeningOverzicht> rekeningOverzicht = new ArrayList<RekeningOverzicht>();
@@ -123,13 +125,14 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv, Seria
 
     @Override
     @Transactional
-    public FinanceOverzichtGroep graphiekOverzichtGroep(Date beginDate, Date eindDate) {
+    public FinanceOverzichtGroep graphiekOverzichtGroep(Date beginDate, Date eindDate, boolean showBedragPublicGroep) {
+        
         FinanceOverzichtGroep financeOverzichtGroep = new FinanceOverzichtGroep();
         
-        List<Bedragen> lstBedragen = bedragenDao.BedragInPeriode(beginDate, eindDate, null);
+        List<Bedragen> lstBedragen = bedragenDao.BedragInPeriode(beginDate, eindDate, null, showBedragPublicGroep);
         System.out.println(lstBedragen.size());
         
-        Map<Groepen, Map> bedragenOverzicht = OverviewRekeningGroep(bedragenDao.BedragInPeriode(beginDate, eindDate, null));
+        Map<Groepen, Map> bedragenOverzicht = OverviewRekeningGroep(bedragenDao.BedragInPeriode(beginDate, eindDate, null, showBedragPublicGroep));
         
         BigDecimal totaalKosten = new BigDecimal(0);
         BigDecimal totaalOpbrengsten = new BigDecimal(0);
@@ -171,7 +174,8 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv, Seria
     public OverzichtGroepBedragenTotal rapportOverzichtGroepBedragen(Integer typeGroepId, 
                                                                      Integer typeGroepKostOpbrengst, 
                                                                      Date beginDate, 
-                                                                     Date eindDate) {
+                                                                     Date eindDate,
+                                                                     boolean showBedragPublicGroep) {
         Integer negatief = new Integer(0);
         
         if (typeGroepKostOpbrengst.equals(1)){
@@ -180,7 +184,7 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv, Seria
             negatief = 1;
         }
         
-        List<Bedragen> lstBedragenInPeriode = bedragenDao.BedragInPeriode(beginDate, eindDate, null);
+        List<Bedragen> lstBedragenInPeriode = bedragenDao.BedragInPeriode(beginDate, eindDate, null, showBedragPublicGroep);
         List<Bedragen> lstBedragen = getBedragenInGroep(lstBedragenInPeriode, groepenDao.findGroep(typeGroepId), negatief);
         List<OverzichtGroepBedragen> overzichtGroepBedragen = new ArrayList<OverzichtGroepBedragen>();
         
@@ -279,6 +283,8 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv, Seria
     public Map<Groepen, Map> OverviewRekeningGroep(List<Bedragen> bedragen){
         Map<Groepen, Map> overviewRekeningGroep = new LinkedHashMap<Groepen, Map>();
         
+        bedragen = orderByGroup(bedragen);
+        
         for (Bedragen bedrag: bedragen){
             Groepen hoofdGroep =  GroepenDaoImpl.getHoofdGroep(bedrag.getGroep());
             Map<String, BigDecimal> bedragInGroep = (Map)overviewRekeningGroep.get(hoofdGroep);
@@ -357,5 +363,29 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv, Seria
         newOverzichtGroepBedragenTotal.setOverzichtGroepBedragen(overzichtGroepBedragen);
         
         return newOverzichtGroepBedragenTotal;
+    }
+    
+    public List<Bedragen> orderByGroup(List<Bedragen> bedragen){
+        List<String> groupNames = new ArrayList<String>();
+        
+        for (Bedragen bedrag: bedragen){
+            if (!groupNames.contains(bedrag.getGroep().getNaam())){
+                groupNames.add(bedrag.getGroep().getNaam());
+            }
+        }
+        
+        Collections.sort(groupNames);
+        
+        List<Bedragen> orderBedragen = new ArrayList<Bedragen>();
+        
+        for (String groupName: groupNames){
+            for (Bedragen bedrag: bedragen){
+                if (bedrag.getGroep().getNaam().equals(groupName)){
+                    orderBedragen.add(bedrag);
+                }
+            }
+        }
+        
+        return orderBedragen;
     }
 }

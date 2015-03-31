@@ -29,12 +29,12 @@ public interface BedragenSrv {
     public List<RekeningOverzicht> graphiekBedrag(Rekeningen rekening,
                                          Date beginDate,
                                          Date eindDate);
-    public FinanceOverzichtGroep graphiekOverzichtGroep(Date beginDate,
-                                                        Date eindDate);
+    public FinanceOverzichtGroep graphiekOverzichtGroep(Date beginDate, Date eindDate, boolean showBedragPublicGroep);
     public OverzichtGroepBedragenTotal rapportOverzichtGroepBedragen(Integer typeGroepId, 
                                                                      Integer typeGroepKostOpbrengst, 
                                                                      Date beginDate, 
-                                                                     Date eindDate);
+                                                                     Date eindDate,
+                                                                     boolean showBedragPublicGroep);
     public Bedragen findBedrag(Integer bedragId);
     
     public OverzichtGroepBedragenTotal filterOverzichtGroepBedragenTotalGroep(OverzichtGroepBedragenTotal overzichtGroepBedragenTotal, Groepen groep);

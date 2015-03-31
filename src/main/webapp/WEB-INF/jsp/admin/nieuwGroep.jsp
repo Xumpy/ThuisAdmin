@@ -61,7 +61,7 @@
                   <th st-sort="hoofdGroep">Hoofdgroep</th>
                   <th st-sort="naam">Naam</th>
                   <th st-sort="omschrijving">Omschrijving</th>
-                  <th st-sort="negatief">Status</th>
+                  <th st-sort="negatief">Negatief</th>
                   <th st-sort="personen">Personen</th>
               </tr>
             </thead>
@@ -71,7 +71,7 @@
                         <td>{{groep.hoofdGroep.naam}}</td>
                         <td>{{groep.naam}}</td>
                         <td>{{groep.omschrijving}}</td>
-                        <td>{{groep.negatief}}</td>
+                        <td>{{(groep.negatief === 1 ? 'Ja' : 'Nee')}}</td>
                         <td>{{groep.persoon.voornaam}} {{groep.persoon.naam}}</td>
                 </tr>
             </tbody>
@@ -135,7 +135,7 @@
                       $scope.groepen = data;
                   });
               });
-            } else {            
+            } else { 
                 $scope.groep = {
                     pk_id: null,
                     hoofdGroep: null,
@@ -145,36 +145,54 @@
                     persoon: null,
                     codeId: null
                 };
-
+                
                 $http.get("/ThuisAdmin/json/groepTree").success( function(data){
                       $scope.groepTreeData = data;
                   });
             }
             
             $scope.saveGroep = (function(){
-                if ($scope.groep.negatief === true){
-                    $scope.groep.negatief = 1;
-                } else {
-                    $scope.groep.negatief = 0;
+                if ($scope.groep.persoon === null){
+                    $scope.groep.persoon = $scope.registeredPersoon;
                 }
                 
-                if ($scope.hide_groep === true){
-                    $scope.groep.codeId = "INTER_REKENING";
+                if ($scope.registeredPersoon.pk_id !== $scope.groep.persoon.pk_id){
+                    bootbox.alert("You are not allowed to change this group because you are not the owner!", function(){
+                        try {
+                            $(location).attr('href','/ThuisAdmin/admin/nieuwGroep/' + $scope.groep.hoofdGroep.pk_id);
+                        } catch(ex){
+                            $(location).attr('href','/ThuisAdmin/admin/groepen');
+                        }
+                    });
                 } else {
-                    $scope.groep.codeId = null;
-                }
-                
-                if ($scope.public_groep === true){
-                    $scope.groep.publicGroep = 1;
-                } else {
-                    $scope.groep.publicGroep = 0;
-                }
+                    if ($scope.groep.negatief === true){
+                        $scope.groep.negatief = 1;
+                    } else {
+                        $scope.groep.negatief = 0;
+                    }
 
-                $http.post("/ThuisAdmin/json/saveGroep", $scope.groep).success( function() {
-                    $(location).attr('href','/ThuisAdmin/admin/groepen');
-                }).error( function() {
-                    bootbox.alert("Error occured during save");
-                });
+                    if ($scope.hide_groep === true){
+                        $scope.groep.codeId = "INTER_REKENING";
+                    } else {
+                        $scope.groep.codeId = null;
+                    }
+
+                    if ($scope.public_groep === true){
+                        $scope.groep.publicGroep = 1;
+                    } else {
+                        $scope.groep.publicGroep = 0;
+                    }
+
+                    $http.post("/ThuisAdmin/json/saveGroep", $scope.groep).success( function() {
+                        try {
+                            $(location).attr('href','/ThuisAdmin/admin/nieuwGroep/' + $scope.groep.hoofdGroep.pk_id);
+                        } catch(ex){
+                            $(location).attr('href','/ThuisAdmin/admin/groepen');
+                        }
+                    }).error( function() {
+                        bootbox.alert("Error occured during save");
+                    });
+                }
             });
             
             $scope.deleteGroep = (function(){

@@ -77,6 +77,9 @@ public class BedragenSrvTest {
         when(bedrag3.getDatum()).thenReturn(dt.parse("2015-02-20"));
         when(bedrag3.getBedrag()).thenReturn(new BigDecimal(2000));
         when(bedrag3.getGroep()).thenReturn(groepPositief);
+        
+        when(groepNegatief.getNaam()).thenReturn("Groep A");
+        when(groepPositief.getNaam()).thenReturn("Groep B");
     }
     
     @Test
@@ -314,6 +317,25 @@ public class BedragenSrvTest {
         
         assertEquals(new BigDecimal(1300), overzichtGroepBedragenTotalTestOutput.getSomBedrag());
         assertEquals(overzichtGroepBedragenTotalTest.getOverzichtGroepBedragen(), overzichtGroepBedragenTotalTestOutput.getOverzichtGroepBedragen());
+    }
+    
+    @Test
+    public void testOrderByGroup(){
+        List<Bedragen> bedragen = new ArrayList<Bedragen>();
+        bedragen.add(bedrag1);
+        bedragen.add(bedrag2);
+        bedragen.add(bedrag3);
+        
+        when(bedrag1.getGroep()).thenReturn(groepNegatief);
+        when(bedrag2.getGroep()).thenReturn(groepPositief);
+        when(bedrag3.getGroep()).thenReturn(groepNegatief);
+
+        List<Bedragen> orderByBedragen = new ArrayList<Bedragen>();
+        orderByBedragen.add(bedrag1);
+        orderByBedragen.add(bedrag3);
+        orderByBedragen.add(bedrag2);
+        
+        assertEquals(orderByBedragen, bedragenSrv.orderByGroup(bedragen));
     }
 }
 

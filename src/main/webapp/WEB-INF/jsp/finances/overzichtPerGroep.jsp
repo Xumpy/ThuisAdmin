@@ -20,6 +20,11 @@
                   <input data-provide="datepicker" data-date-format="dd/mm/yyyy" class="form-control" id="eindDatum" placeholder="Eind Datum" 
                          type="text" ng-model="financeOverview.eindDatum">
                 </div>
+                <div class="col-lg-2">
+                    <label for="showPublicGroep" class="control-label">Show Public Groups</label>
+                    <input class="control-label" id="showPublicGroep"
+                             type="checkbox" ng-model="financeOverview.showPublicGroep">
+                </div>
                 <input class="btn btn-primary" type="submit" value="Submit"/>
             </div>
         </form>
@@ -79,7 +84,8 @@
             $scope.financeOverview = {
                 beginDatum: "",
                 eindDatum: "",
-                rekening: ""
+                rekening: "",
+                showPublicGroep: false
             };
             
             $scope.filterReport = {
@@ -98,6 +104,7 @@
                 typeGroepKostOpbrengst: "",
                 beginDatum: $scope.financeOverview.beginDatum,
                 eindDatum: $scope.financeOverview.eindDatum,
+                showPublicGroep: $scope.financeOverview.showPublicGroep
             };
             
             $scope.$watchCollection('financeOverview', function() {
@@ -171,6 +178,7 @@
                         $scope.overzichtGroepBedragen.typeGroepKostOpbrengst = selection[0].column;
                         $scope.overzichtGroepBedragen.beginDatum = $scope.financeOverview.beginDatum;
                         $scope.overzichtGroepBedragen.eindDatum = $scope.financeOverview.eindDatum;
+                        $scope.overzichtGroepBedragen.showPublicGroep = $scope.financeOverview.showPublicGroep;
                     });
                 } catch(err){}
            }

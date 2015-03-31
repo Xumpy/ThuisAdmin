@@ -217,14 +217,20 @@ public class BedragenDaoImpl implements BedragenDao{
         }
     }
 
-    public List<Bedragen> BedragInPeriode(Date startDate, Date endDate, Rekeningen rekening){
+    public List<Bedragen> BedragInPeriode(Date startDate, Date endDate, Rekeningen rekening, boolean showPublicGroepen){
         Session session = sessionFactory.getCurrentSession();
 
-        Criteria criteria = session.createCriteria(Bedragen.class);
+        Criteria criteria = session.createCriteria(Bedragen.class).createAlias("groep", "groep");
         
         criteria.add(Restrictions.ge("datum", startDate));
         criteria.add(Restrictions.le("datum", endDate));
-        criteria.add(Restrictions.eq("persoon.pk_id", userInfo.getPersoon().getPk_id()));
+        if (showPublicGroepen){
+            criteria.add(Restrictions.or(Restrictions.eq("persoon.pk_id", userInfo.getPersoon().getPk_id()),
+                                         Restrictions.eq("groep.publicGroep", 1)));
+        } else {
+            criteria.add(Restrictions.eq("persoon.pk_id", userInfo.getPersoon().getPk_id()));
+        }
+        
         if (rekening != null){
             criteria.add(Restrictions.eq("rekening", rekening));
         }
