@@ -5,14 +5,16 @@
  */
 package com.xumpy.thuisadmin.services;
 
-import com.xumpy.thuisadmin.model.db.Bedragen;
-import com.xumpy.thuisadmin.model.db.Groepen;
-import com.xumpy.thuisadmin.model.db.Rekeningen;
-import com.xumpy.thuisadmin.model.view.BeheerBedragenReportLst;
-import com.xumpy.thuisadmin.model.view.FinanceOverzichtGroep;
-import com.xumpy.thuisadmin.model.view.NieuwBedrag;
-import com.xumpy.thuisadmin.model.view.OverzichtGroepBedragenTotal;
-import com.xumpy.thuisadmin.model.view.RekeningOverzicht;
+import com.xumpy.thuisadmin.controllers.model.BeheerBedragenReportLst;
+import com.xumpy.thuisadmin.controllers.model.FinanceOverzichtGroep;
+import com.xumpy.thuisadmin.controllers.model.NieuwBedrag;
+import com.xumpy.thuisadmin.controllers.model.OverzichtGroepBedragenTotal;
+import com.xumpy.thuisadmin.controllers.model.RekeningOverzicht;
+import com.xumpy.thuisadmin.model.Bedragen;
+import com.xumpy.thuisadmin.model.Groepen;
+import com.xumpy.thuisadmin.model.Rekeningen;
+import com.xumpy.thuisadmin.services.model.BedragenSrvPojo;
+import com.xumpy.thuisadmin.services.model.GroepenSrvPojo;
 import java.util.Date;
 import java.util.List;
 
@@ -39,4 +41,5 @@ public interface BedragenSrv {
     
     public OverzichtGroepBedragenTotal filterOverzichtGroepBedragenTotalGroep(OverzichtGroepBedragenTotal overzichtGroepBedragenTotal, Groepen groep);
     public OverzichtGroepBedragenTotal filterOverzichtGroepBedragenTotalFilter(OverzichtGroepBedragenTotal overzichtGroepBedragenTotal, String filter);
+    public List<Bedragen> orderByGroup(List<Bedragen> bedragen);
 }

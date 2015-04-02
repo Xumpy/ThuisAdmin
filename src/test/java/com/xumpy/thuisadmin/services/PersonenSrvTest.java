@@ -5,9 +5,10 @@
  */
 package com.xumpy.thuisadmin.services;
 
+import com.xumpy.thuisadmin.services.implementations.PersonenSrvImpl;
 import com.xumpy.security.model.UserInfo;
-import com.xumpy.thuisadmin.model.db.Personen;
-import com.xumpy.thuisadmin.model.view.RegisterUserPage;
+import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
+import com.xumpy.thuisadmin.controllers.model.RegisterUserPage;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +25,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class PersonenSrvTest {
     @Mock UserInfo userInfo;
-    @Spy Personen persoon = new Personen();
+    @Spy PersonenDaoPojo persoon = new PersonenDaoPojo();
     @Spy RegisterUserPage registerUser = new RegisterUserPage();
     @InjectMocks PersonenSrvImpl personenSrv = new PersonenSrvImpl();
     
@@ -37,7 +38,7 @@ public class PersonenSrvTest {
         
         System.out.println("Test");
         
-        Personen persoon = personenSrv.createRegisterUser(registerUser);
+        PersonenDaoPojo persoon = personenSrv.createRegisterUser(registerUser);
         persoon.set_password(persoon.getMd5_password());
         
         assertEquals(persoon.getUsername(), "test123");
@@ -49,7 +50,7 @@ public class PersonenSrvTest {
         when(userInfo.getPersoon()).thenReturn(persoon);
         when(persoon.getNaam()).thenReturn("Nico");
         
-        Personen persoonFetch = personenSrv.getWhoAmI();
+        PersonenDaoPojo persoonFetch = personenSrv.getWhoAmI();
         assertEquals(persoonFetch.getNaam(), "Nico");
     }
 }

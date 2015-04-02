@@ -5,7 +5,7 @@
  */
 package com.xumpy.thuisadmin.dao;
 
-import com.xumpy.thuisadmin.model.db.Rekeningen;
+import com.xumpy.thuisadmin.dao.model.RekeningenDaoPojo;
 import java.util.List;
 
 /**
@@ -13,10 +13,10 @@ import java.util.List;
  * @author Nico
  */
 public interface RekeningenDao {
-    void save(Rekeningen rekeningen);
-    void update(Rekeningen rekeningen);
-    void delete(Rekeningen rekeningen);
+    void save(RekeningenDaoPojo rekeningen);
+    void update(RekeningenDaoPojo rekeningen);
+    void delete(RekeningenDaoPojo rekeningen);
     public Integer getNewPkId();
-    public Rekeningen findRekening(Integer rekeningId);
-    public List<Rekeningen> findAllRekeningen();
+    public RekeningenDaoPojo findRekening(Integer rekeningId);
+    public List<RekeningenDaoPojo> findAllRekeningen();
 }

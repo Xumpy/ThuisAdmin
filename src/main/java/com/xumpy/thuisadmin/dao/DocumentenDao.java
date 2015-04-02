@@ -5,9 +5,10 @@
  */
 package com.xumpy.thuisadmin.dao;
 
-import com.xumpy.thuisadmin.model.db.Bedragen;
-import com.xumpy.thuisadmin.model.db.Documenten;
-import com.xumpy.thuisadmin.model.view.DocumentenReport;
+import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
+import com.xumpy.thuisadmin.dao.model.DocumentenDaoPojo;
+import com.xumpy.thuisadmin.controllers.model.DocumentenReport;
+import com.xumpy.thuisadmin.model.Documenten;
 import java.util.List;
 
 /**

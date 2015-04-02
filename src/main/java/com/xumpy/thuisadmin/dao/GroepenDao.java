@@ -5,8 +5,8 @@
  */
 package com.xumpy.thuisadmin.dao;
 
-import com.xumpy.thuisadmin.model.db.Groepen;
-import com.xumpy.thuisadmin.model.view.GroepenTree;
+import com.xumpy.thuisadmin.dao.model.GroepenDaoPojo;
+import com.xumpy.thuisadmin.controllers.model.GroepenTree;
 import java.util.List;
 
 /**
@@ -14,12 +14,12 @@ import java.util.List;
  * @author Nico
  */
 public interface GroepenDao {
-    void save(Groepen groepen);
-    void update(Groepen groepen);
-    void delete(Groepen groepen);
+    void save(GroepenDaoPojo groepen);
+    void update(GroepenDaoPojo groepen);
+    void delete(GroepenDaoPojo groepen);
     public Integer getNewPkId();
-    public List<Groepen> findAllHoofdGroepen();
-    public List<Groepen> findAllGroepen(Integer hoofdGroepId);
-    public List<Groepen> findAllGroepen();
-    public Groepen findGroep(Integer groepId);
+    public List<GroepenDaoPojo> findAllHoofdGroepen();
+    public List<GroepenDaoPojo> findAllGroepen(Integer hoofdGroepId);
+    public List<GroepenDaoPojo> findAllGroepen();
+    public GroepenDaoPojo findGroep(Integer groepId);
 }

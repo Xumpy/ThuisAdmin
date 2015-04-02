@@ -5,24 +5,20 @@
  */
 package com.xumpy.thuisadmin.dao;
 
-import com.xumpy.thuisadmin.model.db.Bedragen;
-import com.xumpy.thuisadmin.model.db.Groepen;
-import com.xumpy.thuisadmin.model.db.Personen;
-import com.xumpy.thuisadmin.model.db.Rekeningen;
-import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
+import com.xumpy.thuisadmin.dao.setup.H2InMemory;
+import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
+import com.xumpy.thuisadmin.dao.model.GroepenDaoPojo;
+import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
+import com.xumpy.thuisadmin.dao.model.RekeningenDaoPojo;
+import com.xumpy.thuisadmin.model.Bedragen;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.sql.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,10 +34,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class BedragenDaoTest extends H2InMemory{
     
-    private Personen personen;
-    private Groepen groep;
-    private Rekeningen rekening;
-    private Bedragen bedrag;
+    private PersonenDaoPojo personen;
+    private GroepenDaoPojo groep;
+    private RekeningenDaoPojo rekening;
+    private BedragenDaoPojo bedrag;
     
     private static final Integer BEDRAG_PK_ID = 30;
     
@@ -52,18 +48,13 @@ public class BedragenDaoTest extends H2InMemory{
     private Date startDate;
     private Date endDate;
 
-    public BedragenDaoTest() throws ParseException {
-        this.startDate = new Date(dt.parse("2015-02-18").getTime());
-        this.endDate = new Date(dt.parse("2015-02-23").getTime());
-    }
-
     @Before
     public void setUpBedragen(){
         personen = personenDao.findPersoon(1);
         groep = groepenDao.findGroep(1);
         rekening = rekeningenDao.findRekening(1);
         
-        bedrag = new Bedragen();
+        bedrag = new BedragenDaoPojo();
         bedrag.setPk_id(BEDRAG_PK_ID);
         bedrag.setBedrag(new BigDecimal(200));
         bedrag.setPersoon(personen);
@@ -75,11 +66,11 @@ public class BedragenDaoTest extends H2InMemory{
     
     private List<Bedragen> fetchTestBedragen() throws ParseException{
         List<Bedragen> lstBedragen = new ArrayList<Bedragen>();
-        Groepen groepNegatief = groepenDao.findGroep(2);
-        Groepen groepPositief = groepenDao.findGroep(3);
+        GroepenDaoPojo groepNegatief = groepenDao.findGroep(2);
+        GroepenDaoPojo groepPositief = groepenDao.findGroep(3);
         
         for (int i=0; i<8; i++){
-            Bedragen bedrag = new Bedragen();
+            BedragenDaoPojo bedrag = new BedragenDaoPojo();
             switch(i){
                 case 0: bedrag.setPk_id(1);bedrag.setBedrag(new BigDecimal(200));bedrag.setGroep(groepNegatief);bedrag.setDatum(new Date(dt.parse("2015-02-18").getTime()));
                         break;
@@ -112,7 +103,7 @@ public class BedragenDaoTest extends H2InMemory{
     @Test
     public void testSave(){
         bedragenDao.save(bedrag);
-        Bedragen bedragTest = bedragenDao.getBedrag(BEDRAG_PK_ID);
+        BedragenDaoPojo bedragTest = bedragenDao.findBedrag(BEDRAG_PK_ID);
         assertEquals(bedrag, bedragTest);
     }
     
@@ -120,11 +111,11 @@ public class BedragenDaoTest extends H2InMemory{
     public void testUpdate(){
         bedragenDao.save(bedrag);
         
-        Bedragen bedragForUpdate = bedragenDao.getBedrag(BEDRAG_PK_ID);
+        BedragenDaoPojo bedragForUpdate = bedragenDao.findBedrag(BEDRAG_PK_ID);
         bedragForUpdate.setBedrag(new BigDecimal(2000));
         bedragenDao.update(bedragForUpdate);
         
-        Bedragen bedragTest = bedragenDao.getBedrag(BEDRAG_PK_ID);
+        BedragenDaoPojo bedragTest = bedragenDao.findBedrag(BEDRAG_PK_ID);
         assertEquals(new BigDecimal(2000), bedragTest.getBedrag());
     }
     
@@ -132,163 +123,75 @@ public class BedragenDaoTest extends H2InMemory{
     public void testDelete(){
         bedragenDao.save(bedrag);
         
-        Bedragen bedragForDelete = bedragenDao.getBedrag(BEDRAG_PK_ID);
+        BedragenDaoPojo bedragForDelete = bedragenDao.findBedrag(BEDRAG_PK_ID);
         bedragenDao.delete(bedragForDelete);
         
-        Bedragen bedragNull = bedragenDao.getBedrag(BEDRAG_PK_ID);
+        BedragenDaoPojo bedragNull = bedragenDao.findBedrag(BEDRAG_PK_ID);
         assertNull(bedragNull);
     }
     
     @Test
+    public void testReportBedragen() throws ParseException{
+        List<BedragenDaoPojo> lstBedragenExpected = new ArrayList<BedragenDaoPojo>();
+        
+        bedrag = bedragenDao.findBedrag(24);
+        lstBedragenExpected.add(bedrag);
+        
+        when(persoon.getPk_id()).thenReturn(2);
+        rekening = rekeningenDao.findRekening(3);
+        List<Bedragen> lstBedragenResult = bedragenDao.reportBedragen(rekening, 0, "nog een test");
+        
+        assertEquals(lstBedragenExpected, lstBedragenResult);
+    }
+    
+    @Test
+    public void testGetNewPkId(){
+        Integer newPkId = bedragenDao.getNewPkId();
+        assertEquals(newPkId, new Integer(27));
+    }
+    
+    @Test
+    public void testSomBedragDatum() throws ParseException{
+        startDate = new Date(dt.parse("2015-02-18").getTime());
+        endDate = new Date(dt.parse("2015-02-23").getTime());
+        
+        BigDecimal somBedrag = bedragenDao.somBedragDatum(rekening, startDate);
+        
+        assertEquals(new BigDecimal(1550), somBedrag);
+    }
+    
+    @Test
     public void testBedragenInPeriode() throws ParseException{
+        startDate = new Date(dt.parse("2015-02-18").getTime());
+        endDate = new Date(dt.parse("2015-02-23").getTime());
+        
         List<Bedragen> checkBedragen = fetchTestBedragen();
         
         List<Bedragen> bedragInPeriode = bedragenDao.BedragInPeriode(startDate, endDate, rekening, false);
 
-        assertEquals(checkBedragen, bedragInPeriode);
+        for(int i=0; i<checkBedragen.size();i++){
+            assertEquals(checkBedragen.get(i).getPk_id(), bedragInPeriode.get(i).getPk_id());
+        }
     }
     
     @Test
-    public void testGetBedragAtDate(){
+    public void testGetBedragAtDate() throws ParseException{
+        startDate = new Date(dt.parse("2015-02-18").getTime());
+        endDate = new Date(dt.parse("2015-02-23").getTime());
+        
         BigDecimal bedragAtStartDate = bedragenDao.getBedragAtDate(startDate, rekening);
         BigDecimal bedragAtEndDate = bedragenDao.getBedragAtDate(endDate, rekening);
         
-        assertEquals(bedragAtStartDate, new BigDecimal(450));
-        assertEquals(bedragAtEndDate, new BigDecimal(2080));
-    }
-    
-    @Test
-    public void testOverviewRekeningData() throws ParseException{
-        Map overviewRekeningTestData = new LinkedHashMap();
-        overviewRekeningTestData.put(dt.parse("2015-02-18"), new BigDecimal(450));
-        overviewRekeningTestData.put(dt.parse("2015-02-19"), new BigDecimal(300));
-        overviewRekeningTestData.put(dt.parse("2015-02-20"), new BigDecimal(2300));
-        overviewRekeningTestData.put(dt.parse("2015-02-21"), new BigDecimal(2190));
-        overviewRekeningTestData.put(dt.parse("2015-02-22"), new BigDecimal(2120));
-        overviewRekeningTestData.put(dt.parse("2015-02-23"), new BigDecimal(2080));
-        
-        Map overviewRekeningData = bedragenDao.OverviewRekeningData(bedragenDao.BedragInPeriode(startDate, endDate, rekening, false));
-        
-        assertEquals(overviewRekeningTestData, overviewRekeningData);
-    }
-    
-    @Test
-    public void testOverviewRekeningData2() throws ParseException{
-        Map overviewRekeningTestData = new LinkedHashMap();
-        overviewRekeningTestData.put(dt.parse("2015-02-19"), new BigDecimal(300));
-        overviewRekeningTestData.put(dt.parse("2015-02-20"), new BigDecimal(2300));
-        overviewRekeningTestData.put(dt.parse("2015-02-21"), new BigDecimal(2190));
-        overviewRekeningTestData.put(dt.parse("2015-02-22"), new BigDecimal(2120));
-        overviewRekeningTestData.put(dt.parse("2015-02-23"), new BigDecimal(2080));
-        
-        java.util.Date startDate = dt.parse("2015-02-19");
-        
-        Map overviewRekeningData = bedragenDao.OverviewRekeningData(bedragenDao.BedragInPeriode(startDate, endDate, rekening, false));
-        
-        assertEquals(overviewRekeningTestData, overviewRekeningData);
-    }
-
-    @Test
-    public void testOverviewRekeningData3() throws ParseException{
-        Map overviewRekeningTestData = new LinkedHashMap();
-        overviewRekeningTestData.put(dt.parse("2015-02-19"), new BigDecimal(300));
-        overviewRekeningTestData.put(dt.parse("2015-02-20"), new BigDecimal(2300));
-        overviewRekeningTestData.put(dt.parse("2015-02-21"), new BigDecimal(2190));
-        overviewRekeningTestData.put(dt.parse("2015-02-22"), new BigDecimal(2120));
-        overviewRekeningTestData.put(dt.parse("2015-02-23"), new BigDecimal(2280));
-                
-        java.util.Date startDate = dt.parse("2015-02-19");
-        
-        List<Bedragen> bedragInPeriode = bedragenDao.BedragInPeriode(startDate, endDate, rekening, true);
-        
-        for(Bedragen bedrag: bedragInPeriode){
-            System.out.println(bedrag.getBedrag());
-        }
-        
-        Map overviewRekeningData = bedragenDao.OverviewRekeningData(bedragInPeriode);
-        
-        assertEquals(overviewRekeningTestData, overviewRekeningData);
-    }
-    
-    @Test
-    public void testOverviewRekeningGroep() throws ParseException{
-        Map overviewRekeningTestData = new LinkedHashMap();
-        Map bedrag = new LinkedHashMap();
-        
-        bedrag.put(bedragenDao.NEGATIEF, new BigDecimal(570));
-        bedrag.put(bedragenDao.POSITIEF, new BigDecimal(2000));
-        
-        overviewRekeningTestData.put(groepenDao.findGroep(1), bedrag);
-        
-        Map overviewRekeningData = bedragenDao.OverviewRekeningGroep(fetchTestBedragen());
-        
-        assertEquals(overviewRekeningData, overviewRekeningTestData);
-    }
-    
-    @Test
-    public void testBedragenInGroep() throws ParseException{
-        List<Bedragen> bedragen = fetchTestBedragen();
-        
-        List<Bedragen> bedragNegatief = new ArrayList<Bedragen>();
-        List<Bedragen> bedragPositief = new ArrayList<Bedragen>();
-        
-        for (Bedragen bedrag: bedragen){
-            if (bedrag.getGroep().equals(groepenDao.findGroep(GROEP_POSITIEF_ID))){
-                bedragPositief.add(bedrag);
-            } else {
-                bedragNegatief.add(bedrag);
-            }
-        }
-        
-        Groepen groepNegatief = groepenDao.findGroep(GROEP_NEGATIEF_ID);
-        Groepen groepPositief = groepenDao.findGroep(GROEP_POSITIEF_ID);
-        
-        assertEquals(bedragNegatief, bedragenDao.getBedragenInGroep(bedragenDao.BedragInPeriode(startDate, endDate, rekening, false), 
-                                                                    groepenDao.getHoofdGroep(groepNegatief), 
-                                                                    groepNegatief.getNegatief()));
-        
-        assertEquals(bedragPositief, bedragenDao.getBedragenInGroep(bedragenDao.BedragInPeriode(startDate, endDate, rekening, false), 
-                                                                    groepenDao.getHoofdGroep(groepPositief), 
-                                                                    groepPositief.getNegatief()));
-    }
-    
-    @Test
-    public void testGetTotalRekeningBedragen() throws ParseException{
-        List<Bedragen> bedragen = fetchTestBedragen();
-        BigDecimal totalRekeningBedragen = bedragenDao.getTotalRekeningBedragen(bedragen);
-        
-        assertEquals(totalRekeningBedragen, new BigDecimal(2000));
-    }
-    
-    @Test
-    public void testIsRekeningUnique() throws ParseException{
-        List<Bedragen> bedragen = fetchTestBedragen();
-        
-        assertEquals(bedragenDao.isRekeningUnique(bedragen), true);
-    }
-    
-    @Test
-    public void testReportBedragen() throws ParseException{
-        List<BeheerBedragenReport> lstBeheerBedragenExpected = new ArrayList<BeheerBedragenReport>();
-        
-        bedrag = bedragenDao.getBedrag(24);
-        lstBeheerBedragenExpected.add(new BeheerBedragenReport(bedrag));
-        
-        when(persoon.getPk_id()).thenReturn(2);
-        rekening = rekeningenDao.findRekening(3);
-        List<BeheerBedragenReport> lstBeheerBedragenResult = bedragenDao.reportBedragen(rekening, 0, "nog een test");
-        
-        System.out.println(lstBeheerBedragenResult.size());
-        
-        assertEquals(lstBeheerBedragenExpected, lstBeheerBedragenResult);
+        assertEquals(new BigDecimal(450), bedragAtStartDate);
+        assertEquals(new BigDecimal(2080), bedragAtEndDate);
     }
     
     @Test
     public void testReportBedragenNull() throws ParseException{
         when(persoon.getPk_id()).thenReturn(2);
         rekening = rekeningenDao.findRekening(3);
-        List<BeheerBedragenReport> lstBeheerBedragenResult = bedragenDao.reportBedragen(rekening, 0, null);
+        List<Bedragen> lstBedragenResult = bedragenDao.reportBedragen(rekening, 0, null);
         
-        assertEquals(true, (lstBeheerBedragenResult.size() > 0)); // No Error occured
+        assertEquals(true, (lstBedragenResult.size() > 0)); // No Error occured
     }
 }

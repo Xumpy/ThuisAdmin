@@ -5,10 +5,10 @@
  */
 package com.xumpy.thuisadmin.dao;
 
-import com.xumpy.thuisadmin.model.db.Bedragen;
-import com.xumpy.thuisadmin.model.db.Rekeningen;
-import com.xumpy.thuisadmin.model.view.BeheerBedragenReport;
-import com.xumpy.thuisadmin.model.view.graphiek.OverzichtBedrag;
+import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
+import com.xumpy.thuisadmin.dao.model.RekeningenDaoPojo;
+import com.xumpy.thuisadmin.model.Bedragen;
+import com.xumpy.thuisadmin.model.Rekeningen;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -18,17 +18,14 @@ import java.util.List;
  * @author Nico
  */
 public interface BedragenDao{
-    void save(Bedragen bedragen);
-    void update(Bedragen bedragen);
-    void delete(Bedragen bedragen);
-    public List<BeheerBedragenReport> reportBedragen(Rekeningen rekening, Integer offset, String searchText);
+    void save(BedragenDaoPojo bedragen);
+    void update(BedragenDaoPojo bedragen);
+    void delete(BedragenDaoPojo bedragen);
+    public List<Bedragen> reportBedragen(Rekeningen rekening, Integer offset, String searchText);
     public Integer getNewPkId();
     public Bedragen findBedrag(Integer bedragId);
-    
-    public List<OverzichtBedrag> findAllBedragen();
-    public List<OverzichtBedrag> findAllBedragen(Date startDate, Date endDate);
-    public List<OverzichtBedrag> findBedragenRekening(Rekeningen rekening);
-    public List<OverzichtBedrag> findBedragenRekening(Rekeningen rekening, Date startDate, Date endDate);
+
     public BigDecimal somBedragDatum(Rekeningen rekening, Date datum);
-    public Bedragen getBedrag(Integer pk_id);
+    public List<Bedragen> BedragInPeriode(Date startDate, Date endDate, Rekeningen rekening, boolean showPublicGroepen);
+    public BigDecimal getBedragAtDate(Date date, Rekeningen rekening);
 }

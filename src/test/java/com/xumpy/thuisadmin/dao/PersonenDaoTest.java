@@ -5,7 +5,8 @@
  */
 package com.xumpy.thuisadmin.dao;
 
-import com.xumpy.thuisadmin.model.db.Personen;
+import com.xumpy.thuisadmin.dao.setup.H2InMemory;
+import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +18,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class PersonenDaoTest extends H2InMemory{
-    Personen persoonTest123 = new Personen();
+    PersonenDaoPojo persoonTest123 = new PersonenDaoPojo();
     
     @Test
     public void testSave(){
@@ -29,7 +30,7 @@ public class PersonenDaoTest extends H2InMemory{
         
         personenDao.save(persoonTest123);
         
-        Personen persoonGetTest123 = personenDao.findPersoonByUsername("test123");
+        PersonenDaoPojo persoonGetTest123 = personenDao.findPersoonByUsername("test123");
         
         assertEquals(persoonGetTest123.getNaam(), "test123");
     }

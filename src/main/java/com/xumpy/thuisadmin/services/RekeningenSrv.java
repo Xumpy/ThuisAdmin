@@ -5,9 +5,9 @@
  */
 package com.xumpy.thuisadmin.services;
 
-import com.xumpy.thuisadmin.model.db.Rekeningen;
-import com.xumpy.thuisadmin.model.view.NieuwRekening;
-import com.xumpy.thuisadmin.model.view.RekeningBedragTotal;
+import com.xumpy.thuisadmin.dao.model.RekeningenDaoPojo;
+import com.xumpy.thuisadmin.controllers.model.NieuwRekening;
+import com.xumpy.thuisadmin.controllers.model.RekeningBedragTotal;
 
 /**
  *
@@ -15,8 +15,8 @@ import com.xumpy.thuisadmin.model.view.RekeningBedragTotal;
  */
 public interface RekeningenSrv {
     void save(NieuwRekening rekeningen);
-    public void update(Rekeningen rekeningen);
-    void delete(Rekeningen rekeningen);
+    public void update(RekeningenDaoPojo rekeningen);
+    void delete(RekeningenDaoPojo rekeningen);
     public RekeningBedragTotal findAllRekeningen();
-    public Rekeningen findRekening(Integer rekeningId);
+    public RekeningenDaoPojo findRekening(Integer rekeningId);
 }

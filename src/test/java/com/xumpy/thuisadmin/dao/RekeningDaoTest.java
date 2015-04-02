@@ -5,6 +5,7 @@
  */
 package com.xumpy.thuisadmin.dao;
 
+import com.xumpy.thuisadmin.dao.setup.H2InMemory;
 import java.math.BigDecimal;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;

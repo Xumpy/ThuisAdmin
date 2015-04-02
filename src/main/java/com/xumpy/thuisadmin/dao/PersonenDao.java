@@ -5,7 +5,7 @@
  */
 package com.xumpy.thuisadmin.dao;
 
-import com.xumpy.thuisadmin.model.db.Personen;
+import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
 import java.util.List;
 
 /**
@@ -13,11 +13,11 @@ import java.util.List;
  * @author Nico
  */
 public interface PersonenDao {
-    void save(Personen personen);
-    void update(Personen personen);
-    void delete(Personen personen);
+    void save(PersonenDaoPojo personen);
+    void update(PersonenDaoPojo personen);
+    void delete(PersonenDaoPojo personen);
     public Integer getNewPkId();
-    public List<Personen> findAllPersonen();
-    public Personen findPersoon(Integer persoonId);
-    public Personen findPersoonByUsername(String username);
+    public List<PersonenDaoPojo> findAllPersonen();
+    public PersonenDaoPojo findPersoon(Integer persoonId);
+    public PersonenDaoPojo findPersoonByUsername(String username);
 }

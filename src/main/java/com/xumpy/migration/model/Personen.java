@@ -5,7 +5,7 @@
  */
 package com.xumpy.migration.model;
 
-import com.xumpy.thuisadmin.model.view.RegisterUserPage;
+import com.xumpy.thuisadmin.controllers.model.RegisterUserPage;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
