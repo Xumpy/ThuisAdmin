@@ -93,7 +93,7 @@ public class GroepenSrvImpl implements GroepenSrv{
         }   
     }
     
-    private List<GroepenTree> selectSubGroep(List<Groepen> allGroepen, Groepen hoofdGroep, GroepenDaoPojo selectedGroep){
+    private List<GroepenTree> selectSubGroep(List<Groepen> allGroepen, Groepen hoofdGroep, Groepen selectedGroep){
         List<GroepenTree> lstGroepenTree = new ArrayList<GroepenTree>();
         List<Groepen> lstGroepen = new ArrayList<Groepen>();
         
@@ -136,7 +136,7 @@ public class GroepenSrvImpl implements GroepenSrv{
     @Override
     @Transactional
     public List<GroepenTree> groepTree(Integer selectedGroepId) {
-        GroepenDaoPojo selectedGroep = null;
+        Groepen selectedGroep = null;
         List<Groepen> lstGroepen = groepenDao.findAllGroepen();
         
         List<GroepenTree> lstGroepTree = new ArrayList<GroepenTree>();

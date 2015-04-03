@@ -5,15 +5,19 @@
  */
 package com.xumpy.thuisadmin.services;
 
-import com.xumpy.security.model.UserInfo;
+import com.xumpy.thuisadmin.controllers.model.BeheerBedragenReportLst;
+import com.xumpy.thuisadmin.controllers.model.FinanceOverzichtGroep;
 import com.xumpy.thuisadmin.controllers.model.NieuwBedrag;
 import com.xumpy.thuisadmin.services.implementations.BedragenSrvImpl;
 import com.xumpy.thuisadmin.dao.implementations.BedragenDaoImpl;
 import com.xumpy.thuisadmin.controllers.model.OverzichtGroepBedragen;
 import com.xumpy.thuisadmin.controllers.model.OverzichtGroepBedragenTotal;
+import com.xumpy.thuisadmin.controllers.model.RekeningOverzicht;
+import com.xumpy.thuisadmin.dao.implementations.GroepenDaoImpl;
 import com.xumpy.thuisadmin.dao.implementations.RekeningenDaoImpl;
 import com.xumpy.thuisadmin.model.Bedragen;
 import com.xumpy.thuisadmin.model.Groepen;
+import com.xumpy.thuisadmin.model.Personen;
 import com.xumpy.thuisadmin.model.Rekeningen;
 import com.xumpy.thuisadmin.services.model.GroepenSrvPojo;
 import com.xumpy.thuisadmin.services.model.RekeningenSrvPojo;
@@ -45,6 +49,7 @@ public class BedragenSrvTest extends MainMock{
     
     @Mock RekeningenDaoImpl rekeningenDao;
     @Mock BedragenDaoImpl bedragenDao;
+    @Mock GroepenDaoImpl groepenDao;
     
     @Mock Bedragen bedrag1;
     @Mock Bedragen bedrag2;
@@ -59,6 +64,8 @@ public class BedragenSrvTest extends MainMock{
     @Mock Rekeningen rekening1;
     @Mock Rekeningen rekening2;
 
+    @Mock Personen persoon;
+    
     @InjectMocks BedragenSrvImpl bedragenSrv;
     
     @Before
@@ -67,26 +74,31 @@ public class BedragenSrvTest extends MainMock{
         when(bedrag1.getRekening()).thenReturn(rekening1);
         when(bedrag1.getBedrag()).thenReturn(new BigDecimal(100));
         when(bedrag1.getGroep()).thenReturn(groepNegatief);
+        when(bedrag1.getPersoon()).thenReturn(persoon);
         
         when(bedrag2.getDatum()).thenReturn(dt.parse("2015-02-19"));
         when(bedrag2.getRekening()).thenReturn(rekening1);
         when(bedrag2.getBedrag()).thenReturn(new BigDecimal(150));
         when(bedrag2.getGroep()).thenReturn(groepNegatief);
+        when(bedrag2.getPersoon()).thenReturn(persoon);
         
         when(bedrag3.getDatum()).thenReturn(dt.parse("2015-02-20"));
         when(bedrag3.getRekening()).thenReturn(rekening1);
         when(bedrag3.getBedrag()).thenReturn(new BigDecimal(2000));
         when(bedrag3.getGroep()).thenReturn(groepPositief);
+        when(bedrag3.getPersoon()).thenReturn(persoon);
         
         when(bedrag4.getDatum()).thenReturn(dt.parse("2015-02-19"));
         when(bedrag3.getRekening()).thenReturn(rekening2);
         when(bedrag4.getBedrag()).thenReturn(new BigDecimal(150));
         when(bedrag4.getGroep()).thenReturn(groepNegatief);
+        when(bedrag4.getPersoon()).thenReturn(persoon);
         
         when(bedrag5.getDatum()).thenReturn(dt.parse("2015-02-20"));
         when(bedrag3.getRekening()).thenReturn(rekening2);
         when(bedrag5.getBedrag()).thenReturn(new BigDecimal(2000));
         when(bedrag5.getGroep()).thenReturn(groepPositief);
+        when(bedrag5.getPersoon()).thenReturn(persoon);
         
         when(groepNegatief.getNaam()).thenReturn("Groep A");
         when(groepNegatief.getNegatief()).thenReturn(1);
@@ -117,8 +129,37 @@ public class BedragenSrvTest extends MainMock{
     @Test
     public void testUpdate(){
         NieuwBedrag nieuwBedrag = Mockito.mock(NieuwBedrag.class);
+        when(rekening1.getWaarde()).thenReturn(new BigDecimal(2000));
+        RekeningenSrvPojo rekeningSrvPojo = new RekeningenSrvPojo(rekening1);
+        GroepenSrvPojo groepPositiefSrvPojo = new GroepenSrvPojo(groepPositief);
+        
         when(nieuwBedrag.getPk_id()).thenReturn(1);
+        when(nieuwBedrag.getRekening()).thenReturn(rekeningSrvPojo);
         when(nieuwBedrag.getBedrag()).thenReturn("200");
+        when(nieuwBedrag.getGroep()).thenReturn(groepPositiefSrvPojo);
+        
+        when(bedragenSrv.findBedrag(1)).thenReturn(bedrag2); // This means previous bedrag was 150
+        
+        Bedragen bedragTest = bedragenSrv.save(nieuwBedrag);
+        
+        assertEquals(new BigDecimal("2350.00"), bedragTest.getRekening().getWaarde());
+    }
+    
+    @Test
+    public void testDelete(){
+        NieuwBedrag nieuwBedrag = Mockito.mock(NieuwBedrag.class);
+        when(rekening1.getWaarde()).thenReturn(new BigDecimal(2000));
+        RekeningenSrvPojo rekeningSrvPojo = new RekeningenSrvPojo(rekening1);
+        GroepenSrvPojo groepPositiefSrvPojo = new GroepenSrvPojo(groepPositief);
+        
+        when(nieuwBedrag.getPk_id()).thenReturn(1);
+        when(nieuwBedrag.getRekening()).thenReturn(rekeningSrvPojo);
+        when(nieuwBedrag.getBedrag()).thenReturn("200");
+        when(nieuwBedrag.getGroep()).thenReturn(groepPositiefSrvPojo);
+        
+        Bedragen bedragTest = bedragenSrv.delete(nieuwBedrag);
+        
+        assertEquals(bedragTest.getPk_id(), bedragenSrv.convertNieuwBedrag(nieuwBedrag).getPk_id());
     }
     
     @Test
@@ -430,9 +471,107 @@ public class BedragenSrvTest extends MainMock{
     
     @Test
     public void testFindBedrag(){
-        when(bedragenDao.findBedrag(1)).thenReturn(bedrag1);
+        when(bedragenSrv.findBedrag(1)).thenReturn(bedrag1);
         
         assertEquals(bedrag1, bedragenSrv.findBedrag(1));
+    }
+    
+    @Test
+    public void testBeheerBedragenReportLst(){
+        BeheerBedragenReportLst beheerBedragen = new BeheerBedragenReportLst();
+        
+        List<Bedragen> lstBedragen = new ArrayList<Bedragen>();
+        lstBedragen.add(bedrag1);
+        lstBedragen.add(bedrag2);
+        lstBedragen.add(bedrag3);
+        
+        when(bedrag1.getPk_id()).thenReturn(1);
+        when(bedrag2.getPk_id()).thenReturn(2);
+        when(bedrag3.getPk_id()).thenReturn(3);
+        
+        when(bedragenDao.reportBedragen(rekening1, 1, null)).thenReturn(lstBedragen);
+        
+        beheerBedragen = bedragenSrv.reportBedragen(beheerBedragen, 1, rekening1, null);
+        
+        assertEquals(lstBedragen.get(0).getPk_id(), beheerBedragen.getBeheerBedragenReport().get(0).getPk_id());
+        assertEquals(lstBedragen.get(1).getPk_id(), beheerBedragen.getBeheerBedragenReport().get(1).getPk_id());
+        assertEquals(lstBedragen.get(2).getPk_id(), beheerBedragen.getBeheerBedragenReport().get(2).getPk_id());
+    }
+    
+    @Test
+    public void testRapportOverzichtGroepBedragen() throws ParseException{
+        List<Bedragen> lstBedragen = new ArrayList<Bedragen>();
+        lstBedragen.add(bedrag1);
+        lstBedragen.add(bedrag2);
+        lstBedragen.add(bedrag3);
+        
+        when(bedragenDao.BedragInPeriode(dt.parse("2015-02-18"), dt.parse("2015-02-23"), null, true)).thenReturn(lstBedragen);
+        when(groepenDao.findGroep(1)).thenReturn(groepNegatief);
+        
+        OverzichtGroepBedragenTotal overzichtGroepBedragenTotal = 
+                bedragenSrv.rapportOverzichtGroepBedragen(1, 0, dt.parse("2015-02-18"), dt.parse("2015-02-23"), true);
+        
+        assertEquals(new BigDecimal(250), overzichtGroepBedragenTotal.getSomBedrag());
+    }
+    
+    @Test
+    public void testGraphiekOverzichtGroep() throws ParseException{
+        List<Bedragen> lstBedragen = new ArrayList<Bedragen>();
+        lstBedragen.add(bedrag1);
+        lstBedragen.add(bedrag2);
+        lstBedragen.add(bedrag3);
+        
+        when(bedragenDao.BedragInPeriode(dt.parse("2015-02-18"), dt.parse("2015-02-23"), null, true)).thenReturn(lstBedragen);
+        
+        FinanceOverzichtGroep financeOverzichtGroep = bedragenSrv.graphiekOverzichtGroep(dt.parse("2015-02-18"), dt.parse("2015-02-23"), true);
+        
+        assertEquals(new Double("250.00"), financeOverzichtGroep.getTotaal_kosten());
+        assertEquals(new Double("2000.00"), financeOverzichtGroep.getTotaal_opbrengsten());
+    }
+    
+    @Test
+    public void testGraphiekOverzichtGroepFilterInterRekening() throws ParseException{
+        List<Bedragen> lstBedragen = new ArrayList<Bedragen>();
+        lstBedragen.add(bedrag1);
+        lstBedragen.add(bedrag2);
+        lstBedragen.add(bedrag3);
+        
+        when(groepPositief.getCodeId()).thenReturn("INTER_REKENING");
+        
+        when(bedragenDao.BedragInPeriode(dt.parse("2015-02-18"), dt.parse("2015-02-23"), null, true)).thenReturn(lstBedragen);
+        
+        FinanceOverzichtGroep financeOverzichtGroep = bedragenSrv.graphiekOverzichtGroep(dt.parse("2015-02-18"), dt.parse("2015-02-23"), true);
+        
+        assertEquals(new Double("250.00"), financeOverzichtGroep.getTotaal_kosten());
+        assertEquals(new Double("0.0"), financeOverzichtGroep.getTotaal_opbrengsten());
+    }
+    
+    @Test
+    public void testGraphiekBedrag() throws ParseException{
+        List<Bedragen> lstBedragen = new ArrayList<Bedragen>();
+        lstBedragen.add(bedrag1);
+        lstBedragen.add(bedrag2);
+        lstBedragen.add(bedrag3);
+        
+        when(bedrag1.getRekening()).thenReturn(rekening1);
+        when(bedrag1.getDatum()).thenReturn(dt.parse("2015-02-18"));
+        when(bedrag2.getRekening()).thenReturn(rekening1);
+        when(bedrag2.getDatum()).thenReturn(dt.parse("2015-02-19"));
+        when(bedrag3.getRekening()).thenReturn(rekening1);
+        when(bedrag3.getDatum()).thenReturn(dt.parse("2015-02-20"));
+        
+        when(bedragenDao.BedragInPeriode(dt.parse("2015-02-18"), dt.parse("2015-02-23"), rekening1, false)).thenReturn(lstBedragen);
+        when(rekening1.getWaarde()).thenReturn(new BigDecimal(2000));
+        when(bedragenDao.getBedragAtDate(bedrag1.getDatum(), bedrag1.getRekening())).thenReturn(new BigDecimal(2000));
+        
+        List<RekeningOverzicht> lstRekeningOverzicht = bedragenSrv.graphiekBedrag(rekening1, dt.parse("2015-02-18"), dt.parse("2015-02-23"));
+        
+        assertEquals(new BigDecimal(2000), lstRekeningOverzicht.get(0).getBedrag());
+        assertEquals(dt.parse("2015-02-18"), lstRekeningOverzicht.get(0).getDatum());
+        assertEquals(new BigDecimal(1850), lstRekeningOverzicht.get(1).getBedrag());
+        assertEquals(dt.parse("2015-02-19"), lstRekeningOverzicht.get(1).getDatum());
+        assertEquals(new BigDecimal(3850), lstRekeningOverzicht.get(2).getBedrag());
+        assertEquals(dt.parse("2015-02-20"), lstRekeningOverzicht.get(2).getDatum());
     }
 }
 

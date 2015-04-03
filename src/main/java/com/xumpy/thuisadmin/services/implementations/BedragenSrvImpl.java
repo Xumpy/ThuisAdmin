@@ -124,15 +124,12 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv, Seria
     public FinanceOverzichtGroep graphiekOverzichtGroep(Date beginDate, Date eindDate, boolean showBedragPublicGroep) {
         
         List<Bedragen> bedragInPeriode = bedragenDao.BedragInPeriode(beginDate, eindDate, null, showBedragPublicGroep);
-        List<Bedragen> overviewRekeningGroep = bedragenDao.BedragInPeriode(beginDate, eindDate, null, showBedragPublicGroep);
-        
         
         FinanceOverzichtGroep financeOverzichtGroep = new FinanceOverzichtGroep();
         
         List<Bedragen> lstBedragen = bedragInPeriode;
-        System.out.println(lstBedragen.size());
         
-        Map<Groepen, Map<String, BigDecimal>> bedragenOverzicht = OverviewRekeningGroep(overviewRekeningGroep);
+        Map<Groepen, Map<String, BigDecimal>> bedragenOverzicht = OverviewRekeningGroep(bedragInPeriode);
         
         BigDecimal totaalKosten = new BigDecimal(0);
         BigDecimal totaalOpbrengsten = new BigDecimal(0);
@@ -179,7 +176,7 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv, Seria
         List<Bedragen> lstBedragenInPeriode = bedragenDao.BedragInPeriode(beginDate, eindDate, null, showBedragPublicGroep);
         
         Groepen groepenSrv = groepenDao.findGroep(typeGroepId);
-        
+
         Integer negatief = new Integer(0);
         
         if (typeGroepKostOpbrengst.equals(1)){
@@ -187,7 +184,6 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv, Seria
         } else {
             negatief = 1;
         }
-        
         List<Bedragen> lstBedragen = getBedragenInGroep(lstBedragenInPeriode, groepenSrv, negatief);
         List<OverzichtGroepBedragen> overzichtGroepBedragen = new ArrayList<OverzichtGroepBedragen>();
         
@@ -200,7 +196,8 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv, Seria
             overzichtGroepBedragen.add(overzichtGroepBedrag);
             somOverzicht = somOverzicht.add(overzichtGroepBedrag.getBedrag());
         }
-        
+        System.out.println(somOverzicht);
+            
         overzichtGroepBedragenTotal.setSomBedrag(somOverzicht);
         overzichtGroepBedragenTotal.setOverzichtGroepBedragen(overzichtGroepBedragen);
 
@@ -237,7 +234,6 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv, Seria
         } else {
             rekeningStand = bedragenDao.getBedragAtDate(bedragen.get(0).getDatum(), null);
         }
-        
         overviewRekeningData.put(bedragen.get(0).getDatum(), rekeningStand);
         
         for (Integer i=1; i<bedragen.size(); i++){

@@ -76,8 +76,8 @@ public class GroepenDaoImpl implements GroepenDao{
     }
 
     @Override
-    public GroepenDaoPojo findGroep(Integer groepId) {
-        return (GroepenDaoPojo)sessionFactory.getCurrentSession().get(GroepenDaoPojo.class, groepId);
+    public Groepen findGroep(Integer groepId) {
+        return (Groepen)sessionFactory.getCurrentSession().get(GroepenDaoPojo.class, groepId);
     }
 
     @Override

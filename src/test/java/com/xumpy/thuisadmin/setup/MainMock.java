@@ -6,22 +6,29 @@
 package com.xumpy.thuisadmin.setup;
 
 import com.xumpy.security.model.UserInfo;
+import com.xumpy.thuisadmin.controllers.model.OverzichtGroepBedragenTotal;
 import com.xumpy.thuisadmin.model.Personen;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import static org.mockito.Mockito.when;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 /**
  *
  * @author nicom
+ * 
+ * This mock is made for the mocking of default beans that are assigned and used through the application.
+ * Only extend from this class if your test needs to inject those beans
+ * 
  */
 @RunWith(MockitoJUnitRunner.class)
 public class MainMock {
     @Mock Personen loginPersoon;
-    @Mock UserInfo userInfo;
-    
+    @Spy UserInfo userInfo;
+    @Spy OverzichtGroepBedragenTotal overzichtGroepBedragenTotal;
+            
     @Before
     public void setupUserInfo(){
         when(loginPersoon.getNaam()).thenReturn("Test User");

@@ -68,8 +68,8 @@ public class BedragenDaoTest extends H2InMemory{
     
     private List<Bedragen> fetchTestBedragen() throws ParseException{
         List<Bedragen> lstBedragen = new ArrayList<Bedragen>();
-        GroepenDaoPojo groepNegatief = groepenDao.findGroep(2);
-        GroepenDaoPojo groepPositief = groepenDao.findGroep(3);
+        GroepenDaoPojo groepNegatief = new GroepenDaoPojo(groepenDao.findGroep(2));
+        GroepenDaoPojo groepPositief = new GroepenDaoPojo(groepenDao.findGroep(3));
         
         for (int i=0; i<8; i++){
             BedragenDaoPojo bedrag = new BedragenDaoPojo();
