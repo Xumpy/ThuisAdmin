@@ -42,7 +42,7 @@ public class RekeningenSrvImpl implements RekeningenSrv{
         rekening.setNaam(nieuwRekening.getNaam());
         rekening.setPersoon(new PersonenSrvPojo(userInfo.getPersoon()));
         rekening.setLaatst_bijgewerkt(nieuwRekening.getLaatst_bijgewerkt());
-        rekening.setWaarde(BedragenLogic.convertComma(nieuwRekening.getWaarde()));
+        rekening.setWaarde(BedragenSrvImpl.convertComma(nieuwRekening.getWaarde()));
         
         if (nieuwRekening.getPk_id() == null){
             rekening.setPk_id(rekeningenDao.getNewPkId());

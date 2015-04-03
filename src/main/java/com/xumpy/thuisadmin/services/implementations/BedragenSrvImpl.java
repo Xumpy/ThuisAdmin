@@ -26,20 +26,27 @@ import com.xumpy.thuisadmin.model.Bedragen;
 import com.xumpy.thuisadmin.model.Groepen;
 import com.xumpy.thuisadmin.model.Rekeningen;
 import com.xumpy.thuisadmin.services.BedragenSrv;
+import static com.xumpy.thuisadmin.services.logic.BedragenLogic.DELETE;
+import static com.xumpy.thuisadmin.services.logic.BedragenLogic.INSERT;
+import static com.xumpy.thuisadmin.services.logic.BedragenLogic.UPDATE;
 import com.xumpy.thuisadmin.services.model.BedragenSrvPojo;
 import com.xumpy.thuisadmin.services.model.GroepenSrvPojo;
 import com.xumpy.thuisadmin.services.model.PersonenSrvPojo;
 import com.xumpy.thuisadmin.services.model.RekeningenSrvPojo;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,7 +57,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Nico
  */
 @Service
-public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv, Serializable{
+public class BedragenSrvImpl implements BedragenSrv, Serializable{
 
     @Autowired
     private BedragenDaoImpl bedragenDao;
@@ -66,6 +73,10 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv, Seria
     @Autowired public OverzichtGroepBedragenTotal overzichtGroepBedragenTotal;
     
     static final Logger Log = Logger.getLogger(BedragenSrvImpl.class.getName());
+
+    public static final String UPDATE = "UPDATE";
+    public static final String INSERT = "INSERT";
+    public static final String DELETE = "DELETE";
     
     @Override
     @Transactional(readOnly=false)
@@ -392,5 +403,112 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv, Seria
         }
         
         return bedragenInGroep;
+    }
+    
+    public static BigDecimal convertComma(String bedrag){
+        if (bedrag.contains(",")){
+            bedrag = bedrag.replace(".", "");
+            bedrag = bedrag.replace(",", ".");
+        } else {
+            if (bedrag.indexOf(".", bedrag.indexOf(".") + 1) != -1){
+                bedrag = bedrag.replace(".", "");
+            }
+        }
+
+        NumberFormat nf = NumberFormat.getInstance(new Locale("US"));
+        BigDecimal bigDecimalBedrag = new BigDecimal(0);
+        try {
+            bigDecimalBedrag = new BigDecimal(nf.parse(bedrag).doubleValue());
+        } catch (ParseException ex) {
+            Logger.getLogger(BedragenSrvImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        bigDecimalBedrag = bigDecimalBedrag.setScale(2, BigDecimal.ROUND_HALF_UP);
+        
+        return bigDecimalBedrag;
+    }
+    
+    public Bedragen convertNieuwBedrag(NieuwBedrag nieuwBedrag){
+        BedragenSrvPojo bedragen = new BedragenSrvPojo();
+        
+        bedragen.setPk_id(nieuwBedrag.getPk_id());
+        bedragen.setDatum(nieuwBedrag.getDatum());
+        bedragen.setGroep(nieuwBedrag.getGroep());
+        bedragen.setOmschrijving(nieuwBedrag.getOmschrijving());
+        bedragen.setPersoon(nieuwBedrag.getPersoon());
+        bedragen.setRekening(nieuwBedrag.getRekening());
+
+        BigDecimal bigDecimalBedrag = convertComma(nieuwBedrag.getBedrag());
+        
+        bedragen.setBedrag(bigDecimalBedrag);
+        
+        return bedragen;
+    }
+    
+    public Bedragen processRekeningBedrag(Bedragen bedrag, String transaction){
+        BedragenSrvPojo bedragenSrvPojo = new BedragenSrvPojo(bedrag);
+        RekeningenSrvPojo rekening = new RekeningenSrvPojo(bedrag.getRekening());
+        
+        if (transaction.equals(INSERT)){
+            if (bedragenSrvPojo.getGroep().getNegatief().equals(1)){
+                rekening.setWaarde(rekening.getWaarde().subtract(bedragenSrvPojo.getBedrag()));
+            } else {
+                rekening.setWaarde(rekening.getWaarde().add(bedragenSrvPojo.getBedrag()));
+            }
+        } 
+        
+        if (transaction.equals(UPDATE)){
+            BedragenSrvPojo oldBedrag = new BedragenSrvPojo(bedragenDao.findBedrag(bedragenSrvPojo.getPk_id()));
+            
+            if (!oldBedrag.getRekening().equals(bedragenSrvPojo.getRekening())){
+                rekening = new RekeningenSrvPojo(moveBedragToRekening(oldBedrag, rekening));
+            }
+            System.out.println(rekening.getWaarde());
+            
+            if (bedragenSrvPojo.getGroep().getNegatief().equals(1)){
+                if (oldBedrag.getGroep().getNegatief().equals(1)){
+                    rekening.setWaarde((rekening.getWaarde().add(oldBedrag.getBedrag())));
+                } else {
+                    rekening.setWaarde((rekening.getWaarde().subtract(oldBedrag.getBedrag())));
+                }
+                rekening.setWaarde((rekening.getWaarde().subtract(bedragenSrvPojo.getBedrag())));
+            } else {
+                if (oldBedrag.getGroep().getNegatief().equals(1)){
+                    rekening.setWaarde((rekening.getWaarde().add(oldBedrag.getBedrag())));
+                } else {
+                    rekening.setWaarde((rekening.getWaarde().subtract(oldBedrag.getBedrag())));
+                }
+                rekening.setWaarde((rekening.getWaarde().add(bedragenSrvPojo.getBedrag())));
+            }
+        }
+
+        if (transaction.equals(DELETE)){
+            if (bedragenSrvPojo.getGroep().getNegatief().equals(1)){
+                rekening.setWaarde((rekening.getWaarde().add(bedragenSrvPojo.getBedrag())));
+            } else {
+                rekening.setWaarde((rekening.getWaarde().subtract(bedragenSrvPojo.getBedrag())));
+            }
+        
+        }
+        
+        bedragenSrvPojo.setRekening(rekening);
+
+        return bedragenSrvPojo;
+    }
+
+    public Rekeningen moveBedragToRekening(BedragenSrvPojo bedrag, Rekeningen rekening2) {
+        RekeningenSrvPojo rekening2SrvPojo = new RekeningenSrvPojo(rekening2);
+        
+        if (bedrag.getGroep().getNegatief().equals(0)){
+            bedrag.getRekening().setWaarde(bedrag.getRekening().getWaarde().subtract(bedrag.getBedrag()));
+            rekeningenDao.save(bedrag.getRekening());
+            rekening2 = rekeningenDao.findRekening(rekening2.getPk_id());
+            rekening2SrvPojo.setWaarde(rekening2.getWaarde().add(bedrag.getBedrag()));
+        } else {
+            bedrag.getRekening().setWaarde(bedrag.getRekening().getWaarde().add(bedrag.getBedrag()));
+            rekeningenDao.save(bedrag.getRekening());
+            rekening2 = rekeningenDao.findRekening(rekening2.getPk_id());
+            rekening2SrvPojo.setWaarde(rekening2.getWaarde().subtract(bedrag.getBedrag()));
+        }
+        return rekening2SrvPojo;
     }
 }

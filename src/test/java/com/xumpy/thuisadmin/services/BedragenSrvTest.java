@@ -15,10 +15,12 @@ import com.xumpy.thuisadmin.controllers.model.OverzichtGroepBedragenTotal;
 import com.xumpy.thuisadmin.controllers.model.RekeningOverzicht;
 import com.xumpy.thuisadmin.dao.implementations.GroepenDaoImpl;
 import com.xumpy.thuisadmin.dao.implementations.RekeningenDaoImpl;
+import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
 import com.xumpy.thuisadmin.model.Bedragen;
 import com.xumpy.thuisadmin.model.Groepen;
 import com.xumpy.thuisadmin.model.Personen;
 import com.xumpy.thuisadmin.model.Rekeningen;
+import com.xumpy.thuisadmin.services.model.BedragenSrvPojo;
 import com.xumpy.thuisadmin.services.model.GroepenSrvPojo;
 import com.xumpy.thuisadmin.services.model.RekeningenSrvPojo;
 import com.xumpy.thuisadmin.setup.MainMock;
@@ -29,6 +31,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,8 +39,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.when;
 import org.mockito.runners.MockitoJUnitRunner;
-import static org.junit.Assert.assertEquals;
 import org.mockito.Mockito;
+import static org.mockito.Mockito.when;
 
 /**
  *
@@ -572,6 +575,102 @@ public class BedragenSrvTest extends MainMock{
         assertEquals(dt.parse("2015-02-19"), lstRekeningOverzicht.get(1).getDatum());
         assertEquals(new BigDecimal(3850), lstRekeningOverzicht.get(2).getBedrag());
         assertEquals(dt.parse("2015-02-20"), lstRekeningOverzicht.get(2).getDatum());
+    }
+    
+    @Test
+    public void testConvertNieuwBedragComma(){
+        NieuwBedrag nieuwBedrag = Mockito.mock(NieuwBedrag.class);
+        when(nieuwBedrag.getBedrag()).thenReturn("5,40");
+        Bedragen bedrag = bedragenSrv.convertNieuwBedrag(nieuwBedrag);
+        assertEquals(new BigDecimal("5.40"), bedrag.getBedrag());
+    }
+    
+    @Test
+    public void testConvertNieuwBedragPoint(){
+        NieuwBedrag nieuwBedrag = Mockito.mock(NieuwBedrag.class);
+        when(nieuwBedrag.getBedrag()).thenReturn("5.40");
+        Bedragen bedrag = bedragenSrv.convertNieuwBedrag(nieuwBedrag);
+        assertEquals(new BigDecimal("5.40"), bedrag.getBedrag());
+    }
+    
+    
+    @Test
+    public void testConvertNieuwBedrag1000A(){
+        NieuwBedrag nieuwBedrag = Mockito.mock(NieuwBedrag.class);
+        when(nieuwBedrag.getBedrag()).thenReturn("1.456,45");
+        Bedragen bedrag = bedragenSrv.convertNieuwBedrag(nieuwBedrag);
+        assertEquals(new BigDecimal("1456.45"), bedrag.getBedrag());
+    }
+    
+    @Test
+    public void testConvertNieuwBedrag1000B(){
+        NieuwBedrag nieuwBedrag = Mockito.mock(NieuwBedrag.class);
+        when(nieuwBedrag.getBedrag()).thenReturn("1456.45");
+        Bedragen bedrag = bedragenSrv.convertNieuwBedrag(nieuwBedrag);
+        assertEquals(new BigDecimal("1456.45"), bedrag.getBedrag());
+    }
+    
+    @Test
+    public void testConvertNieuwBedrag1000C(){
+        NieuwBedrag nieuwBedrag = Mockito.mock(NieuwBedrag.class);
+        when(nieuwBedrag.getBedrag()).thenReturn("2000");
+        Bedragen bedrag = bedragenSrv.convertNieuwBedrag(nieuwBedrag);
+        assertEquals(new BigDecimal("2000.00"), bedrag.getBedrag());
+    }
+   
+    @Test
+    public void testProcessRekeningBedragInsert(){
+        when(bedrag1.getBedrag()).thenReturn(new BigDecimal("800"));
+        when(groepNegatief.getNegatief()).thenReturn(1);
+        when(rekening1.getWaarde()).thenReturn(new BigDecimal("2000"));
+        
+        Bedragen bedrag = bedragenSrv.processRekeningBedrag(bedrag1, bedragenSrv.INSERT);
+        
+        assertEquals(new BigDecimal("1200"), bedrag.getRekening().getWaarde());
+    }
+    
+    @Test
+    public void testProcessRekeningBedragUpdate(){
+        when(bedrag1.getPk_id()).thenReturn(1);
+        when(bedrag1.getBedrag()).thenReturn(new BigDecimal("800"));
+        when(bedrag2.getBedrag()).thenReturn(new BigDecimal("400"));
+        when(groepNegatief.getNegatief()).thenReturn(1);
+        when(rekening1.getWaarde()).thenReturn(new BigDecimal("2000"));
+        
+        when(bedragenDao.findBedrag(1)).thenReturn(bedrag2);
+                
+        Bedragen bedrag = bedragenSrv.processRekeningBedrag(bedrag1, bedragenSrv.UPDATE);
+        
+        assertEquals(new BigDecimal("1600"), bedrag.getRekening().getWaarde());
+    }
+
+    @Test
+    public void testProcessRekeningBedragDelete(){
+        when(bedrag1.getBedrag()).thenReturn(new BigDecimal("500"));
+        when(bedrag1.getGroep()).thenReturn(groepPositief);
+        when(rekening1.getWaarde()).thenReturn(new BigDecimal("2000"));
+        
+        Bedragen bedrag = bedragenSrv.processRekeningBedrag(bedrag1, bedragenSrv.DELETE);
+        assertEquals(new BigDecimal("1500"), bedrag.getRekening().getWaarde());
+    }
+    
+    @Test
+    public void testMoveBedragFromOneRekeningToAnother(){
+        RekeningenSrvPojo newRekening = new RekeningenSrvPojo();
+        newRekening.setPk_id(2);
+        newRekening.setWaarde(new BigDecimal(1500));
+        
+        when(bedrag1.getRekening()).thenReturn(rekening1);
+        when(bedrag1.getBedrag()).thenReturn(new BigDecimal(500));
+        when(rekening1.getWaarde()).thenReturn(new BigDecimal(900));
+        
+        BedragenSrvPojo bedragSrvPojoMock = new BedragenSrvPojo(bedrag1);
+        when(rekeningenDao.findRekening(2)).thenReturn(newRekening);
+        
+        newRekening = new RekeningenSrvPojo(bedragenSrv.moveBedragToRekening(bedragSrvPojoMock, newRekening));
+        
+        assertEquals(new BigDecimal(1400), bedragSrvPojoMock.getRekening().getWaarde());
+        assertEquals(new BigDecimal(1000), newRekening.getWaarde());
     }
 }
 

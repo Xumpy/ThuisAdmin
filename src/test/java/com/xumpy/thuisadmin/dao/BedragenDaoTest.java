@@ -141,7 +141,7 @@ public class BedragenDaoTest extends H2InMemory{
         bedrag = bedragenDao.findBedrag(24);
         lstBedragenExpected.add(bedrag);
         
-        when(persoon.getPk_id()).thenReturn(2);
+        when(loginPersoon.getPk_id()).thenReturn(2);
         rekening = rekeningenDao.findRekening(3);
         List<Bedragen> lstBedragenResult = bedragenDao.reportBedragen(rekening, 0, "nog een test");
         
@@ -192,7 +192,7 @@ public class BedragenDaoTest extends H2InMemory{
     
     @Test
     public void testReportBedragenNull() throws ParseException{
-        when(persoon.getPk_id()).thenReturn(2);
+        when(loginPersoon.getPk_id()).thenReturn(2);
         rekening = rekeningenDao.findRekening(3);
         List<Bedragen> lstBedragenResult = bedragenDao.reportBedragen(rekening, 0, null);
         

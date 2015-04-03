@@ -38,15 +38,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @RunWith(MockitoJUnitRunner.class)
 @EnableTransactionManagement
-public abstract class H2InMemory {
+public abstract class H2InMemory extends MainMock {
     @Mock public SessionFactory sessionFactory;
     
     private static ServiceRegistry serviceRegistry;
     protected static SessionFactory sessionFactoryH2;
     private Transaction transaction;
-    
-    @Mock protected UserInfo userInfo;
-    @Mock protected PersonenDaoPojo persoon;
     
     @InjectMocks public PersonenDaoImpl personenDao;
     @InjectMocks public GroepenDaoImpl groepenDao;
@@ -76,8 +73,6 @@ public abstract class H2InMemory {
     public void setUpTest(){
         transaction = sessionFactoryH2.getCurrentSession().beginTransaction();
         when(sessionFactory.getCurrentSession()).thenReturn(sessionFactoryH2.getCurrentSession());
-        when(userInfo.getPersoon()).thenReturn(persoon);
-        when(persoon.getPk_id()).thenReturn(1);
     }
     
     @After

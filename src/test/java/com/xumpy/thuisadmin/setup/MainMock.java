@@ -25,9 +25,9 @@ import org.mockito.runners.MockitoJUnitRunner;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class MainMock {
-    @Mock Personen loginPersoon;
-    @Spy UserInfo userInfo;
-    @Spy OverzichtGroepBedragenTotal overzichtGroepBedragenTotal;
+    @Mock public Personen loginPersoon;
+    @Spy public UserInfo userInfo;
+    @Spy public OverzichtGroepBedragenTotal overzichtGroepBedragenTotal;
             
     @Before
     public void setupUserInfo(){
