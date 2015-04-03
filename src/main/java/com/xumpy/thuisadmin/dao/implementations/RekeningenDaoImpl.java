@@ -9,6 +9,7 @@ import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.dao.RekeningenDao;
 import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
 import com.xumpy.thuisadmin.dao.model.RekeningenDaoPojo;
+import com.xumpy.thuisadmin.model.Rekeningen;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
@@ -41,20 +42,26 @@ public class RekeningenDaoImpl implements RekeningenDao {
     private UserInfo userInfo;
     
     @Override
-    public void save(RekeningenDaoPojo rekeningen) {
-        sessionFactory.getCurrentSession().save(rekeningen);
+    public void save(Rekeningen rekeningen) {
+        RekeningenDaoPojo rekeningenDaoPojo = new RekeningenDaoPojo(rekeningen);
+        
+        sessionFactory.getCurrentSession().save(rekeningenDaoPojo);
         sessionFactory.getCurrentSession().flush();
     }
 
     @Override
-    public void update(RekeningenDaoPojo rekeningen) {
-        sessionFactory.getCurrentSession().merge(rekeningen);
+    public void update(Rekeningen rekeningen) {
+        RekeningenDaoPojo rekeningenDaoPojo = new RekeningenDaoPojo(rekeningen);
+        
+        sessionFactory.getCurrentSession().merge(rekeningenDaoPojo);
         sessionFactory.getCurrentSession().flush();
     }
 
     @Override
-    public void delete(RekeningenDaoPojo rekeningen) {
-        sessionFactory.getCurrentSession().delete(rekeningen);
+    public void delete(Rekeningen rekeningen) {
+        RekeningenDaoPojo rekeningenDaoPojo = new RekeningenDaoPojo(rekeningen);
+        
+        sessionFactory.getCurrentSession().delete(rekeningenDaoPojo);
         sessionFactory.getCurrentSession().flush();
     }
     
@@ -79,7 +86,7 @@ public class RekeningenDaoImpl implements RekeningenDao {
     }
     
     @Override
-    public List<RekeningenDaoPojo> findAllRekeningen() {
+    public List<Rekeningen> findAllRekeningen() {
         Session session = sessionFactory.getCurrentSession();
         
         Criteria criteria = session.createCriteria(RekeningenDaoPojo.class);
@@ -92,7 +99,7 @@ public class RekeningenDaoImpl implements RekeningenDao {
     }
     
     @Override
-    public RekeningenDaoPojo findRekening(Integer rekeningId){
+    public Rekeningen findRekening(Integer rekeningId){
         Session session = sessionFactory.getCurrentSession();
         
         RekeningenDaoPojo rekening = (RekeningenDaoPojo)session.get(RekeningenDaoPojo.class, rekeningId);

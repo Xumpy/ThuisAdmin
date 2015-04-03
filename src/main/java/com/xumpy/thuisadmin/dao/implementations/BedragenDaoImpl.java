@@ -48,20 +48,26 @@ public class BedragenDaoImpl implements BedragenDao{
     private UserInfo userInfo;
     
     @Override
-    public void save(BedragenDaoPojo bedragen) {
-        sessionFactory.getCurrentSession().save(bedragen);
+    public void save(Bedragen bedragen) {
+        BedragenDaoPojo bedragenDaoPojo = new BedragenDaoPojo(bedragen);
+        
+        sessionFactory.getCurrentSession().merge(bedragenDaoPojo);
         sessionFactory.getCurrentSession().flush();
     }
 
     @Override
-    public void update(BedragenDaoPojo bedragen) {
-        sessionFactory.getCurrentSession().merge(bedragen);
+    public void update(Bedragen bedragen) {
+        BedragenDaoPojo bedragenDaoPojo = new BedragenDaoPojo(bedragen);
+        
+        sessionFactory.getCurrentSession().merge(bedragenDaoPojo);
         sessionFactory.getCurrentSession().flush();
     }
 
     @Override
-    public void delete(BedragenDaoPojo bedragen) {
-        sessionFactory.getCurrentSession().delete(bedragen);
+    public void delete(Bedragen bedragen) {
+        BedragenDaoPojo bedragenDaoPojo = new BedragenDaoPojo(bedragen);
+        
+        sessionFactory.getCurrentSession().delete(bedragenDaoPojo);
         sessionFactory.getCurrentSession().flush();
     }
 
@@ -126,7 +132,7 @@ public class BedragenDaoImpl implements BedragenDao{
     }
     
     @Override
-    public BedragenDaoPojo findBedrag(Integer bedragId){
+    public Bedragen findBedrag(Integer bedragId){
         return (BedragenDaoPojo)sessionFactory.getCurrentSession().get(BedragenDaoPojo.class, bedragId);
     }
 

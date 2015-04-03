@@ -5,9 +5,9 @@
  */
 package com.xumpy.thuisadmin.controllers.model;
 
-import com.xumpy.thuisadmin.dao.model.GroepenDaoPojo;
-import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
-import com.xumpy.thuisadmin.dao.model.RekeningenDaoPojo;
+import com.xumpy.thuisadmin.services.model.GroepenSrvPojo;
+import com.xumpy.thuisadmin.services.model.PersonenSrvPojo;
+import com.xumpy.thuisadmin.services.model.RekeningenSrvPojo;
 import java.io.Serializable;
 import java.util.Date;
 /**
@@ -17,9 +17,9 @@ import java.util.Date;
 public class NieuwBedrag implements Serializable {
     private Integer pk_id;
     
-    private GroepenDaoPojo groep;
-    private PersonenDaoPojo persoon;
-    private RekeningenDaoPojo rekening;
+    private GroepenSrvPojo groep;
+    private PersonenSrvPojo persoon;
+    private RekeningenSrvPojo rekening;
     private String bedrag;
     private Date datum;
     private String omschrijving;
@@ -32,27 +32,27 @@ public class NieuwBedrag implements Serializable {
         this.pk_id = pk_id;
     }
 
-    public GroepenDaoPojo getGroep() {
+    public GroepenSrvPojo getGroep() {
         return groep;
     }
 
-    public void setGroep(GroepenDaoPojo groep) {
+    public void setGroep(GroepenSrvPojo groep) {
         this.groep = groep;
     }
 
-    public PersonenDaoPojo getPersoon() {
+    public PersonenSrvPojo getPersoon() {
         return persoon;
     }
 
-    public void setPersoon(PersonenDaoPojo persoon) {
+    public void setPersoon(PersonenSrvPojo persoon) {
         this.persoon = persoon;
     }
 
-    public RekeningenDaoPojo getRekening() {
+    public RekeningenSrvPojo getRekening() {
         return rekening;
     }
 
-    public void setRekening(RekeningenDaoPojo rekening) {
+    public void setRekening(RekeningenSrvPojo rekening) {
         this.rekening = rekening;
     }
 

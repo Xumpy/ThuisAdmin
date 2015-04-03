@@ -11,6 +11,9 @@ import com.xumpy.thuisadmin.dao.model.GroepenDaoPojo;
 import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
 import com.xumpy.thuisadmin.dao.model.RekeningenDaoPojo;
 import com.xumpy.thuisadmin.model.Bedragen;
+import com.xumpy.thuisadmin.model.Groepen;
+import com.xumpy.thuisadmin.model.Personen;
+import com.xumpy.thuisadmin.model.Rekeningen;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,7 +25,10 @@ import static org.junit.Assert.assertNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import static org.mockito.Mockito.when;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -34,10 +40,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class BedragenDaoTest extends H2InMemory{
     
-    private PersonenDaoPojo personen;
-    private GroepenDaoPojo groep;
-    private RekeningenDaoPojo rekening;
-    private BedragenDaoPojo bedrag;
+    @Mock Personen personen;
+    @Mock Groepen groep;
+    @Mock Rekeningen rekening;
+    @Mock Bedragen bedrag;
     
     private static final Integer BEDRAG_PK_ID = 30;
     
@@ -54,14 +60,13 @@ public class BedragenDaoTest extends H2InMemory{
         groep = groepenDao.findGroep(1);
         rekening = rekeningenDao.findRekening(1);
         
-        bedrag = new BedragenDaoPojo();
-        bedrag.setPk_id(BEDRAG_PK_ID);
-        bedrag.setBedrag(new BigDecimal(200));
-        bedrag.setPersoon(personen);
-        bedrag.setGroep(groep); 
-        bedrag.setDatum(new Date(new java.util.Date().getTime()));
-        bedrag.setOmschrijving("test bedrag");
-        bedrag.setRekening(rekening);
+        when(bedrag.getPk_id()).thenReturn(BEDRAG_PK_ID);
+        when(bedrag.getBedrag()).thenReturn(new BigDecimal(200));
+        when(bedrag.getPersoon()).thenReturn(personen);
+        when(bedrag.getGroep()).thenReturn(groep);
+        when(bedrag.getDatum()).thenReturn(new Date(new java.util.Date().getTime()));
+        when(bedrag.getOmschrijving()).thenReturn("test bedrag");
+        when(bedrag.getRekening()).thenReturn(rekening);
     }
     
     private List<Bedragen> fetchTestBedragen() throws ParseException{
@@ -90,8 +95,8 @@ public class BedragenDaoTest extends H2InMemory{
                         break;
             }
             
-            bedrag.setPersoon(personen);
-            bedrag.setRekening(rekening);
+            bedrag.setPersoon(new PersonenDaoPojo(personen));
+            bedrag.setRekening(new RekeningenDaoPojo(rekening));
             bedrag.setOmschrijving("test");
             
             lstBedragen.add(bedrag);
@@ -103,36 +108,38 @@ public class BedragenDaoTest extends H2InMemory{
     @Test
     public void testSave(){
         bedragenDao.save(bedrag);
-        BedragenDaoPojo bedragTest = bedragenDao.findBedrag(BEDRAG_PK_ID);
-        assertEquals(bedrag, bedragTest);
+        Bedragen bedragTest = bedragenDao.findBedrag(BEDRAG_PK_ID);
+        assertEquals(bedrag.getPk_id(), bedragTest.getPk_id());
     }
     
     @Test
     public void testUpdate(){
         bedragenDao.save(bedrag);
         
-        BedragenDaoPojo bedragForUpdate = bedragenDao.findBedrag(BEDRAG_PK_ID);
+        BedragenDaoPojo bedragForUpdate = new BedragenDaoPojo(bedragenDao.findBedrag(BEDRAG_PK_ID));
         bedragForUpdate.setBedrag(new BigDecimal(2000));
         bedragenDao.update(bedragForUpdate);
         
-        BedragenDaoPojo bedragTest = bedragenDao.findBedrag(BEDRAG_PK_ID);
+        Bedragen bedragTest = bedragenDao.findBedrag(BEDRAG_PK_ID);
         assertEquals(new BigDecimal(2000), bedragTest.getBedrag());
     }
     
     @Test
     public void testDelete(){
         bedragenDao.save(bedrag);
+        Bedragen bedragForDelete = bedragenDao.findBedrag(BEDRAG_PK_ID);
         
-        BedragenDaoPojo bedragForDelete = bedragenDao.findBedrag(BEDRAG_PK_ID);
+        resetTransaction();
+        
         bedragenDao.delete(bedragForDelete);
         
-        BedragenDaoPojo bedragNull = bedragenDao.findBedrag(BEDRAG_PK_ID);
+        Bedragen bedragNull = bedragenDao.findBedrag(BEDRAG_PK_ID);
         assertNull(bedragNull);
     }
     
     @Test
     public void testReportBedragen() throws ParseException{
-        List<BedragenDaoPojo> lstBedragenExpected = new ArrayList<BedragenDaoPojo>();
+        List<Bedragen> lstBedragenExpected = new ArrayList<Bedragen>();
         
         bedrag = bedragenDao.findBedrag(24);
         lstBedragenExpected.add(bedrag);

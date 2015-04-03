@@ -28,6 +28,7 @@ import com.xumpy.thuisadmin.model.Rekeningen;
 import com.xumpy.thuisadmin.services.BedragenSrv;
 import com.xumpy.thuisadmin.services.model.BedragenSrvPojo;
 import com.xumpy.thuisadmin.services.model.GroepenSrvPojo;
+import com.xumpy.thuisadmin.services.model.PersonenSrvPojo;
 import com.xumpy.thuisadmin.services.model.RekeningenSrvPojo;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -69,13 +70,13 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv, Seria
     @Override
     @Transactional(readOnly=false)
     public void save(NieuwBedrag nieuwBedrag) {
-        nieuwBedrag.setPersoon(userInfo.getPersoon());
-        BedragenDaoPojo bedragen = convertNieuwBedrag(nieuwBedrag);
+        nieuwBedrag.setPersoon(new PersonenSrvPojo(userInfo.getPersoon()));
+        BedragenDaoPojo bedragen = new BedragenDaoPojo(convertNieuwBedrag(nieuwBedrag));
         
         if (bedragen.getPk_id() == null){
             bedragen.setPk_id(bedragenDao.getNewPkId());
             
-            bedragen = processRekeningBedrag(bedragen, INSERT);
+            bedragen = new BedragenDaoPojo(processRekeningBedrag(bedragen, INSERT));
             
             RekeningenDaoPojo rekening = bedragen.getRekening();
             
@@ -89,11 +90,11 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv, Seria
     @Override
     @Transactional(readOnly=false)
     public void update(NieuwBedrag nieuwBedrag) {
-        nieuwBedrag.setPersoon(userInfo.getPersoon());
-        BedragenDaoPojo bedragen = convertNieuwBedrag(nieuwBedrag);
+        nieuwBedrag.setPersoon(new PersonenSrvPojo(userInfo.getPersoon()));
+        Bedragen bedragen = convertNieuwBedrag(nieuwBedrag);
         bedragen = processRekeningBedrag(bedragen, UPDATE);
         
-        RekeningenDaoPojo rekening = bedragen.getRekening();
+        Rekeningen rekening = bedragen.getRekening();
         
         bedragenDao.update(bedragen);
         rekeningenDao.update(rekening);
@@ -102,11 +103,11 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv, Seria
     @Override
     @Transactional(readOnly=false)
     public void delete(NieuwBedrag nieuwBedrag) {
-        nieuwBedrag.setPersoon(userInfo.getPersoon());
-        BedragenDaoPojo bedragen = convertNieuwBedrag(nieuwBedrag);
-
+        nieuwBedrag.setPersoon(new PersonenSrvPojo(userInfo.getPersoon()));
+        Bedragen bedragen = convertNieuwBedrag(nieuwBedrag);
         bedragen = processRekeningBedrag(bedragen, DELETE);
-        RekeningenDaoPojo rekening = bedragen.getRekening();
+        
+        Rekeningen rekening = bedragen.getRekening();
 
         bedragenDao.delete(bedragen);
         rekeningenDao.update(rekening);

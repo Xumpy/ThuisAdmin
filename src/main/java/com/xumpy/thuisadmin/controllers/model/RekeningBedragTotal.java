@@ -5,7 +5,7 @@
  */
 package com.xumpy.thuisadmin.controllers.model;
 
-import com.xumpy.thuisadmin.dao.model.RekeningenDaoPojo;
+import com.xumpy.thuisadmin.model.Rekeningen;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,13 +16,13 @@ import java.util.List;
  */
 public class RekeningBedragTotal implements Serializable {
     private BigDecimal totaal;
-    private List<RekeningenDaoPojo> rekeningen;
+    private List<Rekeningen> rekeningen;
 
-    public List<RekeningenDaoPojo> getRekeningen() {
+    public List<Rekeningen> getRekeningen() {
         return rekeningen;
     }
 
-    public void setRekeningen(List<RekeningenDaoPojo> rekeningen) {
+    public void setRekeningen(List<Rekeningen> rekeningen) {
         this.rekeningen = rekeningen;
     }
 

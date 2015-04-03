@@ -397,5 +397,12 @@ public class BedragenSrvTest {
         
         assertEquals(overviewRekeningTestData, overviewRekeningData);
     }
+    
+    @Test
+    public void testFindBedrag(){
+        when(bedragenDao.findBedrag(1)).thenReturn(bedrag1);
+        
+        assertEquals(bedrag1, bedragenSrv.findBedrag(1));
+    }
 }
 

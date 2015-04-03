@@ -16,8 +16,6 @@ import com.xumpy.thuisadmin.dao.implementations.GroepenDaoImpl;
 import com.xumpy.thuisadmin.dao.implementations.DocumentenDaoImpl;
 import com.xumpy.thuisadmin.dao.implementations.BedragenDaoImpl;
 import com.xumpy.security.model.UserInfo;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -90,5 +88,11 @@ public abstract class H2InMemory {
     @AfterClass
     public static void tearDown(){
         sessionFactoryH2.close();
+    }
+    
+    public void resetTransaction(){
+        sessionFactoryH2.getCurrentSession().getTransaction().commit();
+        setUp();
+        setUpTest();
     }
 }

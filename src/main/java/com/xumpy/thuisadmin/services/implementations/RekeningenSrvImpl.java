@@ -11,6 +11,7 @@ import com.xumpy.thuisadmin.services.logic.BedragenLogic;
 import com.xumpy.thuisadmin.dao.model.RekeningenDaoPojo;
 import com.xumpy.thuisadmin.controllers.model.NieuwRekening;
 import com.xumpy.thuisadmin.controllers.model.RekeningBedragTotal;
+import com.xumpy.thuisadmin.model.Rekeningen;
 import com.xumpy.thuisadmin.services.RekeningenSrv;
 import java.math.BigDecimal;
 import java.util.List;
@@ -52,13 +53,13 @@ public class RekeningenSrvImpl implements RekeningenSrv{
 
     @Override
     @Transactional(readOnly=false)
-    public void update(RekeningenDaoPojo rekeningen) {
+    public void update(Rekeningen rekeningen) {
         rekeningenDao.update(rekeningen);
     }
 
     @Override
     @Transactional(readOnly=false)
-    public void delete(RekeningenDaoPojo rekeningen) {
+    public void delete(Rekeningen rekeningen) {
         rekeningenDao.delete(rekeningen);
     }
 
@@ -66,11 +67,11 @@ public class RekeningenSrvImpl implements RekeningenSrv{
     @Transactional
     public RekeningBedragTotal findAllRekeningen() {
         RekeningBedragTotal rekeningBedragTotal = new RekeningBedragTotal();
-        List<RekeningenDaoPojo> rekeningen = rekeningenDao.findAllRekeningen();
+        List<Rekeningen> rekeningen = rekeningenDao.findAllRekeningen();
         
         BigDecimal totaal = new BigDecimal(0);
         
-        for (RekeningenDaoPojo rekening: rekeningen){
+        for (Rekeningen rekening: rekeningen){
             totaal = totaal.add(rekening.getWaarde());
         }
         
@@ -82,7 +83,7 @@ public class RekeningenSrvImpl implements RekeningenSrv{
     
     @Override
     @Transactional
-    public RekeningenDaoPojo findRekening(Integer rekeningId){
+    public Rekeningen findRekening(Integer rekeningId){
         return rekeningenDao.findRekening(rekeningId);
     }
 }

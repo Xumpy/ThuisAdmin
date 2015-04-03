@@ -5,8 +5,6 @@
  */
 package com.xumpy.thuisadmin.dao;
 
-import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
-import com.xumpy.thuisadmin.dao.model.RekeningenDaoPojo;
 import com.xumpy.thuisadmin.model.Bedragen;
 import com.xumpy.thuisadmin.model.Rekeningen;
 import java.math.BigDecimal;
@@ -18,9 +16,9 @@ import java.util.List;
  * @author Nico
  */
 public interface BedragenDao{
-    void save(BedragenDaoPojo bedragen);
-    void update(BedragenDaoPojo bedragen);
-    void delete(BedragenDaoPojo bedragen);
+    void save(Bedragen bedragen);
+    void update(Bedragen bedragen);
+    void delete(Bedragen bedragen);
     public List<Bedragen> reportBedragen(Rekeningen rekening, Integer offset, String searchText);
     public Integer getNewPkId();
     public Bedragen findBedrag(Integer bedragId);

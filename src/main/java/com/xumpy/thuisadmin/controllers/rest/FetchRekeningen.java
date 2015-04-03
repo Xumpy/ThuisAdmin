@@ -9,6 +9,7 @@ import com.xumpy.thuisadmin.dao.model.RekeningenDaoPojo;
 import com.xumpy.thuisadmin.controllers.model.NieuwRekening;
 import com.xumpy.thuisadmin.controllers.model.RekeningBedragTotal;
 import com.xumpy.thuisadmin.services.RekeningenSrv;
+import com.xumpy.thuisadmin.services.model.RekeningenSrvPojo;
 import java.io.Serializable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -35,8 +36,8 @@ public class FetchRekeningen implements Serializable{
     }
     
     @RequestMapping("/json/rekeningen/{rekeningId}")
-    public @ResponseBody RekeningenDaoPojo fetchRekening(@PathVariable Integer rekeningId){
-        return rekeningenSrv.findRekening(rekeningId);
+    public @ResponseBody RekeningenSrvPojo fetchRekening(@PathVariable Integer rekeningId){
+        return new RekeningenSrvPojo(rekeningenSrv.findRekening(rekeningId));
     }
     
     @RequestMapping("/json/saveRekening")
