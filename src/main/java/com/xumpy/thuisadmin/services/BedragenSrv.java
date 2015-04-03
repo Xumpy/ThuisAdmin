@@ -23,9 +23,8 @@ import java.util.List;
  * @author Nico
  */
 public interface BedragenSrv {
-    void save(NieuwBedrag bedragen);
-    void update(NieuwBedrag bedragen);
-    void delete(NieuwBedrag bedragen);
+    public Bedragen save(NieuwBedrag bedragen);
+    public Bedragen delete(NieuwBedrag bedragen);
     public BeheerBedragenReportLst reportBedragen(BeheerBedragenReportLst beheerBedragenReportLst, Integer offset, Rekeningen rekening, String searchText);
     
     public List<RekeningOverzicht> graphiekBedrag(Rekeningen rekening,

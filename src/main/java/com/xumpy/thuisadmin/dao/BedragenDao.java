@@ -17,7 +17,6 @@ import java.util.List;
  */
 public interface BedragenDao{
     void save(Bedragen bedragen);
-    void update(Bedragen bedragen);
     void delete(Bedragen bedragen);
     public List<Bedragen> reportBedragen(Rekeningen rekening, Integer offset, String searchText);
     public Integer getNewPkId();

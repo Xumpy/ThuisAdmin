@@ -8,11 +8,11 @@ package com.xumpy.thuisadmin.services.implementations;
 import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.dao.implementations.GroepenDaoImpl;
 import com.xumpy.thuisadmin.dao.model.GroepenDaoPojo;
-import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
 import com.xumpy.thuisadmin.controllers.model.GroepenTree;
 import com.xumpy.thuisadmin.model.Groepen;
 import com.xumpy.thuisadmin.services.GroepenSrv;
 import com.xumpy.thuisadmin.services.model.GroepenSrvPojo;
+import com.xumpy.thuisadmin.services.model.PersonenSrvPojo;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,57 +34,53 @@ public class GroepenSrvImpl implements GroepenSrv{
     
     @Override
     @Transactional(readOnly=false)
-    public void save(GroepenDaoPojo groepen) {
-        if (groepen.getPk_id() == null){
-            groepen.setPk_id(groepenDao.getNewPkId());
-            groepen.setPersoon(userInfo.getPersoon());
-            groepenDao.save(groepen);
+    public Groepen save(Groepen groepen) {
+        GroepenSrvPojo groepenSrvPojo = new GroepenSrvPojo(groepen);
+        if (groepenSrvPojo.getPk_id() == null){
+            groepenSrvPojo.setPk_id(groepenDao.getNewPkId());
+            groepenSrvPojo.setPersoon(new PersonenSrvPojo(userInfo.getPersoon()));
+            groepenDao.save(groepenSrvPojo);
         } else {
             if (groepen.getPersoon().getUsername().equals(userInfo.getPersoon().getUsername())){
-                groepenDao.update(groepen);
+                groepenDao.save(groepenSrvPojo);
             }
         }
+        
+        return groepenSrvPojo;
     }
 
     @Override
     @Transactional(readOnly=false)
-    public void update(GroepenDaoPojo groepen) {
-        if (groepen.getPersoon().getUsername().equals(userInfo.getPersoon().getUsername())){
-            groepenDao.update(groepen);
-        }
-    }
-
-    @Override
-    @Transactional(readOnly=false)
-    public void delete(GroepenDaoPojo groepen) {
+    public Groepen delete(Groepen groepen) {
         groepenDao.delete(groepen);
+        return groepen;
     }
 
     @Override
     @Transactional
-    public List<GroepenDaoPojo> findAllGroepen() {
+    public List<Groepen> findAllGroepen() {
         return groepenDao.findAllGroepen();
     }
 
     @Override
     @Transactional
-    public GroepenDaoPojo findGroep(Integer groepId) {
+    public Groepen findGroep(Integer groepId) {
         return groepenDao.findGroep(groepId);
     }
 
     @Override
     @Transactional
-    public List<GroepenDaoPojo> findAllHoofdGroepen() {
+    public List<Groepen> findAllHoofdGroepen() {
         return groepenDao.findAllHoofdGroepen();
     }
 
     @Override
     @Transactional
-    public List<GroepenDaoPojo> findAllGroepen(Integer hoofdGroepId) {
+    public List<Groepen> findAllGroepen(Integer hoofdGroepId) {
         return groepenDao.findAllGroepen(hoofdGroepId);
     }
 
-    private Boolean selectedGroepInHoofdGroep(GroepenDaoPojo groep, GroepenDaoPojo checkGroep){
+    private Boolean selectedGroepInHoofdGroep(Groepen groep, Groepen checkGroep){
         
         if (checkGroep.getPk_id().equals(groep.getPk_id())){
                 return true;
@@ -97,17 +93,17 @@ public class GroepenSrvImpl implements GroepenSrv{
         }   
     }
     
-    private List<GroepenTree> selectSubGroep(List<GroepenDaoPojo> allGroepen, GroepenDaoPojo hoofdGroep, GroepenDaoPojo selectedGroep){
+    private List<GroepenTree> selectSubGroep(List<Groepen> allGroepen, Groepen hoofdGroep, GroepenDaoPojo selectedGroep){
         List<GroepenTree> lstGroepenTree = new ArrayList<GroepenTree>();
-        List<GroepenDaoPojo> lstGroepen = new ArrayList<GroepenDaoPojo>();
+        List<Groepen> lstGroepen = new ArrayList<Groepen>();
         
-        for(GroepenDaoPojo groep: allGroepen){
+        for(Groepen groep: allGroepen){
             if (groep.getHoofdGroep() != null && groep.getHoofdGroep().equals(hoofdGroep)){
                 lstGroepen.add(groep);
             }
         }
         
-        for (GroepenDaoPojo groep: lstGroepen){
+        for (Groepen groep: lstGroepen){
             GroepenTree groepenTree = new GroepenTree();
             
             groepenTree.setGroep(groep);
@@ -141,19 +137,19 @@ public class GroepenSrvImpl implements GroepenSrv{
     @Transactional
     public List<GroepenTree> groepTree(Integer selectedGroepId) {
         GroepenDaoPojo selectedGroep = null;
-        List<GroepenDaoPojo> lstGroepen = groepenDao.findAllGroepen();
+        List<Groepen> lstGroepen = groepenDao.findAllGroepen();
         
         List<GroepenTree> lstGroepTree = new ArrayList<GroepenTree>();
         
-        List<GroepenDaoPojo> lstHoofdGroepen = new ArrayList<GroepenDaoPojo>();
+        List<Groepen> lstHoofdGroepen = new ArrayList<Groepen>();
         
-        for (GroepenDaoPojo groep: lstGroepen){
+        for (Groepen groep: lstGroepen){
             if (groep.getHoofdGroep() == null){
                 lstHoofdGroepen.add(groep);
             }
         }
         
-        for(GroepenDaoPojo hoofdGroep: lstHoofdGroepen){
+        for(Groepen hoofdGroep: lstHoofdGroepen){
             GroepenTree groepenTree = new GroepenTree();
             
             groepenTree.setGroep(hoofdGroep);

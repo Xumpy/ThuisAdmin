@@ -5,7 +5,7 @@
  */
 package com.xumpy.thuisadmin.dao;
 
-import com.xumpy.thuisadmin.dao.setup.H2InMemory;
+import com.xumpy.thuisadmin.setup.H2InMemory;
 import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
 import com.xumpy.thuisadmin.dao.model.GroepenDaoPojo;
 import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
@@ -26,7 +26,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import static org.mockito.Mockito.when;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -40,15 +39,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class BedragenDaoTest extends H2InMemory{
     
-    @Mock Personen personen;
-    @Mock Groepen groep;
-    @Mock Rekeningen rekening;
+    private Personen personen;
+    private Groepen groep;
+    private Rekeningen rekening;
+    
     @Mock Bedragen bedrag;
     
     private static final Integer BEDRAG_PK_ID = 30;
-    
-    private static final Integer GROEP_NEGATIEF_ID = 2;
-    private static final Integer GROEP_POSITIEF_ID = 3;
     
     private static final SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd"); 
     private Date startDate;
@@ -118,7 +115,7 @@ public class BedragenDaoTest extends H2InMemory{
         
         BedragenDaoPojo bedragForUpdate = new BedragenDaoPojo(bedragenDao.findBedrag(BEDRAG_PK_ID));
         bedragForUpdate.setBedrag(new BigDecimal(2000));
-        bedragenDao.update(bedragForUpdate);
+        bedragenDao.save(bedragForUpdate);
         
         Bedragen bedragTest = bedragenDao.findBedrag(BEDRAG_PK_ID);
         assertEquals(new BigDecimal(2000), bedragTest.getBedrag());

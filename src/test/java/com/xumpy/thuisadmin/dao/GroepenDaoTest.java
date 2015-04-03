@@ -5,7 +5,7 @@
  */
 package com.xumpy.thuisadmin.dao;
 
-import com.xumpy.thuisadmin.dao.setup.H2InMemory;
+import com.xumpy.thuisadmin.setup.H2InMemory;
 import com.xumpy.thuisadmin.dao.model.GroepenDaoPojo;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;

@@ -87,15 +87,6 @@ public class PersonenDaoPojo implements Serializable, Personen{
         this.md5_password = md5_password;
     }
 
-    public void set_password(String password){
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            this.md5_password = (new HexBinaryAdapter()).marshal(md.digest(md5_password.getBytes())).toLowerCase();
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(PersonenDaoPojo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
     public PersonenDaoPojo(){
         
     }

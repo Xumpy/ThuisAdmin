@@ -69,7 +69,7 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv, Seria
     
     @Override
     @Transactional(readOnly=false)
-    public void save(NieuwBedrag nieuwBedrag) {
+    public Bedragen save(NieuwBedrag nieuwBedrag) {
         nieuwBedrag.setPersoon(new PersonenSrvPojo(userInfo.getPersoon()));
         BedragenDaoPojo bedragen = new BedragenDaoPojo(convertNieuwBedrag(nieuwBedrag));
         
@@ -77,40 +77,28 @@ public class BedragenSrvImpl extends BedragenLogic implements BedragenSrv, Seria
             bedragen.setPk_id(bedragenDao.getNewPkId());
             
             bedragen = new BedragenDaoPojo(processRekeningBedrag(bedragen, INSERT));
-            
-            RekeningenDaoPojo rekening = bedragen.getRekening();
-            
-            bedragenDao.save(bedragen);
-            rekeningenDao.update(rekening);
         } else {
-            update(nieuwBedrag);
+            bedragen = new BedragenDaoPojo(processRekeningBedrag(bedragen, UPDATE));
         }
+        rekeningenDao.update(bedragen.getRekening());
+        bedragenDao.save(bedragen);
+        
+        return bedragen;
     }
 
     @Override
     @Transactional(readOnly=false)
-    public void update(NieuwBedrag nieuwBedrag) {
-        nieuwBedrag.setPersoon(new PersonenSrvPojo(userInfo.getPersoon()));
-        Bedragen bedragen = convertNieuwBedrag(nieuwBedrag);
-        bedragen = processRekeningBedrag(bedragen, UPDATE);
-        
-        Rekeningen rekening = bedragen.getRekening();
-        
-        bedragenDao.update(bedragen);
-        rekeningenDao.update(rekening);
-    }
-
-    @Override
-    @Transactional(readOnly=false)
-    public void delete(NieuwBedrag nieuwBedrag) {
+    public Bedragen delete(NieuwBedrag nieuwBedrag) {
         nieuwBedrag.setPersoon(new PersonenSrvPojo(userInfo.getPersoon()));
         Bedragen bedragen = convertNieuwBedrag(nieuwBedrag);
         bedragen = processRekeningBedrag(bedragen, DELETE);
         
         Rekeningen rekening = bedragen.getRekening();
 
-        bedragenDao.delete(bedragen);
         rekeningenDao.update(rekening);
+        bedragenDao.delete(bedragen);
+        
+        return bedragen;
     }
 
     @Override

@@ -5,8 +5,9 @@
  */
 package com.xumpy.thuisadmin.dao;
 
-import com.xumpy.thuisadmin.dao.setup.H2InMemory;
+import com.xumpy.thuisadmin.setup.H2InMemory;
 import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
+import com.xumpy.thuisadmin.model.Personen;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,7 +31,7 @@ public class PersonenDaoTest extends H2InMemory{
         
         personenDao.save(persoonTest123);
         
-        PersonenDaoPojo persoonGetTest123 = personenDao.findPersoonByUsername("test123");
+        Personen persoonGetTest123 = personenDao.findPersoonByUsername("test123");
         
         assertEquals(persoonGetTest123.getNaam(), "test123");
     }

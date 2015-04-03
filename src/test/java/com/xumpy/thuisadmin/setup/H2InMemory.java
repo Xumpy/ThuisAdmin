@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.xumpy.thuisadmin.dao.setup;
+package com.xumpy.thuisadmin.setup;
 
 import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
 import com.xumpy.thuisadmin.dao.model.DocumentenDaoPojo;

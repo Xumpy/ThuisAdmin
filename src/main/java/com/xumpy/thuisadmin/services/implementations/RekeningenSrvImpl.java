@@ -13,6 +13,8 @@ import com.xumpy.thuisadmin.controllers.model.NieuwRekening;
 import com.xumpy.thuisadmin.controllers.model.RekeningBedragTotal;
 import com.xumpy.thuisadmin.model.Rekeningen;
 import com.xumpy.thuisadmin.services.RekeningenSrv;
+import com.xumpy.thuisadmin.services.model.PersonenSrvPojo;
+import com.xumpy.thuisadmin.services.model.RekeningenSrvPojo;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +37,10 @@ public class RekeningenSrvImpl implements RekeningenSrv{
     @Override
     @Transactional(readOnly=false)
     public void save(NieuwRekening nieuwRekening) {
-        RekeningenDaoPojo rekening = new RekeningenDaoPojo();
+        RekeningenSrvPojo rekening = new RekeningenSrvPojo();
         
         rekening.setNaam(nieuwRekening.getNaam());
-        rekening.setPersoon(userInfo.getPersoon());
+        rekening.setPersoon(new PersonenSrvPojo(userInfo.getPersoon()));
         rekening.setLaatst_bijgewerkt(nieuwRekening.getLaatst_bijgewerkt());
         rekening.setWaarde(BedragenLogic.convertComma(nieuwRekening.getWaarde()));
         

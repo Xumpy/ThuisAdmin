@@ -7,7 +7,9 @@ package com.xumpy.thuisadmin.controllers.rest;
 
 import com.xumpy.thuisadmin.dao.model.GroepenDaoPojo;
 import com.xumpy.thuisadmin.controllers.model.GroepenTree;
+import com.xumpy.thuisadmin.model.Groepen;
 import com.xumpy.thuisadmin.services.GroepenSrv;
+import com.xumpy.thuisadmin.services.model.GroepenSrvPojo;
 import java.io.Serializable;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +29,12 @@ public class GroepenCtrl implements Serializable{
     private GroepenSrv groepenSrv;
     
     @RequestMapping("/json/groepen")
-    public @ResponseBody List<GroepenDaoPojo> fetchGroepen(){
+    public @ResponseBody List<Groepen> fetchGroepen(){
         return groepenSrv.findAllGroepen();
     }
     
     @RequestMapping("/json/hoofdGroepen")
-    public @ResponseBody List<GroepenDaoPojo> fetchHoofdGroepen(){
+    public @ResponseBody List<Groepen> fetchHoofdGroepen(){
         return groepenSrv.findAllHoofdGroepen();
     }
     
@@ -42,12 +44,12 @@ public class GroepenCtrl implements Serializable{
     }
     
     @RequestMapping("/json/subGroepen/{hoofdGroepId}")
-    public @ResponseBody List<GroepenDaoPojo> fetchSubGroepen(@PathVariable Integer hoofdGroepId){
+    public @ResponseBody List<Groepen> fetchSubGroepen(@PathVariable Integer hoofdGroepId){
         return groepenSrv.findAllGroepen(hoofdGroepId);
     }
     
     @RequestMapping("/json/groepen/{groepId}")
-    public @ResponseBody GroepenDaoPojo fetchRekening(@PathVariable Integer groepId){
+    public @ResponseBody Groepen fetchRekening(@PathVariable Integer groepId){
         return groepenSrv.findGroep(groepId);
     }
     

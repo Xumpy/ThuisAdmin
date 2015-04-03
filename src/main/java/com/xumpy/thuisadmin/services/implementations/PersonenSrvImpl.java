@@ -9,7 +9,9 @@ import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.dao.implementations.PersonenDaoImpl;
 import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
 import com.xumpy.thuisadmin.controllers.model.RegisterUserPage;
+import com.xumpy.thuisadmin.model.Personen;
 import com.xumpy.thuisadmin.services.PersonenSrv;
+import com.xumpy.thuisadmin.services.model.PersonenSrvPojo;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,47 +32,45 @@ public class PersonenSrvImpl implements PersonenSrv{
     
     @Override
     @Transactional(readOnly=false)
-    public void save(PersonenDaoPojo personen) {
-        if (!personen.getMd5_password().isEmpty()){
-            personen.set_password(personen.getMd5_password());
+    public Personen save(Personen personen) {
+        PersonenSrvPojo personenSrvPojo = new PersonenSrvPojo(personen);
+        
+        if (!personenSrvPojo.getMd5_password().isEmpty()){
+            personenSrvPojo.set_password(personen.getMd5_password());
         }
         
-        if (personen.getPk_id() == null){
-            personen.setPk_id(personenDao.getNewPkId());
-            personenDao.save(personen);
+        if (personenSrvPojo.getPk_id() == null){
+            personenSrvPojo.setPk_id(personenDao.getNewPkId());
+            personenDao.save(personenSrvPojo);
         } else {
-            personenDao.update(personen);
+            personenDao.update(personenSrvPojo);
         }
-        userInfo.updateBean(personen);
+        userInfo.updateBean(personenSrvPojo);
+        
+        return personenSrvPojo;
     }
 
     @Override
     @Transactional(readOnly=false)
-    public void update(PersonenDaoPojo personen) {
-        personenDao.update(personen);
-        userInfo.updateBean(personen);
-    }
-
-    @Override
-    @Transactional(readOnly=false)
-    public void delete(PersonenDaoPojo personen) {
+    public Personen delete(Personen personen) {
         personenDao.delete(personen);
+        return personen;
     }
 
     @Override
     @Transactional
-    public List<PersonenDaoPojo> findAllPersonen() {
+    public List<Personen> findAllPersonen() {
         return personenDao.findAllPersonen();
     }
 
     @Override
     @Transactional
-    public PersonenDaoPojo findPersoon(Integer persoonId) {
+    public Personen findPersoon(Integer persoonId) {
         return personenDao.findPersoon(persoonId);
     }
     
     @Override
-    public PersonenDaoPojo createRegisterUser(RegisterUserPage registerUserPage){
+    public Personen createRegisterUser(RegisterUserPage registerUserPage){
         PersonenDaoPojo persoon = new PersonenDaoPojo();
         
         persoon.setNaam(registerUserPage.getNaam());
@@ -82,7 +82,7 @@ public class PersonenSrvImpl implements PersonenSrv{
     }
     
     @Override
-    public PersonenDaoPojo getWhoAmI(){
+    public Personen getWhoAmI(){
         return userInfo.getPersoon();
     }
 }

@@ -5,8 +5,8 @@
  */
 package com.xumpy.thuisadmin.services;
 
-import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
 import com.xumpy.thuisadmin.controllers.model.RegisterUserPage;
+import com.xumpy.thuisadmin.model.Personen;
 import java.util.List;
 
 /**
@@ -14,11 +14,10 @@ import java.util.List;
  * @author Nico
  */
 public interface PersonenSrv {
-    void save(PersonenDaoPojo personen);
-    void update(PersonenDaoPojo personen);
-    void delete(PersonenDaoPojo personen);
-    public List<PersonenDaoPojo> findAllPersonen();
-    public PersonenDaoPojo findPersoon(Integer persoonId);
-    public PersonenDaoPojo createRegisterUser(RegisterUserPage registerUserPage);
-    public PersonenDaoPojo getWhoAmI();
+    Personen save(Personen personen);
+    Personen delete(Personen personen);
+    public List<Personen> findAllPersonen();
+    public Personen findPersoon(Integer persoonId);
+    public Personen createRegisterUser(RegisterUserPage registerUserPage);
+    public Personen getWhoAmI();
 }

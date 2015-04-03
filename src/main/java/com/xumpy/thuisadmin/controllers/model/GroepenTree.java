@@ -5,7 +5,7 @@
  */
 package com.xumpy.thuisadmin.controllers.model;
 
-import com.xumpy.thuisadmin.dao.model.GroepenDaoPojo;
+import com.xumpy.thuisadmin.model.Groepen;
 import java.io.Serializable;
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  * @author Nico
  */
 public class GroepenTree  implements Serializable{
-    private GroepenDaoPojo groep;
+    private Groepen groep;
     private List<GroepenTree> subGroep;
     private String collapsed;
     private String selected;
@@ -35,11 +35,11 @@ public class GroepenTree  implements Serializable{
         this.collapsed = collapsed;
     }
     
-    public GroepenDaoPojo getGroep() {
+    public Groepen getGroep() {
         return groep;
     }
 
-    public void setGroep(GroepenDaoPojo groep) {
+    public void setGroep(Groepen groep) {
         this.groep = groep;
     }
 

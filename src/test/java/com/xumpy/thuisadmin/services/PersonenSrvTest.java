@@ -9,6 +9,8 @@ import com.xumpy.thuisadmin.services.implementations.PersonenSrvImpl;
 import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
 import com.xumpy.thuisadmin.controllers.model.RegisterUserPage;
+import com.xumpy.thuisadmin.model.Personen;
+import com.xumpy.thuisadmin.services.model.PersonenSrvPojo;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +40,7 @@ public class PersonenSrvTest {
         
         System.out.println("Test");
         
-        PersonenDaoPojo persoon = personenSrv.createRegisterUser(registerUser);
+        PersonenSrvPojo persoon = new PersonenSrvPojo(personenSrv.createRegisterUser(registerUser));
         persoon.set_password(persoon.getMd5_password());
         
         assertEquals(persoon.getUsername(), "test123");
@@ -50,7 +52,7 @@ public class PersonenSrvTest {
         when(userInfo.getPersoon()).thenReturn(persoon);
         when(persoon.getNaam()).thenReturn("Nico");
         
-        PersonenDaoPojo persoonFetch = personenSrv.getWhoAmI();
+        Personen persoonFetch = personenSrv.getWhoAmI();
         assertEquals(persoonFetch.getNaam(), "Nico");
     }
 }

@@ -6,7 +6,7 @@
 package com.xumpy.security.model;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
+import com.xumpy.thuisadmin.model.Personen;
 import java.io.Serializable;
 
 /**
@@ -15,17 +15,17 @@ import java.io.Serializable;
  */
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class UserInfo implements Serializable{
-    private PersonenDaoPojo persoon;
+    private Personen persoon;
 
-    public PersonenDaoPojo getPersoon() {
+    public Personen getPersoon() {
         return persoon;
     }
 
-    public void setPersoon(PersonenDaoPojo persoon) {
+    public void setPersoon(Personen persoon) {
         this.persoon = persoon;
     }
 
-    public void updateBean(PersonenDaoPojo persoon){
+    public void updateBean(Personen persoon){
         this.persoon = persoon;
     }
 }

@@ -56,14 +56,6 @@ public class BedragenDaoImpl implements BedragenDao{
     }
 
     @Override
-    public void update(Bedragen bedragen) {
-        BedragenDaoPojo bedragenDaoPojo = new BedragenDaoPojo(bedragen);
-        
-        sessionFactory.getCurrentSession().merge(bedragenDaoPojo);
-        sessionFactory.getCurrentSession().flush();
-    }
-
-    @Override
     public void delete(Bedragen bedragen) {
         BedragenDaoPojo bedragenDaoPojo = new BedragenDaoPojo(bedragen);
         

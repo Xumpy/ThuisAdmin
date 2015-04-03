@@ -5,17 +5,19 @@
  */
 package com.xumpy.thuisadmin.services;
 
+import com.xumpy.security.model.UserInfo;
+import com.xumpy.thuisadmin.controllers.model.NieuwBedrag;
 import com.xumpy.thuisadmin.services.implementations.BedragenSrvImpl;
 import com.xumpy.thuisadmin.dao.implementations.BedragenDaoImpl;
 import com.xumpy.thuisadmin.controllers.model.OverzichtGroepBedragen;
 import com.xumpy.thuisadmin.controllers.model.OverzichtGroepBedragenTotal;
-import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
-import com.xumpy.thuisadmin.dao.model.RekeningenDaoPojo;
+import com.xumpy.thuisadmin.dao.implementations.RekeningenDaoImpl;
 import com.xumpy.thuisadmin.model.Bedragen;
 import com.xumpy.thuisadmin.model.Groepen;
 import com.xumpy.thuisadmin.model.Rekeningen;
-import com.xumpy.thuisadmin.services.model.BedragenSrvPojo;
+import com.xumpy.thuisadmin.services.model.GroepenSrvPojo;
 import com.xumpy.thuisadmin.services.model.RekeningenSrvPojo;
+import com.xumpy.thuisadmin.setup.MainMock;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,9 +40,10 @@ import org.mockito.Mockito;
  * @author nicom
  */
 @RunWith(MockitoJUnitRunner.class)
-public class BedragenSrvTest {
+public class BedragenSrvTest extends MainMock{
     private static final SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd"); 
     
+    @Mock RekeningenDaoImpl rekeningenDao;
     @Mock BedragenDaoImpl bedragenDao;
     
     @Mock Bedragen bedrag1;
@@ -55,7 +58,7 @@ public class BedragenSrvTest {
     
     @Mock Rekeningen rekening1;
     @Mock Rekeningen rekening2;
-    
+
     @InjectMocks BedragenSrvImpl bedragenSrv;
     
     @Before
@@ -89,6 +92,33 @@ public class BedragenSrvTest {
         when(groepNegatief.getNegatief()).thenReturn(1);
         when(groepPositief.getNaam()).thenReturn("Groep B");
         when(groepPositief.getNegatief()).thenReturn(0);
+    }
+    
+    @Test
+    public void testSave(){
+        NieuwBedrag nieuwBedrag = Mockito.mock(NieuwBedrag.class);
+        
+        when(rekening1.getWaarde()).thenReturn(new BigDecimal(2000));
+        RekeningenSrvPojo rekeningSrvPojo = new RekeningenSrvPojo(rekening1);
+        GroepenSrvPojo groepPositiefSrvPojo = new GroepenSrvPojo(groepPositief);
+        
+        when(nieuwBedrag.getPk_id()).thenReturn(null);
+        when(nieuwBedrag.getRekening()).thenReturn(rekeningSrvPojo);
+        when(nieuwBedrag.getBedrag()).thenReturn("200");
+        when(nieuwBedrag.getGroep()).thenReturn(groepPositiefSrvPojo);
+        when(bedragenDao.getNewPkId()).thenReturn(1);
+        
+        Bedragen bedragTest = bedragenSrv.save(nieuwBedrag);
+        
+        assertEquals(new Integer(1), bedragTest.getPk_id());
+        assertEquals(new BigDecimal("2200.00"), bedragTest.getRekening().getWaarde());
+    }
+    
+    @Test
+    public void testUpdate(){
+        NieuwBedrag nieuwBedrag = Mockito.mock(NieuwBedrag.class);
+        when(nieuwBedrag.getPk_id()).thenReturn(1);
+        when(nieuwBedrag.getBedrag()).thenReturn("200");
     }
     
     @Test

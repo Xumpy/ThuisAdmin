@@ -7,13 +7,9 @@ package com.xumpy.thuisadmin.dao.implementations;
 
 import com.xumpy.thuisadmin.dao.PersonenDao;
 import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
-import com.xumpy.thuisadmin.controllers.model.RegisterUserPage;
-import java.math.BigDecimal;
+import com.xumpy.thuisadmin.model.Personen;
 import java.math.BigInteger;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -34,13 +30,15 @@ public class PersonenDaoImpl implements PersonenDao{
     private SessionFactory sessionFactory;
 
     @Override
-    public void save(PersonenDaoPojo personen) {
-        sessionFactory.getCurrentSession().save(personen);
+    public Personen save(Personen personen) {
+        PersonenDaoPojo personenDaoPojo = new PersonenDaoPojo(personen);
+        sessionFactory.getCurrentSession().save(personenDaoPojo);
         sessionFactory.getCurrentSession().flush();
+        return personenDaoPojo;
     }
 
     @Override
-    public void update(PersonenDaoPojo personen) {
+    public Personen update(Personen personen) {
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("update PersonenDaoPojo set naam = :naam," +
                                           "                       voornaam = :voornaam," +
@@ -58,12 +56,16 @@ public class PersonenDaoImpl implements PersonenDao{
         query.setInteger("pk_id", personen.getPk_id());
         
         query.executeUpdate();
+        
+        return personen;
     }
 
     @Override
-    public void delete(PersonenDaoPojo personen) {
-        sessionFactory.getCurrentSession().delete(personen);
+    public Personen delete(Personen personen) {
+        PersonenDaoPojo personenDaoPojo = new PersonenDaoPojo(personen);
+        sessionFactory.getCurrentSession().delete(personenDaoPojo);
         sessionFactory.getCurrentSession().flush();
+        return personenDaoPojo;
     }
 
     @Override
@@ -85,17 +87,17 @@ public class PersonenDaoImpl implements PersonenDao{
     }
 
     @Override
-    public List<PersonenDaoPojo> findAllPersonen() {
+    public List<Personen> findAllPersonen() {
         return sessionFactory.getCurrentSession().createQuery("from PersonenDaoPojo").list();
     }
 
     @Override
-    public PersonenDaoPojo findPersoon(Integer persoonId) {
+    public Personen findPersoon(Integer persoonId) {
         return (PersonenDaoPojo)sessionFactory.getCurrentSession().get(PersonenDaoPojo.class, persoonId);
     }
     
     @Override
-    public PersonenDaoPojo findPersoonByUsername(String username){
+    public Personen findPersoonByUsername(String username){
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from PersonenDaoPojo where username = :username");
         query.setString("username", username);

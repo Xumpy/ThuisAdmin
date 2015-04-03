@@ -7,6 +7,7 @@ package com.xumpy.thuisadmin.controllers.rest;
 
 import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
 import com.xumpy.thuisadmin.controllers.model.RegisterUserPage;
+import com.xumpy.thuisadmin.model.Personen;
 import com.xumpy.thuisadmin.services.PersonenSrv;
 import java.io.Serializable;
 import java.util.List;
@@ -29,12 +30,12 @@ public class PersonenCtrl implements Serializable{
     private PersonenSrv personenSrv;
     
     @RequestMapping("/json/personen")
-    public @ResponseBody List<PersonenDaoPojo> fetchPersonen(){
+    public @ResponseBody List<Personen> fetchPersonen(){
         return personenSrv.findAllPersonen();
     }
     
     @RequestMapping("/json/personen/{rekeningId}")
-    public @ResponseBody PersonenDaoPojo fetchRekening(@PathVariable Integer rekeningId){
+    public @ResponseBody Personen fetchRekening(@PathVariable Integer rekeningId){
         return personenSrv.findPersoon(rekeningId);
     }
     
@@ -60,7 +61,7 @@ public class PersonenCtrl implements Serializable{
     }
     
     @RequestMapping("/json/whoami")
-    public @ResponseBody PersonenDaoPojo getWhoAmI(){
+    public @ResponseBody Personen getWhoAmI(){
         System.out.println("--- Class: " + personenSrv.getWhoAmI().getClass());
         return personenSrv.getWhoAmI();
     }

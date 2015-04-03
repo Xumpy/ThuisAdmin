@@ -8,6 +8,7 @@ package com.xumpy.thuisadmin.dao.implementations;
 import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.dao.GroepenDao;
 import com.xumpy.thuisadmin.dao.model.GroepenDaoPojo;
+import com.xumpy.thuisadmin.model.Groepen;
 import java.math.BigInteger;
 import java.util.List;
 import org.hibernate.Query;
@@ -34,20 +35,16 @@ public class GroepenDaoImpl implements GroepenDao{
     private UserInfo userInfo;
     
     @Override
-    public void save(GroepenDaoPojo groepen) {
-        sessionFactory.getCurrentSession().save(groepen);
+    public void save(Groepen groepen) {
+        GroepenDaoPojo groepenDaoPojo = new GroepenDaoPojo(groepen);
+        sessionFactory.getCurrentSession().merge(groepenDaoPojo);
         sessionFactory.getCurrentSession().flush();
     }
 
     @Override
-    public void update(GroepenDaoPojo groepen) {
-        sessionFactory.getCurrentSession().update(groepen);
-        sessionFactory.getCurrentSession().flush();
-    }
-
-    @Override
-    public void delete(GroepenDaoPojo groepen) {
-        sessionFactory.getCurrentSession().delete(groepen);
+    public void delete(Groepen groepen) {
+        GroepenDaoPojo groepenDaoPojo = new GroepenDaoPojo(groepen);
+        sessionFactory.getCurrentSession().delete(groepenDaoPojo);
         sessionFactory.getCurrentSession().flush();
     }
 
@@ -70,7 +67,7 @@ public class GroepenDaoImpl implements GroepenDao{
     }
 
     @Override
-    public List<GroepenDaoPojo> findAllGroepen() {
+    public List<Groepen> findAllGroepen() {
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from GroepenDaoPojo where (persoon.pk_id = :personenId or publicGroep = 1)");
         query.setInteger("personenId", userInfo.getPersoon().getPk_id());
@@ -84,7 +81,7 @@ public class GroepenDaoImpl implements GroepenDao{
     }
 
     @Override
-    public List<GroepenDaoPojo> findAllHoofdGroepen() {
+    public List<Groepen> findAllHoofdGroepen() {
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from GroepenDaoPojo where fk_hoofd_type_groep_id is null and (persoon.pk_id = :personenId or publicGroep = 1)");
         query.setInteger("personenId", userInfo.getPersoon().getPk_id());
@@ -92,7 +89,7 @@ public class GroepenDaoImpl implements GroepenDao{
     }
 
     @Override
-    public List<GroepenDaoPojo> findAllGroepen(Integer hoofdGroepId) {
+    public List<Groepen> findAllGroepen(Integer hoofdGroepId) {
         Session session = sessionFactory.getCurrentSession();
         
         Query query = session.createQuery("from GroepenDaoPojo where hoofdGroep.pk_id = ? and (persoon.pk_id = ? or publicGroep = 1) order by negatief");
