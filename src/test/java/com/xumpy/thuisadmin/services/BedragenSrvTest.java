@@ -5,6 +5,8 @@
  */
 package com.xumpy.thuisadmin.services;
 
+import com.xumpy.thuisadmin.controllers.model.BeheerBedragenInp;
+import com.xumpy.thuisadmin.controllers.model.BeheerBedragenReport;
 import com.xumpy.thuisadmin.controllers.model.BeheerBedragenReportLst;
 import com.xumpy.thuisadmin.controllers.model.FinanceOverzichtGroep;
 import com.xumpy.thuisadmin.controllers.model.NieuwBedrag;
@@ -15,7 +17,6 @@ import com.xumpy.thuisadmin.controllers.model.OverzichtGroepBedragenTotal;
 import com.xumpy.thuisadmin.controllers.model.RekeningOverzicht;
 import com.xumpy.thuisadmin.dao.implementations.GroepenDaoImpl;
 import com.xumpy.thuisadmin.dao.implementations.RekeningenDaoImpl;
-import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
 import com.xumpy.thuisadmin.model.Bedragen;
 import com.xumpy.thuisadmin.model.Groepen;
 import com.xumpy.thuisadmin.model.Personen;
@@ -28,6 +29,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,10 +39,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import static org.mockito.Mockito.when;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.when;
+import org.mockito.Spy;
 
 /**
  *
@@ -53,6 +55,10 @@ public class BedragenSrvTest extends MainMock{
     @Mock RekeningenDaoImpl rekeningenDao;
     @Mock BedragenDaoImpl bedragenDao;
     @Mock GroepenDaoImpl groepenDao;
+
+    @Spy BeheerBedragenReportLst beheerBedragenReportLst;
+    @Spy BeheerBedragenInp beheerBedragenInp;
+    @Mock BeheerBedragenReport beheerBedragenReport;    
     
     @Mock Bedragen bedrag1;
     @Mock Bedragen bedrag2;
@@ -518,6 +524,38 @@ public class BedragenSrvTest extends MainMock{
     }
     
     @Test
+    public void testRapportOverzichtGroepBedragenWithoutTypeKostOpbrengsten() throws ParseException{
+        List<Bedragen> lstBedragen = new ArrayList<Bedragen>();
+        lstBedragen.add(bedrag1);
+        lstBedragen.add(bedrag2);
+        lstBedragen.add(bedrag3);
+        
+        when(bedrag1.getBedrag()).thenReturn(new BigDecimal(100));
+        when(bedrag2.getBedrag()).thenReturn(new BigDecimal(100));
+        when(bedrag3.getBedrag()).thenReturn(new BigDecimal(100));
+        
+        when(mainGroup.getPk_id()).thenReturn(1);
+        when(groepPositief.getPk_id()).thenReturn(2);
+        when(groepNegatief.getPk_id()).thenReturn(3);
+        when(groepPositief.getHoofdGroep()).thenReturn(mainGroup);
+        when(groepNegatief.getHoofdGroep()).thenReturn(mainGroup);
+        when(groepPositief.getNegatief()).thenReturn(0);
+        when(groepNegatief.getNegatief()).thenReturn(1);
+        
+        when(bedrag1.getGroep()).thenReturn(groepPositief);
+        when(bedrag2.getGroep()).thenReturn(groepNegatief);
+        when(bedrag3.getGroep()).thenReturn(groepPositief);
+        
+        when(bedragenDao.BedragInPeriode(dt.parse("2015-02-18"), dt.parse("2015-02-23"), null, true)).thenReturn(lstBedragen);
+        when(groepenDao.findGroep(1)).thenReturn(mainGroup);
+        
+        OverzichtGroepBedragenTotal overzichtGroepBedragenTotal = 
+                bedragenSrv.rapportOverzichtGroepBedragen(1, dt.parse("2015-02-18"), dt.parse("2015-02-23"), true);
+        
+        assertEquals(new BigDecimal(100), overzichtGroepBedragenTotal.getSomBedrag());
+    }
+    
+    @Test
     public void testGraphiekOverzichtGroep() throws ParseException{
         List<Bedragen> lstBedragen = new ArrayList<Bedragen>();
         lstBedragen.add(bedrag1);
@@ -671,6 +709,172 @@ public class BedragenSrvTest extends MainMock{
         
         assertEquals(new BigDecimal(1400), bedragSrvPojoMock.getRekening().getWaarde());
         assertEquals(new BigDecimal(1000), newRekening.getWaarde());
+    }
+    
+    public void mockSizeBeheerBedragenReportLst(Integer size){
+        List<BeheerBedragenReport> lstBeheerBedragenReport = new ArrayList<BeheerBedragenReport>();
+        for (int i=0; i<size; i++){
+            lstBeheerBedragenReport.add(beheerBedragenReport);
+        }
+        when(beheerBedragenReportLst.getBeheerBedragenReport()).thenReturn(lstBeheerBedragenReport);
+    }
+    
+    @Test
+    public void testSetButtonsTestNoPreviousNoNext(){
+        when(beheerBedragenInp.getOffset()).thenReturn(0);
+        mockSizeBeheerBedragenReportLst(5);
+        
+        BeheerBedragenReportLst result = BedragenSrvImpl.setButtons(beheerBedragenReportLst, beheerBedragenInp);
+        
+        assertEquals(result.isShowNext(), false);
+        assertEquals(result.isShowPrevious(), false);
+    }
+    
+    @Test
+    public void testSetButtonsTestNoPreviousYesNext(){
+        when(beheerBedragenInp.getOffset()).thenReturn(0);
+        mockSizeBeheerBedragenReportLst(10);
+        
+        BeheerBedragenReportLst result = BedragenSrvImpl.setButtons(beheerBedragenReportLst, beheerBedragenInp);
+        
+        assertEquals(result.isShowNext(), true);
+        assertEquals(result.isShowPrevious(), false);
+    }
+    
+    @Test
+    public void testSetButtonsTestYesPreviousNoNext(){
+        when(beheerBedragenInp.getOffset()).thenReturn(1);
+        mockSizeBeheerBedragenReportLst(5);
+        
+        BeheerBedragenReportLst result = BedragenSrvImpl.setButtons(beheerBedragenReportLst, beheerBedragenInp);
+        
+        assertEquals(result.isShowNext(), false);
+        assertEquals(result.isShowPrevious(), true);
+    }
+    
+    @Test
+    public void testSetButtonsTestYesPreviousYesNext(){
+        when(beheerBedragenInp.getOffset()).thenReturn(1);
+        mockSizeBeheerBedragenReportLst(10);
+        
+        BeheerBedragenReportLst result = BedragenSrvImpl.setButtons(beheerBedragenReportLst, beheerBedragenInp);
+        
+        assertEquals(result.isShowNext(), true);
+        assertEquals(result.isShowPrevious(), true);
+    }
+    
+    @Test
+    public void testFindAllMonthsBedragen() throws ParseException{
+        when(bedrag1.getDatum()).thenReturn(dt.parse("2015-02-19"));
+        when(bedrag2.getDatum()).thenReturn(dt.parse("2015-04-19"));
+        when(bedrag3.getDatum()).thenReturn(dt.parse("2015-02-20"));
+        when(bedrag4.getDatum()).thenReturn(dt.parse("2015-02-19"));
+        when(bedrag5.getDatum()).thenReturn(dt.parse("2015-04-20"));
+        
+        List<Bedragen> allBedragen = new ArrayList<Bedragen>();
+        allBedragen.add(bedrag1);
+        allBedragen.add(bedrag2);
+        allBedragen.add(bedrag3);
+        allBedragen.add(bedrag4);
+        allBedragen.add(bedrag5);
+        
+        List<String> expectedDates = new ArrayList<String>();
+        expectedDates.add("02/2015");
+        expectedDates.add("04/2015");
+        
+        assertEquals(expectedDates, bedragenSrv.findAllMonthsBedragen(allBedragen));
+    }
+    
+    @Test
+    public void testFindMainBedragen() throws ParseException{
+        Groepen mainGroup2 = Mockito.mock(Groepen.class);
+        when(mainGroup.getPk_id()).thenReturn(1);
+        when(mainGroup2.getPk_id()).thenReturn(2);
+        when(groepNegatief.getHoofdGroep()).thenReturn(mainGroup);
+        
+        when(mainGroup.getNegatief()).thenReturn(1);
+        when(mainGroup2.getNegatief()).thenReturn(0);
+        when(groepNegatief.getNegatief()).thenReturn(1);
+        
+        when(bedrag1.getDatum()).thenReturn(dt.parse("2015-02-19"));
+        when(bedrag1.getGroep()).thenReturn(mainGroup);
+        when(bedrag1.getBedrag()).thenReturn(new BigDecimal(100));
+        when(bedrag2.getDatum()).thenReturn(dt.parse("2015-04-19"));
+        when(bedrag2.getGroep()).thenReturn(groepNegatief);
+        when(bedrag2.getBedrag()).thenReturn(new BigDecimal(50));
+        when(bedrag3.getDatum()).thenReturn(dt.parse("2015-02-20"));
+        when(bedrag3.getGroep()).thenReturn(groepNegatief);
+        when(bedrag3.getBedrag()).thenReturn(new BigDecimal(100));
+        when(bedrag4.getDatum()).thenReturn(dt.parse("2015-02-19"));
+        when(bedrag4.getGroep()).thenReturn(mainGroup2);
+        when(bedrag4.getBedrag()).thenReturn(new BigDecimal(50));
+        when(bedrag5.getDatum()).thenReturn(dt.parse("2015-04-20"));
+        when(bedrag5.getGroep()).thenReturn(mainGroup);
+        when(bedrag5.getBedrag()).thenReturn(new BigDecimal(100));
+        
+        List<Bedragen> allBedragen = new ArrayList<Bedragen>();
+        allBedragen.add(bedrag1);
+        allBedragen.add(bedrag2);
+        allBedragen.add(bedrag3);
+        allBedragen.add(bedrag4);
+        allBedragen.add(bedrag5);
+        
+        String month="02/2015";
+        Map<Integer, BigDecimal> expectedResult = new HashMap<Integer, BigDecimal>();
+        expectedResult.put(0, new BigDecimal("75.00"));
+        expectedResult.put(2, new BigDecimal("-50"));
+        expectedResult.put(1, new BigDecimal("200"));
+        
+        assertEquals(expectedResult, bedragenSrv.findMainBedragen(allBedragen, month));
+    }
+    
+    @Test
+    public void testSelectBedragenInPeriode() throws ParseException{
+        List<Bedragen> allBedragen = new ArrayList<Bedragen>();
+        allBedragen.add(bedrag1);
+        allBedragen.add(bedrag2);
+        allBedragen.add(bedrag3);
+        allBedragen.add(bedrag4);
+        allBedragen.add(bedrag5);
+        
+        when(bedragenDao.BedragInPeriode(dt.parse("2015-02-01"), dt.parse("2015-01-31"), null, false)).thenReturn(allBedragen);
+        
+        assertEquals(allBedragen, bedragenSrv.selectBedragenInPeriode(dt.parse("2015-02-01"), dt.parse("2015-01-31")));
+    }
+    
+    @Test
+    public void filterBedragenWithMainGroup() throws ParseException{
+        Groepen mainGroup2 = Mockito.mock(Groepen.class);
+        Groepen mainGroup3 = Mockito.mock(Groepen.class);
+        
+        when(mainGroup.getPk_id()).thenReturn(1);
+        when(mainGroup2.getPk_id()).thenReturn(2);
+        when(mainGroup3.getPk_id()).thenReturn(3);
+        
+        
+        List<Bedragen> allBedragen = new ArrayList<Bedragen>();
+        when(bedrag1.getGroep()).thenReturn(mainGroup);
+        when(bedrag2.getGroep()).thenReturn(mainGroup2);
+        
+        when(bedrag3.getGroep()).thenReturn(mainGroup3);
+        when(bedrag4.getGroep()).thenReturn(mainGroup3);
+        when(bedrag5.getGroep()).thenReturn(mainGroup3);
+        
+        allBedragen.add(bedrag1);
+        allBedragen.add(bedrag2);
+        allBedragen.add(bedrag3);
+        allBedragen.add(bedrag4);
+        allBedragen.add(bedrag5);
+        
+        List<Integer> mainGroup = new ArrayList<Integer>();
+        mainGroup.add(1);
+        mainGroup.add(2);
+        
+        List<Bedragen> expectedResult = new ArrayList<Bedragen>();
+        expectedResult.add(bedrag1);
+        expectedResult.add(bedrag2);
+        
+        assertEquals(expectedResult, bedragenSrv.filterBedragenWithMainGroup(allBedragen, mainGroup));
     }
 }
 

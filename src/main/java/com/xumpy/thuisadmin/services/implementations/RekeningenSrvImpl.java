@@ -7,8 +7,6 @@ package com.xumpy.thuisadmin.services.implementations;
 
 import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.dao.implementations.RekeningenDaoImpl;
-import com.xumpy.thuisadmin.services.logic.BedragenLogic;
-import com.xumpy.thuisadmin.dao.model.RekeningenDaoPojo;
 import com.xumpy.thuisadmin.controllers.model.NieuwRekening;
 import com.xumpy.thuisadmin.controllers.model.RekeningBedragTotal;
 import com.xumpy.thuisadmin.model.Rekeningen;

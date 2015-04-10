@@ -4,13 +4,18 @@
  * and open the template in the editor.
  */
 package com.xumpy.thuisadmin.services;
+import com.xumpy.thuisadmin.model.Bedragen;
 import com.xumpy.thuisadmin.model.Groepen;
 import com.xumpy.thuisadmin.services.implementations.GroepenSrvImpl;
 import com.xumpy.thuisadmin.services.model.GroepenSrvPojo;
+import java.util.ArrayList;
+import java.util.List;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import static org.mockito.Mockito.when;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -27,7 +32,7 @@ public class GroepenSrvTest {
     @Mock Groepen groep3;
     @Mock Groepen groep4;
 
-    @Mock GroepenSrvImpl groepenSrv;
+    @InjectMocks GroepenSrvImpl groepenSrv;
     
     @Test
     public void testGetHoofdGroep(){
@@ -71,5 +76,40 @@ public class GroepenSrvTest {
             System.out.println("---- Equals");
         }
         assertEquals(groepEq1, groepEq2);
+    }
+    
+    @Test
+    public void testFindAllHoofdGroepenWithBedragen(){
+        when(groep1.getHoofdGroep()).thenReturn(null);
+        when(groep2.getHoofdGroep()).thenReturn(null);
+        when(groep3.getHoofdGroep()).thenReturn(groep1);
+        when(groep4.getHoofdGroep()).thenReturn(groep3);
+        
+        
+        List<Bedragen> allBedragen = new ArrayList<Bedragen>();
+        Bedragen bedrag1 = Mockito.mock(Bedragen.class);
+        Bedragen bedrag2 = Mockito.mock(Bedragen.class);
+        Bedragen bedrag3 = Mockito.mock(Bedragen.class);
+        Bedragen bedrag4 = Mockito.mock(Bedragen.class);
+        Bedragen bedrag5 = Mockito.mock(Bedragen.class);
+        
+        when(bedrag1.getGroep()).thenReturn(groep1);
+        when(bedrag2.getGroep()).thenReturn(groep2);
+        when(bedrag3.getGroep()).thenReturn(groep3);
+        when(bedrag4.getGroep()).thenReturn(groep4);
+        when(bedrag5.getGroep()).thenReturn(groep2);
+        
+        allBedragen.add(bedrag1);
+        allBedragen.add(bedrag2);
+        allBedragen.add(bedrag3);
+        allBedragen.add(bedrag4);
+        allBedragen.add(bedrag5);
+        
+        List<Groepen> mainGroups = groepenSrv.findAllHoofdGroepen(allBedragen);
+        List<Groepen> expectedMainGroups = new ArrayList<Groepen>();
+        expectedMainGroups.add(groep1);
+        expectedMainGroups.add(groep2);
+        
+        assertEquals(expectedMainGroups, mainGroups);
     }
 }

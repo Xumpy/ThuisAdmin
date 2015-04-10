@@ -77,6 +77,11 @@ public class Finances {
         
         return "finances/nieuwDocument";
     }
+     
+    @RequestMapping(value = "finances/OverviewMonthCategory")
+    public String OverviewMonthCategory(){
+        return "finances/OverviewMonthCategory";
+    }
     
     @RequestMapping(value="/finances/editBedragDocument/{documentId}")
     public String editBedragDocument(@PathVariable Integer documentId, Model model){

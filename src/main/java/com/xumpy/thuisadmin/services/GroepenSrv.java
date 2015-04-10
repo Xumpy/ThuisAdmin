@@ -6,6 +6,7 @@
 package com.xumpy.thuisadmin.services;
 
 import com.xumpy.thuisadmin.controllers.model.GroepenTree;
+import com.xumpy.thuisadmin.model.Bedragen;
 import com.xumpy.thuisadmin.model.Groepen;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public interface GroepenSrv {
     Groepen save(Groepen groepen);
     Groepen delete(Groepen groepen);
     public List<Groepen> findAllHoofdGroepen();
+    public List<Groepen> findAllHoofdGroepen(List<Bedragen> bedragen);
     public List<Groepen> findAllGroepen(Integer hoofdGroepId);
     public List<Groepen> findAllGroepen();
     public Groepen findGroep(Integer groepId);

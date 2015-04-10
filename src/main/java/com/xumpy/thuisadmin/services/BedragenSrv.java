@@ -15,8 +15,10 @@ import com.xumpy.thuisadmin.model.Groepen;
 import com.xumpy.thuisadmin.model.Rekeningen;
 import com.xumpy.thuisadmin.services.model.BedragenSrvPojo;
 import com.xumpy.thuisadmin.services.model.GroepenSrvPojo;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -32,6 +34,10 @@ public interface BedragenSrv {
                                          Date eindDate);
     public FinanceOverzichtGroep graphiekOverzichtGroep(Date beginDate, Date eindDate, boolean showBedragPublicGroep);
     public OverzichtGroepBedragenTotal rapportOverzichtGroepBedragen(Integer typeGroepId, 
+                                                                     Date beginDate, 
+                                                                     Date eindDate,
+                                                                     boolean showBedragPublicGroep);
+    public OverzichtGroepBedragenTotal rapportOverzichtGroepBedragen(Integer typeGroepId, 
                                                                      Integer typeGroepKostOpbrengst, 
                                                                      Date beginDate, 
                                                                      Date eindDate,
@@ -41,4 +47,9 @@ public interface BedragenSrv {
     public OverzichtGroepBedragenTotal filterOverzichtGroepBedragenTotalGroep(OverzichtGroepBedragenTotal overzichtGroepBedragenTotal, Groepen groep);
     public OverzichtGroepBedragenTotal filterOverzichtGroepBedragenTotalFilter(OverzichtGroepBedragenTotal overzichtGroepBedragenTotal, String filter);
     public List<Bedragen> orderByGroup(List<Bedragen> bedragen);
+    public List<String> findAllMonthsBedragen(List<Bedragen> bedragen);
+    public Map<Integer, BigDecimal> findMainBedragen(List<Bedragen> bedragen, String Month);
+    
+    public List<Bedragen> selectBedragenInPeriode(Date beginDate, Date endDate);
+    public List<Bedragen> filterBedragenWithMainGroup(List<Bedragen> bedragen, List<Integer> MainGroupId);
 }

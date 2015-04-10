@@ -6,15 +6,14 @@
 package com.xumpy.thuisadmin.services.implementations;
 
 import com.xumpy.security.model.UserInfo;
+import com.xumpy.thuisadmin.controllers.model.BeheerBedragenInp;
 import com.xumpy.thuisadmin.controllers.model.BeheerBedragenReport;
 import com.xumpy.thuisadmin.dao.implementations.BedragenDaoImpl;
 import static com.xumpy.thuisadmin.dao.implementations.BedragenDaoImpl.NEGATIEF;
 import static com.xumpy.thuisadmin.dao.implementations.BedragenDaoImpl.POSITIEF;
 import com.xumpy.thuisadmin.dao.implementations.GroepenDaoImpl;
 import com.xumpy.thuisadmin.dao.implementations.RekeningenDaoImpl;
-import com.xumpy.thuisadmin.services.logic.BedragenLogic;
 import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
-import com.xumpy.thuisadmin.dao.model.RekeningenDaoPojo;
 import com.xumpy.thuisadmin.controllers.model.BeheerBedragenReportLst;
 import com.xumpy.thuisadmin.controllers.model.FinanceOverzichtGroep;
 import com.xumpy.thuisadmin.controllers.model.NieuwBedrag;
@@ -26,20 +25,20 @@ import com.xumpy.thuisadmin.model.Bedragen;
 import com.xumpy.thuisadmin.model.Groepen;
 import com.xumpy.thuisadmin.model.Rekeningen;
 import com.xumpy.thuisadmin.services.BedragenSrv;
-import static com.xumpy.thuisadmin.services.logic.BedragenLogic.DELETE;
-import static com.xumpy.thuisadmin.services.logic.BedragenLogic.INSERT;
-import static com.xumpy.thuisadmin.services.logic.BedragenLogic.UPDATE;
 import com.xumpy.thuisadmin.services.model.BedragenSrvPojo;
 import com.xumpy.thuisadmin.services.model.GroepenSrvPojo;
 import com.xumpy.thuisadmin.services.model.PersonenSrvPojo;
 import com.xumpy.thuisadmin.services.model.RekeningenSrvPojo;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -177,6 +176,52 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         return financeOverzichtGroep;
     }
 
+    @Override
+    @Transactional
+    public OverzichtGroepBedragenTotal rapportOverzichtGroepBedragen(Integer typeGroepId, 
+                                                                     Date beginDate, 
+                                                                     Date eindDate,
+                                                                     boolean showBedragPublicGroep) {
+        List<Bedragen> lstBedragenInPeriode = bedragenDao.BedragInPeriode(beginDate, eindDate, null, showBedragPublicGroep);
+        
+        Groepen groepenSrv = groepenDao.findGroep(typeGroepId);
+
+        Integer negatief = new Integer(0);
+        
+        List<Bedragen> lstBedragenNeg = getBedragenInGroep(lstBedragenInPeriode, groepenSrv, 1);
+        List<Bedragen> lstBedragenPos = getBedragenInGroep(lstBedragenInPeriode, groepenSrv, 0);
+
+        List<OverzichtGroepBedragen> overzichtGroepBedragen = new ArrayList<OverzichtGroepBedragen>();
+        
+        BigDecimal somOverzicht = new BigDecimal(0);
+        
+        for(Bedragen bedrag: lstBedragenNeg){
+            System.out.println(bedrag);
+            OverzichtGroepBedragen overzichtGroepBedrag = new OverzichtGroepBedragen();
+            
+            BedragenSrvPojo bedragSrvPojo = new BedragenSrvPojo(bedrag);
+            bedragSrvPojo.setBedrag(bedrag.getBedrag().multiply(new BigDecimal(-1)));
+            overzichtGroepBedrag.setWithBedrag(bedragSrvPojo);
+            
+            overzichtGroepBedragen.add(overzichtGroepBedrag);
+            somOverzicht = somOverzicht.add(bedragSrvPojo.getBedrag());
+        }
+        
+        for(Bedragen bedrag: lstBedragenPos){
+            System.out.println(bedrag);
+            OverzichtGroepBedragen overzichtGroepBedrag = new OverzichtGroepBedragen();
+            overzichtGroepBedrag.setWithBedrag(bedrag);
+            
+            overzichtGroepBedragen.add(overzichtGroepBedrag);
+            somOverzicht = somOverzicht.add(bedrag.getBedrag());
+        }
+        
+        overzichtGroepBedragenTotal.setSomBedrag(somOverzicht);
+        overzichtGroepBedragenTotal.setOverzichtGroepBedragen(overzichtGroepBedragen);
+
+        return overzichtGroepBedragenTotal;
+    }
+    
     @Override
     @Transactional
     public OverzichtGroepBedragenTotal rapportOverzichtGroepBedragen(Integer typeGroepId, 
@@ -510,5 +555,99 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
             rekening2SrvPojo.setWaarde(rekening2.getWaarde().subtract(bedrag.getBedrag()));
         }
         return rekening2SrvPojo;
+    }
+    
+    public static BeheerBedragenReportLst setButtons(BeheerBedragenReportLst beheerBedragenReportLst, BeheerBedragenInp beheerBedragenInp){
+        if (beheerBedragenInp.getOffset().equals(0)){
+            beheerBedragenReportLst.setShowPrevious(false);
+        } else {
+            beheerBedragenReportLst.setShowPrevious(true);
+        }
+        
+        if (beheerBedragenReportLst.getBeheerBedragenReport() != null && beheerBedragenReportLst.getBeheerBedragenReport().size() == 10){
+            beheerBedragenReportLst.setShowNext(true);
+        } else {
+            beheerBedragenReportLst.setShowNext(false);
+        }
+        
+        return beheerBedragenReportLst;
+    }
+    
+    @Override
+    public List<String> findAllMonthsBedragen(List<Bedragen> bedragen){
+        SimpleDateFormat dt = new SimpleDateFormat("MM/yyyy"); 
+        List<String> months = new ArrayList<String>();
+        
+        for (Bedragen bedrag: bedragen){
+            if (!months.contains(dt.format(bedrag.getDatum()))){
+                months.add(dt.format(bedrag.getDatum()));
+            }
+        }
+        
+        return months;
+    }
+    
+    @Override
+    public Map<Integer, BigDecimal> findMainBedragen(List<Bedragen> bedragen, String Month){
+        SimpleDateFormat dt = new SimpleDateFormat("MM/yyyy"); 
+        Map<GroepenSrvPojo, BigDecimal> mainBedragenPerGroup = new HashMap<GroepenSrvPojo, BigDecimal>();
+        
+        for (Bedragen bedrag: bedragen){
+            if (dt.format(bedrag.getDatum()).equals(Month)){
+                GroepenSrvPojo mainGroup = new GroepenSrvPojo(GroepenSrvImpl.getHoofdGroep(bedrag.getGroep()));
+                if (mainBedragenPerGroup.containsKey(mainGroup)){
+                    BigDecimal ammount = mainBedragenPerGroup.get(mainGroup);
+                    if (bedrag.getGroep().getNegatief().equals(1)){
+                        ammount = ammount.add(bedrag.getBedrag());
+                    } else {
+                        ammount = ammount.subtract(bedrag.getBedrag());
+                    }
+                    mainBedragenPerGroup.put(mainGroup, ammount);
+                } else {
+                    if (bedrag.getGroep().getNegatief().equals(1)){
+                        mainBedragenPerGroup.put(mainGroup, bedrag.getBedrag());
+                    } else {
+                        mainBedragenPerGroup.put(mainGroup, bedrag.getBedrag().multiply(new BigDecimal(-1)));
+                    }
+                }
+            }
+        }
+        
+        BigDecimal average = new BigDecimal(0);
+        for (Map.Entry bedrag: mainBedragenPerGroup.entrySet()){
+            average = average.add((BigDecimal) bedrag.getValue());
+        }
+        average = average.divide(new BigDecimal(mainBedragenPerGroup.size()), 2, RoundingMode.HALF_UP);
+        
+        Map<Integer, BigDecimal> result = new HashMap<Integer, BigDecimal>();
+        
+        result.put(0, average);
+        
+        for (Map.Entry bedrag: mainBedragenPerGroup.entrySet()){
+            result.put(((GroepenSrvPojo) bedrag.getKey()).getPk_id(), (BigDecimal) bedrag.getValue());
+        }
+        
+        return result;
+    }
+        
+    @Override
+    @Transactional
+    public List<Bedragen> selectBedragenInPeriode(Date beginDate, Date endDate){
+        List<Bedragen> bedragen = bedragenDao.BedragInPeriode(beginDate, endDate, null, false);
+        
+        return bedragen;
+    }
+    
+    @Override
+    public List<Bedragen> filterBedragenWithMainGroup(List<Bedragen> bedragen, List<Integer> MainGroupId){
+        List<Bedragen> result = new ArrayList<Bedragen>();
+        
+        for (Bedragen bedrag: bedragen){
+            if (MainGroupId.contains(GroepenSrvImpl.getHoofdGroep(bedrag.getGroep()).getPk_id())){
+                result.add(bedrag);
+            }
+        }
+        
+        return result;
     }
 }

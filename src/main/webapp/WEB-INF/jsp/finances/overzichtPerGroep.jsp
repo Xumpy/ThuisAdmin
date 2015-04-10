@@ -46,6 +46,7 @@
                       <th st-sort="type_naam">Type Naam</th>
                       <th st-sort="bedrag">Bedrag</th>
                       <th st-sort="datum">Datum</th>
+                      <th st-sort="rekening">Rekening</th>
                       <th st-sort="omschrijving">Omschrijving</th>
                   </tr>
                 </thead>
@@ -54,6 +55,7 @@
                             <td>{{overzicht.type_naam}}</td>
                             <td>{{overzicht.bedrag}}</td>
                             <td>{{overzicht.datum}}</td>
+                            <td>{{overzicht.rekening}}</td>
                             <td>{{overzicht.omschrijving}}</td>
                     </tr>
                 </tbody>

@@ -5,12 +5,11 @@
  */
 package com.xumpy.thuisadmin.controllers.rest;
 
-import com.xumpy.thuisadmin.services.logic.BeheerBedragenButtons;
-import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
 import com.xumpy.thuisadmin.controllers.model.BeheerBedragenInp;
 import com.xumpy.thuisadmin.controllers.model.BeheerBedragenReportLst;
 import com.xumpy.thuisadmin.controllers.model.NieuwBedrag;
 import com.xumpy.thuisadmin.services.BedragenSrv;
+import com.xumpy.thuisadmin.services.implementations.BedragenSrvImpl;
 import com.xumpy.thuisadmin.services.model.BedragenSrvPojo;
 import java.io.Serializable;
 import java.text.ParseException;
@@ -49,7 +48,7 @@ public class CtrlBedragen implements Serializable{
         this.beheerBedragenInp = beheerBedragenInp;
 
         beheerBedragenReportLst = bedragenSrv.reportBedragen(beheerBedragenReportLst, beheerBedragenInp.getOffset(), beheerBedragenInp.getRekening(), beheerBedragenInp.getZoekOpdracht());
-        beheerBedragenReportLst = BeheerBedragenButtons.setButtons(beheerBedragenReportLst, beheerBedragenInp);
+        beheerBedragenReportLst = BedragenSrvImpl.setButtons(beheerBedragenReportLst, beheerBedragenInp);
         
         return beheerBedragenReportLst;
     }

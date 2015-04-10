@@ -6334,3 +6334,8 @@ button.close {
   background-color: #fff;
   color: #772953;
 }
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}

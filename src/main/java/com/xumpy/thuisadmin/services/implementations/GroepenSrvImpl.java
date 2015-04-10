@@ -9,6 +9,7 @@ import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.dao.implementations.GroepenDaoImpl;
 import com.xumpy.thuisadmin.dao.model.GroepenDaoPojo;
 import com.xumpy.thuisadmin.controllers.model.GroepenTree;
+import com.xumpy.thuisadmin.model.Bedragen;
 import com.xumpy.thuisadmin.model.Groepen;
 import com.xumpy.thuisadmin.services.GroepenSrv;
 import com.xumpy.thuisadmin.services.model.GroepenSrvPojo;
@@ -74,6 +75,20 @@ public class GroepenSrvImpl implements GroepenSrv{
         return groepenDao.findAllHoofdGroepen();
     }
 
+    @Override
+    public List<Groepen> findAllHoofdGroepen(List<Bedragen> bedragen){
+        List<Groepen> groepen = new ArrayList<Groepen>();
+        System.out.println(bedragen.size());
+            
+        for (Bedragen bedrag: bedragen){
+            if (!groepen.contains(getHoofdGroep(bedrag.getGroep()))){
+                groepen.add(getHoofdGroep(bedrag.getGroep()));
+            }
+        }
+        
+        return groepen;
+    }
+    
     @Override
     @Transactional
     public List<Groepen> findAllGroepen(Integer hoofdGroepId) {

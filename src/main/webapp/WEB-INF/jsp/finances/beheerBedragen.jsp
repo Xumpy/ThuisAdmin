@@ -133,4 +133,5 @@
             $scope.itemsByPage = 10;
         });
     </script>
+    <script src="<c:url value="/resources/bootstrap/js/jquery.multi-select.js" />" type="text/javascript"></script>
 </html>

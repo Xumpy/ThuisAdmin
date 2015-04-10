@@ -25,6 +25,7 @@ public class OverzichtGroepBedragen implements Serializable{
     private String type_naam;
     private BigDecimal bedrag;
     private String datum;
+    private String rekening;
     private String omschrijving;
 
     public Integer getPk_id() {
@@ -66,6 +67,14 @@ public class OverzichtGroepBedragen implements Serializable{
     public void setOmschrijving(String omschrijving) {
         this.omschrijving = omschrijving;
     }
+
+    public String getRekening() {
+        return rekening;
+    }
+
+    public void setRekening(String rekening) {
+        this.rekening = rekening;
+    }
     
     public void setWithBedrag(Bedragen bedrag){
         SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd"); 
@@ -73,6 +82,7 @@ public class OverzichtGroepBedragen implements Serializable{
         this.type_naam = bedrag.getGroep().getNaam();
         this.bedrag = bedrag.getBedrag();
         this.datum = dt.format(bedrag.getDatum());
+        this.rekening = bedrag.getRekening().getNaam();
         this.omschrijving = bedrag.getOmschrijving();
     }
     
@@ -117,6 +127,7 @@ public class OverzichtGroepBedragen implements Serializable{
         if (bedrag != null && bedrag.toString().toLowerCase().contains(searchText.toLowerCase())) return true;
         if (datum != null && datum.toLowerCase().contains(searchText.toLowerCase())) return true;
         if (omschrijving != null && omschrijving.toLowerCase().contains(searchText.toLowerCase())) return true;
+        if (rekening != null && rekening.toLowerCase().contains(searchText.toLowerCase())) return true;
         
         return false;
     }
