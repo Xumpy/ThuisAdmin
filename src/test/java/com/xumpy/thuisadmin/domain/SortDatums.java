@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.xumpy.thuisadmin.model;
+package com.xumpy.thuisadmin.domain;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

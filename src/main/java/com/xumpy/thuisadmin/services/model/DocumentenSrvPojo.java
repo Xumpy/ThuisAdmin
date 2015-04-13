@@ -5,7 +5,7 @@
  */
 package com.xumpy.thuisadmin.services.model;
 
-import com.xumpy.thuisadmin.model.Documenten;
+import com.xumpy.thuisadmin.domain.Documenten;
 
 /**
  *

@@ -6,7 +6,7 @@
 package com.xumpy.thuisadmin.dao;
 
 import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
-import com.xumpy.thuisadmin.model.Personen;
+import com.xumpy.thuisadmin.domain.Personen;
 import java.util.List;
 
 /**

@@ -9,7 +9,7 @@ import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.dao.DocumentenDao;
 import com.xumpy.thuisadmin.dao.model.DocumentenDaoPojo;
 import com.xumpy.thuisadmin.controllers.model.DocumentenReport;
-import com.xumpy.thuisadmin.model.Documenten;
+import com.xumpy.thuisadmin.domain.Documenten;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;

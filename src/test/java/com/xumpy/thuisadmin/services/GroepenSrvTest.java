@@ -4,8 +4,8 @@
  * and open the template in the editor.
  */
 package com.xumpy.thuisadmin.services;
-import com.xumpy.thuisadmin.model.Bedragen;
-import com.xumpy.thuisadmin.model.Groepen;
+import com.xumpy.thuisadmin.domain.Bedragen;
+import com.xumpy.thuisadmin.domain.Groepen;
 import com.xumpy.thuisadmin.services.implementations.GroepenSrvImpl;
 import com.xumpy.thuisadmin.services.model.GroepenSrvPojo;
 import java.util.ArrayList;

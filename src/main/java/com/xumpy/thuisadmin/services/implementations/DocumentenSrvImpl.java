@@ -7,7 +7,7 @@ package com.xumpy.thuisadmin.services.implementations;
 
 import com.xumpy.thuisadmin.dao.implementations.DocumentenDaoImpl;
 import com.xumpy.thuisadmin.controllers.model.DocumentenReport;
-import com.xumpy.thuisadmin.model.Documenten;
+import com.xumpy.thuisadmin.domain.Documenten;
 import com.xumpy.thuisadmin.services.DocumentenSrv;
 import com.xumpy.thuisadmin.services.model.DocumentenSrvPojo;
 import java.util.List;

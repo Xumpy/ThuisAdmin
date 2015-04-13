@@ -5,7 +5,7 @@
  */
 package com.xumpy.thuisadmin.controllers.model;
 
-import com.xumpy.thuisadmin.model.Groepen;
+import com.xumpy.thuisadmin.domain.Groepen;
 import java.io.Serializable;
 import java.util.List;
 

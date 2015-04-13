@@ -9,7 +9,7 @@ import com.xumpy.thuisadmin.services.implementations.PersonenSrvImpl;
 import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
 import com.xumpy.thuisadmin.controllers.model.RegisterUserPage;
-import com.xumpy.thuisadmin.model.Personen;
+import com.xumpy.thuisadmin.domain.Personen;
 import com.xumpy.thuisadmin.services.model.PersonenSrvPojo;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;

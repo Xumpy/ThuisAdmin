@@ -3,18 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.xumpy.thuisadmin.model;
-import java.math.BigDecimal;
-import java.util.Date;
+package com.xumpy.thuisadmin.domain;
 
 /**
  *
  * @author nicom
  */
-public interface Rekeningen {
-    Date getLaatst_bijgewerkt();
+public interface Personen {
+    String getMd5_password();
     String getNaam();
-    Personen getPersoon();
     Integer getPk_id();
-    BigDecimal getWaarde();
+    String getUsername();
+    String getVoornaam();
 }

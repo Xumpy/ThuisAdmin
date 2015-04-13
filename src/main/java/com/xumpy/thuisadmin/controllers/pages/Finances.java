@@ -6,7 +6,7 @@
 package com.xumpy.thuisadmin.controllers.pages;
 
 import com.xumpy.thuisadmin.controllers.model.NieuwDocument;
-import com.xumpy.thuisadmin.model.Documenten;
+import com.xumpy.thuisadmin.domain.Documenten;
 import com.xumpy.thuisadmin.services.BedragenSrv;
 import com.xumpy.thuisadmin.services.DocumentenSrv;
 import com.xumpy.thuisadmin.services.model.BedragenSrvPojo;

@@ -9,7 +9,7 @@ import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.dao.implementations.RekeningenDaoImpl;
 import com.xumpy.thuisadmin.controllers.model.NieuwRekening;
 import com.xumpy.thuisadmin.controllers.model.RekeningBedragTotal;
-import com.xumpy.thuisadmin.model.Rekeningen;
+import com.xumpy.thuisadmin.domain.Rekeningen;
 import com.xumpy.thuisadmin.services.RekeningenSrv;
 import com.xumpy.thuisadmin.services.model.PersonenSrvPojo;
 import com.xumpy.thuisadmin.services.model.RekeningenSrvPojo;

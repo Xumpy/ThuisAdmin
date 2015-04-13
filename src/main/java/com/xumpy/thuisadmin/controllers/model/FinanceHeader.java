@@ -5,7 +5,7 @@
  */
 package com.xumpy.thuisadmin.controllers.model;
 
-import com.xumpy.thuisadmin.model.Rekeningen;
+import com.xumpy.thuisadmin.domain.Rekeningen;
 import com.xumpy.thuisadmin.services.model.RekeningenSrvPojo;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;

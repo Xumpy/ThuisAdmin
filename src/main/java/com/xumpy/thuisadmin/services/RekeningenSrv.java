@@ -7,7 +7,7 @@ package com.xumpy.thuisadmin.services;
 
 import com.xumpy.thuisadmin.controllers.model.NieuwRekening;
 import com.xumpy.thuisadmin.controllers.model.RekeningBedragTotal;
-import com.xumpy.thuisadmin.model.Rekeningen;
+import com.xumpy.thuisadmin.domain.Rekeningen;
 
 /**
  *

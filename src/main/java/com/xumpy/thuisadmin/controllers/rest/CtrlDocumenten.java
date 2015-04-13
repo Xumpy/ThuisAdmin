@@ -8,7 +8,7 @@ package com.xumpy.thuisadmin.controllers.rest;
 import com.xumpy.thuisadmin.dao.model.DocumentenDaoPojo;
 import com.xumpy.thuisadmin.controllers.model.DocumentenReport;
 import com.xumpy.thuisadmin.controllers.model.NieuwDocument;
-import com.xumpy.thuisadmin.model.Documenten;
+import com.xumpy.thuisadmin.domain.Documenten;
 import com.xumpy.thuisadmin.services.DocumentenSrv;
 import com.xumpy.thuisadmin.services.model.DocumentenSrvPojo;
 import java.io.IOException;

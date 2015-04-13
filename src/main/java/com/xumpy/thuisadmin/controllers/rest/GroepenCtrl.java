@@ -7,7 +7,7 @@ package com.xumpy.thuisadmin.controllers.rest;
 
 import com.xumpy.thuisadmin.dao.model.GroepenDaoPojo;
 import com.xumpy.thuisadmin.controllers.model.GroepenTree;
-import com.xumpy.thuisadmin.model.Groepen;
+import com.xumpy.thuisadmin.domain.Groepen;
 import com.xumpy.thuisadmin.services.GroepenSrv;
 import com.xumpy.thuisadmin.services.model.GroepenSrvPojo;
 import java.io.Serializable;

@@ -5,7 +5,7 @@
  */
 package com.xumpy.thuisadmin.dao;
 
-import com.xumpy.thuisadmin.model.Rekeningen;
+import com.xumpy.thuisadmin.domain.Rekeningen;
 import java.util.List;
 
 /**

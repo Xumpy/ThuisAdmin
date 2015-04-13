@@ -5,7 +5,7 @@
  */
 package com.xumpy.thuisadmin.dao.model;
 
-import com.xumpy.thuisadmin.model.Documenten;
+import com.xumpy.thuisadmin.domain.Documenten;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -5,7 +5,7 @@
  */
 package com.xumpy.thuisadmin.dao.model;
 
-import com.xumpy.thuisadmin.model.Personen;
+import com.xumpy.thuisadmin.domain.Personen;
 import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

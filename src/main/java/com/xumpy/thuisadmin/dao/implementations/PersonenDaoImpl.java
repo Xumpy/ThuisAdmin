@@ -7,7 +7,7 @@ package com.xumpy.thuisadmin.dao.implementations;
 
 import com.xumpy.thuisadmin.dao.PersonenDao;
 import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
-import com.xumpy.thuisadmin.model.Personen;
+import com.xumpy.thuisadmin.domain.Personen;
 import java.math.BigInteger;
 import java.util.List;
 import org.hibernate.Query;

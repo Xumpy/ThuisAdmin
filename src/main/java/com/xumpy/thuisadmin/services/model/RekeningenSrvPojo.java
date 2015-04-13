@@ -5,7 +5,7 @@
  */
 package com.xumpy.thuisadmin.services.model;
 
-import com.xumpy.thuisadmin.model.Rekeningen;
+import com.xumpy.thuisadmin.domain.Rekeningen;
 import java.math.BigDecimal;
 import java.util.Date;
 

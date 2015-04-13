@@ -3,20 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.xumpy.thuisadmin.model;
+package com.xumpy.thuisadmin.domain;
 
 /**
  *
  * @author nicom
  */
-public interface Groepen {
-    String getCodeId();
-    Groepen getHoofdGroep();
-    String getNaam();
-    Integer getNegatief();
+public interface Documenten {
+    Bedragen getBedrag();
+    byte[] getDocument();
+    String getDocument_mime();
+    String getDocument_naam();
     String getOmschrijving();
-    Personen getPersoon();
     Integer getPk_id();
-    Integer getPublicGroep();
-    
 }

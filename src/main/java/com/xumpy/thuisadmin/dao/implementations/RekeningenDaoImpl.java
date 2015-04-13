@@ -9,7 +9,7 @@ import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.dao.RekeningenDao;
 import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
 import com.xumpy.thuisadmin.dao.model.RekeningenDaoPojo;
-import com.xumpy.thuisadmin.model.Rekeningen;
+import com.xumpy.thuisadmin.domain.Rekeningen;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;

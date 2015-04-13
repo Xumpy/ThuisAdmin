@@ -6,8 +6,8 @@
 package com.xumpy.thuisadmin.services;
 
 import com.xumpy.thuisadmin.controllers.model.GroepenTree;
-import com.xumpy.thuisadmin.model.Bedragen;
-import com.xumpy.thuisadmin.model.Groepen;
+import com.xumpy.thuisadmin.domain.Bedragen;
+import com.xumpy.thuisadmin.domain.Groepen;
 import java.util.List;
 
 /**

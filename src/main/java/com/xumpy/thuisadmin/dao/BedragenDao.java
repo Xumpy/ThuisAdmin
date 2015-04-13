@@ -5,8 +5,8 @@
  */
 package com.xumpy.thuisadmin.dao;
 
-import com.xumpy.thuisadmin.model.Bedragen;
-import com.xumpy.thuisadmin.model.Rekeningen;
+import com.xumpy.thuisadmin.domain.Bedragen;
+import com.xumpy.thuisadmin.domain.Rekeningen;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;

@@ -8,7 +8,7 @@ package com.xumpy.thuisadmin.dao.implementations;
 import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.dao.GroepenDao;
 import com.xumpy.thuisadmin.dao.model.GroepenDaoPojo;
-import com.xumpy.thuisadmin.model.Groepen;
+import com.xumpy.thuisadmin.domain.Groepen;
 import java.math.BigInteger;
 import java.util.List;
 import org.hibernate.Query;

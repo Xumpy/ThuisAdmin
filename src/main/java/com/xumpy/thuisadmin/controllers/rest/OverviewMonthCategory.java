@@ -7,8 +7,8 @@ package com.xumpy.thuisadmin.controllers.rest;
 
 import com.xumpy.thuisadmin.controllers.model.OverzichtGroepBedragenTotal;
 import com.xumpy.thuisadmin.controllers.model.finances.overviewMonthCategory.*;
-import com.xumpy.thuisadmin.model.Bedragen;
-import com.xumpy.thuisadmin.model.Groepen;
+import com.xumpy.thuisadmin.domain.Bedragen;
+import com.xumpy.thuisadmin.domain.Groepen;
 import com.xumpy.thuisadmin.services.BedragenSrv;
 import com.xumpy.thuisadmin.services.GroepenSrv;
 import java.text.ParseException;
@@ -18,6 +18,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,9 +29,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author nicom
  */
 @Controller
+@Scope("session")
 public class OverviewMonthCategory {
     @Autowired GroepenSrv groepenSrv;
     @Autowired BedragenSrv bedragenSrv;
+    @Autowired OverviewMonthCategoryInput overviewMonthCategoryInput;
+    
+    @RequestMapping("/json/overviewMonthCategoryHeader")
+    public @ResponseBody OverviewMonthCategoryInput getOverviewMonthCategoryHeader(){
+        return overviewMonthCategoryInput;
+    }
     
     @RequestMapping("/json/fetchMainGroups")
     public @ResponseBody List<MainGroups> fetchMainGroups(){
@@ -49,6 +57,8 @@ public class OverviewMonthCategory {
     
     @RequestMapping("/json/fetchOverviewMonthCategory")
     public @ResponseBody OverviewMonthCategoryResulst fetchMonthCategory(@RequestBody OverviewMonthCategoryInput overviewMonthCategory) throws ParseException{
+        this.overviewMonthCategoryInput = overviewMonthCategory;
+        
         SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy"); 
         Date startDate = dt.parse("01/" + overviewMonthCategory.getBeginDate());
         Calendar c = Calendar.getInstance();

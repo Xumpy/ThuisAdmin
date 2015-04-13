@@ -5,8 +5,8 @@
  */
 package com.xumpy.thuisadmin.controllers.model.finances.overviewMonthCategory;
 
-import com.xumpy.thuisadmin.model.Bedragen;
-import com.xumpy.thuisadmin.model.Groepen;
+import com.xumpy.thuisadmin.domain.Bedragen;
+import com.xumpy.thuisadmin.domain.Groepen;
 import com.xumpy.thuisadmin.services.BedragenSrv;
 import com.xumpy.thuisadmin.services.GroepenSrv;
 import java.math.BigDecimal;

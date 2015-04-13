@@ -6,7 +6,7 @@
 package com.xumpy.thuisadmin.services;
 
 import com.xumpy.thuisadmin.controllers.model.RegisterUserPage;
-import com.xumpy.thuisadmin.model.Personen;
+import com.xumpy.thuisadmin.domain.Personen;
 import java.util.List;
 
 /**

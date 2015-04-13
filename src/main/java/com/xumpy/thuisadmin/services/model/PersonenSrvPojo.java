@@ -6,7 +6,7 @@
 package com.xumpy.thuisadmin.services.model;
 
 import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
-import com.xumpy.thuisadmin.model.Personen;
+import com.xumpy.thuisadmin.domain.Personen;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;

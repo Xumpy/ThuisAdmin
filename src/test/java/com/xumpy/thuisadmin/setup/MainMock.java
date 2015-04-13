@@ -7,7 +7,7 @@ package com.xumpy.thuisadmin.setup;
 
 import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.controllers.model.OverzichtGroepBedragenTotal;
-import com.xumpy.thuisadmin.model.Personen;
+import com.xumpy.thuisadmin.domain.Personen;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

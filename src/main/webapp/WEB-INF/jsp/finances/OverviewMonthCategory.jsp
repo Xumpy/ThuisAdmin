@@ -89,40 +89,44 @@
                     fetchGraphiek();
                 },
                 afterDeselect: function(values){
-                    var index = $scope.OverviewMonthCategory.mainGroupValues.indexOf({pk_id: values});
-                    $scope.OverviewMonthCategory.mainGroupValues.splice(index);
+                    $scope.OverviewMonthCategory.mainGroupValues = $scope.OverviewMonthCategory.mainGroupValues
+                            .filter(function (el){
+                               return el.pk_id !== values[0]; 
+                            });
                     fetchGraphiek();
                 }
-            });
-            
-            var res = $http.post('/ThuisAdmin/json/fetchMainGroups', $scope.OverviewMonthCategory);
-            res.success(function(data) {
-                $scope.mainGroups = data;
             });
             
             $scope.filterReport = {
                 searchTekst: ""
             }
             
-            $scope.OverviewMonthCategory = {
-                beginDate: "01/2015",
-                endDate: "12/2015",
-                mainGroupValues: []
-            }
-            
-            $scope.$watchCollection('mainGroups', function(){
+            $http.post('/ThuisAdmin/json/fetchMainGroups').success(function(data) {
+                $('#mainGroups').multiSelect();
+                $scope.mainGroups = data;
                 for(var i in $scope.mainGroups){
-                    mainGroup = $scope.mainGroups;
-                    $('#mainGroups').multiSelect('addOption', { value: mainGroup[i].pk_id, text: mainGroup[i].name, index: i });
+                    $('#mainGroups').multiSelect('addOption', { value: $scope.mainGroups[i].pk_id, text: $scope.mainGroups[i].name, index: i });
                 }
-                $('#mainGroups').multiSelect('refresh');
-            });
-            
-            function fetchGraphiek(){
-                var res = $http.post('/ThuisAdmin/json/fetchOverviewMonthCategory', $scope.OverviewMonthCategory);
-                res.success(function(data) {
-                    drawVisualization(data.overviewMonthCategory, $scope, $http);
+                $http.post('/ThuisAdmin/json/overviewMonthCategoryHeader').success(function(data2){
+                    $scope.OverviewMonthCategory = {
+                        beginDate: data2.beginDate,
+                        endDate: data2.endDate,
+                        mainGroupValues: []
+                    }
+                    for(var i in data2.mainGroupValues){
+                        $('#mainGroups').multiSelect('select', data2.mainGroupValues[i].pk_id.toString());
+                    }
+                    $('#mainGroups').multiSelect('refresh');
                 });
+            });
+        
+            function fetchGraphiek(){
+                if ($scope.OverviewMonthCategory !== undefined){
+                    var res = $http.post('/ThuisAdmin/json/fetchOverviewMonthCategory', $scope.OverviewMonthCategory);
+                    res.success(function(data) {
+                        drawVisualization(data.overviewMonthCategory, $scope, $http);
+                    });
+                }
             }
             
             $scope.$watchCollection('OverviewMonthCategory', function(){
@@ -146,16 +150,27 @@
                 chart.draw(data, options);
                 google.visualization.events.addListener(chart, 'select', selectHandler);
               }
+              
+              function getPkId(columnName){
+                  for(var i=0;i<scope.mainGroups.length;i++){
+                      if (scope.mainGroups[i].name === columnName){
+                        return scope.mainGroups[i].pk_id;
+                      }
+                  }
+              }
+              
               function selectHandler() {
-                var selection = chart.getSelection();
-                
-                var OverviewMonthCategoryReport = {
-                    date: data.getFormattedValue(selection[0].row, 0),
-                    mainGroup: scope.OverviewMonthCategory.mainGroupValues[selection[0].column - 2].pk_id
-                }                    
-                http.post('/ThuisAdmin/json/report_overzicht_groep_bedragen_per_maand', OverviewMonthCategoryReport).success( function(data) {
-                    scope.reportGroepBedragenTotal = data;
-                });
+                try{
+                    var selection = chart.getSelection();
+                    
+                    var OverviewMonthCategoryReport = {
+                        date: data.getFormattedValue(selection[0].row, 0),
+                        mainGroup: getPkId(data.getColumnLabel(selection[0].column))
+                    }   
+                    http.post('/ThuisAdmin/json/report_overzicht_groep_bedragen_per_maand', OverviewMonthCategoryReport).success( function(data) {
+                        scope.reportGroepBedragenTotal = data;
+                    });
+                }catch(err){}
             }
         }
     </script>

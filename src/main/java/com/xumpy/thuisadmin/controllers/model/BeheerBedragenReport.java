@@ -6,7 +6,7 @@
 package com.xumpy.thuisadmin.controllers.model;
 
 import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
-import com.xumpy.thuisadmin.model.Bedragen;
+import com.xumpy.thuisadmin.domain.Bedragen;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
