@@ -1,7 +1,7 @@
-create database tst_thuisadmin;
-create user tst_thuisadmin;
-grant all on tst_thuisadmin.* to 'tst_thuisadmin'@'localhost' identified by '123456';
-grant select, insert, delete on tst_thuisadmin.* to 'tst_thuisadmin'@'localhost' identified by '123456';
+create database prd_thuisadmin;
+create user prd_thuisadmin;
+grant all on prd_thuisadmin.* to 'prd_thuisadmin'@'localhost' identified by 'pcat3900';
+grant select, insert, delete on tst_thuisadmin.* to 'prd_thuisadmin'@'localhost' identified by 'pcat3900';
 
 CREATE TABLE TA_PERSONEN(
     PK_ID BIGINT NOT NULL,
