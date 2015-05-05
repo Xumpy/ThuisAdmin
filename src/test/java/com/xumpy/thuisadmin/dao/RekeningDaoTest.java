@@ -5,7 +5,6 @@
  */
 package com.xumpy.thuisadmin.dao;
 
-import com.xumpy.thuisadmin.setup.H2InMemory;
 import java.math.BigDecimal;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
@@ -18,7 +17,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  */
 
 @RunWith(MockitoJUnitRunner.class)
-public class RekeningDaoTest extends H2InMemory{
+public class RekeningDaoTest extends Setup{
     
     @Test
     public void testTotalRekening(){

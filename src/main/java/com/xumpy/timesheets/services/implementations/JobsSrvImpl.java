@@ -1,0 +1,215 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.xumpy.timesheets.services.implementations;
+
+import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
+import com.xumpy.timesheets.domain.Jobs;
+import com.xumpy.timesheets.domain.JobsGroup;
+import com.xumpy.timesheets.services.JobsGroupSrv;
+import com.xumpy.timesheets.services.JobsSrv;
+import com.xumpy.timesheets.services.model.JobsGroupSrvPojo;
+import com.xumpy.timesheets.services.model.JobsInJobsGroup;
+import com.xumpy.timesheets.services.model.JobsSrvPojo;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ *
+ * @author nicom
+ */
+@Service
+public class JobsSrvImpl implements JobsSrv{
+
+    @Autowired JobsDaoImpl jobsDao;
+    @Autowired JobsGroupSrv jobsGroupSrv;
+    
+    @Override
+    @Transactional(readOnly=false)
+    public Jobs select(Integer pk_id) {
+        return jobsDao.select(pk_id);
+    }
+
+    @Override
+    @Transactional(readOnly=false)
+    public List<Jobs> selectDate(Date date) {
+        return jobsDao.selectDate(date);
+    }
+
+    @Override
+    @Transactional(readOnly=false)
+    public List<Jobs> selectPeriode(Date startDate, Date endDate) {
+        return jobsDao.selectPeriode(startDate, endDate);
+    }
+
+    public Jobs saveInTransaction(Jobs jobs){
+        JobsSrvPojo jobsSrvPojo = new JobsSrvPojo(jobs);
+        
+        if (jobsSrvPojo.getPk_id() == null){
+            jobsSrvPojo.setPk_id(jobsDao.getNewPkId());
+        }
+        
+        jobsDao.save(jobsSrvPojo);
+        
+        return jobsSrvPojo;    
+    }
+    
+    @Override
+    @Transactional(readOnly=false)
+    public Jobs save(Jobs jobs) {
+        return saveInTransaction(jobs);
+    }
+
+    @Override
+    @Transactional(readOnly=false)
+    public void delete(Jobs jobs) {
+        jobsDao.delete(jobs);
+    }
+
+    @Override
+    @Transactional(readOnly=false)
+    public List<Jobs> selectMonth(String month) throws ParseException {
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        Date startDate = df.parse("01/" + month);
+        
+        Calendar c = Calendar.getInstance();
+        c.setTime(startDate);
+        c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+        Date endDate = c.getTime();
+        
+        return jobsDao.selectPeriode(startDate, endDate);
+    }
+
+    @Override
+    @Transactional(readOnly=false)
+    public List<? extends Jobs> saveJobs(List<? extends Jobs> jobs) {
+        List<JobsSrvPojo> lstJobSrvPojo = new ArrayList<JobsSrvPojo>();
+        
+        for(int i=0; i<jobs.size(); i++){
+            JobsSrvPojo jobsSrvPojo = new JobsSrvPojo(jobs.get(i));
+            jobsSrvPojo = new JobsSrvPojo(saveInTransaction(jobsSrvPojo));
+            
+            lstJobSrvPojo.add(jobsSrvPojo);
+        }
+        
+        return lstJobSrvPojo;
+    }
+
+    @Override
+    @Transactional(readOnly=false)
+    public List<JobsInJobsGroup> selectPeriodeJobsInJobGroup(Date startDate, Date endDate) {
+        List<Jobs> allJobsInPeriode = jobsDao.selectPeriode(startDate, endDate);
+        List<JobsGroup> jobGroups = jobsGroupSrv.selectAllGroupsInJobs(allJobsInPeriode);
+        
+        List<JobsInJobsGroup> jobsInAllJobGroup = new ArrayList<JobsInJobsGroup>();
+        
+        for (JobsGroup jobGroup: jobGroups){
+            JobsInJobsGroup jobsInJobsGroup = new JobsInJobsGroup(jobGroup);
+            
+            List<JobsSrvPojo> filteredJobs = new ArrayList<JobsSrvPojo>();
+        
+            for (Jobs job: allJobsInPeriode){
+                JobsSrvPojo jobSrvPojo = new JobsSrvPojo(job);
+                
+                if (job.getJobsGroup().equals(jobGroup)){
+                    filteredJobs.add(jobSrvPojo);
+                }
+            }
+            jobsInJobsGroup.setJobs(filteredJobs);
+            
+            jobsInAllJobGroup.add(jobsInJobsGroup);
+            
+        }
+        
+        return jobsInAllJobGroup;
+    }
+
+    @Override
+    public List<? extends Jobs> fillMonth(List<? extends Jobs> jobs) throws ParseException{
+        SimpleDateFormat dfOnlyDay = new SimpleDateFormat("dd");
+        
+        List<Jobs> allJobsInMonth = new ArrayList<Jobs>();
+        
+        SimpleDateFormat dfMonth = new SimpleDateFormat("MM/yyyy");
+        String month = dfMonth.format(jobs.get(0).getJobDate());
+        
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        Date startDate = df.parse("01/" + month);
+        
+        Calendar endDate = Calendar.getInstance();
+        endDate.setTime(startDate);
+        endDate.set(Calendar.DAY_OF_MONTH, endDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+        endDate.add(Calendar.DATE, 1);
+        
+        Calendar iteratorDate = Calendar.getInstance();
+        iteratorDate.setTime(startDate);
+        
+        while(iteratorDate.before(endDate)){
+            boolean found = false;
+            JobsSrvPojo jobsSrvPojo = new JobsSrvPojo();
+                
+            for (Jobs job: jobs){
+                if (df.format(job.getJobDate()).equals(df.format(iteratorDate.getTime()))){
+                    found = true;
+                    jobsSrvPojo = new JobsSrvPojo(job);
+                }
+            }
+            
+            if (!found){
+                jobsSrvPojo.setJobDate(iteratorDate.getTime());
+                jobsSrvPojo.setJobsGroup(new JobsGroupSrvPojo(jobs.get(0).getJobsGroup()));
+                jobsSrvPojo.setWorkedHours("0");
+            }
+            jobsSrvPojo.setJobDay(dfOnlyDay.format(jobsSrvPojo.getJobDate()));
+            allJobsInMonth.add(jobsSrvPojo);
+            iteratorDate.add(Calendar.DATE, 1);
+        }
+        
+        return allJobsInMonth;
+    }
+
+    @Override
+    public List<Jobs> filterMonth(List<? extends Jobs> jobs) {
+        List<Jobs> filteredJobs = new ArrayList<Jobs>();
+        
+        for(Jobs job: jobs){
+            if (job.getWorkedHours() != null && !job.getWorkedHours().equals(new BigDecimal(0))){
+                filteredJobs.add(job);
+            }
+        }
+        
+        return filteredJobs;
+    }
+
+    @Override
+    @Transactional(readOnly=false)
+    public List<JobsInJobsGroup> selectMonthJobsInJobGroup(String month) throws ParseException {
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        Date startDate = df.parse("01/" + month);
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(startDate);
+        c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+        Date endDate = c.getTime();
+        
+        List<JobsInJobsGroup> periodeJobsInJobsGroup = selectPeriodeJobsInJobGroup(startDate, endDate);
+        
+        for(int i=0; i<periodeJobsInJobsGroup.size();i++){
+            JobsInJobsGroup jobsInJobsGroup = periodeJobsInJobsGroup.get(i);
+            jobsInJobsGroup.setJobs((List<JobsSrvPojo>) fillMonth(jobsInJobsGroup.getJobs()));
+            periodeJobsInJobsGroup.set(i, jobsInJobsGroup);
+        }
+        
+        return periodeJobsInJobsGroup;
+    }
+}

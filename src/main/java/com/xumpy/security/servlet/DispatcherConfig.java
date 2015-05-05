@@ -29,7 +29,7 @@ import org.springframework.web.servlet.view.JstlView;
  */
 @EnableWebMvc
 @Configuration
-@ComponentScan({ "com.xumpy.thuisadmin.*" })
+@ComponentScan({ "com.xumpy.*" })
 @EnableTransactionManagement
 public class DispatcherConfig extends WebMvcConfigurerAdapter{
     

@@ -5,7 +5,6 @@
  */
 package com.xumpy.thuisadmin.dao;
 
-import com.xumpy.thuisadmin.setup.H2InMemory;
 import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
 import com.xumpy.thuisadmin.dao.model.GroepenDaoPojo;
 import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
@@ -37,7 +36,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @RunWith(MockitoJUnitRunner.class)
 @EnableTransactionManagement
-public class BedragenDaoTest extends H2InMemory{
+public class BedragenDaoTest extends Setup{
     
     private Personen personen;
     private Groepen groep;

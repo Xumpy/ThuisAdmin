@@ -83,6 +83,7 @@
             minViewMode: "months"
         });
         app.controller("fController", function($scope, $http) {
+            <%@include file="/resources/template/globalScope.html" %>
             $('#mainGroups').multiSelect({
                 afterSelect: function(values){
                     $scope.OverviewMonthCategory.mainGroupValues.push({pk_id: values[0]});
@@ -137,7 +138,7 @@
         function drawVisualization(jsonData, scope, http) {
             if (jsonData.constructor === Array){
                 var data = google.visualization.arrayToDataTable(jsonData);
-          
+                
                 var options = {
                   title : 'Monthly Costs per Group',
                   vAxis: {title: "Values"},
@@ -147,7 +148,11 @@
                 };
 
                 var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
-                chart.draw(data, options);
+                if (jsonData.length > 1){
+                    chart.draw(data, options);
+                } else {
+                    chart.draw(google.visualization.arrayToDataTable([["Month", "Average"], ["", 0]]), options);
+                }
                 google.visualization.events.addListener(chart, 'select', selectHandler);
               }
               

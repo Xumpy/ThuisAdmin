@@ -5,7 +5,6 @@
  */
 package com.xumpy.thuisadmin.dao;
 
-import com.xumpy.thuisadmin.setup.H2InMemory;
 import com.xumpy.thuisadmin.dao.model.GroepenDaoPojo;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
@@ -17,7 +16,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  * @author nicom
  */
 @RunWith(MockitoJUnitRunner.class)
-public class GroepenDaoTest extends H2InMemory{
+public class GroepenDaoTest extends Setup{
     @Test
     public void testHoofdGroep(){
         /*

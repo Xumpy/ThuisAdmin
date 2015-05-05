@@ -5,7 +5,6 @@
  */
 package com.xumpy.thuisadmin.dao;
 
-import com.xumpy.thuisadmin.setup.H2InMemory;
 import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
 import com.xumpy.thuisadmin.domain.Personen;
 import static org.junit.Assert.assertEquals;
@@ -18,7 +17,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  * @author nicom
  */
 @RunWith(MockitoJUnitRunner.class)
-public class PersonenDaoTest extends H2InMemory{
+public class PersonenDaoTest extends Setup{
     PersonenDaoPojo persoonTest123 = new PersonenDaoPojo();
     
     @Test

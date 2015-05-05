@@ -8,7 +8,6 @@ package com.xumpy.security.root;
 import java.util.Properties;
 import javax.sql.DataSource;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -25,7 +24,7 @@ import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
  * @author nicom
  */
 
-@ComponentScan({"com.xumpy.thuisadmin.dao.*"})
+@ComponentScan({"com.xumpy.dao.*"})
 public class InitDatabase { 
     @Configuration
     @Profile("dev")
@@ -57,7 +56,7 @@ public class InitDatabase {
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan(new String[] { "com.xumpy.thuisadmin" });
+        sessionFactory.setPackagesToScan(new String[] { "com.xumpy" });
         sessionFactory.setHibernateProperties(hibernateProperties());
 
         return sessionFactory;

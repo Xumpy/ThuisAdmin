@@ -24,7 +24,8 @@ import com.xumpy.thuisadmin.domain.Rekeningen;
 import com.xumpy.thuisadmin.services.model.BedragenSrvPojo;
 import com.xumpy.thuisadmin.services.model.GroepenSrvPojo;
 import com.xumpy.thuisadmin.services.model.RekeningenSrvPojo;
-import com.xumpy.thuisadmin.setup.MainMock;
+import com.xumpy.global.MainSetup;
+import com.xumpy.thuisadmin.dao.Setup;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -49,7 +50,7 @@ import org.mockito.Spy;
  * @author nicom
  */
 @RunWith(MockitoJUnitRunner.class)
-public class BedragenSrvTest extends MainMock{
+public class BedragenSrvTest extends Setup{
     private static final SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd"); 
     
     @Mock RekeningenDaoImpl rekeningenDao;
