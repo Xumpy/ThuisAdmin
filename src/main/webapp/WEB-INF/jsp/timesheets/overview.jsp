@@ -20,6 +20,10 @@
                     <input class="btn btn-primary" type="submit" value="Nieuw Group"/>
                 </div>
             </form>
+            <div class="col-lg-2">
+                <input data-provide="datepicker" data-date-format="mm/yyyy" class="datepicker form-control" id="beginDatum" placeholder="Select Month" 
+                       type="text" ng-model="monthToFetch">
+            </div>
         </div>
         <table st-safe-src="bedragen" st-table="emptyBedragen" class="table table-striped table-hover ">
             <thead>
@@ -39,18 +43,32 @@
         </table>
     </body>
     <script type="text/javascript">
+        $(".datepicker").datepicker( {
+            format: "mm/yyyy",
+            viewMode: "months", 
+            minViewMode: "months"
+        });
+        
         app.controller("fController", function($scope, $http) {
             <%@include file="/resources/template/globalScope.html" %>
+            
+            $scope.monthToFetch = null;
             
             $http.post('/ThuisAdmin/json/fetch_overview').success(function(data){
                 $scope.Overview = data;
             });
             
             $scope.saveJobs = function(){
-                $http.post('/ThuisAdmin/josn/save_jobs_overview', $scope.Overview).success(function(data){
+                $http.post('/ThuisAdmin/json/save_jobs_overview', $scope.Overview).success(function(data){
                     alert(data);
                 });
             }
+            
+            $scope.$watchCollection('monthToFetch', function(){
+                $http.post('/ThuisAdmin/json/fetch_month', $scope.monthToFetch).success(function(data){
+                    $scope.Overview = data;
+                });
+            });
         });
     </script>
 </html>

@@ -43,14 +43,14 @@ public class OverviewCtrl implements Serializable{
     }
     
     @RequestMapping("/json/fetch_month")
-    public @ResponseBody Overview fetchOverviewMonth(String month) throws ParseException{
+    public @ResponseBody Overview fetchOverviewMonth(@RequestBody String month) throws ParseException{
         overview.setMonth(month);
         overview.setAllJobsInJobsGroup(jobsSrv.selectMonthJobsInJobGroup(month));
 
         return overview;
     }
     
-    @RequestMapping("/josn/save_jobs_overview")
+    @RequestMapping("/json/save_jobs_overview")
     public @ResponseBody String saveJobsOverview(@RequestBody Overview overview){
         for(JobsInJobsGroup jobsInJobGroup: overview.getAllJobsInJobsGroup()){
             jobsSrv.saveJobs(jobsSrv.filterMonth(jobsInJobGroup.getJobs()));
