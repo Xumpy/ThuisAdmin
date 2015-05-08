@@ -17,7 +17,6 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -45,7 +44,7 @@ public class RekeningenDaoImpl implements RekeningenDao {
     public void save(Rekeningen rekeningen) {
         RekeningenDaoPojo rekeningenDaoPojo = new RekeningenDaoPojo(rekeningen);
         
-        sessionFactory.getCurrentSession().save(rekeningenDaoPojo);
+        sessionFactory.getCurrentSession().merge(rekeningenDaoPojo);
         sessionFactory.getCurrentSession().flush();
     }
 

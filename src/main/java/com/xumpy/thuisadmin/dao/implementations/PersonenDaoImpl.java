@@ -32,7 +32,7 @@ public class PersonenDaoImpl implements PersonenDao{
     @Override
     public Personen save(Personen personen) {
         PersonenDaoPojo personenDaoPojo = new PersonenDaoPojo(personen);
-        sessionFactory.getCurrentSession().save(personenDaoPojo);
+        sessionFactory.getCurrentSession().merge(personenDaoPojo);
         sessionFactory.getCurrentSession().flush();
         return personenDaoPojo;
     }

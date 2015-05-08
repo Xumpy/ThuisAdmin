@@ -38,13 +38,13 @@ public class DocumentenDaoImpl implements DocumentenDao{
     
     @Override
     public void save(Documenten document) {
-        sessionFactory.getCurrentSession().save(new DocumentenDaoPojo(document));
+        sessionFactory.getCurrentSession().merge(new DocumentenDaoPojo(document));
         sessionFactory.getCurrentSession().flush();
     }
 
     @Override
     public void update(Documenten document) {
-        sessionFactory.getCurrentSession().update(new DocumentenDaoPojo(document));
+        sessionFactory.getCurrentSession().merge(new DocumentenDaoPojo(document));
         sessionFactory.getCurrentSession().flush();
     }
 
