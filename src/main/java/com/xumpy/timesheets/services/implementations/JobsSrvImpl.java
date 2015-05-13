@@ -5,6 +5,7 @@
  */
 package com.xumpy.timesheets.services.implementations;
 
+import com.xumpy.timesheets.controller.model.Overview;
 import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
 import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.JobsGroup;
@@ -34,6 +35,8 @@ public class JobsSrvImpl implements JobsSrv{
     @Autowired JobsDaoImpl jobsDao;
     @Autowired JobsGroupSrv jobsGroupSrv;
     
+    @Autowired Overview overview;
+    
     @Override
     @Transactional(readOnly=false)
     public Jobs select(Integer pk_id) {
@@ -59,7 +62,11 @@ public class JobsSrvImpl implements JobsSrv{
             jobsSrvPojo.setPk_id(jobsDao.getNewPkId());
         }
         
-        jobsDao.save(jobsSrvPojo);
+        if (!jobs.getWorkedHours().equals(new BigDecimal(0))){
+            jobsDao.save(jobsSrvPojo);
+        } else {
+            jobsDao.delete(jobs);
+        }
         
         return jobsSrvPojo;    
     }
@@ -134,14 +141,9 @@ public class JobsSrvImpl implements JobsSrv{
         return jobsInAllJobGroup;
     }
 
-    @Override
-    public List<? extends Jobs> fillMonth(List<? extends Jobs> jobs) throws ParseException{
+    public List<? extends Jobs> addZeroDates(List<? extends Jobs> jobs, String month, JobsGroup jobsGroup) throws ParseException{
         SimpleDateFormat dfOnlyDay = new SimpleDateFormat("dd");
-        
         List<Jobs> allJobsInMonth = new ArrayList<Jobs>();
-        
-        SimpleDateFormat dfMonth = new SimpleDateFormat("MM/yyyy");
-        String month = dfMonth.format(jobs.get(0).getJobDate());
         
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         Date startDate = df.parse("01/" + month);
@@ -167,8 +169,9 @@ public class JobsSrvImpl implements JobsSrv{
             
             if (!found){
                 jobsSrvPojo.setJobDate(iteratorDate.getTime());
-                jobsSrvPojo.setJobsGroup(new JobsGroupSrvPojo(jobs.get(0).getJobsGroup()));
+                jobsSrvPojo.setJobsGroup(new JobsGroupSrvPojo(jobsGroup));
                 jobsSrvPojo.setWorkedHours("0");
+                jobsSrvPojo.setWeekendDay(jobInWeekend(jobsSrvPojo));
             }
             jobsSrvPojo.setJobDay(dfOnlyDay.format(jobsSrvPojo.getJobDate()));
             allJobsInMonth.add(jobsSrvPojo);
@@ -177,13 +180,21 @@ public class JobsSrvImpl implements JobsSrv{
         
         return allJobsInMonth;
     }
+    
+    @Override
+    public List<? extends Jobs> fillMonth(List<? extends Jobs> jobs) throws ParseException{
+        SimpleDateFormat dfMonth = new SimpleDateFormat("MM/yyyy");
+        String month = dfMonth.format(jobs.get(0).getJobDate());
+        
+        return addZeroDates(jobs, month, jobs.get(0).getJobsGroup());
+    }
 
     @Override
     public List<Jobs> filterMonth(List<? extends Jobs> jobs) {
         List<Jobs> filteredJobs = new ArrayList<Jobs>();
         
         for(Jobs job: jobs){
-            if (job.getWorkedHours() != null && !job.getWorkedHours().equals(new BigDecimal(0))){
+            if (job.getWorkedHours() != null && !job.getWorkedHours().equals(new BigDecimal(0)) || job.getPk_id() != null){
                 filteredJobs.add(job);
             }
         }
@@ -210,6 +221,44 @@ public class JobsSrvImpl implements JobsSrv{
             periodeJobsInJobsGroup.set(i, jobsInJobsGroup);
         }
         
+        overview.setMonth(month);
+        overview.setAllJobsInJobsGroup(periodeJobsInJobsGroup);
+        
         return periodeJobsInJobsGroup;
+    }
+    
+    public static boolean jobInWeekend(Jobs jobs){
+        Date date = jobs.getJobDate();
+        
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        
+        if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY ){
+            return true;
+        }
+        
+        return false;
+    }
+    
+    public Overview newGroupInMonth(JobsGroup jobsGroup) throws ParseException{
+        Overview newOverview = new Overview();
+        
+        List<JobsInJobsGroup> lstJobsInJobsGroup;
+        
+        if (!this.overview.getAllJobsInJobsGroup().isEmpty()){
+            lstJobsInJobsGroup = this.overview.getAllJobsInJobsGroup();
+        } else {
+            lstJobsInJobsGroup = new ArrayList<JobsInJobsGroup>();
+        }
+        
+        JobsInJobsGroup jobsInJobsGroup = new JobsInJobsGroup(jobsGroup);
+        jobsInJobsGroup.setJobs((List<JobsSrvPojo>) addZeroDates(new ArrayList<Jobs>(), overview.getMonth(), jobsGroup));
+        
+        lstJobsInJobsGroup.add(jobsInJobsGroup);
+        
+        newOverview.setMonth(overview.getMonth());
+        newOverview.setAllJobsInJobsGroup(lstJobsInJobsGroup); 
+        
+        return newOverview;
     }
 }

@@ -22,7 +22,7 @@
             </form>
             <div class="col-lg-2">
                 <input data-provide="datepicker" data-date-format="mm/yyyy" class="datepicker form-control" id="beginDatum" placeholder="Select Month" 
-                       type="text" ng-model="monthToFetch">
+                       type="text" ng-model="Overview.month">
             </div>
         </div>
         <table st-safe-src="bedragen" st-table="emptyBedragen" class="table table-striped table-hover ">
@@ -36,7 +36,8 @@
                 <tr ng-repeat="allJobsInJobsGroup in Overview.allJobsInJobsGroup">
                     <td>{{allJobsInJobsGroup.name}}</td>
                     <td ng-repeat="jobs in allJobsInJobsGroup.jobs">
-                        <input class="form-control input-sm" placeholder=".input-sm" type="text" ng-model="jobs.workedHours">
+                        <input ng-style="jobs.weekendDay === true && {'background-color': 'grey'}"
+                            class="form-control input-sm" placeholder=".input-sm" type="text" ng-model="jobs.workedHours">
                     </td>
                 </tr>
             </tbody>
@@ -52,10 +53,9 @@
         app.controller("fController", function($scope, $http) {
             <%@include file="/resources/template/globalScope.html" %>
             
-            $scope.monthToFetch = null;
-            
             $http.post('/ThuisAdmin/json/fetch_overview').success(function(data){
                 $scope.Overview = data;
+                $scope.tempSelectMonth = data.month;
             });
             
             $scope.saveJobs = function(){
@@ -64,10 +64,13 @@
                 });
             }
             
-            $scope.$watchCollection('monthToFetch', function(){
-                $http.post('/ThuisAdmin/json/fetch_month', $scope.monthToFetch).success(function(data){
-                    $scope.Overview = data;
-                });
+            $scope.$watchCollection('Overview.month', function(newValue, oldValue){
+                if (newValue !== undefined && newValue !== $scope.tempSelectMonth){
+                    $http.post('/ThuisAdmin/json/fetch_month', $scope.Overview.month).success(function(data){
+                        $scope.Overview = data;
+                    });
+                    $scope.tempSelectMonth = $scope.Overview.month;
+                }
             });
         });
     </script>

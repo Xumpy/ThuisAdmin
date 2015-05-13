@@ -7,6 +7,7 @@ package com.xumpy.timesheets.services.model;
 
 import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.JobsGroup;
+import com.xumpy.timesheets.services.implementations.JobsSrvImpl;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -18,6 +19,7 @@ import java.util.Date;
 public class JobsSrvPojo implements Jobs, Serializable  {
     private Integer pk_id;
     private JobsGroupSrvPojo jobsGroup;
+    private boolean weekendDay;
     private Date jobDate;
     private String workedHours;
     private String remarks;
@@ -75,6 +77,14 @@ public class JobsSrvPojo implements Jobs, Serializable  {
     public void setJobDay(String jobDay) {
         this.jobDay = jobDay;
     }
+
+    public boolean isWeekendDay() {
+        return weekendDay;
+    }
+
+    public void setWeekendDay(boolean weekendDay) {
+        this.weekendDay = weekendDay;
+    }
     
     public JobsSrvPojo(){};
     
@@ -83,7 +93,7 @@ public class JobsSrvPojo implements Jobs, Serializable  {
         this.jobsGroup = new JobsGroupSrvPojo(job.getJobsGroup());
         this.pk_id = job.getPk_id();
         this.remarks = job.getRemarks();
-        System.out.println(job.getClass());
         this.workedHours = job.getWorkedHours() != null ? job.getWorkedHours().toString() : null;
+        this.weekendDay = JobsSrvImpl.jobInWeekend(job);
     }
 }

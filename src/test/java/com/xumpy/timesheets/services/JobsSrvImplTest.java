@@ -5,11 +5,13 @@
  */
 package com.xumpy.timesheets.services;
 
+import com.xumpy.timesheets.controller.model.Overview;
 import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
 import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.services.implementations.JobsGroupSrvImpl;
 import com.xumpy.timesheets.services.implementations.JobsSrvImpl;
+import com.xumpy.timesheets.services.model.JobsInJobsGroup;
 import com.xumpy.timesheets.services.model.JobsSrvPojo;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -37,6 +39,7 @@ public class JobsSrvImplTest {
     @Mock JobsDaoImpl jobsDao;
     @Mock Jobs jobs;
     @Mock JobsGroup jobsGroup;
+    @Mock Overview overview;
     
     @Spy JobsGroupSrvImpl jobsGroupSrv;
     
@@ -223,6 +226,7 @@ public class JobsSrvImplTest {
         when(job1.getJobsGroup()).thenReturn(jobsGroup);
         when(job2.getJobsGroup()).thenReturn(jobsGroup);
         when(job1.getWorkedHours()).thenReturn(new BigDecimal("7.6"));
+        when(job2.getPk_id()).thenReturn(null);
         when(job2.getWorkedHours()).thenReturn(new BigDecimal("0"));
         List<Jobs> process = new ArrayList<Jobs>();
         process.add(job1);
@@ -291,5 +295,42 @@ public class JobsSrvImplTest {
         assertEquals("Test", jobsSrv.selectMonthJobsInJobGroup("03/2015").get(0).getJobs().get(0).getJobsGroup().getName());
         assertEquals(df.parse("01/03/2015"), jobsSrv.selectMonthJobsInJobGroup("03/2015").get(0).getJobs().get(0).getJobDate());
         assertEquals(df.parse("10/03/2015"), jobsSrv.selectMonthJobsInJobGroup("03/2015").get(0).getJobs().get(9).getJobDate());
+    }
+    
+    @Test
+    public void testJobInWeekend() throws ParseException{
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        Date mondayDate = df.parse("04/05/2015");
+        Date wensdayDate = df.parse("06/05/2015");
+        Date saterdayDate = df.parse("09/05/2015");
+        Date sundayDate = df.parse("10/05/2015");
+
+        Jobs job1 = Mockito.mock(Jobs.class);
+        Jobs job2 = Mockito.mock(Jobs.class);
+        Jobs job3 = Mockito.mock(Jobs.class);
+        Jobs job4 = Mockito.mock(Jobs.class);
+        
+        when(job1.getJobDate()).thenReturn(mondayDate);
+        when(job2.getJobDate()).thenReturn(wensdayDate);
+        when(job3.getJobDate()).thenReturn(saterdayDate);
+        when(job4.getJobDate()).thenReturn(sundayDate);
+        
+        assertEquals(false, JobsSrvImpl.jobInWeekend(job1));
+        assertEquals(false, JobsSrvImpl.jobInWeekend(job2));
+        assertEquals(true, JobsSrvImpl.jobInWeekend(job3));
+        assertEquals(true, JobsSrvImpl.jobInWeekend(job4));
+    }
+    
+    @Test
+    public void testNewGroupInMonth() throws ParseException{
+        when(overview.getMonth()).thenReturn("04/2015");
+        
+        when(jobsGroup.getName()).thenReturn("Test Job Group");
+        
+        Overview newOverview = jobsSrv.newGroupInMonth(jobsGroup);
+        
+        assertEquals(newOverview.getAllJobsInJobsGroup().size(), 1);
+        assertEquals(newOverview.getAllJobsInJobsGroup().get(0).getName(), "Test Job Group");
+        assertEquals(newOverview.getAllJobsInJobsGroup().get(0).getJobs().size(), 30);
     }
 }

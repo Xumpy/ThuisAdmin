@@ -11,8 +11,6 @@ import com.xumpy.timesheets.services.JobsSrv;
 import com.xumpy.timesheets.services.model.JobsInJobsGroup;
 import java.io.Serializable;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,14 +29,6 @@ public class OverviewCtrl implements Serializable{
     
     @RequestMapping("/json/fetch_overview")
     public @ResponseBody Overview fetchOverview() throws ParseException{
-        if (overview.getMonth() == null){
-            SimpleDateFormat df = new SimpleDateFormat("MM/yyyy");
-            String month = df.format(new Date());
-
-            overview.setMonth(month);
-            overview.setAllJobsInJobsGroup(jobsSrv.selectMonthJobsInJobGroup(month));
-        }
-        
         return overview;
     }
     
@@ -52,6 +42,8 @@ public class OverviewCtrl implements Serializable{
     
     @RequestMapping("/json/save_jobs_overview")
     public @ResponseBody String saveJobsOverview(@RequestBody Overview overview){
+        this.overview = overview;
+        
         for(JobsInJobsGroup jobsInJobGroup: overview.getAllJobsInJobsGroup()){
             jobsSrv.saveJobs(jobsSrv.filterMonth(jobsInJobGroup.getJobs()));
         }
