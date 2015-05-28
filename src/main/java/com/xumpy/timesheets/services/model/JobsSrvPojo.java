@@ -10,7 +10,9 @@ import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.services.implementations.JobsSrvImpl;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -95,5 +97,14 @@ public class JobsSrvPojo implements Jobs, Serializable  {
         this.remarks = job.getRemarks();
         this.workedHours = job.getWorkedHours() != null ? job.getWorkedHours().toString() : null;
         this.weekendDay = JobsSrvImpl.jobInWeekend(job);
+    }
+    
+    public static List<JobsSrvPojo> lstJobsSrvPojo(List<? extends Jobs> jobs){
+        List<JobsSrvPojo> lstJobsSrv = new ArrayList<JobsSrvPojo>();
+        for(Jobs job: jobs){
+            lstJobsSrv.add(new JobsSrvPojo(job));
+        }
+        
+        return lstJobsSrv;
     }
 }

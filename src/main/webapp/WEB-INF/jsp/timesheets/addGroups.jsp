@@ -6,17 +6,13 @@
     <%@include file="/resources/template/header.html" %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Groups</title>
+        <title>Add Groups</title>
     </head>
     <body>
         <div class="col-lg-12">
-            <form class="form-horizontal" action="editGroup">
-                <div class="col-lg-1">
-                    <input class="btn btn-primary" type="submit" value="New Group"/>
-                </div>
+            <form class="col-lg-1" ng-submit="addGroups()">
+                <input class="col-lg-12 btn btn-primary" type="submit" value="Add Groups"/>
             </form>
-        </div>
-        <div class="col-lg-12">
             <table st-safe-src="groups" st-table="emptyGroups" class="table table-striped table-hover ">
             <thead>
               <tr>
@@ -27,7 +23,7 @@
             </thead>
             <tbody>
                 <tr ng-repeat="group in emptyGroups">
-                    <td><a href="editGroup/{{group.pk_id}}">Edit</a></td>
+                    <td><input type="checkbox" ng-model="group.checked" ng-true-value="1"></td>
                     <td>{{group.name}}</td>
                     <td>{{group.description}}</td>
                 </tr>
@@ -45,9 +41,17 @@
     <script type="text/javascript">
         app.controller("fController", function($scope, $http) {
             <%@include file="/resources/template/globalScope.html" %>
-            $http.get("/ThuisAdmin/json/fetch_all_jobs_group").success( function(data){
+            $http.get("/ThuisAdmin/json/fetch_all_jobs_group_not_in_controller").success( function(data){
                 $scope.groups = data;
             });
+            
+            $scope.addGroups = function(){
+                $http.post("/ThuisAdmin/json/add_jobs_group_in_controller", $scope.groups).success( function(){
+                    $(location).attr('href','/ThuisAdmin/timesheets/overview');
+                }).error( function(){
+                  bootbox.alert("Error occured during delete");
+                });
+            }
         });
     </script>
 </html>

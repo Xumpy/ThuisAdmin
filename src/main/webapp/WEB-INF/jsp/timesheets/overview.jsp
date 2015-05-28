@@ -15,9 +15,9 @@
                     <input class="btn btn-primary" type="submit" value="Save"/>
                 </div>
             </form>
-            <form class="form-horizontal" ng-submit="nieuwGroup()">
+            <form class="form-horizontal" action="addGroups">
                 <div class="col-lg-1">
-                    <input class="btn btn-primary" type="submit" value="Nieuw Group"/>
+                    <input class="btn btn-primary" type="submit" value="Add Group"/>
                 </div>
             </form>
             <div class="col-lg-2">
@@ -60,7 +60,7 @@
             
             $scope.saveJobs = function(){
                 $http.post('/ThuisAdmin/json/save_jobs_overview', $scope.Overview).success(function(data){
-                    alert(data);
+
                 });
             }
             

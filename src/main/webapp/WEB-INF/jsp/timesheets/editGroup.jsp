@@ -1,17 +1,71 @@
-<%-- 
-    Document   : editGroup
-    Created on : Apr 16, 2015, 8:53:17 AM
-    Author     : nicom
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page session="true"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
-<html>
+<html ng-app="myApp">
+    <%@include file="/resources/template/header.html" %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Edit Group</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <div class="col-lg-12">
+            <form class="col-lg-1" ng-submit="saveGroup()">
+                <input class="col-lg-12 btn btn-primary" type="submit" value="Save"/>
+            </form>
+            <form ng-show="rekening.pk_id !== ''" class="col-lg-1" ng-submit="deleteGroup()">
+                <input class="col-lg-12 btn btn-primary" type="submit" value="Delete"/>
+            </form>
+        </div>
+        <div class="col-lg-6 well">
+            <div class="form-group col-lg-12">
+              <label for="inputNaam" class="col-lg-2 control-label">Naam</label>
+              <div class="col-lg-4">
+                <input class="form-control" id="inputNaam" ng-model="group.name" placeholder="Naam" type="text">
+              </div>
+            </div>
+            <div class="form-group col-lg-12">
+              <label for="inputVoornaam" class="col-lg-2 control-label">Description</label>
+              <div class="col-lg-4">
+                <input class="form-control" id="inputVoornaam" ng-model="group.description" placeholder="Naam" type="text">
+              </div>
+            </div>
+        </div>
     </body>
+    <script type="text/javascript">
+        app.controller("fController", function($scope, $http) {
+            <%@include file="/resources/template/globalScope.html" %>
+            if ("<c:out value="${pk_id}"/>" !== ""){
+              $http.get("/ThuisAdmin/json/fetch_job_group/<c:out value="${pk_id}"/>").success( function(data){
+                  $scope.group = data;
+              });  
+            } else {
+              $scope.group = {
+                  pk_id: "",
+                  name: "",
+                  description: ""
+              };
+            }
+            
+            $scope.saveGroup = (function(){
+                $http.post("/ThuisAdmin/json/save_job_group", $scope.group).success( function() {
+                    $(location).attr('href','/ThuisAdmin/timesheets/group');
+                }).error( function() {
+                    bootbox.alert("Error occured during save");
+                });
+            });
+            
+            $scope.deleteGroup = (function(){
+                 bootbox.confirm("Are you sure you want to delete this Group?", function(result) {
+                    if (result === true){
+                        $http.post("/ThuisAdmin/json/delete_job_group", $scope.group).success( function() {
+                            $(location).attr('href','/ThuisAdmin/timesheets/group');
+                        }).error( function(){
+                          bootbox.alert("Error occured during delete");
+                        });
+                    }
+                }); 
+            });
+        });
+    </script>
 </html>

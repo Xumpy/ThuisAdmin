@@ -12,6 +12,7 @@ import com.xumpy.timesheets.services.model.JobsInJobsGroup;
 import java.io.Serializable;
 import java.text.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author nicom
  */
 @Controller
+@Scope(value="session")
 public class OverviewCtrl implements Serializable{
     @Autowired Overview overview;
     @Autowired JobsGroupSrv jobsGroupSrv;
@@ -35,7 +37,7 @@ public class OverviewCtrl implements Serializable{
     @RequestMapping("/json/fetch_month")
     public @ResponseBody Overview fetchOverviewMonth(@RequestBody String month) throws ParseException{
         overview.setMonth(month);
-        overview.setAllJobsInJobsGroup(jobsSrv.selectMonthJobsInJobGroup(month));
+        overview.setAllJobsInJobsGroup(jobsSrv.selectMonthJobsInJobGroup(month, overview));
 
         return overview;
     }

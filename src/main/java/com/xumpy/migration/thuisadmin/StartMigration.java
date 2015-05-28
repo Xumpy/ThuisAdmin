@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.xumpy.migration;
+package com.xumpy.migration.thuisadmin;
 
-import com.xumpy.migration.model.DataBase;
-import com.xumpy.migration.mysql.WriteDatabase;
-import com.xumpy.migration.oracle.ReadDatabase;
+import com.xumpy.migration.thuisadmin.model.DataBase;
+import com.xumpy.migration.thuisadmin.mysql.WriteDatabase;
+import com.xumpy.migration.thuisadmin.oracle.ReadDatabase;
 import java.sql.SQLException;
 
 /**

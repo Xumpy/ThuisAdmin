@@ -35,8 +35,6 @@ public class JobsSrvImpl implements JobsSrv{
     @Autowired JobsDaoImpl jobsDao;
     @Autowired JobsGroupSrv jobsGroupSrv;
     
-    @Autowired Overview overview;
-    
     @Override
     @Transactional(readOnly=false)
     public Jobs select(Integer pk_id) {
@@ -141,7 +139,7 @@ public class JobsSrvImpl implements JobsSrv{
         return jobsInAllJobGroup;
     }
 
-    public List<? extends Jobs> addZeroDates(List<? extends Jobs> jobs, String month, JobsGroup jobsGroup) throws ParseException{
+    public static List<? extends Jobs> addZeroDates(List<? extends Jobs> jobs, String month, JobsGroup jobsGroup) throws ParseException{
         SimpleDateFormat dfOnlyDay = new SimpleDateFormat("dd");
         List<Jobs> allJobsInMonth = new ArrayList<Jobs>();
         
@@ -204,7 +202,7 @@ public class JobsSrvImpl implements JobsSrv{
 
     @Override
     @Transactional(readOnly=false)
-    public List<JobsInJobsGroup> selectMonthJobsInJobGroup(String month) throws ParseException {
+    public List<JobsInJobsGroup> selectMonthJobsInJobGroup(String month, Overview overview) throws ParseException {
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         Date startDate = df.parse("01/" + month);
 
@@ -238,27 +236,5 @@ public class JobsSrvImpl implements JobsSrv{
         }
         
         return false;
-    }
-    
-    public Overview newGroupInMonth(JobsGroup jobsGroup) throws ParseException{
-        Overview newOverview = new Overview();
-        
-        List<JobsInJobsGroup> lstJobsInJobsGroup;
-        
-        if (!this.overview.getAllJobsInJobsGroup().isEmpty()){
-            lstJobsInJobsGroup = this.overview.getAllJobsInJobsGroup();
-        } else {
-            lstJobsInJobsGroup = new ArrayList<JobsInJobsGroup>();
-        }
-        
-        JobsInJobsGroup jobsInJobsGroup = new JobsInJobsGroup(jobsGroup);
-        jobsInJobsGroup.setJobs((List<JobsSrvPojo>) addZeroDates(new ArrayList<Jobs>(), overview.getMonth(), jobsGroup));
-        
-        lstJobsInJobsGroup.add(jobsInJobsGroup);
-        
-        newOverview.setMonth(overview.getMonth());
-        newOverview.setAllJobsInJobsGroup(lstJobsInJobsGroup); 
-        
-        return newOverview;
     }
 }

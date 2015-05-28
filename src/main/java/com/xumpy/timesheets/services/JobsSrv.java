@@ -5,6 +5,7 @@
  */
 package com.xumpy.timesheets.services;
 
+import com.xumpy.timesheets.controller.model.Overview;
 import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.services.model.JobsInJobsGroup;
@@ -22,7 +23,7 @@ public interface JobsSrv {
     List<? extends Jobs> selectDate(Date date);
     List<? extends Jobs> selectMonth(String month) throws ParseException;
     List<? extends Jobs> selectPeriode(Date startDate, Date endDate);
-    public List<JobsInJobsGroup> selectMonthJobsInJobGroup(String month) throws ParseException;
+    public List<JobsInJobsGroup> selectMonthJobsInJobGroup(String month, Overview overview) throws ParseException;
     public List<JobsInJobsGroup> selectPeriodeJobsInJobGroup(Date startDate, Date endDate);
     List<? extends Jobs> saveJobs(List<? extends Jobs> jobs);
     Jobs save(Jobs jobs);

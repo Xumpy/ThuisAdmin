@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.xumpy.migration.oracle;
+package com.xumpy.migration.thuisadmin.oracle;
 
-import com.xumpy.migration.model.Bedragen;
-import com.xumpy.migration.model.DataBase;
-import com.xumpy.migration.model.Documenten;
-import com.xumpy.migration.model.Groepen;
-import com.xumpy.migration.model.Personen;
-import com.xumpy.migration.model.Rekeningen;
+import com.xumpy.migration.thuisadmin.model.Bedragen;
+import com.xumpy.migration.thuisadmin.model.DataBase;
+import com.xumpy.migration.thuisadmin.model.Documenten;
+import com.xumpy.migration.thuisadmin.model.Groepen;
+import com.xumpy.migration.thuisadmin.model.Personen;
+import com.xumpy.migration.thuisadmin.model.Rekeningen;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;

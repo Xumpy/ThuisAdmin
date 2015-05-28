@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.xumpy.migration.model;
+package com.xumpy.migration.thuisadmin.model;
 
 import com.xumpy.thuisadmin.controllers.model.RegisterUserPage;
 import java.security.MessageDigest;

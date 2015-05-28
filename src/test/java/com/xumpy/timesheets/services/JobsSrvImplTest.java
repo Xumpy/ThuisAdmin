@@ -11,7 +11,6 @@ import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.services.implementations.JobsGroupSrvImpl;
 import com.xumpy.timesheets.services.implementations.JobsSrvImpl;
-import com.xumpy.timesheets.services.model.JobsInJobsGroup;
 import com.xumpy.timesheets.services.model.JobsSrvPojo;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -291,10 +290,10 @@ public class JobsSrvImplTest {
         when(job3.getJobsGroup()).thenReturn(jobsGroup2);
         when(job4.getJobsGroup()).thenReturn(jobsGroup1);
         
-        assertEquals(31, jobsSrv.selectMonthJobsInJobGroup("03/2015").get(0).getJobs().size());
-        assertEquals("Test", jobsSrv.selectMonthJobsInJobGroup("03/2015").get(0).getJobs().get(0).getJobsGroup().getName());
-        assertEquals(df.parse("01/03/2015"), jobsSrv.selectMonthJobsInJobGroup("03/2015").get(0).getJobs().get(0).getJobDate());
-        assertEquals(df.parse("10/03/2015"), jobsSrv.selectMonthJobsInJobGroup("03/2015").get(0).getJobs().get(9).getJobDate());
+        assertEquals(31, jobsSrv.selectMonthJobsInJobGroup("03/2015", overview).get(0).getJobs().size());
+        assertEquals("Test", jobsSrv.selectMonthJobsInJobGroup("03/2015", overview).get(0).getJobs().get(0).getJobsGroup().getName());
+        assertEquals(df.parse("01/03/2015"), jobsSrv.selectMonthJobsInJobGroup("03/2015", overview).get(0).getJobs().get(0).getJobDate());
+        assertEquals(df.parse("10/03/2015"), jobsSrv.selectMonthJobsInJobGroup("03/2015", overview).get(0).getJobs().get(9).getJobDate());
     }
     
     @Test
@@ -319,18 +318,5 @@ public class JobsSrvImplTest {
         assertEquals(false, JobsSrvImpl.jobInWeekend(job2));
         assertEquals(true, JobsSrvImpl.jobInWeekend(job3));
         assertEquals(true, JobsSrvImpl.jobInWeekend(job4));
-    }
-    
-    @Test
-    public void testNewGroupInMonth() throws ParseException{
-        when(overview.getMonth()).thenReturn("04/2015");
-        
-        when(jobsGroup.getName()).thenReturn("Test Job Group");
-        
-        Overview newOverview = jobsSrv.newGroupInMonth(jobsGroup);
-        
-        assertEquals(newOverview.getAllJobsInJobsGroup().size(), 1);
-        assertEquals(newOverview.getAllJobsInJobsGroup().get(0).getName(), "Test Job Group");
-        assertEquals(newOverview.getAllJobsInJobsGroup().get(0).getJobs().size(), 30);
     }
 }

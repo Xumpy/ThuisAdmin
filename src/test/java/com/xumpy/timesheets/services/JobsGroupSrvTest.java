@@ -5,10 +5,13 @@
  */
 package com.xumpy.timesheets.services;
 
+import com.xumpy.timesheets.controller.model.Overview;
 import com.xumpy.timesheets.dao.implementations.JobsGroupDaoImpl;
 import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.services.implementations.JobsGroupSrvImpl;
+import com.xumpy.timesheets.services.model.JobsInJobsGroup;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
@@ -98,5 +101,76 @@ public class JobsGroupSrvTest {
         when(jobs3.getJobsGroup()).thenReturn(jobsGroup2);
         
         assertEquals(lstJobsGroup, jobsGroupSrv.selectAllGroupsInJobs(lstJobs));
+    }
+    
+    @Test
+    public void testJobsInJobsGroupContainsJobsGroup(){
+        List<JobsInJobsGroup> lstJobsInJobsGroup = new ArrayList<JobsInJobsGroup>();
+        
+        JobsGroup jobsGroup1 = Mockito.mock(JobsGroup.class);
+        
+        when(jobsGroup1.getPk_id()).thenReturn(1);
+        
+        JobsInJobsGroup jobsInJobsGroup = new JobsInJobsGroup();
+        jobsInJobsGroup.setPk_id(jobsGroup1.getPk_id());
+        jobsInJobsGroup.setName(jobsGroup1.getName());
+        jobsInJobsGroup.setDescription(jobsGroup1.getDescription());
+        
+        lstJobsInJobsGroup.add(jobsInJobsGroup);
+        
+        boolean containsJobsGroup = jobsGroupSrv.jobsInJobsGroupContainsJobsGroup(lstJobsInJobsGroup, jobsGroup1);
+        
+        assertEquals(true, containsJobsGroup);
+    }
+    
+    @Test
+    public void testFilterJobsGroupWithJobsInJobsGroup(){
+        List<JobsInJobsGroup> lstJobsInJobsGroup = new ArrayList<JobsInJobsGroup>();
+        List<JobsGroup> lstJobsGroup = new ArrayList<JobsGroup>();
+        
+        JobsGroup jobsGroup1 = Mockito.mock(JobsGroup.class);
+        JobsGroup jobsGroup2 = Mockito.mock(JobsGroup.class);
+        JobsGroup jobsGroup3 = Mockito.mock(JobsGroup.class);
+        
+        when(jobsGroup1.getPk_id()).thenReturn(1);
+        when(jobsGroup2.getPk_id()).thenReturn(2);
+        when(jobsGroup3.getPk_id()).thenReturn(3);
+        
+        JobsInJobsGroup jobsInJobsGroup = new JobsInJobsGroup();
+        jobsInJobsGroup.setPk_id(jobsGroup1.getPk_id());
+        jobsInJobsGroup.setName(jobsGroup1.getName());
+        jobsInJobsGroup.setDescription(jobsGroup1.getDescription());
+        
+        lstJobsInJobsGroup.add(jobsInJobsGroup);
+        
+        lstJobsGroup.add(jobsGroup1);
+        lstJobsGroup.add(jobsGroup2);
+        lstJobsGroup.add(jobsGroup3);
+        
+        List<JobsGroup> lstJobsGroupResult = jobsGroupSrv.filterJobsGroupWithJobsInJobsGroup(lstJobsGroup, lstJobsInJobsGroup);
+        
+        List<JobsGroup> lstJobsGroupExpectedResult = new ArrayList<JobsGroup>();
+        lstJobsGroupExpectedResult.add(jobsGroup2);
+        lstJobsGroupExpectedResult.add(jobsGroup3);
+        
+        assertEquals(lstJobsGroupExpectedResult, lstJobsGroupResult);
+    }
+    
+    @Test
+    public void testAddJobsGroupInOverview() throws ParseException{
+        Overview overview = Mockito.mock(Overview.class);
+        
+        List<JobsInJobsGroup> lstJobsInJobsGroup = new ArrayList<JobsInJobsGroup>();
+        JobsGroup jobsGroup1 = Mockito.mock(JobsGroup.class);
+        
+        when(jobsGroup1.getPk_id()).thenReturn(1);
+        
+        when(overview.getAllJobsInJobsGroup()).thenReturn(lstJobsInJobsGroup);
+        when(overview.getMonth()).thenReturn("05/2015");
+        
+        overview = jobsGroupSrv.addJobsGroupInOverview(overview, jobsGroup1);
+        
+        assertEquals(new Integer(1), overview.getAllJobsInJobsGroup().get(0).getPk_id());
+        assertEquals(31, overview.getAllJobsInJobsGroup().get(0).getJobs().size());
     }
 }

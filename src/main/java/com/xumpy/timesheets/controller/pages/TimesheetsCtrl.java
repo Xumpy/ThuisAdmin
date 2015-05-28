@@ -6,6 +6,8 @@
 package com.xumpy.timesheets.controller.pages;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -26,6 +28,18 @@ public class TimesheetsCtrl {
     
     @RequestMapping(value = "timesheets/editGroup")
     public String timesheetsEditGroup(){
+        return "timesheets/editGroup";
+    }
+    
+    @RequestMapping(value = "timesheets/addGroups")
+    public String timesheetsAddGroups(){
+        return "timesheets/addGroups";
+    }
+    
+    @RequestMapping(value = "timesheets/editGroup/{groupId}")
+    public String viewNieuwBedrag(@PathVariable Integer groupId, Model model){
+        model.addAttribute("pk_id", groupId);
+        
         return "timesheets/editGroup";
     }
 }
