@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class JobsGraphics {
@@ -42,6 +43,16 @@ public class JobsGraphics {
         return workedWeekHours;
     }
     
+    public BigDecimal getWorkedWeekDays(List<Jobs> jobs){
+        BigDecimal workedWeekDays = new BigDecimal(0);
+        for (Jobs job: jobs){
+            if (CustomDateUtils.isWeekDay(job.getJobDate())){
+                workedWeekDays = workedWeekDays.add(new BigDecimal(1));
+            }
+        }
+        return workedWeekDays;
+    }
+    
     public BigDecimal getWorkedWeekendHours(List<Jobs> jobs){
         BigDecimal workedWeekendHours = new BigDecimal(0);
         for (Jobs job: jobs){
@@ -50,6 +61,16 @@ public class JobsGraphics {
             }
         }
         return workedWeekendHours;
+    }
+    
+    public BigDecimal getWorkedWeekendDays(List<Jobs> jobs){
+        BigDecimal workedWeekendDays = new BigDecimal(0);
+        for (Jobs job: jobs){
+            if (CustomDateUtils.isWeekDay(job.getJobDate())){
+                workedWeekendDays = workedWeekendDays.add(new BigDecimal(1));
+            }
+        }
+        return workedWeekendDays;
     }
     
     public BigDecimal getWeekDays(List<Jobs> jobs) throws ParseException{
@@ -101,8 +122,8 @@ public class JobsGraphics {
         overviewWorkDetails.setWeekDays(getWeekDays(jobs));
         overviewWorkDetails.setWeekendDays(getWeekendDays(jobs));
         
-        overviewWorkDetails.setWorkedWeekDays(overviewWorkDetails.getWorkedWeekHours().divide(overviewWorkDetails.getHoursToWorkPerDay(), mc));
-        overviewWorkDetails.setWorkedWeekendDays(overviewWorkDetails.getWorkedWeekendHours().divide(overviewWorkDetails.getHoursToWorkPerDay(), mc));
+        overviewWorkDetails.setWorkedWeekDays(getWorkedWeekDays(jobs));
+        overviewWorkDetails.setWorkedWeekendDays(getWorkedWeekendDays(jobs));
         
         overviewWorkDetails.setOvertimeHours(overviewWorkDetails.getWorkedWeekHours()
                                                 .subtract(overviewWorkDetails.getHoursPayedPerDay()
@@ -149,6 +170,7 @@ public class JobsGraphics {
         return overviewWork;
     }
     
+    @Transactional
     public OverviewWork overviewWork(String beginMonth, String endMonth, List<? extends JobsGroup> lstJobsGroup) throws ParseException{
         Date firstDay = CustomDateUtils.getFirstDayOfMonth(beginMonth);
         Date lastDay = CustomDateUtils.getLastDayOfMonth(endMonth);

@@ -42,4 +42,9 @@ public class TimesheetsCtrl {
         
         return "timesheets/editGroup";
     }
+    
+    @RequestMapping(value = "timesheets/graphics")
+    public String viewGraphics(){
+        return "timesheets/graphics";
+    }
 }

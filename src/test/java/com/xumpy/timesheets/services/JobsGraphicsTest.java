@@ -109,11 +109,11 @@ public class JobsGraphicsTest {
         assertEquals(new BigDecimal(4), overviewWork.getMonthlyWorkDetails().get(2).getWorkDetails().getWorkedWeekendHours());
         
         assertEquals(new BigDecimal(1), overviewWork.getMonthlyWorkDetails().get(0).getWorkDetails().getWorkedWeekDays());
-        assertEquals(new BigDecimal(0.5), overviewWork.getMonthlyWorkDetails().get(0).getWorkDetails().getWorkedWeekendDays());
-        assertEquals(new BigDecimal(1.25), overviewWork.getMonthlyWorkDetails().get(1).getWorkDetails().getWorkedWeekDays());
-        assertEquals(new BigDecimal(0.625), overviewWork.getMonthlyWorkDetails().get(1).getWorkDetails().getWorkedWeekendDays());
+        assertEquals(new BigDecimal(1), overviewWork.getMonthlyWorkDetails().get(0).getWorkDetails().getWorkedWeekendDays());
+        assertEquals(new BigDecimal(1), overviewWork.getMonthlyWorkDetails().get(1).getWorkDetails().getWorkedWeekDays());
+        assertEquals(new BigDecimal(1), overviewWork.getMonthlyWorkDetails().get(1).getWorkDetails().getWorkedWeekendDays());
         assertEquals(new BigDecimal(1), overviewWork.getMonthlyWorkDetails().get(2).getWorkDetails().getWorkedWeekDays());
-        assertEquals(new BigDecimal(0.5), overviewWork.getMonthlyWorkDetails().get(2).getWorkDetails().getWorkedWeekendDays());
+        assertEquals(new BigDecimal(1), overviewWork.getMonthlyWorkDetails().get(2).getWorkDetails().getWorkedWeekendDays());
     }
     
     @Test
@@ -135,10 +135,10 @@ public class JobsGraphicsTest {
         assertEquals(new BigDecimal(4), overviewWork.getMonthlyWorkDetails().get(2).getWorkDetails().getWorkedWeekendHours());
         
         assertEquals(new BigDecimal(1), overviewWork.getMonthlyWorkDetails().get(0).getWorkDetails().getWorkedWeekDays());
-        assertEquals(new BigDecimal(0.5), overviewWork.getMonthlyWorkDetails().get(0).getWorkDetails().getWorkedWeekendDays());
+        assertEquals(new BigDecimal(1), overviewWork.getMonthlyWorkDetails().get(0).getWorkDetails().getWorkedWeekendDays());
         assertEquals(new BigDecimal(0), overviewWork.getMonthlyWorkDetails().get(1).getWorkDetails().getWorkedWeekDays());
         assertEquals(new BigDecimal(0), overviewWork.getMonthlyWorkDetails().get(1).getWorkDetails().getWorkedWeekendDays());
         assertEquals(new BigDecimal(1), overviewWork.getMonthlyWorkDetails().get(2).getWorkDetails().getWorkedWeekDays());
-        assertEquals(new BigDecimal(0.5), overviewWork.getMonthlyWorkDetails().get(2).getWorkDetails().getWorkedWeekendDays());
+        assertEquals(new BigDecimal(1), overviewWork.getMonthlyWorkDetails().get(2).getWorkDetails().getWorkedWeekendDays());
     }
 }

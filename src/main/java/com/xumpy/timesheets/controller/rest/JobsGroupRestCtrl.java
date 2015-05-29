@@ -7,9 +7,13 @@ package com.xumpy.timesheets.controller.rest;
 
 import com.xumpy.timesheets.controller.model.JobsGroupCtrl;
 import com.xumpy.timesheets.controller.model.Overview;
+import com.xumpy.timesheets.controller.model.OverviewWorkHeader;
 import com.xumpy.timesheets.domain.JobsGroup;
+import com.xumpy.timesheets.domain.OverviewWork.OverviewWork;
+import com.xumpy.timesheets.services.JobsGraphics;
 import com.xumpy.timesheets.services.JobsGroupSrv;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Scope(value="session")
 public class JobsGroupRestCtrl {
     @Autowired Overview overview;
+    @Autowired JobsGraphics jobsGraphics;
     @Autowired JobsGroupSrv jobsGroupSrv;
     
     @RequestMapping("/json/fetch_all_jobs_group")
@@ -76,5 +81,22 @@ public class JobsGroupRestCtrl {
         jobsGroupSrv.delete(jobsGroup);
         
         return "200";
+    }
+    
+    @RequestMapping("/json/fetch_overview_work")
+    public @ResponseBody OverviewWork fetchOverviewWork(@RequestBody OverviewWorkHeader overviewWorkHeader){
+        try {
+            List<JobsGroup> filteredJobsGroup = new ArrayList<JobsGroup>();
+            for (JobsGroupCtrl jobsGroup: overviewWorkHeader.getJobsGroup()){
+                if (jobsGroup.getChecked().equals(1)){
+                    filteredJobsGroup.add(jobsGroup);
+                }
+            }
+            
+            return jobsGraphics.overviewWork(overviewWorkHeader.getBeginMonth(), overviewWorkHeader.getEndMonth(), filteredJobsGroup);
+        } catch (ParseException ex) {
+            Logger.getLogger(JobsGroupRestCtrl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 }
