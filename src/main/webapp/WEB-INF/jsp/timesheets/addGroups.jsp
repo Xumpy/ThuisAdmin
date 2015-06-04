@@ -41,7 +41,7 @@
     <script type="text/javascript">
         app.controller("fController", function($scope, $http) {
             <%@include file="/resources/template/globalScope.html" %>
-            $http.get("/ThuisAdmin/json/fetch_all_jobs_group_not_in_controller").success( function(data){
+            $http.get("/ThuisAdmin/json/fetch_all_jobs_group").success( function(data){
                 $scope.groups = data;
             });
             

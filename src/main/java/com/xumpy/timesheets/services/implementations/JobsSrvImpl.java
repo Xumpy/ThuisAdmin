@@ -113,6 +113,7 @@ public class JobsSrvImpl implements JobsSrv{
     @Override
     @Transactional(readOnly=false)
     public List<JobsInJobsGroup> selectPeriodeJobsInJobGroup(Date startDate, Date endDate) {
+        /*
         List<Jobs> allJobsInPeriode = jobsDao.selectPeriode(startDate, endDate);
         List<JobsGroup> jobGroups = jobsGroupSrv.selectAllGroupsInJobs(allJobsInPeriode);
         
@@ -135,10 +136,54 @@ public class JobsSrvImpl implements JobsSrv{
             jobsInAllJobGroup.add(jobsInJobsGroup);
             
         }
+        */
+        
+        List<Jobs> allJobsInPeriode = jobsDao.selectPeriode(startDate, endDate);
+        List<JobsInJobsGroup> jobsInAllJobGroup = new ArrayList<JobsInJobsGroup>();
+        
+        for(Jobs job: allJobsInPeriode){
+            jobsInAllJobGroup = putJobInJobsGroup(jobsInAllJobGroup, new JobsSrvPojo(job));
+        }
         
         return jobsInAllJobGroup;
     }
 
+    public List<JobsInJobsGroup> putJobInJobsGroup(List<JobsInJobsGroup> jobsInAllJobGroup, JobsSrvPojo job){
+        boolean jobFound = false;
+        
+        for (JobsInJobsGroup jobsInJobsGroup: jobsInAllJobGroup){
+            if (jobsInJobsGroup.getPk_id().equals(job.getJobsGroup().getPk_id())){
+                boolean jobDateFound = false;
+                for (Jobs jobs: jobsInJobsGroup.getJobs()){
+                    if (jobs.getJobDate().equals(job.getJobDate())){
+                        jobDateFound = true;
+                    }
+                }
+                
+                if (!jobDateFound){
+                    jobsInJobsGroup.getJobs().add(job);
+                    jobFound = true;
+                }
+            }
+        }
+        
+        if (!jobFound){
+            JobsInJobsGroup jobsInJobsGroup = new JobsInJobsGroup();
+            
+            jobsInJobsGroup.setPk_id(job.getJobsGroup().getPk_id());
+            jobsInJobsGroup.setName(job.getJobsGroup().getName());
+            jobsInJobsGroup.setDescription(job.getJobsGroup().getDescription());
+            
+            List<JobsSrvPojo> jobs = new ArrayList<JobsSrvPojo>();
+            jobs.add(job);
+            jobsInJobsGroup.setJobs(jobs);
+            
+            jobsInAllJobGroup.add(jobsInJobsGroup);
+        }
+        
+        return jobsInAllJobGroup;
+    }
+    
     public static List<? extends Jobs> addZeroDates(List<? extends Jobs> jobs, String month, JobsGroup jobsGroup) throws ParseException{
         SimpleDateFormat dfOnlyDay = new SimpleDateFormat("dd");
         List<Jobs> allJobsInMonth = new ArrayList<Jobs>();

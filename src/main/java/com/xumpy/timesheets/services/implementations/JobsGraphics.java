@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.xumpy.timesheets.services;
+package com.xumpy.timesheets.services.implementations;
 
 import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
 import com.xumpy.timesheets.domain.Jobs;
@@ -45,9 +45,14 @@ public class JobsGraphics {
     
     public BigDecimal getWorkedWeekDays(List<Jobs> jobs){
         BigDecimal workedWeekDays = new BigDecimal(0);
+        List<Date> lstDates = new ArrayList<Date>();
+        
         for (Jobs job: jobs){
             if (CustomDateUtils.isWeekDay(job.getJobDate())){
-                workedWeekDays = workedWeekDays.add(new BigDecimal(1));
+                if (!lstDates.contains(job.getJobDate())){
+                    lstDates.add(job.getJobDate());
+                    workedWeekDays = workedWeekDays.add(new BigDecimal(1));
+                }
             }
         }
         return workedWeekDays;
@@ -65,9 +70,14 @@ public class JobsGraphics {
     
     public BigDecimal getWorkedWeekendDays(List<Jobs> jobs){
         BigDecimal workedWeekendDays = new BigDecimal(0);
+        List<Date> lstDate = new ArrayList<Date>();
+        
         for (Jobs job: jobs){
             if (CustomDateUtils.isWeekDay(job.getJobDate())){
-                workedWeekendDays = workedWeekendDays.add(new BigDecimal(1));
+                if (!lstDate.contains(job.getJobDate())){
+                    lstDate.add(job.getJobDate());
+                    workedWeekendDays = workedWeekendDays.add(new BigDecimal(1));
+                }
             }
         }
         return workedWeekendDays;
@@ -127,8 +137,8 @@ public class JobsGraphics {
         
         overviewWorkDetails.setOvertimeHours(overviewWorkDetails.getWorkedWeekHours()
                                                 .subtract(overviewWorkDetails.getHoursPayedPerDay()
-                                                            .multiply(overviewWorkDetails.getWorkedWeekDays()))
-                                                .add(overviewWorkDetails.getWorkedWeekendHours()));
+                                                            .multiply(overviewWorkDetails.getWorkedWeekDays(), mc), mc)
+                                                .add(overviewWorkDetails.getWorkedWeekendHours(), mc));
         
         overviewWorkDetails.setOvertimeDays(overviewWorkDetails.getOvertimeHours().divide(overviewWorkDetails.getHoursPayedPerDay(), mc));
         

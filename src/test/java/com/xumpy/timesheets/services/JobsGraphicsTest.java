@@ -5,6 +5,7 @@
  */
 package com.xumpy.timesheets.services;
 
+import com.xumpy.timesheets.services.implementations.JobsGraphics;
 import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
 import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.JobsGroup;

@@ -190,9 +190,9 @@ public class JobsSrvImplTest {
         jobsInJobsInGroup.add(job1);
         jobsInJobsInGroup.add(job2);
         
-        assertEquals(2, jobsSrv.selectPeriodeJobsInJobGroup(inPeriode, endPeriode).get(0).getJobs().size());
+        assertEquals(2, jobsSrv.selectPeriodeJobsInJobGroup(inPeriode, endPeriode).size());
         assertEquals(inPeriode, jobsSrv.selectPeriodeJobsInJobGroup(inPeriode, endPeriode).get(0).getJobs().get(0).getJobDate());
-        assertEquals(inPeriode, jobsSrv.selectPeriodeJobsInJobGroup(inPeriode, endPeriode).get(0).getJobs().get(1).getJobDate());
+        assertEquals(inPeriode, jobsSrv.selectPeriodeJobsInJobGroup(inPeriode, endPeriode).get(1).getJobs().get(0).getJobDate());
     }
     
     @Test

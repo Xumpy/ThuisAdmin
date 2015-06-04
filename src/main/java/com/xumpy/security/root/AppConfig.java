@@ -37,6 +37,7 @@ public class AppConfig extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
             .authorizeRequests()
+                .antMatchers("/timesheets/**").hasAnyAuthority("USER")
                 .antMatchers("/finances/**").hasAnyAuthority("USER")
                 .antMatchers("/json/**").hasAnyAuthority("USER")
                 .antMatchers("/admin/**").hasAnyAuthority("USER")

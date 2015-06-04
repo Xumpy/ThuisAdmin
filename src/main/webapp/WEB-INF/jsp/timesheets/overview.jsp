@@ -28,7 +28,7 @@
         <table st-safe-src="bedragen" st-table="emptyBedragen" class="table table-striped table-hover ">
             <thead>
                 <tr>
-                    <th>Rekening</th>
+                    <th>Project</th>
                     <th ng-repeat="jobs in Overview.allJobsInJobsGroup[0].jobs">{{jobs.jobDay}}</th>
                 </tr>
             </thead>
@@ -36,14 +36,21 @@
                 <tr ng-repeat="allJobsInJobsGroup in Overview.allJobsInJobsGroup">
                     <td>{{allJobsInJobsGroup.name}}</td>
                     <td ng-repeat="jobs in allJobsInJobsGroup.jobs">
-                        <input ng-style="jobs.weekendDay === true && {'background-color': 'grey'}"
+                        <input ng-style="jobsColor(jobs)" ng-dblclick="jobsDetails(jobs)"
                             class="form-control input-sm" placeholder=".input-sm" type="text" ng-model="jobs.workedHours">
                     </td>
                 </tr>
             </tbody>
         </table>
+        <div id="dialog" class="modal-dialog" title="Basic dialog">
+            Remarks: <input type="text" ng_model="jobInfo.remarks">
+        </div>
     </body>
     <script type="text/javascript">
+        $(function() {
+            $( "#dialog" ).hide();
+        });
+        
         $(".datepicker").datepicker( {
             format: "mm/yyyy",
             viewMode: "months", 
@@ -60,7 +67,7 @@
             
             $scope.saveJobs = function(){
                 $http.post('/ThuisAdmin/json/save_jobs_overview', $scope.Overview).success(function(data){
-
+                    $scope.Overview = data;
                 });
             }
             
@@ -72,6 +79,25 @@
                     $scope.tempSelectMonth = $scope.Overview.month;
                 }
             });
+            
+            $scope.jobsDetails = function(jobs){
+                $scope.jobInfo = jobs;
+                $('#dialog').dialog({
+                    title: "Job Details",
+                    width: 500,
+                    buttons: { "OK": function() { $(this).dialog("close"); } } 
+                }).prev(".ui-dialog-titlebar").css("background","#bf3e11");
+            }
+            
+            $scope.jobsColor = function(jobs){
+                if (!(jobs.remarks === '' || jobs.remarks === null)){
+                    return { 'background-color': '#bf3e11' }
+                }
+                
+                if (jobs.weekendDay === true){
+                    return { 'background-color': 'grey' };
+                }
+            }
         });
     </script>
 </html>

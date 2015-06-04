@@ -10,8 +10,10 @@ import com.xumpy.timesheets.controller.model.Overview;
 import com.xumpy.timesheets.controller.model.OverviewWorkHeader;
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.domain.OverviewWork.OverviewWork;
-import com.xumpy.timesheets.services.JobsGraphics;
+import com.xumpy.timesheets.services.implementations.JobsGraphics;
 import com.xumpy.timesheets.services.JobsGroupSrv;
+import com.xumpy.timesheets.services.JobsSrv;
+import com.xumpy.timesheets.services.model.JobsInJobsGroup;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,7 @@ public class JobsGroupRestCtrl {
     @Autowired Overview overview;
     @Autowired JobsGraphics jobsGraphics;
     @Autowired JobsGroupSrv jobsGroupSrv;
+    @Autowired JobsSrv jobsSrv;
     
     @RequestMapping("/json/fetch_all_jobs_group")
     public @ResponseBody List<JobsGroupCtrl> fetchAllJobsGroup(){
@@ -98,5 +101,29 @@ public class JobsGroupRestCtrl {
             Logger.getLogger(JobsGroupRestCtrl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    @RequestMapping("/json/fetch_overview")
+    public @ResponseBody Overview fetchOverview() throws ParseException{
+        return overview;
+    }
+    
+    @RequestMapping("/json/fetch_month")
+    public @ResponseBody Overview fetchOverviewMonth(@RequestBody String month) throws ParseException{
+        overview.setMonth(month);
+        overview.setAllJobsInJobsGroup(jobsSrv.selectMonthJobsInJobGroup(month, overview));
+
+        return overview;
+    }
+    
+    @RequestMapping("/json/save_jobs_overview")
+    public @ResponseBody Overview saveJobsOverview(@RequestBody Overview overview) throws ParseException{
+        this.overview = overview;
+        
+        for(JobsInJobsGroup jobsInJobGroup: overview.getAllJobsInJobsGroup()){
+            jobsSrv.saveJobs(jobsSrv.filterMonth(jobsInJobGroup.getJobs()));
+        }
+
+        return fetchOverviewMonth(overview.getMonth());
     }
 }
