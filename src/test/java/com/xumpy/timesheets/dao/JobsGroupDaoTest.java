@@ -5,6 +5,7 @@
  */
 package com.xumpy.timesheets.dao;
 
+import com.xumpy.timesheets.dao.model.CompanyDaoPojo;
 import com.xumpy.timesheets.dao.model.JobsGroupDaoPojo;
 import com.xumpy.timesheets.domain.JobsGroup;
 import java.util.List;
@@ -13,6 +14,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import static org.mockito.Mockito.when;
 import org.mockito.runners.MockitoJUnitRunner;
 
 /**
@@ -21,6 +24,8 @@ import org.mockito.runners.MockitoJUnitRunner;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class JobsGroupDaoTest extends Setup{
+    @Mock CompanyDaoPojo company;
+    
     @Test
     public void testSelect(){
         JobsGroup jobsGroup = jobsGroupDao.select(1);
@@ -33,7 +38,9 @@ public class JobsGroupDaoTest extends Setup{
         JobsGroupDaoPojo jobsGroup = new JobsGroupDaoPojo();
         jobsGroup.setPk_id(101);
         jobsGroup.setName("New Test");
+        jobsGroup.setCompany(company);
         
+        when(company.getPk_id()).thenReturn(1);
         jobsGroupDao.save(jobsGroup);
 
         JobsGroup jobsGroupSelect = jobsGroupDao.select(101);
@@ -58,6 +65,9 @@ public class JobsGroupDaoTest extends Setup{
         JobsGroupDaoPojo jobsGroup = new JobsGroupDaoPojo();
         jobsGroup.setPk_id(101);
         jobsGroup.setName("New Test");
+        jobsGroup.setCompany(company);
+        
+        when(company.getPk_id()).thenReturn(1);
         
         jobsGroupDao.save(jobsGroup);
         

@@ -8,8 +8,10 @@ package com.xumpy.timesheets.dao;
 import com.xumpy.global.MainSetup;
 import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
 import com.xumpy.timesheets.dao.implementations.JobsGroupDaoImpl;
+import com.xumpy.timesheets.dao.model.CompanyDaoPojo;
 import com.xumpy.timesheets.dao.model.JobsDaoPojo;
 import com.xumpy.timesheets.dao.model.JobsGroupDaoPojo;
+import com.xumpy.timesheets.dao.model.JobsGroupPricesDaoPojo;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -28,6 +30,9 @@ public class Setup extends MainSetup{
     public static void setUp(){
         config.addAnnotatedClass(JobsGroupDaoPojo.class);
         config.addAnnotatedClass(JobsDaoPojo.class);
+        config.addAnnotatedClass(CompanyDaoPojo.class);
+        config.addAnnotatedClass(JobsGroupPricesDaoPojo.class);
+        
         startSession();
     }
 }

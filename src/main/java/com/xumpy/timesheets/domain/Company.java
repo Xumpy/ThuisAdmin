@@ -5,17 +5,14 @@
  */
 package com.xumpy.timesheets.domain;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author nicom
  */
-public interface JobsGroup {
-
-    String getDescription();
-
-    String getName();
-
-    Integer getPk_id();
-    
-    Company getCompany();
+public interface Company {
+    public Integer getPk_id();
+    public String getName();
+    public BigDecimal getDailyPayedHours();
 }

@@ -5,6 +5,7 @@
  */
 package com.xumpy.timesheets.services.model;
 
+import com.xumpy.timesheets.domain.Company;
 import com.xumpy.timesheets.domain.JobsGroup;
 import java.io.Serializable;
 import java.util.List;
@@ -18,7 +19,13 @@ public class JobsInJobsGroup implements JobsGroup, Serializable{
     private Integer pk_id;
     private String name;
     private String description;
+    private CompanySrvPojo company;
+    
     private List<JobsSrvPojo> jobs;
+
+    public void setCompany(CompanySrvPojo company) {
+        this.company = company;
+    }
     
     public void setPk_id(Integer pk_id) {
         this.pk_id = pk_id;
@@ -61,5 +68,11 @@ public class JobsInJobsGroup implements JobsGroup, Serializable{
         this.description = jobsGroup.getDescription();
         this.name = jobsGroup.getName();
         this.pk_id = jobsGroup.getPk_id();
+        this.company = new CompanySrvPojo(jobsGroup.getCompany());
+    }
+
+    @Override
+    public Company getCompany() {
+        return this.company;
     }
 }

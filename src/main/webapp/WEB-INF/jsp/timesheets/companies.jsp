@@ -6,32 +6,30 @@
     <%@include file="/resources/template/header.html" %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Groups</title>
+        <title>Company</title>
     </head>
     <body>
         <div class="col-lg-12">
-            <form class="form-horizontal" action="editGroup">
+            <form class="form-horizontal" action="editCompanies">
                 <div class="col-lg-1">
-                    <input class="btn btn-primary" type="submit" value="New Group"/>
+                    <input class="btn btn-primary" type="submit" value="New Company"/>
                 </div>
             </form>
         </div>
         <div class="col-lg-12">
-            <table st-safe-src="groups" st-table="emptyGroups" class="table table-striped table-hover ">
+            <table st-safe-src="companies" st-table="emptyCompanies" class="table table-striped table-hover ">
             <thead>
               <tr>
                   <th></th>
-                  <th st-sort="name">Group Name</th>
-                  <th st-sort="description">Group Description</th>
-                  <th st-sort="company">Company</th>
+                  <th st-sort="name">Company Name</th>
+                  <th st-sort="dailyPayedHours">Daily Payed Hours</th>
               </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="group in emptyGroups">
-                    <td><a href="editGroup/{{group.pk_id}}">Edit</a></td>
-                    <td>{{group.name}}</td>
-                    <td>{{group.description}}</td>
-                    <td>{{group.company.name}}</td>
+                <tr ng-repeat="company in emptyCompanies">
+                    <td><a href="editCompanies/{{company.pk_id}}">Edit</a></td>
+                    <td>{{company.name}}</td>
+                    <td>{{company.dailyPayedHours}}</td>
                 </tr>
             </tbody>
             <tfoot>
@@ -47,8 +45,8 @@
     <script type="text/javascript">
         app.controller("fController", function($scope, $http) {
             <%@include file="/resources/template/globalScope.html" %>
-            $http.get("/ThuisAdmin/json/fetch_all_jobs_group").success( function(data){
-                $scope.groups = data;
+            $http.get("/ThuisAdmin/json/fetch_all_companies").success( function(data){
+                $scope.companies = data;
             });
         });
     </script>

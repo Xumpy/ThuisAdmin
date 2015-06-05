@@ -7,6 +7,7 @@ package com.xumpy.timesheets.services;
 
 import com.xumpy.timesheets.controller.model.Overview;
 import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
+import com.xumpy.timesheets.dao.model.CompanyDaoPojo;
 import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.services.implementations.JobsGroupSrvImpl;
@@ -39,6 +40,7 @@ public class JobsSrvImplTest {
     @Mock Jobs jobs;
     @Mock JobsGroup jobsGroup;
     @Mock Overview overview;
+    @Mock CompanyDaoPojo company;
     
     @Spy JobsGroupSrvImpl jobsGroupSrv;
     
@@ -78,6 +80,8 @@ public class JobsSrvImplTest {
     public void testInsert(){
         Date date = Mockito.mock(Date.class);
         JobsGroup jobsGroup = Mockito.mock(JobsGroup.class);
+        when(jobsGroup.getCompany()).thenReturn(company);
+        when(company.getPk_id()).thenReturn(1);
         
         when(jobs.getPk_id()).thenReturn(null);
         when(jobs.getJobDate()).thenReturn(date);
@@ -94,6 +98,8 @@ public class JobsSrvImplTest {
     public void testUpdate(){
         Date date = Mockito.mock(Date.class);
         JobsGroup jobsGroup = Mockito.mock(JobsGroup.class);
+        when(jobsGroup.getCompany()).thenReturn(company);
+        when(company.getPk_id()).thenReturn(1);
         
         when(jobs.getPk_id()).thenReturn(1);
         when(jobs.getJobDate()).thenReturn(date);
@@ -130,6 +136,8 @@ public class JobsSrvImplTest {
     public void testSaveJobs(){
         Date date = Mockito.mock(Date.class);
         JobsGroup jobsGroup = Mockito.mock(JobsGroup.class);
+        when(jobsGroup.getCompany()).thenReturn(company);
+        when(company.getPk_id()).thenReturn(1);
         
         JobsSrvPojo job1 = Mockito.mock(JobsSrvPojo.class);
         JobsSrvPojo job2 = Mockito.mock(JobsSrvPojo.class);
@@ -165,6 +173,9 @@ public class JobsSrvImplTest {
         
         JobsGroup jobsGroup1 = Mockito.mock(JobsGroup.class);
         JobsGroup jobsGroup2 = Mockito.mock(JobsGroup.class);
+        when(jobsGroup1.getCompany()).thenReturn(company);
+        when(jobsGroup2.getCompany()).thenReturn(company);
+        when(company.getPk_id()).thenReturn(1);
         
         JobsSrvPojo job1 = Mockito.mock(JobsSrvPojo.class);
         JobsSrvPojo job2 = Mockito.mock(JobsSrvPojo.class);
@@ -201,6 +212,8 @@ public class JobsSrvImplTest {
         Date date = df.parse("01/03/2015");
         when(jobs.getJobDate()).thenReturn(date);
         when(jobs.getJobsGroup()).thenReturn(jobsGroup);
+        when(jobsGroup.getCompany()).thenReturn(company);
+        when(company.getPk_id()).thenReturn(1);
         
         List<Jobs> allMonthJobs = new ArrayList<Jobs>();
         allMonthJobs.add(jobs);
@@ -246,6 +259,9 @@ public class JobsSrvImplTest {
         when(jobs.getJobsGroup()).thenReturn(jobsGroup);
         when(jobs.getWorkedHours()).thenReturn(new BigDecimal("7.6"));
         
+        when(jobsGroup.getCompany()).thenReturn(company);
+        when(company.getPk_id()).thenReturn(1);
+        
         List<Jobs> allMonthJobs = new ArrayList<Jobs>();
         allMonthJobs.add(jobs);
         
@@ -266,6 +282,10 @@ public class JobsSrvImplTest {
         
         JobsGroup jobsGroup1 = Mockito.mock(JobsGroup.class);
         JobsGroup jobsGroup2 = Mockito.mock(JobsGroup.class);
+        when(jobsGroup1.getCompany()).thenReturn(company);
+        when(jobsGroup2.getCompany()).thenReturn(company);
+        when(company.getPk_id()).thenReturn(1);
+        
         
         Jobs job1 = Mockito.mock(Jobs.class);
         Jobs job2 = Mockito.mock(Jobs.class);

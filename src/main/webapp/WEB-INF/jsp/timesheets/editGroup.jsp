@@ -27,7 +27,16 @@
             <div class="form-group col-lg-12">
               <label for="inputVoornaam" class="col-lg-2 control-label">Description</label>
               <div class="col-lg-4">
-                <input class="form-control" id="inputVoornaam" ng-model="group.description" placeholder="Naam" type="text">
+                <input class="form-control" id="inputVoornaam" ng-model="group.description" placeholder="Description" type="text">
+              </div>
+            </div>
+            <div class="form-group col-lg-12">
+              <label for="inputCompany" class="col-lg-2 control-label">Company</label>
+              <div class="col-lg-4">
+                <select class="form-control" ng-model="group.company"
+                        ng-options="company.name for company in companies track by company.pk_id">
+                            <option value="">-- No Company --</option>
+                </select>
               </div>
             </div>
         </div>
@@ -43,7 +52,8 @@
               $scope.group = {
                   pk_id: "",
                   name: "",
-                  description: ""
+                  description: "",
+                  company: {}
               };
             }
             
@@ -65,6 +75,10 @@
                         });
                     }
                 }); 
+            });
+            
+            $http.get("/ThuisAdmin/json/fetch_all_companies").success( function(data){
+                $scope.companies = data;
             });
         });
     </script>

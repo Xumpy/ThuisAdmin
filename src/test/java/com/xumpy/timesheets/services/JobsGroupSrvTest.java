@@ -7,6 +7,7 @@ package com.xumpy.timesheets.services;
 
 import com.xumpy.timesheets.controller.model.Overview;
 import com.xumpy.timesheets.dao.implementations.JobsGroupDaoImpl;
+import com.xumpy.timesheets.domain.Company;
 import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.services.implementations.JobsGroupSrvImpl;
@@ -32,6 +33,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class JobsGroupSrvTest {
     @Mock JobsGroupDaoImpl jobsGroupDao;
     @Mock JobsGroup jobsGroup;
+    @Mock Company company;
     
     @InjectMocks JobsGroupSrvImpl jobsGroupSrv;
     
@@ -58,6 +60,8 @@ public class JobsGroupSrvTest {
         when(jobsGroup.getPk_id()).thenReturn(null);
         when(jobsGroup.getName()).thenReturn("Test");
         when(jobsGroup.getDescription()).thenReturn("Test");
+        when(jobsGroup.getCompany()).thenReturn(company);
+        when(company.getPk_id()).thenReturn(1);
         
         jobsGroup = jobsGroupSrv.save(jobsGroup);
         
@@ -69,6 +73,8 @@ public class JobsGroupSrvTest {
         when(jobsGroup.getPk_id()).thenReturn(1);
         when(jobsGroup.getName()).thenReturn("Test");
         when(jobsGroup.getDescription()).thenReturn("Test");
+        when(jobsGroup.getCompany()).thenReturn(company);
+        when(company.getPk_id()).thenReturn(1);
         
         jobsGroup = jobsGroupSrv.save(jobsGroup);
         
@@ -164,6 +170,8 @@ public class JobsGroupSrvTest {
         JobsGroup jobsGroup1 = Mockito.mock(JobsGroup.class);
         
         when(jobsGroup1.getPk_id()).thenReturn(1);
+        when(jobsGroup1.getCompany()).thenReturn(company);
+        when(company.getPk_id()).thenReturn(1);
         
         when(overview.getAllJobsInJobsGroup()).thenReturn(lstJobsInJobsGroup);
         when(overview.getMonth()).thenReturn("05/2015");

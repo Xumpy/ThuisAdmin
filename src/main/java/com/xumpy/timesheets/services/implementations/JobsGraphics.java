@@ -10,6 +10,7 @@ import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.domain.OverviewWork.OverviewWork;
 import com.xumpy.timesheets.domain.OverviewWork.OverviewWorkDetails;
+import com.xumpy.timesheets.services.model.JobsValue;
 import com.xumpy.timesheets.services.model.OverviewWorkSrvPojo.MonthlyOverviewWorkDetailsSrvPojo;
 import com.xumpy.timesheets.services.model.OverviewWorkSrvPojo.OverviewWorkDetailsSrvPojo;
 import com.xumpy.timesheets.services.model.OverviewWorkSrvPojo.OverviewWorkSrvPojo;
@@ -32,6 +33,21 @@ public class JobsGraphics {
     @Autowired JobsDaoImpl jobsDao;
     
     private final SimpleDateFormat dfToMonth = new SimpleDateFormat("MM/yyyy");
+    
+    public List<JobsValue> calculateJobsValue(List<Jobs> jobs){
+        List<JobsValue> jobsValues = new ArrayList<JobsValue>();
+        
+        for (Jobs job: jobs){
+            JobsValue jobsValue = new JobsValue();
+            
+            jobsValue.setJobs(job);
+            
+            jobsValue.setActualWorkHours(job.getWorkedHours());
+            jobsValue.setOvertimeHours(jobsValue.getActualWorkHours().min(new BigDecimal(7.6)));
+        }
+        
+        return jobsValues;
+    }
     
     public BigDecimal getWorkedWeekHours(List<Jobs> jobs){
         BigDecimal workedWeekHours = new BigDecimal(0);

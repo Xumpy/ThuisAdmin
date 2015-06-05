@@ -5,11 +5,13 @@
  */
 package com.xumpy.timesheets.controller.rest;
 
+import com.xumpy.timesheets.controller.model.CompanyCtrlPojo;
 import com.xumpy.timesheets.controller.model.JobsGroupCtrl;
 import com.xumpy.timesheets.controller.model.Overview;
 import com.xumpy.timesheets.controller.model.OverviewWorkHeader;
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.domain.OverviewWork.OverviewWork;
+import com.xumpy.timesheets.services.CompanySrv;
 import com.xumpy.timesheets.services.implementations.JobsGraphics;
 import com.xumpy.timesheets.services.JobsGroupSrv;
 import com.xumpy.timesheets.services.JobsSrv;
@@ -38,6 +40,7 @@ public class JobsGroupRestCtrl {
     @Autowired JobsGraphics jobsGraphics;
     @Autowired JobsGroupSrv jobsGroupSrv;
     @Autowired JobsSrv jobsSrv;
+    @Autowired CompanySrv companySrv;
     
     @RequestMapping("/json/fetch_all_jobs_group")
     public @ResponseBody List<JobsGroupCtrl> fetchAllJobsGroup(){
@@ -125,5 +128,27 @@ public class JobsGroupRestCtrl {
         }
 
         return fetchOverviewMonth(overview.getMonth());
+    }
+    
+    @RequestMapping("/json/fetch_all_companies")
+    public @ResponseBody List<CompanyCtrlPojo> fetchAllCompanies(){
+        return CompanyCtrlPojo.allCompanies(companySrv.selectAll());
+    }
+    
+    @RequestMapping("/json/fetch_company")
+    public @ResponseBody CompanyCtrlPojo fetchCompany(@RequestBody Integer pk_id){
+        return new CompanyCtrlPojo(companySrv.select(pk_id));
+    }
+    
+    @RequestMapping("/json/save_company")
+    public @ResponseBody CompanyCtrlPojo saveCompany(@RequestBody CompanyCtrlPojo company){
+        return new CompanyCtrlPojo(companySrv.save(company));
+    }
+    
+    @RequestMapping("/json/delete_company")
+    public @ResponseBody String deleteCompany(@RequestBody CompanyCtrlPojo company){
+        companySrv.delete(company);
+        
+        return "200";
     }
 }

@@ -47,4 +47,21 @@ public class TimesheetsCtrl {
     public String viewGraphics(){
         return "timesheets/graphics";
     }
+    
+    @RequestMapping(value = "timesheets/companies")
+    public String viewCompanies(){
+        return "timesheets/companies";
+    }
+    
+    @RequestMapping(value = "timesheets/editCompanies")
+    public String editCompanies(){
+        return "timesheets/editCompanies";
+    }
+    
+    @RequestMapping(value = "timesheets/editCompanies/{companyId}")
+    public String editCompanies(@PathVariable Integer companyId, Model model){
+        model.addAttribute("pk_id", companyId);
+        
+        return "timesheets/editCompanies";
+    }
 }

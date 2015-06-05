@@ -121,11 +121,27 @@ select 1 as pk_id, 1 as fk_bedrag_id, 'PC madness' as omschrijving, X'89504E470D
 
 create sequence if not exists seq_ta_job_groups start with 100;
 create sequence if not exists seq_ta_jobs start with 100;
+create sequence if not exists seq_ta_company start with 100;
+create sequence if not exists seq_ta_jobs_group_prices start with 100;
+
+create table if not exists ta_company(
+    pk_id int not null,
+    name varchar,
+    daily_payed_hours decimal);
+
+create table if not exists ta_jobs_group_prices(
+    pk_id int not null,
+    fk_job_group_id int not null,
+    start_date date not null,
+    end_date date not null,
+    price_per_hour decimal);
+
 
 create table if not exists ta_job_groups(
 	pk_id int primary key,
 	job_name varchar,
-	description varchar
+	description varchar,
+        fk_company_id int
 );
 
 create table if not exists ta_jobs(
@@ -138,10 +154,15 @@ create table if not exists ta_jobs(
 
 alter table ta_jobs add foreign key(fk_job_group_id) references public.ta_job_groups(pk_id);
 
+insert into ta_company select * from (
+select 1 as pk_id, 'Test' as name, 7.6 as daily_payed_hours) x 
+where not exists(select * from ta_company);
+
+
 insert into ta_job_groups select * from (
-select 1 as pk_id, 'JIRA-TEST1' as job_name, 'Job Test 1' as description union
-select 2 as pk_id, 'JIRA-TEST2' as job_name, 'Job Test 2' as description union
-select 3 as pk_id, 'JIRA-TEST3' as job_name, 'Job Test 3' as description
+select 1 as pk_id, 'JIRA-TEST1' as job_name, 'Job Test 1' as description, 1 as fk_company_id union
+select 2 as pk_id, 'JIRA-TEST2' as job_name, 'Job Test 2' as description, 1 as fk_company_id union
+select 3 as pk_id, 'JIRA-TEST3' as job_name, 'Job Test 3' as description, 1 as fk_company_id
 ) x where not exists(select * from ta_job_groups);
 
 insert into ta_jobs select * from (

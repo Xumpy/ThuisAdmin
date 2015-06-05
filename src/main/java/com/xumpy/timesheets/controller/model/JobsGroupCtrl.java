@@ -5,6 +5,7 @@
  */
 package com.xumpy.timesheets.controller.model;
 
+import com.xumpy.timesheets.domain.Company;
 import com.xumpy.timesheets.domain.JobsGroup;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,12 @@ public class JobsGroupCtrl implements JobsGroup{
     private String name;
     private String description;
     private Integer checked;
+    private CompanyCtrlPojo company;
 
+    public void setCompany(CompanyCtrlPojo company) {
+        this.company = company;
+    }
+    
     public void setPk_id(Integer pk_id) {
         this.pk_id = pk_id;
     }
@@ -61,6 +67,7 @@ public class JobsGroupCtrl implements JobsGroup{
         this.name = jobsGroup.getName();
         this.description = jobsGroup.getDescription();
         this.checked = 0;
+        this.company = jobsGroup.getCompany() == null ? null : new CompanyCtrlPojo(jobsGroup.getCompany());
     }
     
     public static List<JobsGroupCtrl> allJobsGroupCtrl(List<JobsGroup> allJobsGroup){
@@ -71,5 +78,10 @@ public class JobsGroupCtrl implements JobsGroup{
         }
         
         return lstJobsGroupCtrl;
+    }
+
+    @Override
+    public Company getCompany() {
+        return this.company;
     }
 }

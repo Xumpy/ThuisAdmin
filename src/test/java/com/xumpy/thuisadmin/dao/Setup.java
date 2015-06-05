@@ -44,7 +44,7 @@ public abstract class Setup extends MainSetup {
         config.addAnnotatedClass(DocumentenDaoPojo.class);
         config.addAnnotatedClass(GroepenDaoPojo.class);
         config.addAnnotatedClass(RekeningenDaoPojo.class);
-                
+        
         startSession();
     }
 }

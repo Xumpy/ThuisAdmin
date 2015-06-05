@@ -5,11 +5,14 @@
  */
 package com.xumpy.timesheets.dao.model;
 
+import com.xumpy.timesheets.domain.Company;
 import com.xumpy.timesheets.domain.JobsGroup;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -29,6 +32,14 @@ public class JobsGroupDaoPojo implements JobsGroup, Serializable {
     @Column(name="DESCRIPTION")
     private String description;
 
+    @ManyToOne
+    @JoinColumn(name="FK_COMPANY_ID")
+    private CompanyDaoPojo company;
+
+    public void setCompany(CompanyDaoPojo company) {
+        this.company = company;
+    }
+    
     @Override
     public Integer getPk_id() {
         return pk_id;
@@ -62,5 +73,11 @@ public class JobsGroupDaoPojo implements JobsGroup, Serializable {
         this.description = jobsGroup.getDescription();
         this.name = jobsGroup.getName();
         this.pk_id = jobsGroup.getPk_id();
+        this.company = jobsGroup.getCompany() == null ? null : new CompanyDaoPojo(jobsGroup.getCompany());
+    }
+
+    @Override
+    public Company getCompany() {
+        return this.company;
     }
 }
