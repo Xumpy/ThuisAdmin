@@ -10,7 +10,7 @@ import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.domain.OverviewWork.OverviewWork;
 import com.xumpy.timesheets.domain.OverviewWork.OverviewWorkDetails;
-import com.xumpy.timesheets.services.model.JobsValue;
+import com.xumpy.timesheets.services.model.WorkingDay;
 import com.xumpy.timesheets.services.model.OverviewWorkSrvPojo.MonthlyOverviewWorkDetailsSrvPojo;
 import com.xumpy.timesheets.services.model.OverviewWorkSrvPojo.OverviewWorkDetailsSrvPojo;
 import com.xumpy.timesheets.services.model.OverviewWorkSrvPojo.OverviewWorkSrvPojo;
@@ -34,129 +34,123 @@ public class JobsGraphics {
     
     private final SimpleDateFormat dfToMonth = new SimpleDateFormat("MM/yyyy");
     
-    public List<JobsValue> calculateJobsValue(List<Jobs> jobs){
-        List<JobsValue> jobsValues = new ArrayList<JobsValue>();
-        
-        for (Jobs job: jobs){
-            JobsValue jobsValue = new JobsValue();
-            
-            jobsValue.setJobs(job);
-            
-            jobsValue.setActualWorkHours(job.getWorkedHours());
-            jobsValue.setOvertimeHours(jobsValue.getActualWorkHours().min(new BigDecimal(7.6)));
-        }
-        
-        return jobsValues;
-    }
-    
-    public BigDecimal getWorkedWeekHours(List<Jobs> jobs){
-        BigDecimal workedWeekHours = new BigDecimal(0);
-        for (Jobs job: jobs){
-            if (CustomDateUtils.isWeekDay(job.getJobDate())){
-                workedWeekHours = workedWeekHours.add(job.getWorkedHours());
+    public WorkingDay getWorkingDay(List<WorkingDay> workingDays, Date date){
+        for(WorkingDay workingDay: workingDays){
+            if (workingDay.getDate().equals(date)){
+                return workingDay;
             }
         }
-        return workedWeekHours;
+        return null;
     }
     
-    public BigDecimal getWorkedWeekDays(List<Jobs> jobs){
-        BigDecimal workedWeekDays = new BigDecimal(0);
-        List<Date> lstDates = new ArrayList<Date>();
+    public List<WorkingDay> calculateWorkingDates(List<Jobs> jobs){
+        List<WorkingDay> workingDays = new ArrayList<WorkingDay>();
         
-        for (Jobs job: jobs){
-            if (CustomDateUtils.isWeekDay(job.getJobDate())){
-                if (!lstDates.contains(job.getJobDate())){
-                    lstDates.add(job.getJobDate());
-                    workedWeekDays = workedWeekDays.add(new BigDecimal(1));
+        List<BigDecimal> lstPayedHours = new ArrayList<BigDecimal>();
+        
+        for(Jobs job: jobs){
+            if (getWorkingDay(workingDays, job.getJobDate()) == null){
+                WorkingDay workingDay = new WorkingDay();
+                workingDay.setDate(job.getJobDate());
+                workingDay.setJobs(new ArrayList<Jobs>());
+                workingDay.setActualWorkHours(new BigDecimal(0));
+                workingDay.setOvertimeHours(new BigDecimal(0));
+                workingDay.setOvertimeHoursPayed(new BigDecimal(0));
+                
+                workingDays.add(workingDay);
+            }
+            
+            if (job.getJobsGroup().getCompany() != null){
+                if (!lstPayedHours.contains(job.getJobsGroup().getCompany().getDailyPayedHours())){
+                    lstPayedHours.add(job.getJobsGroup().getCompany().getDailyPayedHours());
                 }
             }
         }
-        return workedWeekDays;
-    }
-    
-    public BigDecimal getWorkedWeekendHours(List<Jobs> jobs){
-        BigDecimal workedWeekendHours = new BigDecimal(0);
-        for (Jobs job: jobs){
-            if (!CustomDateUtils.isWeekDay(job.getJobDate())){
-                workedWeekendHours = workedWeekendHours.add(job.getWorkedHours());
+        
+        BigDecimal payedHours = new BigDecimal(0);
+        
+        for (BigDecimal payedHoursFromList: lstPayedHours){
+            if (payedHoursFromList.compareTo(payedHours) > 0){
+                payedHours = payedHoursFromList;
             }
         }
-        return workedWeekendHours;
-    }
-    
-    public BigDecimal getWorkedWeekendDays(List<Jobs> jobs){
-        BigDecimal workedWeekendDays = new BigDecimal(0);
-        List<Date> lstDate = new ArrayList<Date>();
-        
-        for (Jobs job: jobs){
-            if (CustomDateUtils.isWeekDay(job.getJobDate())){
-                if (!lstDate.contains(job.getJobDate())){
-                    lstDate.add(job.getJobDate());
-                    workedWeekendDays = workedWeekendDays.add(new BigDecimal(1));
+
+        for (WorkingDay workingDay: workingDays){
+            for (Jobs job: jobs){
+                if (job.getJobDate().equals(workingDay.getDate())){
+                    workingDay.getJobs().add(job);
+                    if (job.getPercentage() == null || job.getPercentage().equals(new BigDecimal(0))){
+                        workingDay.setActualWorkHours(workingDay.getActualWorkHours().add(job.getWorkedHours()));
+                    } else {
+                        workingDay.setActualWorkHours(workingDay.getActualWorkHours().add(job.getWorkedHours().multiply(job.getPercentage().divide(new BigDecimal(100)))));
+                    }
+                    workingDay.setOvertimeHours(workingDay.getActualWorkHours().subtract(payedHours));
                 }
             }
         }
-        return workedWeekendDays;
+
+        return workingDays;
     }
-    
-    public BigDecimal getWeekDays(List<Jobs> jobs) throws ParseException{
-        List<String> months = new ArrayList<String>();
-        
-        BigDecimal weekDays = new BigDecimal(0);
-        
-        for(Jobs job: jobs){
-            if(!months.contains(dfToMonth.format(job.getJobDate()))){
-                months.add(dfToMonth.format(job.getJobDate()));
-            }
-        }
-        
-        for (String month: months){
-            weekDays.add(new BigDecimal(CustomDateUtils.getWeekDays(month).size()));
-        }
-        
-        return weekDays;
-    }
-    
-    public BigDecimal getWeekendDays(List<Jobs> jobs) throws ParseException{
-        List<String> months = new ArrayList<String>();
-        
-        BigDecimal weekendDays = new BigDecimal(0);
-        
-        for(Jobs job: jobs){
-            if(!months.contains(dfToMonth.format(job.getJobDate()))){
-                months.add(dfToMonth.format(job.getJobDate()));
-            }
-        }
-        
-        for (String month: months){
-            weekendDays.add(new BigDecimal(CustomDateUtils.getWeekendDays(month).size()));
-        }
-        
-        return weekendDays;
-    }
-    
+
     public OverviewWorkDetails getOverviewWorkDetails(List<Jobs> jobs) throws ParseException{
         MathContext mc = new MathContext(3, RoundingMode.HALF_UP);
         
         OverviewWorkDetailsSrvPojo overviewWorkDetails = new OverviewWorkDetailsSrvPojo();
         
+        List<WorkingDay> workingDays = calculateWorkingDates(jobs);
+        
         overviewWorkDetails.setHoursToWorkPerDay(new BigDecimal(8)); // Hardcoded
-        overviewWorkDetails.setHoursPayedPerDay(new BigDecimal(7.6)); // Hardcoded
         
-        overviewWorkDetails.setWorkedWeekHours(getWorkedWeekHours(jobs));
-        overviewWorkDetails.setWorkedWeekendHours(getWorkedWeekendHours(jobs));
-        overviewWorkDetails.setWeekDays(getWeekDays(jobs));
-        overviewWorkDetails.setWeekendDays(getWeekendDays(jobs));
+        BigDecimal hoursPayedPerDay = new BigDecimal(0, mc);
+        BigDecimal workedWeekHours = new BigDecimal(0, mc);
+        BigDecimal workedWeekendHours = new BigDecimal(0, mc);
+        BigDecimal weekDays = new BigDecimal(0, mc);
+        BigDecimal weekendDays = new BigDecimal(0, mc);
+        BigDecimal workedWeekDays = new BigDecimal(0, mc);
+        BigDecimal workedWeekendDays = new BigDecimal(0, mc);
+        BigDecimal overtimeHours = new BigDecimal(0, mc);
+        BigDecimal overtimeDays = new BigDecimal(0, mc);
         
-        overviewWorkDetails.setWorkedWeekDays(getWorkedWeekDays(jobs));
-        overviewWorkDetails.setWorkedWeekendDays(getWorkedWeekendDays(jobs));
+        for(WorkingDay workingDay: workingDays){
+            if (CustomDateUtils.isWeekDay(workingDay.getDate())){
+                weekDays = weekDays.add(new BigDecimal(1));
+                workedWeekHours = workedWeekHours.add(workingDay.getActualWorkHours(), mc);
+                workedWeekDays = workedWeekDays.add(new BigDecimal(1));
+            } else {
+                weekendDays = weekendDays.add(new BigDecimal(1));
+                workedWeekendHours = workedWeekendHours.add(workingDay.getActualWorkHours(), mc);
+                workedWeekendDays = workedWeekendDays.add(new BigDecimal(1));
+            }
+            
+            overtimeHours = overtimeHours.add(workingDay.getOvertimeHours(), mc);
+
+            for(Jobs jobPerDay: workingDay.getJobs()){
+                if(jobPerDay.getJobsGroup().getCompany() != null){
+                    if (hoursPayedPerDay.compareTo(jobPerDay.getJobsGroup().getCompany().getDailyPayedHours()) < 0){
+                        hoursPayedPerDay = jobPerDay.getJobsGroup().getCompany().getDailyPayedHours();
+                    }
+                }
+            }
+            
+            if (!hoursPayedPerDay.equals(new BigDecimal(0))){        
+                overtimeDays = overtimeHours.divide(hoursPayedPerDay, mc);
+            } else {
+                overtimeDays = workedWeekDays.add(workedWeekendDays);
+            }
+        }
         
-        overviewWorkDetails.setOvertimeHours(overviewWorkDetails.getWorkedWeekHours()
-                                                .subtract(overviewWorkDetails.getHoursPayedPerDay()
-                                                            .multiply(overviewWorkDetails.getWorkedWeekDays(), mc), mc)
-                                                .add(overviewWorkDetails.getWorkedWeekendHours(), mc));
+        overviewWorkDetails.setHoursPayedPerDay(hoursPayedPerDay);
         
-        overviewWorkDetails.setOvertimeDays(overviewWorkDetails.getOvertimeHours().divide(overviewWorkDetails.getHoursPayedPerDay(), mc));
+        overviewWorkDetails.setWorkedWeekHours(workedWeekHours);
+        overviewWorkDetails.setWorkedWeekendHours(workedWeekendHours);
+        overviewWorkDetails.setWeekDays(weekDays);
+        overviewWorkDetails.setWeekendDays(weekendDays);
+        
+        overviewWorkDetails.setWorkedWeekDays(workedWeekDays);
+        overviewWorkDetails.setWorkedWeekendDays(workedWeekendDays);
+        
+        overviewWorkDetails.setOvertimeHours(overtimeHours);
+        overviewWorkDetails.setOvertimeDays(overtimeDays);
         
         return overviewWorkDetails;
     }

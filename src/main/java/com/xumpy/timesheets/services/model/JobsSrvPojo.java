@@ -26,6 +26,7 @@ public class JobsSrvPojo implements Jobs, Serializable  {
     private String workedHours;
     private String remarks;
     private String jobDay;
+    private BigDecimal percentage;
     
     public void setPk_id(Integer pk_id) {
         this.pk_id = pk_id;
@@ -45,6 +46,10 @@ public class JobsSrvPojo implements Jobs, Serializable  {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public void setPercentage(BigDecimal percentage) {
+        this.percentage = percentage;
     }
     
     @Override
@@ -97,6 +102,7 @@ public class JobsSrvPojo implements Jobs, Serializable  {
         this.remarks = job.getRemarks();
         this.workedHours = job.getWorkedHours() != null ? job.getWorkedHours().toString() : null;
         this.weekendDay = JobsSrvImpl.jobInWeekend(job);
+        this.percentage = job.getPercentage();
     }
     
     public static List<JobsSrvPojo> lstJobsSrvPojo(List<? extends Jobs> jobs){
@@ -106,5 +112,10 @@ public class JobsSrvPojo implements Jobs, Serializable  {
         }
         
         return lstJobsSrv;
+    }
+
+    @Override
+    public BigDecimal getPercentage() {
+        return this.percentage;
     }
 }

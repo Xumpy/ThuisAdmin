@@ -7,10 +7,13 @@ package com.xumpy.timesheets.services;
 
 import com.xumpy.timesheets.services.implementations.JobsGraphics;
 import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
+import com.xumpy.timesheets.dao.model.CompanyDaoPojo;
 import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.domain.OverviewWork.OverviewWork;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,6 +32,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class JobsGraphicsTest {
     
     @Mock JobsDaoImpl jobsDao;
+    @Mock CompanyDaoPojo company;
+    
     @InjectMocks JobsGraphics jobsGraphics;
     
     private List<Jobs> jobs = new ArrayList<Jobs>();
@@ -49,6 +54,8 @@ public class JobsGraphicsTest {
        
         when(jobsGroup1.getPk_id()).thenReturn(1);
         when(jobsGroup2.getPk_id()).thenReturn(2);
+        when(jobsGroup1.getCompany()).thenReturn(company);
+        when(jobsGroup2.getCompany()).thenReturn(company);
         
         when(job1.getJobDate()).thenReturn(df.parse("01/01/2015"));
         when(job2.getJobDate()).thenReturn(df.parse("04/01/2015"));
@@ -90,8 +97,14 @@ public class JobsGraphicsTest {
     
     @Test
     public void testOverviewWorkTest1() throws ParseException{
+        MathContext mc = new MathContext(3, RoundingMode.HALF_UP);
+        
+        when(company.getDailyPayedHours()).thenReturn(new BigDecimal(7.6));
         JobsGroup jobsGroup1 = Mockito.mock(JobsGroup.class);
         JobsGroup jobsGroup2 = Mockito.mock(JobsGroup.class);
+        
+        when(jobsGroup1.getCompany()).thenReturn(company);
+        when(jobsGroup2.getCompany()).thenReturn(company);
         
         when(jobsGroup1.getPk_id()).thenReturn(1);
         when(jobsGroup2.getPk_id()).thenReturn(2);
@@ -101,6 +114,9 @@ public class JobsGraphicsTest {
         jobsGroups.add(jobsGroup2);
         
         OverviewWork overviewWork = jobsGraphics.overviewWork("01/2015", "03/2015", jobsGroups);
+        
+        
+        assertEquals(new BigDecimal(7.6), overviewWork.getMonthlyWorkDetails().get(0).getWorkDetails().getHoursPayedPerDay());
         
         assertEquals(new BigDecimal(8), overviewWork.getMonthlyWorkDetails().get(0).getWorkDetails().getWorkedWeekHours());
         assertEquals(new BigDecimal(4), overviewWork.getMonthlyWorkDetails().get(0).getWorkDetails().getWorkedWeekendHours());
@@ -115,13 +131,19 @@ public class JobsGraphicsTest {
         assertEquals(new BigDecimal(1), overviewWork.getMonthlyWorkDetails().get(1).getWorkDetails().getWorkedWeekendDays());
         assertEquals(new BigDecimal(1), overviewWork.getMonthlyWorkDetails().get(2).getWorkDetails().getWorkedWeekDays());
         assertEquals(new BigDecimal(1), overviewWork.getMonthlyWorkDetails().get(2).getWorkDetails().getWorkedWeekendDays());
+        
+        assertEquals(new BigDecimal(-3.2, mc), overviewWork.getMonthlyWorkDetails().get(0).getWorkDetails().getOvertimeHours());
+        assertEquals(new BigDecimal(-0.2, mc), overviewWork.getMonthlyWorkDetails().get(1).getWorkDetails().getOvertimeHours());
+        assertEquals(new BigDecimal(-3.2, mc), overviewWork.getMonthlyWorkDetails().get(2).getWorkDetails().getOvertimeHours());
     }
     
     @Test
     public void testOverviewWorkTest2() throws ParseException{
+        when(company.getDailyPayedHours()).thenReturn(new BigDecimal(7.6));
         JobsGroup jobsGroup1 = Mockito.mock(JobsGroup.class);
         
         when(jobsGroup1.getPk_id()).thenReturn(1);
+        when(jobsGroup1.getCompany()).thenReturn(company);
         
         List<JobsGroup> jobsGroups = new ArrayList<JobsGroup>();
         jobsGroups.add(jobsGroup1);

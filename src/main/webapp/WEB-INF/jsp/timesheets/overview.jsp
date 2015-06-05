@@ -43,7 +43,10 @@
             </tbody>
         </table>
         <div id="dialog" class="modal-dialog" title="Basic dialog">
-            Remarks: <input type="text" ng_model="jobInfo.remarks">
+            <table st-safe-src="bedragen" st-table="emptyBedragen" class="table table-hover ">
+                <tr><td>Remarks:</td><td><input type="text" ng_model="jobInfo.remarks"></td></tr>
+                <tr><td>Percentage:</td><td><input type="text" ng_model="jobInfo.percentage"></td></tr>
+            </table>
         </div>
     </body>
     <script type="text/javascript">

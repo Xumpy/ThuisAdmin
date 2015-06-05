@@ -149,7 +149,8 @@ create table if not exists ta_jobs(
 	fk_job_group_id varchar,
 	job_date date,
         worked_hours decimal,
-        remarks varchar
+        remarks varchar,
+        percentage int
 );
 
 alter table ta_jobs add foreign key(fk_job_group_id) references public.ta_job_groups(pk_id);
@@ -166,21 +167,21 @@ select 3 as pk_id, 'JIRA-TEST3' as job_name, 'Job Test 3' as description, 1 as f
 ) x where not exists(select * from ta_job_groups);
 
 insert into ta_jobs select * from (
-select 1 as pk_id, 1 as fk_job_group_id, DATE'2015-03-20' as job_date, 7.6 as worked_hours, 'JIRA-TEST1' as remarks union
-select 2 as pk_id, 1 as fk_job_group_id, DATE'2015-03-21' as job_date, 7.6 as worked_hours, 'JIRA-TEST1' as remarks union
-select 3 as pk_id, 1 as fk_job_group_id, DATE'2015-03-22' as job_date, 7.6 as worked_hours, 'JIRA-TEST1' as remarks union
-select 4 as pk_id, 1 as fk_job_group_id, DATE'2015-03-23' as job_date, 4 as worked_hours, 'JIRA-TEST1' as remarks union
-select 5 as pk_id, 1 as fk_job_group_id, DATE'2015-03-23' as job_date, 3.6 as worked_hours, 'JIRA-TEST1' as remarks union
-select 6 as pk_id, 1 as fk_job_group_id, DATE'2015-03-24' as job_date, 7.6 as worked_hours, 'JIRA-TEST1' as remarks union
-select 7 as pk_id, 2 as fk_job_group_id, DATE'2015-03-27' as job_date, 7.6 as worked_hours, 'JIRA-TEST2' as remarks union
-select 8 as pk_id, 2 as fk_job_group_id, DATE'2015-03-28' as job_date, 7.6 as worked_hours, 'JIRA-TEST2' as remarks union
-select 9 as pk_id, 2 as fk_job_group_id, DATE'2015-03-29' as job_date, 7.6 as worked_hours, 'JIRA-TEST2' as remarks union
-select 10 as pk_id, 2 as fk_job_group_id, DATE'2015-03-30' as job_date, 7.6 as worked_hours, 'JIRA-TEST2' as remarks union
-select 11 as pk_id, 2 as fk_job_group_id, DATE'2015-04-01' as job_date, 4 as worked_hours, 'JIRA-TEST2' as remarks union
-select 12 as pk_id, 3 as fk_job_group_id, DATE'2015-04-01' as job_date, 3.6 as worked_hours, 'JIRA-TEST3' as remarks union
-select 13 as pk_id, 3 as fk_job_group_id, DATE'2015-04-04' as job_date, 7.6 as worked_hours, 'JIRA-TEST3' as remarks union
-select 14 as pk_id, 3 as fk_job_group_id, DATE'2015-04-05' as job_date, 7.6 as worked_hours, 'JIRA-TEST3' as remarks union
-select 15 as pk_id, 3 as fk_job_group_id, DATE'2015-04-06' as job_date, 7.6 as worked_hours, 'JIRA-TEST3' as remarks union
-select 16 as pk_id, 3 as fk_job_group_id, DATE'2015-04-07' as job_date, 7.6 as worked_hours, 'JIRA-TEST3' as remarks union
-select 17 as pk_id, 3 as fk_job_group_id, DATE'2015-04-08' as job_date, 7.6 as worked_hours, 'JIRA-TEST3' as remarks
+select 1 as pk_id, 1 as fk_job_group_id, DATE'2015-03-20' as job_date, 7.6 as worked_hours, 'JIRA-TEST1' as remarks, 0 as percentage union
+select 2 as pk_id, 1 as fk_job_group_id, DATE'2015-03-21' as job_date, 7.6 as worked_hours, 'JIRA-TEST1' as remarks, 0 as percentage union
+select 3 as pk_id, 1 as fk_job_group_id, DATE'2015-03-22' as job_date, 7.6 as worked_hours, 'JIRA-TEST1' as remarks, 0 as percentage union
+select 4 as pk_id, 1 as fk_job_group_id, DATE'2015-03-23' as job_date, 4 as worked_hours, 'JIRA-TEST1' as remarks, 0 as percentage union
+select 5 as pk_id, 1 as fk_job_group_id, DATE'2015-03-23' as job_date, 3.6 as worked_hours, 'JIRA-TEST1' as remarks, 0 as percentage union
+select 6 as pk_id, 1 as fk_job_group_id, DATE'2015-03-24' as job_date, 7.6 as worked_hours, 'JIRA-TEST1' as remarks, 0 as percentage union
+select 7 as pk_id, 2 as fk_job_group_id, DATE'2015-03-27' as job_date, 7.6 as worked_hours, 'JIRA-TEST2' as remarks, 0 as percentage union
+select 8 as pk_id, 2 as fk_job_group_id, DATE'2015-03-28' as job_date, 7.6 as worked_hours, 'JIRA-TEST2' as remarks, 0 as percentage union
+select 9 as pk_id, 2 as fk_job_group_id, DATE'2015-03-29' as job_date, 7.6 as worked_hours, 'JIRA-TEST2' as remarks, 0 as percentage union
+select 10 as pk_id, 2 as fk_job_group_id, DATE'2015-03-30' as job_date, 7.6 as worked_hours, 'JIRA-TEST2' as remarks, 0 as percentage union
+select 11 as pk_id, 2 as fk_job_group_id, DATE'2015-04-01' as job_date, 4 as worked_hours, 'JIRA-TEST2' as remarks, 0 as percentage union
+select 12 as pk_id, 3 as fk_job_group_id, DATE'2015-04-01' as job_date, 3.6 as worked_hours, 'JIRA-TEST3' as remarks, 0 as percentage union
+select 13 as pk_id, 3 as fk_job_group_id, DATE'2015-04-04' as job_date, 7.6 as worked_hours, 'JIRA-TEST3' as remarks, 0 as percentage union
+select 14 as pk_id, 3 as fk_job_group_id, DATE'2015-04-05' as job_date, 7.6 as worked_hours, 'JIRA-TEST3' as remarks, 0 as percentage union
+select 15 as pk_id, 3 as fk_job_group_id, DATE'2015-04-06' as job_date, 7.6 as worked_hours, 'JIRA-TEST3' as remarks, 0 as percentage union
+select 16 as pk_id, 3 as fk_job_group_id, DATE'2015-04-07' as job_date, 7.6 as worked_hours, 'JIRA-TEST3' as remarks, 0 as percentage union
+select 17 as pk_id, 3 as fk_job_group_id, DATE'2015-04-08' as job_date, 7.6 as worked_hours, 'JIRA-TEST3' as remarks, 0 as percentage
 ) x where not exists(select * from ta_jobs);

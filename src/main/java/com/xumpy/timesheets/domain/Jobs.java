@@ -23,4 +23,6 @@ public interface Jobs {
     BigDecimal getWorkedHours();
     
     String getRemarks();
+    
+    BigDecimal getPercentage();
 }

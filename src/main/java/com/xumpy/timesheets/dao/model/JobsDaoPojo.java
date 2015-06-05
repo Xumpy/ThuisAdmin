@@ -40,6 +40,9 @@ public class JobsDaoPojo implements Serializable, Jobs {
     @Column(name="REMARKS")
     private String remarks;
     
+    @Column(name="PERCENTAGE")
+    private BigDecimal percentage;
+    
     @Override
     public Integer getPk_id() {
         return pk_id;
@@ -47,6 +50,10 @@ public class JobsDaoPojo implements Serializable, Jobs {
 
     public void setPk_id(Integer pk_id) {
         this.pk_id = pk_id;
+    }
+
+    public void setPercentage(BigDecimal percentage) {
+        this.percentage = percentage;
     }
 
     @Override
@@ -93,5 +100,11 @@ public class JobsDaoPojo implements Serializable, Jobs {
         this.pk_id = jobs.getPk_id();
         this.workedHours = jobs.getWorkedHours();
         this.remarks = jobs.getRemarks();
+        this.percentage = jobs.getPercentage();
+    }
+
+    @Override
+    public BigDecimal getPercentage() {
+        return this.percentage;
     }
 }

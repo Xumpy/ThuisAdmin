@@ -7,22 +7,41 @@ package com.xumpy.timesheets.services.model;
 
 import com.xumpy.timesheets.domain.Jobs;
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 /**
  *
  * @author nicom
  */
-public class JobsValue {
-    private Jobs jobs;
+public class WorkingDay {
+    private List<Jobs> jobs;
+    private Date date;
     private BigDecimal actualWorkHours;
     private BigDecimal overtimeHours;
     private BigDecimal overtimeHoursPayed;
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public BigDecimal getOvertimeHoursPayed() {
+        return overtimeHoursPayed;
+    }
+
+    public void setOvertimeHoursPayed(BigDecimal overtimeHoursPayed) {
+        this.overtimeHoursPayed = overtimeHoursPayed;
+    }
     
-    public Jobs getJobs() {
+    public List<Jobs> getJobs() {
         return jobs;
     }
 
-    public void setJobs(Jobs jobs) {
+    public void setJobs(List<Jobs> jobs) {
         this.jobs = jobs;
     }
 
