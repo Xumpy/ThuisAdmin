@@ -5,6 +5,7 @@
  */
 package com.xumpy.migration.timesheets.model;
 
+import com.xumpy.timesheets.domain.Company;
 import com.xumpy.timesheets.domain.JobsGroup;
 
 /**
@@ -15,7 +16,12 @@ public class JobsGroupPojo implements JobsGroup{
     private Integer pk_id;
     private String name;
     private String description;
+    private Company company;
 
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+    
     public void setPk_id(Integer pk_id) {
         this.pk_id = pk_id;
     }
@@ -41,6 +47,11 @@ public class JobsGroupPojo implements JobsGroup{
     @Override
     public Integer getPk_id() {
        return this.pk_id;
+    }
+
+    @Override
+    public Company getCompany() {
+        return this.company;
     }
     
 }

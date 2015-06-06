@@ -21,7 +21,12 @@ public class JobsPojo implements Jobs{
     private Date jobDate;
     private BigDecimal workedHours;
     private String remarks;
+    private BigDecimal percentage;
 
+    public void setPercentage(BigDecimal percentage) {
+        this.percentage = percentage;
+    }
+    
     public Integer getFk_jobs_group_id() {
         return fk_jobs_group_id;
     }
@@ -69,6 +74,11 @@ public class JobsPojo implements Jobs{
     @Override
     public String getRemarks() {
         return this.remarks;
+    }
+
+    @Override
+    public BigDecimal getPercentage() {
+        return this.percentage;
     }
     
 }
