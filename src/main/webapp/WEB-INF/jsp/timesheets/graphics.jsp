@@ -53,7 +53,7 @@
                 </tfoot>
                 </table>
             </div>
-            <div>
+            <div class="col-lg-12">
                 <table class="table table-striped table-hover">
                     <tr>
                         <td>Hours Payed Per Day</td><td>{{overviewWork.workDetails.hoursPayedPerDay}}</td>
