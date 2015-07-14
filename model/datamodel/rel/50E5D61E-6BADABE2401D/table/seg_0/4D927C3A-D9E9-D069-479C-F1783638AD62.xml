@@ -1,0 +1,81 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="4D927C3A-D9E9-D069-479C-F1783638AD62" name="TA_REKENINGEN">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 10:00:14 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<ordsAlias>table_8</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="PK_ID" id="D2B01F67-702C-A560-74CE-738D1AF58970">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 10:00:26 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FK_PERSOON_ID" id="AE8AAF0E-2FED-3E34-C0F5-059FF64200B0">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 10:01:04 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="F479DEA6-FA92-5EEC-8C00-9A03C993B96E" referredColumn="848FC16D-5FC8-8C9A-0AAA-667F429B378F"/>
+</associations>
+</Column>
+<Column name="WAARDE" id="D19AF479-A43E-234F-BBDC-DE45B735FCE3">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 10:00:37 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT026</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="LAATST_BIJGEWERKT" id="0E697389-D6BA-685E-994D-A3A528A606AD">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 10:00:48 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT007</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="C42C69B8-4E6D-0B29-516C-F194807FD2A3" name="TA_REKENINGEN_PK">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 10:00:26 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="D2B01F67-702C-A560-74CE-738D1AF58970"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="8B56A5DA-B393-8B9C-B98A-DB9EF75A8012" name="TA_REKENINGEN_TA_PERSONEN_FK">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 10:01:04 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="AE8AAF0E-2FED-3E34-C0F5-059FF64200B0"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

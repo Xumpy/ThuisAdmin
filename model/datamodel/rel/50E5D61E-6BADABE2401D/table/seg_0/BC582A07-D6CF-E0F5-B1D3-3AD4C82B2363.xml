@@ -1,0 +1,142 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="BC582A07-D6CF-E0F5-B1D3-3AD4C82B2363" name="TA_TYPE_GROEP">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:52:50 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<ordsAlias>table_7</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="PK_ID" id="C1D01143-BE72-CC83-DD39-215BC4FCE157">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:53:01 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FK_HOOFD_TYPE_GROEP_ID" id="D05E5555-EBFA-8E61-543E-B33793E08640">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:54:12 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="3DD7BFCC-222C-E4BD-BD8D-DBCE870CCFD6" referredColumn="C1D01143-BE72-CC83-DD39-215BC4FCE157"/>
+</associations>
+</Column>
+<Column name="FK_PERSOON_ID" id="6E2CACBA-E3B9-240F-12A6-12ED3A59F0D3">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:54:37 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="AA7B347B-FAFE-CF73-8018-02EB778BED88" referredColumn="848FC16D-5FC8-8C9A-0AAA-667F429B378F"/>
+</associations>
+</Column>
+<Column name="NAAM" id="6B64E948-7249-31CA-0C1D-3EC79A32D6A4">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:53:18 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>255</dataTypeSize>
+<ownDataTypeParameters>255,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="OMSCHRIJVING" id="7D469973-C4D9-E6EA-11A2-6B6323664495">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:53:30 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>4000</dataTypeSize>
+<ownDataTypeParameters>4000,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="NEGATIEF" id="56297C87-8B7F-56C4-9DFA-5F99F00B6AD0">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:53:39 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="CODE_ID" id="EFC6CAF5-3F3A-D7CC-2EDB-A2A3CE3E659E">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:53:50 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50</dataTypeSize>
+<ownDataTypeParameters>50,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="PUBLIC_GROEP" id="94DA0289-4630-03FF-844A-B15B996356EE">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:54:02 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="E9A38024-6BD0-C07A-3045-3A3DC8DDD154" name="TA_TYPE_GROEP_PK">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:53:01 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="C1D01143-BE72-CC83-DD39-215BC4FCE157"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="79C6DF87-8022-4C3F-A93E-EA801C1D7B96" name="TA_TYPE_GROEP_TA_TYPE_GROEP_FK">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:54:12 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="D05E5555-EBFA-8E61-543E-B33793E08640"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="7E5F9C63-F8DF-CB55-93DC-EFE2D1CD06F5" name="TA_TYPE_GROEP_TA_PERSONEN_FK">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:54:37 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="6E2CACBA-E3B9-240F-12A6-12ED3A59F0D3"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

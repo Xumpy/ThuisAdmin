@@ -64,4 +64,9 @@ public class TimesheetsCtrl {
         
         return "timesheets/editCompanies";
     }
+    
+    @RequestMapping(value = "timesheets/importTimeRecordings")
+    public String importTimeRecordings(){
+        return "timesheets/importTimeRecordings";
+    }
 }

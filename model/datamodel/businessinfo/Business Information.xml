@@ -1,0 +1,7 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<BusinessInfoDesign class="oracle.dbtools.crest.model.businessinfo.BusinessInfoDesign" name="Business Information" id="BED137BE-025F-86BA-0C41-972B1CECDBAD">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:34:52 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<shouldBeOpen>false</shouldBeOpen>
+</BusinessInfoDesign>

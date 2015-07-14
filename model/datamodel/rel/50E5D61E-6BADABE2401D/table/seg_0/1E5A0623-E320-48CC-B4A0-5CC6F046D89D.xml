@@ -1,0 +1,93 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="1E5A0623-E320-48CC-B4A0-5CC6F046D89D" name="TA_TICKED_JOBS">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 10:31:26 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<ordsAlias>table_10</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="PK_ID" id="30AB8362-EB94-6FB1-BC78-AC91BDE5347C">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 10:31:45 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FK_JOB_ID" id="9F05BB1C-F4BF-35EC-8F33-5B4CF01DBCC6">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 10:35:54 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="376FD0A6-B796-E427-8D4C-55EABCE59FA1" referredColumn="922FF5ED-130B-DFF0-76AA-92F6058AA235"/>
+</associations>
+</Column>
+<Column name="SQLITE_ID" id="2BED70DC-481B-DEA3-D343-BB781335C2C5">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 10:33:41 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="TICKED" id="58656DC3-60FE-C681-CBDE-B296045E8AB6">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 10:34:09 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="STARTED" id="19F85A08-C4A7-E56E-BA0A-E555890CBDA9">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 10:35:23 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT006</logicalDatatype>
+<dataTypeSize>1</dataTypeSize>
+<ownDataTypeParameters>1,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="C6330827-67CB-343E-1D6A-AFDF03630E5A" name="TA_TICKED_JOBS_PK">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 10:31:47 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="30AB8362-EB94-6FB1-BC78-AC91BDE5347C"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="6B81BA4A-C225-E273-07F3-3A3F7B9E2CFE" name="TA_TICKED_JOBS_TA_JOBS_FK">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 10:35:54 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="9F05BB1C-F4BF-35EC-8F33-5B4CF01DBCC6"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

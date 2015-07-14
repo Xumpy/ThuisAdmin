@@ -1,0 +1,129 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="1414715A-C691-A7E8-6BCD-FDC04274EE88" name="TA_BEDRAGEN">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:49:46 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<ordsAlias>table_5</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="PK_ID" id="00825D21-F3C5-1481-BE31-EBB1A568555A">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:50:02 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FK_TYPE_GROEP_ID" id="E6CE6201-17FA-29B4-E155-06CE35A36C53">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:56:16 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="95D9C8E4-4649-E56A-0FD3-4D5F7C69C1E4" referredColumn="C1D01143-BE72-CC83-DD39-215BC4FCE157"/>
+</associations>
+</Column>
+<Column name="FK_PERSOON_ID" id="451B927D-F65D-6757-AE4D-D0B66C58006F">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:52:17 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="EAFA3BEC-C914-15CA-7D16-A1BD7CD7A99C" referredColumn="848FC16D-5FC8-8C9A-0AAA-667F429B378F"/>
+</associations>
+</Column>
+<Column name="FK_REKENING_ID" id="49FBD5DC-E475-C43E-24C5-C87604440967">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 10:01:31 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="99F2959E-BA91-F740-3EAA-04C3E5A5AA74" referredColumn="D2B01F67-702C-A560-74CE-738D1AF58970"/>
+</associations>
+</Column>
+<Column name="BEDRAG" id="0A638DD7-68C3-D052-7C29-54760730F810">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:50:23 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT026</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="DATUM" id="907EA448-9ADE-B484-54C2-F9B4178A8CC7">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:50:33 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT007</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="A5E62885-9DE9-3159-F786-3D33FE6F3480" name="TA_BEDRAGEN_PK">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:50:02 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="00825D21-F3C5-1481-BE31-EBB1A568555A"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="6BA5451A-B551-B036-9200-373272EA7EFE" name="TA_BEDRAGEN_TA_PERSONEN_FK">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:52:17 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="451B927D-F65D-6757-AE4D-D0B66C58006F"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="E80050D4-BAF2-BB8A-2E51-AF00FE72BEAD" name="TA_BEDRAGEN_TA_TYPE_GROEP_FK">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:56:16 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="E6CE6201-17FA-29B4-E155-06CE35A36C53"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="218F30E8-A4D8-FF3B-74F8-547C1C29DB90" name="TA_BEDRAGEN_TA_REKENINGEN_FK">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 10:01:31 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="49FBD5DC-E475-C43E-24C5-C87604440967"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

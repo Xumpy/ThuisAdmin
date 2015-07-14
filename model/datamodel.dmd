@@ -1,0 +1,8 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<OSDM_Design class="oracle.dbtools.crest.model.design.Design" name="datamodel" id="70B844A7-2FAB-FDBE-FDCB-F04D1334E674" version="3.5">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:34:52 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<capitalNames>false</capitalNames>
+<designId>70B844A7-2FAB-FDBE-FDCB-F04D1334E674</designId>
+</OSDM_Design>

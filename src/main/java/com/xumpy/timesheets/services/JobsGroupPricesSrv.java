@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.xumpy.timesheets.dao;
+package com.xumpy.timesheets.services;
 
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.domain.JobsGroupPrices;
@@ -13,11 +13,10 @@ import java.util.List;
  *
  * @author nicom
  */
-public interface JobsGroupPricesDao {
-    public JobsGroupPrices select(Integer pk_id);
-    public List<JobsGroupPrices> selectAll();
+public interface JobsGroupPricesSrv {
+    JobsGroupPrices select(Integer pk_id);
+    List<JobsGroupPrices> selectAllJobGroupPrices();
     List<JobsGroupPrices> selectAllJobGroupPrices(JobsGroup jobsGroup);
-    public Integer getNextPkId();
-    public void save(JobsGroupPrices jobsGroupPrices);
-    public void delete(JobsGroupPrices jobsGroupPrices);
+    JobsGroupPrices save(JobsGroupPrices jobsGroupPrices);
+    void delete(JobsGroupPrices jobsGroupPrices);
 }

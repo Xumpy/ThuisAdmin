@@ -1,0 +1,104 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="79EA3758-8BF6-92C8-4369-A52E86374AF1" name="TA_JOBS">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:43:29 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<ordsAlias>table_3</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="PK_ID" id="922FF5ED-130B-DFF0-76AA-92F6058AA235">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:43:41 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FK_JOB_GROUP_ID" id="C04A8455-AB34-09AF-DB0A-B2DC09D7E765">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:44:30 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="4EA0890E-3CEA-B00A-8671-23D57E0EC6CD" referredColumn="34B6C485-BBD7-FC0B-6E4A-32755AB455A6"/>
+</associations>
+</Column>
+<Column name="JOB_DATE" id="D0BADB21-77FB-E88F-71D7-2FB9DBF3EEEF">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:43:52 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT007</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="WORKED_HOURS" id="366D846C-344F-6CDD-3991-B59D04166260">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:44:01 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT026</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="REMARKS" id="9C8B0DD7-6261-3AAE-B6B0-B77ADE5C452F">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:44:17 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>4000</dataTypeSize>
+<ownDataTypeParameters>4000,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="PERCENTAGE" id="0B61EEFD-6F99-ED6E-7730-4D1DC5D3A147">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:44:25 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT026</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="07FC720F-6417-EE3A-2F0C-30E1F0B4A46D" name="TA_JOBS_PK">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:43:41 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="922FF5ED-130B-DFF0-76AA-92F6058AA235"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="E9908F9E-9CE7-6ED3-7E5F-E9636E94ED5D" name="TA_JOBS_TA_JOB_GROUPS_FK">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:44:30 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="C04A8455-AB34-09AF-DB0A-B2DC09D7E765"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

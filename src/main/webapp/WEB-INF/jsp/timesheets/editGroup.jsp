@@ -40,6 +40,40 @@
               </div>
             </div>
         </div>
+        <div class="col-lg-12">
+            <form class="form-horizontal" action="editGroupPrice">
+                <div class="col-lg-1">
+                    <input class="btn btn-primary" type="submit" value="New Price"/>
+                </div>
+            </form>
+        </div>
+        <div class="col-lg-12">
+            <table st-safe-src="groupPrices" st-table="emptyGroupPrices" class="table table-striped table-hover ">
+            <thead>
+              <tr>
+                  <th></th>
+                  <th st-sort="startDate">Start Date</th>
+                  <th st-sort="endDate">End Date</th>
+                  <th st-sort="price">Price per hour</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="groupPrice in emptyGroupPrices">
+                    <td><a href="editGroupPrice/{{group.pk_id}}">Edit</a></td>
+                    <td>{{groupPrice.startDate}}</td>
+                    <td>{{groupPrice.endDate}}</td>
+                    <td>{{groupPrice.pricePerHour}}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4" class="text-center">
+                            <div st-pagination="" st-items-by-page="10" st-displayed-pages="100"></div>
+                    </td>
+                </tr>
+            </tfoot>
+            </table>
+        </div>
     </body>
     <script type="text/javascript">
         app.controller("fController", function($scope, $http) {

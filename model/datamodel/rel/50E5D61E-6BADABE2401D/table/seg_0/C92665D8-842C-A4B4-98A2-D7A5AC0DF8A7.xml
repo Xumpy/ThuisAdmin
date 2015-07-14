@@ -1,0 +1,58 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="C92665D8-842C-A4B4-98A2-D7A5AC0DF8A7" name="TA_COMPANY">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:35:10 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<ordsAlias>table_1</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="PK_ID" id="F43E7CE3-EA63-DBEC-6DAD-C0CDDF0FB85E">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:36:36 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="NAME" id="6141BB93-7862-84B4-A660-569AB3652BE2">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:37:28 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>255</dataTypeSize>
+<ownDataTypeParameters>255,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="DAILY_PAYED_HOURS" id="F5C4FBC1-DCAE-4585-8E76-AC824C2DCBAF">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:37:28 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT026</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="F6CBE1F8-3E0E-A1FF-D36B-5D4672974485" name="TA_COMPANY_PK">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:37:46 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="F43E7CE3-EA63-DBEC-6DAD-C0CDDF0FB85E"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

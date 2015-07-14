@@ -7,6 +7,7 @@ package com.xumpy.timesheets.dao.implementations;
 
 import com.xumpy.timesheets.dao.JobsGroupPricesDao;
 import com.xumpy.timesheets.dao.model.JobsGroupPricesDaoPojo;
+import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.domain.JobsGroupPrices;
 import java.util.List;
 import org.hibernate.Query;
@@ -49,5 +50,14 @@ public class JobsGroupPricesDaoImpl implements JobsGroupPricesDao{
     @Override
     public Integer getNextPkId() {
         return ((Integer) sessionFactory.getCurrentSession().createQuery("select coalesce(max(pk_id),0) as pk_id from JobsGroupPricesDaoPojo").uniqueResult()) + 1;
+    }
+
+    @Override
+    public List<JobsGroupPrices> selectAllJobGroupPrices(JobsGroup jobsGroup) {
+        Query query = sessionFactory.getCurrentSession().createQuery("from JobsGroupPricesDaoPojo where jobsGroup.pk_id = :jobsGroupId");
+        
+        query.setInteger("jobsGroupId", jobsGroup.getPk_id());
+        
+        return query.list();
     }
 }

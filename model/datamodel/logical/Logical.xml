@@ -1,0 +1,7 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<LogicalDesign class="oracle.dbtools.crest.model.design.logical.LogicalDesign" name="Logical" id="07060F6B-0D9D-E87B-154D-56B27A2C0C1F" mainViewID="ECB6FB18-692C-99C9-D4FC-36377BD7FF6A">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:34:52 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<shouldBeOpen>false</shouldBeOpen>
+</LogicalDesign>

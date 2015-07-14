@@ -1,0 +1,14 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="4EA0890E-3CEA-B00A-8671-23D57E0EC6CD" containerWithKeyObject="79EA3758-8BF6-92C8-4369-A52E86374AF1" localFKIndex="E9908F9E-9CE7-6ED3-7E5F-E9636E94ED5D" name="TA_JOBS_TA_JOB_GROUPS_FK">
+<createdBy>nicom</createdBy>
+<createdTime>2015-07-14 09:44:30 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>92A1E3B6-0DC0-C6F7-2948-3542AD1A35B1</referredTableID>
+<keyObject>A6A91C46-63AB-3FB7-59F9-D03EC8B4B0B7</keyObject>
+<referredKeyID>A6A91C46-63AB-3FB7-59F9-D03EC8B4B0B7</referredKeyID>
+<mandatory>true</mandatory>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>
