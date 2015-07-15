@@ -5,18 +5,17 @@
  */
 package com.xumpy.timesheets.services.implementations;
 
+import com.xumpy.timesheets.controller.model.JobsCtrlPojo;
 import com.xumpy.timesheets.controller.model.Overview;
 import com.xumpy.timesheets.dao.implementations.JobsGroupDaoImpl;
 import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.services.JobsGroupSrv;
 import com.xumpy.timesheets.services.model.JobsGroupSrvPojo;
-import com.xumpy.timesheets.services.model.JobsInJobsGroup;
-import com.xumpy.timesheets.services.model.JobsSrvPojo;
+import com.xumpy.timesheets.controller.model.JobsInJobsGroup;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -102,7 +101,7 @@ public class JobsGroupSrvImpl implements JobsGroupSrv{
         JobsInJobsGroup jobsInJobsGroup = new JobsInJobsGroup();
         
         List<? extends Jobs> jobs = JobsSrvImpl.addZeroDates(new ArrayList<Jobs>(), overview.getMonth(), jobsGroup);
-        jobsInJobsGroup.setJobs(JobsSrvPojo.lstJobsSrvPojo(jobs));
+        jobsInJobsGroup.setJobs(JobsCtrlPojo.lstJobsSrvPojo(jobs));
         
         jobsInJobsGroup.setPk_id(jobsGroup.getPk_id());
         jobsInJobsGroup.setName(jobsGroup.getName());

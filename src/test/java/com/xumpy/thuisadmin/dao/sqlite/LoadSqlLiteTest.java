@@ -27,7 +27,7 @@ public class LoadSqlLiteTest {
     public void testLoadTimeRecordings() throws SQLException, ClassNotFoundException{
         List<TimeRecording> timeRecordings = new ArrayList<TimeRecording>();
         
-        timeRecordings = LoadSqlLite.loadTimeRecordings();
+        timeRecordings = LoadSqlLite.loadTimeRecordings(":resource:timeRecording.db");
         
         assertEquals(380, timeRecordings.size());
         assertEquals(new Integer(2), timeRecordings.get(0).getSqlite_id());

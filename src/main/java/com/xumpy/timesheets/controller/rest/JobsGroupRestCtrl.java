@@ -6,16 +6,22 @@
 package com.xumpy.timesheets.controller.rest;
 
 import com.xumpy.timesheets.controller.model.CompanyCtrlPojo;
+import com.xumpy.timesheets.controller.model.JobsCtrlPojo;
 import com.xumpy.timesheets.controller.model.JobsGroupCtrl;
 import com.xumpy.timesheets.controller.model.Overview;
 import com.xumpy.timesheets.controller.model.OverviewWorkHeader;
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.domain.OverviewWork.OverviewWork;
+import com.xumpy.timesheets.domain.TickedJobs;
 import com.xumpy.timesheets.services.CompanySrv;
 import com.xumpy.timesheets.services.implementations.JobsGraphics;
 import com.xumpy.timesheets.services.JobsGroupSrv;
 import com.xumpy.timesheets.services.JobsSrv;
-import com.xumpy.timesheets.services.model.JobsInJobsGroup;
+import com.xumpy.timesheets.services.TickedJobsSrv;
+import com.xumpy.timesheets.controller.model.JobsInJobsGroup;
+import com.xumpy.timesheets.controller.model.TickedJobsCtrlPojo;
+import com.xumpy.timesheets.services.model.JobsSrvPojo;
+import com.xumpy.timesheets.services.model.TickedJobsSrvPojo;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +33,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -41,6 +48,7 @@ public class JobsGroupRestCtrl {
     @Autowired JobsGroupSrv jobsGroupSrv;
     @Autowired JobsSrv jobsSrv;
     @Autowired CompanySrv companySrv;
+    @Autowired TickedJobsSrv tickedJobsSrv;
     
     @RequestMapping("/json/fetch_all_jobs_group")
     public @ResponseBody List<JobsGroupCtrl> fetchAllJobsGroup(){
@@ -54,7 +62,7 @@ public class JobsGroupRestCtrl {
                         jobsGroupSrv.selectAllJobGroups(), overview.getAllJobsInJobsGroup()));
     }
     
-    @RequestMapping("/json/add_jobs_group_in_controller")
+    @RequestMapping(value = "/json/add_jobs_group_in_controller", method = RequestMethod.POST)
     public @ResponseBody String addJobsGroupInController(@RequestBody List<JobsGroupCtrl> allJobsGroup){
         
         for(JobsGroupCtrl jobsGroupCtrl: allJobsGroup){
@@ -115,7 +123,21 @@ public class JobsGroupRestCtrl {
     public @ResponseBody Overview fetchOverviewMonth(@RequestBody String month) throws ParseException{
         overview.setMonth(month);
         overview.setAllJobsInJobsGroup(jobsSrv.selectMonthJobsInJobGroup(month, overview));
-
+        
+        for (JobsInJobsGroup jobsInJobsGroup: overview.getAllJobsInJobsGroup()){
+            for(JobsCtrlPojo job: jobsInJobsGroup.getJobs()){
+                if (job.getPk_id() != null){
+                    List<TickedJobsCtrlPojo> tickedJobsSrvPojo = new ArrayList<TickedJobsCtrlPojo>();
+                
+                    for (TickedJobs tickedJobs: tickedJobsSrv.selectTickedJobsByJob(job)){
+                        tickedJobsSrvPojo.add(new TickedJobsCtrlPojo(tickedJobs));
+                    }
+                
+                    job.setTickedJobs(tickedJobsSrvPojo);
+                }
+            }
+        }
+        
         return overview;
     }
     

@@ -19,11 +19,11 @@ import java.util.List;
  * @author nicom
  */
 public class LoadSqlLite {
-    public static List<TimeRecording> loadTimeRecordings() throws ClassNotFoundException, SQLException{
+    public static List<TimeRecording> loadTimeRecordings(String fileLocation) throws ClassNotFoundException, SQLException{
         List<TimeRecording> timeRecordings = new ArrayList<TimeRecording>();
         
         Class.forName("org.sqlite.JDBC");
-        Connection c = DriverManager.getConnection("jdbc:sqlite::resource:timeRecording.db");
+        Connection c = DriverManager.getConnection("jdbc:sqlite:" + fileLocation); //:resource:timeRecording.db");
         Statement stmt = c.createStatement();
           
         ResultSet rs = stmt.executeQuery("select SEQNR, STAMP_DATE_STR, CHECK_ACTION from T_STAMP_3");

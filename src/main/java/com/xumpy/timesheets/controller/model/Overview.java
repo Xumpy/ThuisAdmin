@@ -5,7 +5,6 @@
  */
 package com.xumpy.timesheets.controller.model;
 
-import com.xumpy.timesheets.services.model.JobsInJobsGroup;
 import java.io.Serializable;
 import java.util.List;
 import org.springframework.context.annotation.Scope;

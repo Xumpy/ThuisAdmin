@@ -7,6 +7,7 @@ package com.xumpy.timesheets.controller.model;
 
 import com.xumpy.timesheets.domain.Company;
 import com.xumpy.timesheets.domain.JobsGroup;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
  *
  * @author nicom
  */
-public class JobsGroupCtrl implements JobsGroup{
+public class JobsGroupCtrl implements JobsGroup, Serializable{
     private Integer pk_id;
     private String name;
     private String description;

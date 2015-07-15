@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.xumpy.timesheets.services.model;
+package com.xumpy.timesheets.controller.model;
 
 import com.xumpy.timesheets.domain.Company;
 import com.xumpy.timesheets.domain.JobsGroup;
@@ -19,11 +19,11 @@ public class JobsInJobsGroup implements JobsGroup, Serializable{
     private Integer pk_id;
     private String name;
     private String description;
-    private CompanySrvPojo company;
+    private CompanyCtrlPojo company;
     
-    private List<JobsSrvPojo> jobs;
+    private List<JobsCtrlPojo> jobs;
 
-    public void setCompany(CompanySrvPojo company) {
+    public void setCompany(CompanyCtrlPojo company) {
         this.company = company;
     }
     
@@ -54,11 +54,11 @@ public class JobsInJobsGroup implements JobsGroup, Serializable{
         return pk_id;
     }
 
-    public List<JobsSrvPojo> getJobs() {
+    public List<JobsCtrlPojo> getJobs() {
         return jobs;
     }
 
-    public void setJobs(List<JobsSrvPojo> jobs) {
+    public void setJobs(List<JobsCtrlPojo> jobs) {
         this.jobs = jobs;
     }
     
@@ -68,7 +68,7 @@ public class JobsInJobsGroup implements JobsGroup, Serializable{
         this.description = jobsGroup.getDescription();
         this.name = jobsGroup.getName();
         this.pk_id = jobsGroup.getPk_id();
-        this.company = new CompanySrvPojo(jobsGroup.getCompany());
+        this.company = new CompanyCtrlPojo(jobsGroup.getCompany());
     }
 
     @Override

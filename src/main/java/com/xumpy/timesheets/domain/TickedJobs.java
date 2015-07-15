@@ -16,5 +16,5 @@ public interface TickedJobs {
     public Jobs getJob();
     public Integer getSqlite_id();
     public Date getTicked();
-    public boolean getStarted();
+    public boolean isStarted();
 }

@@ -239,6 +239,13 @@
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.8.10.1</version>
         </dependency>
+        
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.53</version>
+        </dependency>
+
     </dependencies>
 
     <build>

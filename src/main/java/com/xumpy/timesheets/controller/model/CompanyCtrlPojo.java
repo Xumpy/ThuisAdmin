@@ -6,6 +6,7 @@
 package com.xumpy.timesheets.controller.model;
 
 import com.xumpy.timesheets.domain.Company;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
  *
  * @author nicom
  */
-public class CompanyCtrlPojo implements Company{
+public class CompanyCtrlPojo implements Company, Serializable{
     private Integer pk_id;
     private String name;
     private BigDecimal dailyPayedHours;

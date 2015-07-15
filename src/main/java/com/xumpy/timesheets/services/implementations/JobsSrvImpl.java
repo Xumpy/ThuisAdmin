@@ -5,6 +5,7 @@
  */
 package com.xumpy.timesheets.services.implementations;
 
+import com.xumpy.timesheets.controller.model.JobsCtrlPojo;
 import com.xumpy.timesheets.controller.model.Overview;
 import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
 import com.xumpy.timesheets.domain.Jobs;
@@ -12,7 +13,7 @@ import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.services.JobsGroupSrv;
 import com.xumpy.timesheets.services.JobsSrv;
 import com.xumpy.timesheets.services.model.JobsGroupSrvPojo;
-import com.xumpy.timesheets.services.model.JobsInJobsGroup;
+import com.xumpy.timesheets.controller.model.JobsInJobsGroup;
 import com.xumpy.timesheets.services.model.JobsSrvPojo;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -113,31 +114,6 @@ public class JobsSrvImpl implements JobsSrv{
     @Override
     @Transactional(readOnly=false)
     public List<JobsInJobsGroup> selectPeriodeJobsInJobGroup(Date startDate, Date endDate) {
-        /*
-        List<Jobs> allJobsInPeriode = jobsDao.selectPeriode(startDate, endDate);
-        List<JobsGroup> jobGroups = jobsGroupSrv.selectAllGroupsInJobs(allJobsInPeriode);
-        
-        List<JobsInJobsGroup> jobsInAllJobGroup = new ArrayList<JobsInJobsGroup>();
-        
-        for (JobsGroup jobGroup: jobGroups){
-            JobsInJobsGroup jobsInJobsGroup = new JobsInJobsGroup(jobGroup);
-            
-            List<JobsSrvPojo> filteredJobs = new ArrayList<JobsSrvPojo>();
-        
-            for (Jobs job: allJobsInPeriode){
-                JobsSrvPojo jobSrvPojo = new JobsSrvPojo(job);
-                
-                if (job.getJobsGroup().equals(jobGroup)){
-                    filteredJobs.add(jobSrvPojo);
-                }
-            }
-            jobsInJobsGroup.setJobs(filteredJobs);
-            
-            jobsInAllJobGroup.add(jobsInJobsGroup);
-            
-        }
-        */
-        
         List<Jobs> allJobsInPeriode = jobsDao.selectPeriode(startDate, endDate);
         List<JobsInJobsGroup> jobsInAllJobGroup = new ArrayList<JobsInJobsGroup>();
         
@@ -161,7 +137,7 @@ public class JobsSrvImpl implements JobsSrv{
                 }
                 
                 if (!jobDateFound){
-                    jobsInJobsGroup.getJobs().add(job);
+                    jobsInJobsGroup.getJobs().add(new JobsCtrlPojo(job));
                     jobFound = true;
                 }
             }
@@ -174,8 +150,8 @@ public class JobsSrvImpl implements JobsSrv{
             jobsInJobsGroup.setName(job.getJobsGroup().getName());
             jobsInJobsGroup.setDescription(job.getJobsGroup().getDescription());
             
-            List<JobsSrvPojo> jobs = new ArrayList<JobsSrvPojo>();
-            jobs.add(job);
+            List<JobsCtrlPojo> jobs = new ArrayList<JobsCtrlPojo>();
+            jobs.add(new JobsCtrlPojo(job));
             jobsInJobsGroup.setJobs(jobs);
             
             jobsInAllJobGroup.add(jobsInJobsGroup);
@@ -260,7 +236,13 @@ public class JobsSrvImpl implements JobsSrv{
         
         for(int i=0; i<periodeJobsInJobsGroup.size();i++){
             JobsInJobsGroup jobsInJobsGroup = periodeJobsInJobsGroup.get(i);
-            jobsInJobsGroup.setJobs((List<JobsSrvPojo>) fillMonth(jobsInJobsGroup.getJobs()));
+            
+            List<JobsCtrlPojo> jobsCtrlPojo = new ArrayList<JobsCtrlPojo>();
+            for (Jobs job: fillMonth(jobsInJobsGroup.getJobs())){
+                jobsCtrlPojo.add(new JobsCtrlPojo(job));
+            }
+            
+            jobsInJobsGroup.setJobs(jobsCtrlPojo);
             periodeJobsInJobsGroup.set(i, jobsInJobsGroup);
         }
         

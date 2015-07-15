@@ -8,7 +8,7 @@ package com.xumpy.timesheets.services;
 import com.xumpy.timesheets.controller.model.Overview;
 import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.JobsGroup;
-import com.xumpy.timesheets.services.model.JobsInJobsGroup;
+import com.xumpy.timesheets.controller.model.JobsInJobsGroup;
 import java.text.ParseException;
 import java.util.List;
 

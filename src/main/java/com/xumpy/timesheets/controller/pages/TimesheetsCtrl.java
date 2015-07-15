@@ -5,10 +5,22 @@
  */
 package com.xumpy.timesheets.controller.pages;
 
+import com.jcraft.jsch.ChannelSftp;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.Session;
+import com.jcraft.jsch.SftpException;
+import com.xumpy.thuisadmin.controllers.model.NieuwDocument;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -68,5 +80,47 @@ public class TimesheetsCtrl {
     @RequestMapping(value = "timesheets/importTimeRecordings")
     public String importTimeRecordings(){
         return "timesheets/importTimeRecordings";
+    }
+    
+    @RequestMapping(value="timesheets/saveSQLite")
+    public String saveSQLiteDB(@RequestParam("file") MultipartFile file) throws IOException{
+        if (!file.isEmpty()) {
+            BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File("/tmp/timeRecording.db")));
+            stream.write(file.getBytes());
+            stream.close();
+        }
+        
+        return "redirect:/timesheets/importTimeRecordings";
+    }
+    
+    @RequestMapping(value="timesheets/saveSSHSQLite")
+    public String saveSSHSQLite(@RequestParam("ip") String ip) throws IOException{
+        try{
+        
+            JSch jsch = new JSch();
+            Session session = null;
+            session = jsch.getSession("root",ip,22);
+            session.setPassword("pcat3900");
+            session.setConfig("StrictHostKeyChecking", "no");
+            session.connect();
+
+            ChannelSftp channel = null;
+            channel = (ChannelSftp)session.openChannel("sftp");
+            channel.connect();
+
+            File localFile = new File("/tmp/timeRecording.db");
+
+
+            BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(localFile));
+            channel.get("/data/data/com.dynamicg.timerecording/files/timeRecording.db", stream);
+            
+            channel.disconnect();
+            session.disconnect();
+            
+            stream.close();
+        } catch (Exception ex){
+            System.out.println("Error occured while fetching the file from ssh");
+        }
+        return "redirect:/timesheets/importTimeRecordings";
     }
 }

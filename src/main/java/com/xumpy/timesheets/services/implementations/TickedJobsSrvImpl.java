@@ -7,6 +7,8 @@ package com.xumpy.timesheets.services.implementations;
 
 import com.xumpy.thuisadmin.dao.sqlite.LoadSqlLite;
 import com.xumpy.thuisadmin.dao.sqlite.model.TimeRecording;
+import com.xumpy.timesheets.controller.model.JobsCtrlPojo;
+import com.xumpy.timesheets.controller.model.TickedJobsCtrlPojo;
 import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
 import com.xumpy.timesheets.dao.implementations.TickedJobsDaoImpl;
 import com.xumpy.timesheets.domain.Jobs;
@@ -21,7 +23,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,13 +71,13 @@ public class TickedJobsSrvImpl implements TickedJobsSrv{
     
     @Override
     @Transactional
-    public List<TickedJobsSrvPojo> allNotProcessedTickedJobs(){
+    public List<TickedJobsCtrlPojo> allNotProcessedTickedJobs(){
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         
-        List<TickedJobsSrvPojo> tickedJobsFiltered = new ArrayList<TickedJobsSrvPojo>();
+        List<TickedJobsCtrlPojo> tickedJobsFiltered = new ArrayList<TickedJobsCtrlPojo>();
         List<TickedJobs> tickedJobsAll = tickedJobsDao.selectAllTickedJobs();
         try { 
-            List<TimeRecording> timeRecordings = LoadSqlLite.loadTimeRecordings();
+            List<TimeRecording> timeRecordings = LoadSqlLite.loadTimeRecordings("/tmp/timeRecording.db");
             
             for (TimeRecording timeRecording: timeRecordings){
                 boolean found = false;
@@ -87,43 +88,79 @@ public class TickedJobsSrvImpl implements TickedJobsSrv{
                 }
                 
                 if (!found){
-                    TickedJobsSrvPojo tickedJobsSrvPojo = new TickedJobsSrvPojo();
+                    TickedJobsCtrlPojo tickedJobsCtrlPojo = new TickedJobsCtrlPojo();
                     
-                    tickedJobsSrvPojo.setSqlite_id(timeRecording.getSqlite_id());
+                    tickedJobsCtrlPojo.setSqlite_id(timeRecording.getSqlite_id());
                     
                     if (timeRecording.getStarted().equals(10)){
-                        tickedJobsSrvPojo.setStarted(true);
+                        tickedJobsCtrlPojo.setStarted(true);
                     } else {
-                        tickedJobsSrvPojo.setStarted(false);
+                        tickedJobsCtrlPojo.setStarted(false);
                     }
                     
-                    tickedJobsSrvPojo.setTicked(format.parse(timeRecording.getTicked()));
+                    tickedJobsCtrlPojo.setTicked(format.parse(timeRecording.getTicked()));
                     
                     Calendar cal = Calendar.getInstance(); // locale-specific
-                    cal.setTime(tickedJobsSrvPojo.getTicked());
+                    cal.setTime(tickedJobsCtrlPojo.getTicked());
                     cal.set(Calendar.HOUR_OF_DAY, 0);
                     cal.set(Calendar.MINUTE, 0);
                     cal.set(Calendar.SECOND, 0);
                     cal.set(Calendar.MILLISECOND, 0);
                     
-                    List<Jobs> allJobsOnDate = jobsDao.selectDate(cal.getTime());
-                    
-                    if (allJobsOnDate.size() == 1){
-                        tickedJobsSrvPojo.setJob(new JobsSrvPojo(allJobsOnDate.get(0)));
+                    List<JobsCtrlPojo> allJobs = new ArrayList<JobsCtrlPojo>();
+                    List<Jobs> selectedJobs = jobsDao.selectDate(cal.getTime());
+  
+                    for(Jobs job: selectedJobs){
+                        allJobs.add(new JobsCtrlPojo(job));
                     }
                     
-                    tickedJobsFiltered.add(tickedJobsSrvPojo);
+                    if (selectedJobs.size() == 1){
+                        tickedJobsCtrlPojo.setSelectedJobId(selectedJobs.get(0).getPk_id());
+                    }
+                    
+                    tickedJobsCtrlPojo.setJobs(allJobs);
+                    
+                    tickedJobsFiltered.add(tickedJobsCtrlPojo);
                 }
             }
             
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(TickedJobsSrvImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(TickedJobsSrvImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(TickedJobsSrvImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            System.out.println("Error occured loading SQLite Database");
         }
         
         return tickedJobsFiltered;
+    }
+
+    @Override
+    @Transactional
+    public void processTickedJobs(List<TickedJobsCtrlPojo> tickedJobs) {
+        for(TickedJobsCtrlPojo tickedJob: tickedJobs){
+            if (tickedJob.getSelectedJobId() != null){
+                TickedJobsSrvPojo tickedJobsSrvPojo = new TickedJobsSrvPojo();
+
+                tickedJobsSrvPojo.setPk_id(tickedJob.getPk_id());
+                tickedJobsSrvPojo.setSqlite_id(tickedJob.getSqlite_id());
+                tickedJobsSrvPojo.setStarted(tickedJob.isStarted());
+                tickedJobsSrvPojo.setTicked(tickedJob.getTicked());
+
+                for(Jobs job: tickedJob.getJobs()){
+                    if (tickedJob.getSelectedJobId().equals(job.getPk_id())){
+                        tickedJobsSrvPojo.setJob(new JobsSrvPojo(job));
+                    }
+                }
+
+                if (tickedJobsSrvPojo.getPk_id() == null){
+                    tickedJobsSrvPojo.setPk_id(tickedJobsDao.getNewPkId());
+                }
+
+                tickedJobsDao.save(tickedJobsSrvPojo);
+            }
+        }
+    }
+
+    @Override
+    @Transactional
+    public List<TickedJobs> selectTickedJobsByJob(Jobs job) {
+        return tickedJobsDao.selectTickedJobsByJob(job);
     }
 }

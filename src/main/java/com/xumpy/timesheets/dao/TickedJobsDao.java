@@ -5,6 +5,7 @@
  */
 package com.xumpy.timesheets.dao;
 
+import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.TickedJobs;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public interface TickedJobsDao {
     TickedJobs select(Integer pk_id);
     List<TickedJobs> selectAllTickedJobs();
+    List<TickedJobs> selectTickedJobsByJob(Jobs job);
     void save(TickedJobs tickedJobs);
     void delete(TickedJobs tickedJobs);
     Integer getNewPkId();

@@ -5,11 +5,9 @@
  */
 package com.xumpy.timesheets.services.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.TickedJobs;
 import java.util.Date;
-import java.util.Locale;
 
 /**
  *
@@ -20,8 +18,6 @@ public class TickedJobsSrvPojo implements TickedJobs{
     private Integer pk_id;
     private JobsSrvPojo job;
     private Integer sqlite_id;
-    
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="CET")
     private Date ticked;
     private boolean started;
     
@@ -46,7 +42,7 @@ public class TickedJobsSrvPojo implements TickedJobs{
     }
 
     @Override
-    public boolean getStarted() {
+    public boolean isStarted() {
         return started;
     }
 
@@ -76,7 +72,7 @@ public class TickedJobsSrvPojo implements TickedJobs{
         this.job = new JobsSrvPojo(tickedJobs.getJob());
         this.pk_id = tickedJobs.getPk_id();
         this.sqlite_id = tickedJobs.getSqlite_id();
-        this.started = tickedJobs.getStarted();
+        this.started = tickedJobs.isStarted();
         this.ticked = tickedJobs.getTicked();
     }
 }

@@ -7,8 +7,10 @@ package com.xumpy.timesheets.dao.implementations;
 
 import com.xumpy.timesheets.dao.TickedJobsDao;
 import com.xumpy.timesheets.dao.model.TickedJobsDaoPojo;
+import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.TickedJobs;
 import java.util.List;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -34,17 +36,30 @@ public class TickedJobsDaoImpl implements TickedJobsDao{
 
     @Override
     public void save(TickedJobs tickedJobs) {
-        sessionFactory.getCurrentSession().merge(tickedJobs);
+        TickedJobsDaoPojo tickedJobsDoaPojo = new TickedJobsDaoPojo(tickedJobs);
+        
+        sessionFactory.getCurrentSession().merge(tickedJobsDoaPojo);
     }
 
     @Override
     public void delete(TickedJobs tickedJobs) {
-        sessionFactory.getCurrentSession().delete(tickedJobs);
+        TickedJobsDaoPojo tickedJobsDoaPojo = new TickedJobsDaoPojo(tickedJobs);
+        
+        sessionFactory.getCurrentSession().delete(tickedJobsDoaPojo);
     }
 
     @Override
     public Integer getNewPkId() {
-        return ((Integer) sessionFactory.getCurrentSession().createQuery("select max(pk_id) as pk_id from TickedJobsDaoPojo").list().get(0)) + 1;
+        return ((Integer) sessionFactory.getCurrentSession().createQuery("select coalesce(max(pk_id),0) as pk_id from TickedJobsDaoPojo").list().get(0)) + 1;
+    }
+
+    @Override
+    public List<TickedJobs> selectTickedJobsByJob(Jobs job) {
+        Query query = sessionFactory.getCurrentSession().createQuery("from TickedJobsDaoPojo where job.pk_id = :jobId order by ticked asc");
+        
+        query.setInteger("jobId", job.getPk_id());
+        
+        return query.list();
     }
     
 }

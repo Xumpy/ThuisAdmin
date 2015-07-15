@@ -5,13 +5,14 @@
  */
 package com.xumpy.timesheets.controller.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  *
  * @author nicom
  */
-public class OverviewWorkHeader {
+public class OverviewWorkHeader implements Serializable{
     private String beginMonth;
     private String endMonth;
     private List<JobsGroupCtrl> jobsGroup;

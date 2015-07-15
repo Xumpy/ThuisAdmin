@@ -56,7 +56,7 @@ public class TickedJobsDaoPojo implements TickedJobs{
     }
 
     @Override
-    public boolean getStarted() {
+    public boolean isStarted() {
         return started;
     }
 
@@ -91,7 +91,7 @@ public class TickedJobsDaoPojo implements TickedJobs{
         this.job = new JobsDaoPojo(tickedJobs.getJob());
         this.pk_id = tickedJobs.getPk_id();
         this.sqlite_id = tickedJobs.getSqlite_id();
-        this.started = tickedJobs.getStarted();
+        this.started = tickedJobs.isStarted();
         this.ticked = tickedJobs.getTicked();
     }
 }

@@ -10,11 +10,27 @@
     </head>
     <body>
         <div class="col-lg-12">
-            <form class="form-horizontal" action="editGroup">
-                <div class="col-lg-1">
-                    <input class="btn btn-primary" type="submit" value="New Group"/>
-                </div>
-            </form>
+            <div class="col-lg-2">
+                <form class="col-lg-12 form-horizontal" ng-submit="processTickedJobs()">
+                    <input class="btn btn-primary" type="submit" value="Process Completed Ticked Jobs"/>
+                </form>
+            </div>
+            <div class="col-lg-5">
+                <form class="col-lg-12 form-horizontal" method="post" action="/ThuisAdmin/timesheets/saveSQLite" enctype="multipart/form-data">
+                    <input class="col-lg-4" name="file" id="file" type="file">
+                    <input class="col-lg-6 btn btn-primary" type="submit" value="Upload New File"/>
+                </form>
+            </div>
+            <div class="col-lg-5">
+                <form class="col-lg-12 form-inline" method="post" action="/ThuisAdmin/timesheets/saveSSHSQLite" enctype="multipart/form-data">
+                    <div class="col-lg-4 form-group">
+                        <input class="col-lg-12 form-control" name="ip" id="ip" placeholder="IP Address" type="text">
+                    </div>
+                    <div class="col-lg-6 form-group">
+                        <input class="col-lg-12 btn btn-primary" type="submit" value="Upload From SSH Server"/>
+                    </div>
+                </form>
+            </div>
         </div>
         <div class="col-lg-12">
             <table st-safe-src="tickedJobs" st-table="emptyTickedJobs" class="table table-striped table-hover ">
@@ -29,7 +45,12 @@
             <tbody>
                 <tr ng-repeat="ticked in emptyTickedJobs">
                     <td></td>
-                    <td>{{ticked.job.jobsGroup.name}}</td>
+                    <td>
+                        <select id="rekening" class="form-control" ng-model="ticked.selectedJobId"
+                              ng-options="job.pk_id as job.jobsGroup.name + ' ' + job.workedHours for job in ticked.jobs">
+                              <option value="">--Kies Job--</option>
+                        </select>
+                    </td>
                     <td>{{ticked.started}}</td>
                     <td>{{ticked.ticked}}</td>
                 </tr>
@@ -50,6 +71,12 @@
             $http.get("/ThuisAdmin/json/fetch_all_not_processed_ticked_jobs").success( function(data){
                 $scope.tickedJobs = data;
             });
+            
+            $scope.processTickedJobs = function(){
+                $http.post("/ThuisAdmin/json/process_ticked_jobs", $scope.tickedJobs).success( function(data){
+                    $scope.tickedJobs = data;
+                });
+            }
         });
     </script>
 </html>
