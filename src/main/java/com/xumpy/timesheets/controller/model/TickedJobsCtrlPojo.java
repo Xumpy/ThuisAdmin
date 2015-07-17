@@ -6,6 +6,7 @@
 package com.xumpy.timesheets.controller.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.TickedJobs;
 import java.io.Serializable;
 import java.util.Date;
@@ -15,7 +16,7 @@ import java.util.List;
  *
  * @author nicom
  */
-public class TickedJobsCtrlPojo implements Serializable{
+public class TickedJobsCtrlPojo implements TickedJobs, Serializable{
     private Integer pk_id;
     private List<JobsCtrlPojo> jobs;
     private Integer selectedJobId;
@@ -23,6 +24,7 @@ public class TickedJobsCtrlPojo implements Serializable{
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="CET") private Date ticked;
     private boolean started;
 
+    @Override
     public Integer getPk_id() {
         return pk_id;
     }
@@ -39,6 +41,7 @@ public class TickedJobsCtrlPojo implements Serializable{
         this.jobs = job;
     }
 
+    @Override
     public Integer getSqlite_id() {
         return sqlite_id;
     }
@@ -47,6 +50,7 @@ public class TickedJobsCtrlPojo implements Serializable{
         this.sqlite_id = sqlite_id;
     }
 
+    @Override
     public Date getTicked() {
         return ticked;
     }
@@ -55,6 +59,7 @@ public class TickedJobsCtrlPojo implements Serializable{
         this.ticked = ticked;
     }
 
+    @Override
     public boolean isStarted() {
         return started;
     }
@@ -79,5 +84,14 @@ public class TickedJobsCtrlPojo implements Serializable{
         this.sqlite_id = tickedJobs.getSqlite_id();
         this.started = tickedJobs.isStarted();
         this.ticked = tickedJobs.getTicked();
+    }
+
+    @Override
+    public Jobs getJob() {
+        if (jobs == null){
+            return null;
+        } else {
+            return jobs.get(0);
+        }
     }
 }

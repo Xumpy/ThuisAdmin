@@ -69,7 +69,9 @@ public class TickedJobsSrvPojo implements TickedJobs{
     public TickedJobsSrvPojo(){ }
     
     public TickedJobsSrvPojo(TickedJobs tickedJobs){
-        this.job = new JobsSrvPojo(tickedJobs.getJob());
+        if (tickedJobs.getJob() != null){
+            this.job = new JobsSrvPojo(tickedJobs.getJob());
+        }
         this.pk_id = tickedJobs.getPk_id();
         this.sqlite_id = tickedJobs.getSqlite_id();
         this.started = tickedJobs.isStarted();

@@ -8,6 +8,7 @@ package com.xumpy.timesheets.controller.model;
 import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.services.implementations.JobsSrvImpl;
+import com.xumpy.timesheets.services.model.TickedJobsDetail;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class JobsCtrlPojo implements Jobs, Serializable  {
     private String remarks;
     private String jobDay;
     private BigDecimal percentage;
-    private List<TickedJobsCtrlPojo> tickedJobs;
+    private TickedJobsDetail tickedJobsDetail;
     
     public void setPk_id(Integer pk_id) {
         this.pk_id = pk_id;
@@ -120,11 +121,11 @@ public class JobsCtrlPojo implements Jobs, Serializable  {
         return this.percentage;
     }
 
-    public List<TickedJobsCtrlPojo> getTickedJobs() {
-        return tickedJobs;
+    public TickedJobsDetail getTickedJobsDetail() {
+        return tickedJobsDetail;
     }
 
-    public void setTickedJobs(List<TickedJobsCtrlPojo> tickedJobs) {
-        this.tickedJobs = tickedJobs;
+    public void setTickedJobsDetail(TickedJobsDetail tickedJobsDetail) {
+        this.tickedJobsDetail = tickedJobsDetail;
     }
 }

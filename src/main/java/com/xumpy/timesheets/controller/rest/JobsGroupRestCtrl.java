@@ -20,8 +20,11 @@ import com.xumpy.timesheets.services.JobsSrv;
 import com.xumpy.timesheets.services.TickedJobsSrv;
 import com.xumpy.timesheets.controller.model.JobsInJobsGroup;
 import com.xumpy.timesheets.controller.model.TickedJobsCtrlPojo;
+import com.xumpy.timesheets.services.TickedJobsDetailSrv;
 import com.xumpy.timesheets.services.model.JobsSrvPojo;
+import com.xumpy.timesheets.services.model.TickedJobsDetail;
 import com.xumpy.timesheets.services.model.TickedJobsSrvPojo;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -127,13 +130,12 @@ public class JobsGroupRestCtrl {
         for (JobsInJobsGroup jobsInJobsGroup: overview.getAllJobsInJobsGroup()){
             for(JobsCtrlPojo job: jobsInJobsGroup.getJobs()){
                 if (job.getPk_id() != null){
-                    List<TickedJobsCtrlPojo> tickedJobsSrvPojo = new ArrayList<TickedJobsCtrlPojo>();
+                    List<TickedJobsCtrlPojo> tickedJobsCtrlPojo = new ArrayList<TickedJobsCtrlPojo>();
                 
                     for (TickedJobs tickedJobs: tickedJobsSrv.selectTickedJobsByJob(job)){
-                        tickedJobsSrvPojo.add(new TickedJobsCtrlPojo(tickedJobs));
+                        tickedJobsCtrlPojo.add(new TickedJobsCtrlPojo(tickedJobs));
                     }
-                
-                    job.setTickedJobs(tickedJobsSrvPojo);
+                    job.setTickedJobsDetail(TickedJobsDetailSrv.calculate(tickedJobsCtrlPojo, new BigDecimal(30)));
                 }
             }
         }

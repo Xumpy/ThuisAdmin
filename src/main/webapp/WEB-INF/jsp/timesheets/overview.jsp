@@ -46,9 +46,10 @@
             <table st-safe-src="bedragen" st-table="emptyBedragen" class="table table-hover ">
                 <tr><td>Remarks:</td><td><input type="text" ng_model="jobInfo.remarks"></td></tr>
                 <tr><td>Percentage:</td><td><input type="text" ng_model="jobInfo.percentage"></td></tr>
-                <tr ng-repeat="tickedJob in jobInfo.tickedJobs">
+                <tr ng-repeat="tickedJob in jobInfo.tickedJobsDetail.tickedJobs">
                     <td>Ticked {{tickedJob.started == true ? "In" : "Out"}}</td><td>{{tickedJob.ticked}}</td>
                 </tr>
+                <tr><td>Total hours worked: </td><td>{{jobInfo.tickedJobsDetail.actualWorked}}</td></tr>
             </table>
         </div>
     </body>
