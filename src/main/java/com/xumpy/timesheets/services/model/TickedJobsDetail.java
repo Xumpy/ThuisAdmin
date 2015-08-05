@@ -5,7 +5,7 @@
  */
 package com.xumpy.timesheets.services.model;
 
-import com.xumpy.timesheets.controller.model.TickedJobsCtrlPojo;
+import com.xumpy.timesheets.domain.TickedJobs;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,15 +15,15 @@ import java.util.List;
  * @author nico
  */
 public class TickedJobsDetail implements Serializable {
-    private List<TickedJobsCtrlPojo> tickedJobs;
+    private List<? extends TickedJobs> tickedJobs;
     private BigDecimal actualPause;
     private BigDecimal actualWorked;
 
-    public List<TickedJobsCtrlPojo> getTickedJobs() {
+    public List<? extends TickedJobs> getTickedJobs() {
         return tickedJobs;
     }
 
-    public void setTickedJobs(List<TickedJobsCtrlPojo> tickedJobs) {
+    public void setTickedJobs(List<? extends TickedJobs> tickedJobs) {
         this.tickedJobs = tickedJobs;
     }
 

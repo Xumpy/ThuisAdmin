@@ -83,6 +83,9 @@
                     $http.post('/ThuisAdmin/json/fetch_month', $scope.Overview.month).success(function(data){
                         $scope.Overview = data;
                     });
+                    $http.post('/ThuisAdmin/json/ticket_overview_month', $scope.Overview.month).success(function(data){
+                        $scope.tickedOverviewDetails = data;
+                    });
                     $scope.tempSelectMonth = $scope.Overview.month;
                 }
             });

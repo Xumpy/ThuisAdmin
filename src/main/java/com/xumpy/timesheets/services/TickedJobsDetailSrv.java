@@ -5,23 +5,37 @@
  */
 package com.xumpy.timesheets.services;
 
-import com.xumpy.timesheets.controller.model.TickedJobsCtrlPojo;
+import com.xumpy.timesheets.dao.JobsDao;
+import com.xumpy.timesheets.dao.TickedJobsDao;
+import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.TickedJobs;
 import com.xumpy.timesheets.services.model.TickedJobsDetail;
+import com.xumpy.utilities.CustomDateUtils;
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author nico
  */
+@Service
 public class TickedJobsDetailSrv {
-    public static TickedJobsDetail calculate(List<TickedJobsCtrlPojo> tickedJobs){
+    
+    @Autowired private TickedJobsDao tickedJobsDao;
+    @Autowired private JobsDao jobsDao;
+    
+    public static TickedJobsDetail calculate(List<? extends TickedJobs> tickedJobs){
         TickedJobsDetail tickedJobsDetail = new TickedJobsDetail();
         tickedJobsDetail.setTickedJobs(tickedJobs);
         
@@ -72,7 +86,7 @@ public class TickedJobsDetailSrv {
         return tickedJobsDetail;
     }
     
-    private static List<TickedJobsCtrlPojo> sortTickedJobs(List<TickedJobsCtrlPojo> tickedJobs){
+    private static List<? extends TickedJobs> sortTickedJobs(List<? extends TickedJobs> tickedJobs){
         Collections.sort(tickedJobs, new Comparator<TickedJobs>() {
             @Override
             public int compare(TickedJobs o1, TickedJobs o2) {
@@ -83,7 +97,7 @@ public class TickedJobsDetailSrv {
         return tickedJobs;
     }
     
-    public static TickedJobsDetail calculate(List<TickedJobsCtrlPojo> tickedJobs, BigDecimal minimumPause){
+    public static TickedJobsDetail calculate(List<? extends TickedJobs> tickedJobs, BigDecimal minimumPause){
         TickedJobsDetail tickedJobsDetail = calculate(tickedJobs);
 
         if (tickedJobsDetail.getActualPause() != null){
@@ -96,5 +110,28 @@ public class TickedJobsDetailSrv {
         }
         
         return tickedJobsDetail;
+    }
+    
+    @Transactional
+    public Map<String, String> tickedOverviewMonth(String month) throws ParseException{
+        List<Jobs> jobs = jobsDao.selectPeriode(CustomDateUtils.getFirstDayOfMonth(month), CustomDateUtils.getLastDayOfMonth(month));
+        
+        BigDecimal actualWorked = new BigDecimal(0);
+        BigDecimal timesheetWorked = new BigDecimal(0);
+        for(Jobs job: jobs){
+            List<TickedJobs> tickedJobs = tickedJobsDao.selectTickedJobsByJob(job);
+            
+            TickedJobsDetail jobsDetail = calculate(tickedJobs, new BigDecimal(30));
+            
+            timesheetWorked = timesheetWorked.add(job.getWorkedHours());
+            actualWorked = actualWorked.add(jobsDetail.getActualWorked());
+        }
+        
+        Map<String, String> returnMap = new HashMap<String, String>();
+        
+        returnMap.put("actualWorked", actualWorked.toString());
+        returnMap.put("timesheetWorked", timesheetWorked.toString());
+        
+        return returnMap;
     }
 }

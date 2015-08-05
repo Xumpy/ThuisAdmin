@@ -9,6 +9,7 @@ import com.xumpy.thuisadmin.dao.sqlite.LoadSqlLite;
 import com.xumpy.thuisadmin.dao.sqlite.model.TimeRecording;
 import com.xumpy.timesheets.controller.model.JobsCtrlPojo;
 import com.xumpy.timesheets.controller.model.TickedJobsCtrlPojo;
+import com.xumpy.timesheets.controller.model.TickedJobsLstCtrlPojo;
 import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
 import com.xumpy.timesheets.dao.implementations.TickedJobsDaoImpl;
 import com.xumpy.timesheets.domain.Jobs;
@@ -23,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,10 +73,10 @@ public class TickedJobsSrvImpl implements TickedJobsSrv{
     
     @Override
     @Transactional
-    public List<TickedJobsCtrlPojo> allNotProcessedTickedJobs(){
+    public TickedJobsLstCtrlPojo allNotProcessedTickedJobs(){
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         
-        List<TickedJobsCtrlPojo> tickedJobsFiltered = new ArrayList<TickedJobsCtrlPojo>();
+        TickedJobsLstCtrlPojo tickedJobsFiltered = new TickedJobsLstCtrlPojo();
         List<TickedJobs> tickedJobsAll = tickedJobsDao.selectAllTickedJobs();
         try { 
             List<TimeRecording> timeRecordings = LoadSqlLite.loadTimeRecordings("/tmp/timeRecording.db");

@@ -6,6 +6,7 @@
 package com.xumpy.timesheets.controller.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.TickedJobs;
 import java.io.Serializable;
@@ -18,6 +19,7 @@ import java.util.List;
  */
 public class TickedJobsCtrlPojo implements TickedJobs, Serializable{
     private Integer pk_id;
+    private JobsCtrlPojo job;
     private List<JobsCtrlPojo> jobs;
     private Integer selectedJobId;
     private Integer sqlite_id;
@@ -86,12 +88,26 @@ public class TickedJobsCtrlPojo implements TickedJobs, Serializable{
         this.ticked = tickedJobs.getTicked();
     }
 
+    public void setJob(JobsCtrlPojo job){
+        this.job = job;
+    }
+    
     @Override
     public Jobs getJob() {
         if (jobs == null){
-            return null;
-        } else {
-            return jobs.get(0);
+            this.job = null;
+            
+            return this.job;
         }
+        
+        if (jobs.isEmpty()){
+            this.job = new JobsCtrlPojo();
+            
+            return this.job;
+        }
+        
+        
+        this.job = jobs.get(0);
+        return this.job;
     }
 }

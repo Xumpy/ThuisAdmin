@@ -6,6 +6,7 @@
 package com.xumpy.timesheets.services;
 
 import com.xumpy.timesheets.controller.model.TickedJobsCtrlPojo;
+import com.xumpy.timesheets.controller.model.TickedJobsLstCtrlPojo;
 import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.TickedJobs;
 import java.util.List;
@@ -20,6 +21,6 @@ public interface TickedJobsSrv {
     List<TickedJobs> selectTickedJobsByJob(Jobs job);
     TickedJobs save(TickedJobs tickedJobs);
     void delete(TickedJobs tickedJobs);
-    public List<TickedJobsCtrlPojo> allNotProcessedTickedJobs();
+    public TickedJobsLstCtrlPojo allNotProcessedTickedJobs();
     public void processTickedJobs(List<TickedJobsCtrlPojo> tickedJobs);
 }

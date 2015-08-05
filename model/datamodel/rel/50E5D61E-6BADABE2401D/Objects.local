@@ -1,24 +1,24 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <oracle.dbtools.crest.model.design.relational.RelationalDesign>
+   <object objectType="Table" objectID="1414715A-C691-A7E8-6BCD-FDC04274EE88" name="TA_BEDRAGEN" seqName="seg_0"/>
    <object objectType="Table" objectID="1E5A0623-E320-48CC-B4A0-5CC6F046D89D" name="TA_TICKED_JOBS" seqName="seg_0"/>
    <object objectType="Table" objectID="49F6892A-CF3E-2F82-DD9F-9A0BC54A70AB" name="TA_JOBS_GROUP_PRICES" seqName="seg_0"/>
-   <object objectType="Table" objectID="C92665D8-842C-A4B4-98A2-D7A5AC0DF8A7" name="TA_COMPANY" seqName="seg_0"/>
-   <object objectType="Table" objectID="79EA3758-8BF6-92C8-4369-A52E86374AF1" name="TA_JOBS" seqName="seg_0"/>
-   <object objectType="Table" objectID="73AB44DF-8822-3D17-7D24-7DB93131A5EC" name="TA_BEDRAG_DOCUMENTEN" seqName="seg_0"/>
-   <object objectType="Table" objectID="92A1E3B6-0DC0-C6F7-2948-3542AD1A35B1" name="TA_JOB_GROUPS" seqName="seg_0"/>
-   <object objectType="Table" objectID="BC582A07-D6CF-E0F5-B1D3-3AD4C82B2363" name="TA_TYPE_GROEP" seqName="seg_0"/>
-   <object objectType="Table" objectID="1414715A-C691-A7E8-6BCD-FDC04274EE88" name="TA_BEDRAGEN" seqName="seg_0"/>
    <object objectType="Table" objectID="4D927C3A-D9E9-D069-479C-F1783638AD62" name="TA_REKENINGEN" seqName="seg_0"/>
+   <object objectType="Table" objectID="73AB44DF-8822-3D17-7D24-7DB93131A5EC" name="TA_BEDRAG_DOCUMENTEN" seqName="seg_0"/>
+   <object objectType="Table" objectID="79EA3758-8BF6-92C8-4369-A52E86374AF1" name="TA_JOBS" seqName="seg_0"/>
+   <object objectType="Table" objectID="92A1E3B6-0DC0-C6F7-2948-3542AD1A35B1" name="TA_JOB_GROUPS" seqName="seg_0"/>
    <object objectType="Table" objectID="9F8F4983-AE5D-CBAF-E631-CEF39F42C5A9" name="TA_PERSONEN" seqName="seg_0"/>
-   <object objectType="FKIndexAssociation" objectID="99F2959E-BA91-F740-3EAA-04C3E5A5AA74" name="TA_BEDRAGEN_TA_REKENINGEN_FK" containerID="1414715A-C691-A7E8-6BCD-FDC04274EE88" refContainerID="4D927C3A-D9E9-D069-479C-F1783638AD62" seqName="seg_0"/>
-   <object objectType="FKIndexAssociation" objectID="3DD7BFCC-222C-E4BD-BD8D-DBCE870CCFD6" name="TA_TYPE_GROEP_TA_TYPE_GROEP_FK" containerID="BC582A07-D6CF-E0F5-B1D3-3AD4C82B2363" refContainerID="BC582A07-D6CF-E0F5-B1D3-3AD4C82B2363" seqName="seg_0"/>
-   <object objectType="FKIndexAssociation" objectID="3914379C-07B4-D80A-D3F8-0A11929B8BA9" name="TA_JOB_GROUPS_TA_COMPANY_FK" containerID="92A1E3B6-0DC0-C6F7-2948-3542AD1A35B1" refContainerID="C92665D8-842C-A4B4-98A2-D7A5AC0DF8A7" seqName="seg_0"/>
-   <object objectType="FKIndexAssociation" objectID="F479DEA6-FA92-5EEC-8C00-9A03C993B96E" name="TA_REKENINGEN_TA_PERSONEN_FK" containerID="4D927C3A-D9E9-D069-479C-F1783638AD62" refContainerID="9F8F4983-AE5D-CBAF-E631-CEF39F42C5A9" seqName="seg_0"/>
-   <object objectType="FKIndexAssociation" objectID="376FD0A6-B796-E427-8D4C-55EABCE59FA1" name="TA_TICKED_JOBS_TA_JOBS_FK" containerID="1E5A0623-E320-48CC-B4A0-5CC6F046D89D" refContainerID="79EA3758-8BF6-92C8-4369-A52E86374AF1" seqName="seg_0"/>
-   <object objectType="FKIndexAssociation" objectID="EAFA3BEC-C914-15CA-7D16-A1BD7CD7A99C" name="TA_BEDRAGEN_TA_PERSONEN_FK" containerID="1414715A-C691-A7E8-6BCD-FDC04274EE88" refContainerID="9F8F4983-AE5D-CBAF-E631-CEF39F42C5A9" seqName="seg_0"/>
-   <object objectType="FKIndexAssociation" objectID="AA7B347B-FAFE-CF73-8018-02EB778BED88" name="TA_TYPE_GROEP_TA_PERSONEN_FK" containerID="BC582A07-D6CF-E0F5-B1D3-3AD4C82B2363" refContainerID="9F8F4983-AE5D-CBAF-E631-CEF39F42C5A9" seqName="seg_0"/>
-   <object objectType="FKIndexAssociation" objectID="95D9C8E4-4649-E56A-0FD3-4D5F7C69C1E4" name="TA_BEDRAGEN_TA_TYPE_GROEP_FK" containerID="1414715A-C691-A7E8-6BCD-FDC04274EE88" refContainerID="BC582A07-D6CF-E0F5-B1D3-3AD4C82B2363" seqName="seg_0"/>
+   <object objectType="Table" objectID="BC582A07-D6CF-E0F5-B1D3-3AD4C82B2363" name="TA_TYPE_GROEP" seqName="seg_0"/>
+   <object objectType="Table" objectID="C92665D8-842C-A4B4-98A2-D7A5AC0DF8A7" name="TA_COMPANY" seqName="seg_0"/>
    <object objectType="FKIndexAssociation" objectID="24584143-0B90-E19E-EC50-2B4CC4A98459" name="TA_JOBS_GROUP_PRICES_TA_JOB_GROUPS_FK" containerID="49F6892A-CF3E-2F82-DD9F-9A0BC54A70AB" refContainerID="92A1E3B6-0DC0-C6F7-2948-3542AD1A35B1" seqName="seg_0"/>
+   <object objectType="FKIndexAssociation" objectID="376FD0A6-B796-E427-8D4C-55EABCE59FA1" name="TA_TICKED_JOBS_TA_JOBS_FK" containerID="1E5A0623-E320-48CC-B4A0-5CC6F046D89D" refContainerID="79EA3758-8BF6-92C8-4369-A52E86374AF1" seqName="seg_0"/>
+   <object objectType="FKIndexAssociation" objectID="3914379C-07B4-D80A-D3F8-0A11929B8BA9" name="TA_JOB_GROUPS_TA_COMPANY_FK" containerID="92A1E3B6-0DC0-C6F7-2948-3542AD1A35B1" refContainerID="C92665D8-842C-A4B4-98A2-D7A5AC0DF8A7" seqName="seg_0"/>
+   <object objectType="FKIndexAssociation" objectID="3DD7BFCC-222C-E4BD-BD8D-DBCE870CCFD6" name="TA_TYPE_GROEP_TA_TYPE_GROEP_FK" containerID="BC582A07-D6CF-E0F5-B1D3-3AD4C82B2363" refContainerID="BC582A07-D6CF-E0F5-B1D3-3AD4C82B2363" seqName="seg_0"/>
    <object objectType="FKIndexAssociation" objectID="4EA0890E-3CEA-B00A-8671-23D57E0EC6CD" name="TA_JOBS_TA_JOB_GROUPS_FK" containerID="79EA3758-8BF6-92C8-4369-A52E86374AF1" refContainerID="92A1E3B6-0DC0-C6F7-2948-3542AD1A35B1" seqName="seg_0"/>
    <object objectType="FKIndexAssociation" objectID="7E8CB242-DA85-A235-5E0A-EE4447B802D6" name="TA_BEDRAG_DOCUMENTEN_TA_BEDRAGEN_FK" containerID="73AB44DF-8822-3D17-7D24-7DB93131A5EC" refContainerID="1414715A-C691-A7E8-6BCD-FDC04274EE88" seqName="seg_0"/>
+   <object objectType="FKIndexAssociation" objectID="95D9C8E4-4649-E56A-0FD3-4D5F7C69C1E4" name="TA_BEDRAGEN_TA_TYPE_GROEP_FK" containerID="1414715A-C691-A7E8-6BCD-FDC04274EE88" refContainerID="BC582A07-D6CF-E0F5-B1D3-3AD4C82B2363" seqName="seg_0"/>
+   <object objectType="FKIndexAssociation" objectID="99F2959E-BA91-F740-3EAA-04C3E5A5AA74" name="TA_BEDRAGEN_TA_REKENINGEN_FK" containerID="1414715A-C691-A7E8-6BCD-FDC04274EE88" refContainerID="4D927C3A-D9E9-D069-479C-F1783638AD62" seqName="seg_0"/>
+   <object objectType="FKIndexAssociation" objectID="AA7B347B-FAFE-CF73-8018-02EB778BED88" name="TA_TYPE_GROEP_TA_PERSONEN_FK" containerID="BC582A07-D6CF-E0F5-B1D3-3AD4C82B2363" refContainerID="9F8F4983-AE5D-CBAF-E631-CEF39F42C5A9" seqName="seg_0"/>
+   <object objectType="FKIndexAssociation" objectID="EAFA3BEC-C914-15CA-7D16-A1BD7CD7A99C" name="TA_BEDRAGEN_TA_PERSONEN_FK" containerID="1414715A-C691-A7E8-6BCD-FDC04274EE88" refContainerID="9F8F4983-AE5D-CBAF-E631-CEF39F42C5A9" seqName="seg_0"/>
+   <object objectType="FKIndexAssociation" objectID="F479DEA6-FA92-5EEC-8C00-9A03C993B96E" name="TA_REKENINGEN_TA_PERSONEN_FK" containerID="4D927C3A-D9E9-D069-479C-F1783638AD62" refContainerID="9F8F4983-AE5D-CBAF-E631-CEF39F42C5A9" seqName="seg_0"/>
 </oracle.dbtools.crest.model.design.relational.RelationalDesign>

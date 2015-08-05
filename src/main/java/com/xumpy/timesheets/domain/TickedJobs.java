@@ -5,12 +5,14 @@
  */
 package com.xumpy.timesheets.domain;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.util.Date;
 
 /**
  *
  * @author nicom
  */
+@JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="@class")
 public interface TickedJobs {
     public Integer getPk_id();
     public Jobs getJob();
