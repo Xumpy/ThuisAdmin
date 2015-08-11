@@ -9,7 +9,9 @@ import com.xumpy.timesheets.controller.model.TickedJobsCtrlPojo;
 import com.xumpy.timesheets.dao.JobsDao;
 import com.xumpy.timesheets.dao.TickedJobsDao;
 import com.xumpy.timesheets.domain.Jobs;
+import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.domain.TickedJobs;
+import com.xumpy.timesheets.services.model.JobsGroupSrvPojo;
 import com.xumpy.timesheets.services.model.TickedJobsDetail;
 import com.xumpy.timesheets.services.model.TickedJobsSrvPojo;
 import com.xumpy.utilities.CustomDateUtils;
@@ -235,17 +237,43 @@ public class TickedJobsDetailSrvTest {
         Assert.assertEquals(new BigDecimal(30), tickedJobsDetail.getActualPause());
         Assert.assertEquals(new BigDecimal(601), tickedJobsDetail.getActualWorked());
     }
+
+    @Test
+    public void testCalculate7Under6HoursNoPauseDetected() throws ParseException{
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        
+        TickedJobsCtrlPojo tickedJobs1 = Mockito.mock(TickedJobsCtrlPojo.class);
+        TickedJobsCtrlPojo tickedJobs2 = Mockito.mock(TickedJobsCtrlPojo.class);
+        
+        Mockito.when(tickedJobs1.getTicked()).thenReturn(format.parse("2015-07-16 12:33:00"));
+        Mockito.when(tickedJobs1.isStarted()).thenReturn(true);
+        Mockito.when(tickedJobs2.getTicked()).thenReturn(format.parse("2015-07-16 18:04:00"));
+        Mockito.when(tickedJobs2.isStarted()).thenReturn(false);
+        
+        List<TickedJobsCtrlPojo> tickedJobs = new ArrayList<TickedJobsCtrlPojo>();
+        tickedJobs.add(tickedJobs1);
+        tickedJobs.add(tickedJobs2);
+        
+        TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, new BigDecimal(30));
+        
+        Assert.assertEquals(new BigDecimal(0), tickedJobsDetail.getActualPause());
+        Assert.assertEquals(new BigDecimal(331), tickedJobsDetail.getActualWorked());
+    }
     
     @Test
     public void tickedOverviewMonthTest() throws ParseException{
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         
+        JobsGroup jobsGroup = Mockito.mock(JobsGroup.class);
         Jobs job1 = Mockito.mock(Jobs.class);
         Jobs job2 = Mockito.mock(Jobs.class);
         
         List<Jobs> jobs = new ArrayList<Jobs>();
         jobs.add(job1);
         jobs.add(job2);
+        
+        when(job1.getJobsGroup()).thenReturn(jobsGroup);
+        when(job2.getJobsGroup()).thenReturn(jobsGroup);
         
         when(jobsDao.selectPeriode(CustomDateUtils.getFirstDayOfMonth("07/2015"), CustomDateUtils.getLastDayOfMonth("07/2015"))).thenReturn(jobs);
         
@@ -307,8 +335,12 @@ public class TickedJobsDetailSrvTest {
         
         Map<String, String> result = new HashMap<String, String>();
         result.put("actualWorked", "942");
-        result.put("timesheetWorked", "16");
+        result.put("timesheetWorked", "960");
         
-        assertEquals(result, tickedJobsDetailSrv.tickedOverviewMonth("07/2015"));
+        Map<String, Map<String, String>> finalResult = new HashMap<String, Map<String, String>>();
+        
+        finalResult.put(jobsGroup.getName(), result);
+        
+        assertEquals(finalResult, tickedJobsDetailSrv.tickedOverviewMonth("07/2015"));
     }
 }

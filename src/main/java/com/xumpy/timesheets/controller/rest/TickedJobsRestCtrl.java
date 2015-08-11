@@ -6,6 +6,7 @@
 package com.xumpy.timesheets.controller.rest;
 
 import com.xumpy.timesheets.controller.model.TickedJobsLstCtrlPojo;
+import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.services.TickedJobsDetailSrv;
 import com.xumpy.timesheets.services.TickedJobsSrv;
 import java.text.ParseException;
@@ -40,7 +41,7 @@ public class TickedJobsRestCtrl {
     }
     
     @RequestMapping("/json/ticket_overview_month")
-    public @ResponseBody Map<String, String> tickedOverviewMonth(@RequestBody String month) throws ParseException{
+    public @ResponseBody Map<String, Map<String, String>> tickedOverviewMonth(@RequestBody String month) throws ParseException{
         
         return tickedJobsDetailSrv.tickedOverviewMonth(month);
     }

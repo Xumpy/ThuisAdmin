@@ -52,6 +52,15 @@
                 <tr><td>Total hours worked: </td><td>{{jobInfo.tickedJobsDetail.actualWorked}}</td></tr>
             </table>
         </div>
+        
+        <div id="overtimeHours" title="Overtime Hours">
+            <table st-safe-src="overtimeHours" st-table="emptyOvertimeHours" class="table table-hover">
+                <tr ng-repeat="(tickedName, tickedOverview) in tickedOverviewDetails">
+                    <td>Project: </td><td>{{tickedName}}</td>
+                    <td>Overtime in minutes: </td><td>{{(tickedOverview.actualWorked - tickedOverview.timesheetWorked)}}</td>
+                </tr>
+            </table>
+        </div>
     </body>
     <script type="text/javascript">
         $(function() {
@@ -70,11 +79,18 @@
             $http.post('/ThuisAdmin/json/fetch_overview').success(function(data){
                 $scope.Overview = data;
                 $scope.tempSelectMonth = data.month;
+                
+                $http.post('/ThuisAdmin/json/ticket_overview_month', $scope.Overview.month).success(function(data){
+                    $scope.tickedOverviewDetails = data;
+                });
             });
             
             $scope.saveJobs = function(){
                 $http.post('/ThuisAdmin/json/save_jobs_overview', $scope.Overview).success(function(data){
                     $scope.Overview = data;
+                    $http.post('/ThuisAdmin/json/ticket_overview_month', $scope.Overview.month).success(function(data){
+                        $scope.tickedOverviewDetails = data;
+                    });
                 });
             }
             

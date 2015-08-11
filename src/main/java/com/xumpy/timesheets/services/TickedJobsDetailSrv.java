@@ -8,11 +8,14 @@ package com.xumpy.timesheets.services;
 import com.xumpy.timesheets.dao.JobsDao;
 import com.xumpy.timesheets.dao.TickedJobsDao;
 import com.xumpy.timesheets.domain.Jobs;
+import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.domain.TickedJobs;
+import com.xumpy.timesheets.services.model.JobsGroupSrvPojo;
 import com.xumpy.timesheets.services.model.TickedJobsDetail;
 import com.xumpy.utilities.CustomDateUtils;
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -100,12 +103,14 @@ public class TickedJobsDetailSrv {
     public static TickedJobsDetail calculate(List<? extends TickedJobs> tickedJobs, BigDecimal minimumPause){
         TickedJobsDetail tickedJobsDetail = calculate(tickedJobs);
 
-        if (tickedJobsDetail.getActualPause() != null){
-            BigDecimal pauseDifference = tickedJobsDetail.getActualPause().subtract(minimumPause);
+        if (!tickedJobsDetail.getActualPause().equals(new BigDecimal(0)) || tickedJobsDetail.getActualWorked().compareTo(new BigDecimal(360)) > 0){
+            if (tickedJobsDetail.getActualPause() != null){
+                BigDecimal pauseDifference = tickedJobsDetail.getActualPause().subtract(minimumPause);
 
-            if (pauseDifference.compareTo(new BigDecimal(0)) < 0){
-                tickedJobsDetail.setActualPause(minimumPause);
-                tickedJobsDetail.setActualWorked(tickedJobsDetail.getActualWorked().add(pauseDifference));
+                if (pauseDifference.compareTo(new BigDecimal(0)) < 0){
+                    tickedJobsDetail.setActualPause(minimumPause);
+                    tickedJobsDetail.setActualWorked(tickedJobsDetail.getActualWorked().add(pauseDifference));
+                }
             }
         }
         
@@ -113,24 +118,39 @@ public class TickedJobsDetailSrv {
     }
     
     @Transactional
-    public Map<String, String> tickedOverviewMonth(String month) throws ParseException{
+    public Map<String, Map<String, String>> tickedOverviewMonth(String month) throws ParseException{
         List<Jobs> jobs = jobsDao.selectPeriode(CustomDateUtils.getFirstDayOfMonth(month), CustomDateUtils.getLastDayOfMonth(month));
         
-        BigDecimal actualWorked = new BigDecimal(0);
-        BigDecimal timesheetWorked = new BigDecimal(0);
+        List<JobsGroup> jobsGroups = new ArrayList<JobsGroup>();
         for(Jobs job: jobs){
-            List<TickedJobs> tickedJobs = tickedJobsDao.selectTickedJobsByJob(job);
-            
-            TickedJobsDetail jobsDetail = calculate(tickedJobs, new BigDecimal(30));
-            
-            timesheetWorked = timesheetWorked.add(job.getWorkedHours());
-            actualWorked = actualWorked.add(jobsDetail.getActualWorked());
+            if (!jobsGroups.contains(job.getJobsGroup())){
+                jobsGroups.add(job.getJobsGroup());
+            }
         }
         
-        Map<String, String> returnMap = new HashMap<String, String>();
+        Map<String, Map<String, String>> returnMap = new HashMap<String, Map<String, String>>();
         
-        returnMap.put("actualWorked", actualWorked.toString());
-        returnMap.put("timesheetWorked", timesheetWorked.toString());
+        for(JobsGroup jobsGroup: jobsGroups){
+            BigDecimal actualWorked = new BigDecimal(0);
+            BigDecimal timesheetWorked = new BigDecimal(0);
+            
+            Map worked = new HashMap<String, String>();
+            
+            for(Jobs job: jobs){
+                if (jobsGroup.getPk_id().equals(job.getJobsGroup().getPk_id())){
+                    List<TickedJobs> tickedJobs = tickedJobsDao.selectTickedJobsByJob(job);
+
+                    TickedJobsDetail jobsDetail = calculate(tickedJobs, new BigDecimal(30));
+
+                    timesheetWorked = timesheetWorked.add(job.getWorkedHours());
+                    actualWorked = actualWorked.add(jobsDetail.getActualWorked());
+                }
+            }
+            worked.put("actualWorked", actualWorked.toString());
+            worked.put("timesheetWorked", timesheetWorked.multiply(new BigDecimal(60)).toString());
+            
+            returnMap.put(jobsGroup.getName(), worked);
+        }
         
         return returnMap;
     }
