@@ -55,9 +55,11 @@
         
         <div id="overtimeHours" title="Overtime Hours">
             <table st-safe-src="overtimeHours" st-table="emptyOvertimeHours" class="table table-hover">
-                <tr ng-repeat="(tickedName, tickedOverview) in tickedOverviewDetails">
-                    <td>Project: </td><td>{{tickedName}}</td>
-                    <td>Overtime in minutes: </td><td>{{(tickedOverview.actualWorked - tickedOverview.timesheetWorked)}}</td>
+                <tr ng-repeat="tickedOverview in tickedOverviewDetails">
+                    <td>Project: </td><td>{{tickedOverview.key.name}}</td>
+                    <td>Overtime in minutes: </td><td>{{(tickedOverview.value.actualWorked - tickedOverview.value.timesheetWorked)}}</td>
+                    <td><a href="/ThuisAdmin/timesheets/printTimesheet?jobsGroupId={{tickedOverview.key.pk_id}}&month={{tempSelectMonth}}">Print PDF</a>
+                    </td>
                 </tr>
             </table>
         </div>
@@ -123,6 +125,10 @@
                 if (jobs.weekendDay === true){
                     return { 'background-color': 'grey' };
                 }
+            }
+            
+            $scope.printPDF = function(jobsGroup){
+                $http.get('/ThuisAdmin/timesheets/printTimesheet', jobsGroup, $scope.Overview.month);
             }
         });
     </script>

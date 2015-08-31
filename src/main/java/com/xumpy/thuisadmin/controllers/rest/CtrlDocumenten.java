@@ -56,11 +56,10 @@ public class CtrlDocumenten implements Serializable{
     
     @RequestMapping(value="/json/fetch_document/{documentId}", method = RequestMethod.GET)
     public @ResponseBody String fetchDocumentBlob(@PathVariable Integer documentId, HttpServletResponse response) throws IOException, SQLException{
-        response.setContentType("application/octet-stream");
-        
         OutputStream out = response.getOutputStream();
         Documenten documenten = documentenSrv.fetchDocument(documentId);
         
+        response.setContentType(documenten.getDocument_mime());
         response.setHeader("Content-Disposition", "inline;filename=\"" + documenten.getDocument_naam() + "\"");
        
         out.write(documenten.getDocument());

@@ -6,11 +6,11 @@
 package com.xumpy.timesheets.controller.rest;
 
 import com.xumpy.timesheets.controller.model.TickedJobsLstCtrlPojo;
-import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.services.TickedJobsDetailSrv;
 import com.xumpy.timesheets.services.TickedJobsSrv;
+import com.xumpy.utilities.ConvertMapForMarshalling;
 import java.text.ParseException;
-import java.util.Map;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -41,8 +41,8 @@ public class TickedJobsRestCtrl {
     }
     
     @RequestMapping("/json/ticket_overview_month")
-    public @ResponseBody Map<String, Map<String, String>> tickedOverviewMonth(@RequestBody String month) throws ParseException{
+    public @ResponseBody List tickedOverviewMonth(@RequestBody String month) throws ParseException{
         
-        return tickedJobsDetailSrv.tickedOverviewMonth(month);
+        return new ConvertMapForMarshalling().convert(tickedJobsDetailSrv.tickedOverviewMonth(month));
     }
 }

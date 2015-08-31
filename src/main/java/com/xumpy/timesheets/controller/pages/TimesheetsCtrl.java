@@ -8,18 +8,27 @@ package com.xumpy.timesheets.controller.pages;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
-import com.jcraft.jsch.SftpException;
-import com.xumpy.thuisadmin.controllers.model.NieuwDocument;
+import com.xumpy.timesheets.controller.model.JobsGroupCtrl;
+import com.xumpy.timesheets.services.TimesheetSrv;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -28,6 +37,8 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Controller
 public class TimesheetsCtrl {
+    @Autowired TimesheetSrv timesheetSrv;
+    
     @RequestMapping(value = "timesheets/overview")
     public String timesheetsOverview(){
         return "timesheets/overview";
@@ -122,5 +133,20 @@ public class TimesheetsCtrl {
             System.out.println("Error occured while fetching the file from ssh");
         }
         return "redirect:/timesheets/importTimeRecordings";
+    }
+    
+    @RequestMapping(value="timesheets/printTimesheet", method = RequestMethod.GET)
+    public @ResponseBody ResponseEntity<byte[]> fetchDocumentBlob(@RequestParam Integer jobsGroupId, @RequestParam String month, HttpServletResponse response) throws IOException{
+        OutputStream out = response.getOutputStream();
+        
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "inline;filename=\"timesheet.pdf\"");
+       
+        out = timesheetSrv.getTimesheet(jobsGroupId, month, out);
+        
+        out.flush();
+        out.close();
+        
+        return null;
     }
 }

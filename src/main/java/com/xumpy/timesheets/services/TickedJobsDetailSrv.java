@@ -118,7 +118,7 @@ public class TickedJobsDetailSrv {
     }
     
     @Transactional
-    public Map<String, Map<String, String>> tickedOverviewMonth(String month) throws ParseException{
+    public Map<JobsGroupSrvPojo, Map<String, String>> tickedOverviewMonth(String month) throws ParseException{
         List<Jobs> jobs = jobsDao.selectPeriode(CustomDateUtils.getFirstDayOfMonth(month), CustomDateUtils.getLastDayOfMonth(month));
         
         List<JobsGroup> jobsGroups = new ArrayList<JobsGroup>();
@@ -128,7 +128,7 @@ public class TickedJobsDetailSrv {
             }
         }
         
-        Map<String, Map<String, String>> returnMap = new HashMap<String, Map<String, String>>();
+        Map<JobsGroupSrvPojo, Map<String, String>> returnMap = new HashMap<JobsGroupSrvPojo, Map<String, String>>();
         
         for(JobsGroup jobsGroup: jobsGroups){
             BigDecimal actualWorked = new BigDecimal(0);
@@ -149,7 +149,7 @@ public class TickedJobsDetailSrv {
             worked.put("actualWorked", actualWorked.toString());
             worked.put("timesheetWorked", timesheetWorked.multiply(new BigDecimal(60)).toString());
             
-            returnMap.put(jobsGroup.getName(), worked);
+            returnMap.put(new JobsGroupSrvPojo(jobsGroup), worked);
         }
         
         return returnMap;

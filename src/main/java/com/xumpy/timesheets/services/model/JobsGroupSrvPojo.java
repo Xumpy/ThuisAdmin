@@ -7,12 +7,13 @@ package com.xumpy.timesheets.services.model;
 
 import com.xumpy.timesheets.domain.Company;
 import com.xumpy.timesheets.domain.JobsGroup;
+import java.io.Serializable;
 
 /**
  *
  * @author nicom
  */
-public class JobsGroupSrvPojo implements JobsGroup{
+public class JobsGroupSrvPojo implements JobsGroup, Serializable{
     private Integer pk_id;
     private String name;
     private String description;

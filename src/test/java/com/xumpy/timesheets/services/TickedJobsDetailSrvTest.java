@@ -5,15 +5,14 @@
  */
 package com.xumpy.timesheets.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.xumpy.timesheets.controller.model.TickedJobsCtrlPojo;
 import com.xumpy.timesheets.dao.JobsDao;
 import com.xumpy.timesheets.dao.TickedJobsDao;
 import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.domain.TickedJobs;
-import com.xumpy.timesheets.services.model.JobsGroupSrvPojo;
 import com.xumpy.timesheets.services.model.TickedJobsDetail;
-import com.xumpy.timesheets.services.model.TickedJobsSrvPojo;
 import com.xumpy.utilities.CustomDateUtils;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -22,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
@@ -261,7 +261,7 @@ public class TickedJobsDetailSrvTest {
     }
     
     @Test
-    public void tickedOverviewMonthTest() throws ParseException{
+    public void tickedOverviewMonthTest() throws ParseException, JsonProcessingException{
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         
         JobsGroup jobsGroup = Mockito.mock(JobsGroup.class);
@@ -337,10 +337,8 @@ public class TickedJobsDetailSrvTest {
         result.put("actualWorked", "942");
         result.put("timesheetWorked", "960");
         
-        Map<String, Map<String, String>> finalResult = new HashMap<String, Map<String, String>>();
-        
-        finalResult.put(jobsGroup.getName(), result);
-        
-        assertEquals(finalResult, tickedJobsDetailSrv.tickedOverviewMonth("07/2015"));
+        for(Entry entry: tickedJobsDetailSrv.tickedOverviewMonth("07/2015").entrySet()){
+            assertEquals(result, entry.getValue());
+        }
     }
 }
