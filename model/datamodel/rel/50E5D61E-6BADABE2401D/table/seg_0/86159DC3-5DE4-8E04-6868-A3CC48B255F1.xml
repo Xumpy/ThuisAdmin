@@ -1,0 +1,94 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="86159DC3-5DE4-8E04-6868-A3CC48B255F1" name="TA_COLLECTION_DETAILS">
+<createdBy>nico</createdBy>
+<createdTime>2016-01-04 15:06:24 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<ordsAlias>table_13</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="PK_ID" id="9F84020F-E4A4-E7A5-FA88-FC613847E9FF">
+<createdBy>nico</createdBy>
+<createdTime>2016-01-04 15:11:22 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FK_COLLECTION_ID" id="ED3B9F1D-7B37-D739-41E6-3979A8E43C37">
+<createdBy>nico</createdBy>
+<createdTime>2016-01-04 15:15:02 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="E3336EBE-9DEA-DC3B-FD73-81FB4CF33144" referredColumn="36A8EDC9-D7DE-1B6B-0C4C-5F61EC9567C6"/>
+</associations>
+</Column>
+<Column name="CODE" id="46D4B805-2069-3939-2956-32AAAC7AB113">
+<createdBy>nico</createdBy>
+<createdTime>2016-01-04 15:11:43 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>255</dataTypeSize>
+<ownDataTypeParameters>255,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="NAME" id="B50FA94E-BC50-E660-E84F-CC71BB07C414">
+<createdBy>nico</createdBy>
+<createdTime>2016-01-04 15:11:55 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>255</dataTypeSize>
+<ownDataTypeParameters>255,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="DESCRIPTION" id="E56FEB23-B5F2-3BB6-F591-8CD6830C23C3">
+<createdBy>nico</createdBy>
+<createdTime>2016-01-04 15:12:06 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="01533428-89FA-D57E-36D8-04E352B52407" name="TA_COLLECTION_DETAILS_PK">
+<createdBy>nico</createdBy>
+<createdTime>2016-01-04 15:11:22 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="9F84020F-E4A4-E7A5-FA88-FC613847E9FF"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="378DF8FF-2080-0EF3-9196-3922ADB227DF" name="TA_COLLECTION_DETAILS_TA_COLLECTIONS_FK">
+<createdBy>nico</createdBy>
+<createdTime>2016-01-04 15:15:02 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="ED3B9F1D-7B37-D739-41E6-3979A8E43C37"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

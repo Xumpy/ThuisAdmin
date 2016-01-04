@@ -1,0 +1,83 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="3451A11A-370E-E193-B376-9A99C6EBC2AA" name="TA_PERSON_COLLECTIONS">
+<createdBy>nico</createdBy>
+<createdTime>2016-01-04 15:06:56 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<ordsAlias>table_14</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="PK_ID" id="6E5E1629-6B4C-3F3D-CD94-BE503A3FEC1C">
+<createdBy>nico</createdBy>
+<createdTime>2016-01-04 15:16:11 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FK_PERSON_ID" id="B2719AC3-89A5-1A49-8544-55BC351B94A1">
+<createdBy>nico</createdBy>
+<createdTime>2016-01-04 15:16:24 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="E8307534-DD5D-8BBB-610D-19ED1A39FF80" referredColumn="848FC16D-5FC8-8C9A-0AAA-667F429B378F"/>
+</associations>
+</Column>
+<Column name="FK_COLLECTION_DETAIL_ID" id="8C92A97E-2B59-418D-68D4-A01EFCC54928">
+<createdBy>nico</createdBy>
+<createdTime>2016-01-04 15:16:30 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="13A840E0-1248-1597-899B-9414855DDFBF" referredColumn="9F84020F-E4A4-E7A5-FA88-FC613847E9FF"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="5A039653-1305-93D9-46F1-661E554AE891" name="TA_PERSON_COLLECTIONS_PK">
+<createdBy>nico</createdBy>
+<createdTime>2016-01-04 15:16:11 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="6E5E1629-6B4C-3F3D-CD94-BE503A3FEC1C"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="D43833B2-B24A-9C6D-83D8-1AC2C1C39064" name="TA_PERSON_COLLECTIONS_TA_PERSONEN_FK">
+<createdBy>nico</createdBy>
+<createdTime>2016-01-04 15:16:24 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="B2719AC3-89A5-1A49-8544-55BC351B94A1"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="E5D48DBD-8443-FC92-BB63-8E2DBD61CA9A" name="TA_PERSON_COLLECTIONS_TA_COLLECTION_DETAILS_FK">
+<createdBy>nico</createdBy>
+<createdTime>2016-01-04 15:16:30 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="8C92A97E-2B59-418D-68D4-A01EFCC54928"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>
