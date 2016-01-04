@@ -1,0 +1,116 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="EA391737-9FD7-7FEB-1D95-488DADB7053E" name="TA_TIMESHEETS">
+<createdBy>nico</createdBy>
+<createdTime>2015-09-04 09:08:24 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<ordsAlias>table_11</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="PK_ID" id="7D08AD29-ED4B-9107-B1F9-8BBEB12C52F3">
+<createdBy>nico</createdBy>
+<createdTime>2015-09-04 09:08:39 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FK_JOB_GROUP_ID" id="9A00B98C-EAD2-F48A-A678-20AFB60DDDB1">
+<createdBy>nico</createdBy>
+<createdTime>2015-09-04 09:12:10 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="AD675EA0-FCFF-798F-B3FD-2CF98BD73DD2" referredColumn="34B6C485-BBD7-FC0B-6E4A-32755AB455A6"/>
+</associations>
+</Column>
+<Column name="BEGIN_DATE" id="05B155C9-39B8-C510-305E-3CCE8AFD0C07">
+<createdBy>nico</createdBy>
+<createdTime>2015-09-04 09:09:05 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT007</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="END_DATE" id="7CF6171E-DAA2-ADBC-784E-BDB94E4F777D">
+<createdBy>nico</createdBy>
+<createdTime>2015-09-04 09:09:13 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT007</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="DOCUMENT" id="99E1FDA1-F2A6-B5D5-378F-73991E058877">
+<createdBy>nico</createdBy>
+<createdTime>2015-09-04 09:09:27 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT029</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="DOCUMENT_NAME" id="FBCBDA6F-336E-0787-A51A-442CB98C0359">
+<createdBy>nico</createdBy>
+<createdTime>2015-09-04 09:09:42 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>255</dataTypeSize>
+<ownDataTypeParameters>255,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="DOCUMENT_MIME" id="446F8DB9-9980-9310-F321-9EE4FEB8DC05">
+<createdBy>nico</createdBy>
+<createdTime>2015-09-04 09:09:55 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50</dataTypeSize>
+<ownDataTypeParameters>50,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="4F39D9C2-C248-6838-FD52-513F13EFFF09" name="TA_TIMESHEETS_PK">
+<createdBy>nico</createdBy>
+<createdTime>2015-09-04 09:09:59 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="7D08AD29-ED4B-9107-B1F9-8BBEB12C52F3"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="CD136CB5-9E0D-E525-BD31-318301920154" name="TA_TIMESHEETS_TA_JOB_GROUPS_FK">
+<createdBy>nico</createdBy>
+<createdTime>2015-09-04 09:12:10 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="9A00B98C-EAD2-F48A-A678-20AFB60DDDB1"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>
