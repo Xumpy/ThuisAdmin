@@ -14,7 +14,7 @@
 <ownerDesignName>datamodel</ownerDesignName>
 <useDomainConstraints>false</useDomainConstraints>
 <use>1</use>
-<logicalDatatype>LOGDT019</logicalDatatype>
+<logicalDatatype>LOGDT011</logicalDatatype>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
@@ -38,12 +38,26 @@
 <ownerDesignName>datamodel</ownerDesignName>
 <useDomainConstraints>false</useDomainConstraints>
 <use>1</use>
-<logicalDatatype>LOGDT019</logicalDatatype>
+<logicalDatatype>LOGDT011</logicalDatatype>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <previousColumn>false</previousColumn>
 <autoIncrementCycle>false</autoIncrementCycle>
 <associations>
 <colAssociation fkAssociation="13A840E0-1248-1597-899B-9414855DDFBF" referredColumn="9F84020F-E4A4-E7A5-FA88-FC613847E9FF"/>
+</associations>
+</Column>
+<Column name="FK_PERSON_COL_STATUS_ID" id="8BD1705F-A650-E0FE-9920-4FD8530026D0">
+<createdBy>nico</createdBy>
+<createdTime>2016-01-05 07:27:48 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="A4BACBE0-1387-FFB3-C34A-6AEBCA4DFB23" referredColumn="1E082D52-430D-8A4F-3A8F-EF88BB3F876A"/>
 </associations>
 </Column>
 </columns>
@@ -77,6 +91,16 @@
 <isSurrogateKey>false</isSurrogateKey>
 <indexColumnUsage>
 <colUsage columnID="8C92A97E-2B59-418D-68D4-A01EFCC54928"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="18BA95E0-34B2-1153-8F53-1E7611235602" name="TA_PERSON_COLLECTIONS_TA_PERSON_COL_STATUS_FK">
+<createdBy>nico</createdBy>
+<createdTime>2016-01-05 07:27:48 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="8BD1705F-A650-E0FE-9920-4FD8530026D0"/>
 </indexColumnUsage>
 </ind_PK_UK>
 </indexes>

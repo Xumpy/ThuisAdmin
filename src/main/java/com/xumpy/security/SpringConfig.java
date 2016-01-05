@@ -9,6 +9,7 @@ import com.xumpy.security.servlet.DispatcherConfig;
 import com.xumpy.security.root.UserService;
 import com.xumpy.security.root.AppConfig;
 import com.xumpy.security.root.InitDatabase;
+import com.xumpy.security.root.InitOldDatabase;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import org.springframework.web.context.request.RequestContextListener;
@@ -22,7 +23,7 @@ public class SpringConfig extends AbstractAnnotationConfigDispatcherServletIniti
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[] { InitDatabase.class, UserService.class, AppConfig.class };
+        return new Class[] { InitDatabase.class, InitOldDatabase.class, UserService.class, AppConfig.class };
     }
 
     @Override
