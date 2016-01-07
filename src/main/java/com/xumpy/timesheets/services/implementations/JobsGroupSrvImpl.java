@@ -30,19 +30,19 @@ public class JobsGroupSrvImpl implements JobsGroupSrv{
     @Autowired JobsGroupDaoImpl jobsGroupDao;
     
     @Override
-    @Transactional(readOnly=false)
+    @Transactional(readOnly=false, value="transactionManager")
     public JobsGroup select(Integer pk_id) {
         return jobsGroupDao.select(pk_id);
     }
 
     @Override
-    @Transactional(readOnly=false)
+    @Transactional(readOnly=false, value="transactionManager")
     public List<JobsGroup> selectAllJobGroups() {
         return jobsGroupDao.selectAllJobGroups();
     }
 
     @Override
-    @Transactional(readOnly=false)
+    @Transactional(readOnly=false, value="transactionManager")
     public JobsGroup save(JobsGroup jobsGroup) {
         JobsGroupSrvPojo jobsGroupSrvPojo = new JobsGroupSrvPojo(jobsGroup);
         
@@ -56,7 +56,7 @@ public class JobsGroupSrvImpl implements JobsGroupSrv{
     }
 
     @Override
-    @Transactional(readOnly=false)
+    @Transactional(readOnly=false, value="transactionManager")
     public void delete(JobsGroup jobsGroup) {
         jobsGroupDao.delete(jobsGroup);
     }

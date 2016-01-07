@@ -31,7 +31,7 @@ public class PersonenSrvImpl implements PersonenSrv{
     private UserInfo userInfo;
     
     @Override
-    @Transactional(readOnly=false)
+    @Transactional(readOnly=false, value="transactionManager")
     public Personen save(Personen personen) {
         PersonenSrvPojo personenSrvPojo = new PersonenSrvPojo(personen);
         
@@ -51,22 +51,28 @@ public class PersonenSrvImpl implements PersonenSrv{
     }
 
     @Override
-    @Transactional(readOnly=false)
+    @Transactional(readOnly=false, value="transactionManager")
     public Personen delete(Personen personen) {
         personenDao.delete(personen);
         return personen;
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public List<Personen> findAllPersonen() {
         return personenDao.findAllPersonen();
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public Personen findPersoon(Integer persoonId) {
         return personenDao.findPersoon(persoonId);
+    }
+    
+    @Override
+    @Transactional(value="transactionManager")
+    public Personen findPersoonByUsername(String username) {
+        return personenDao.findPersoonByUsername(username);
     }
     
     @Override

@@ -82,8 +82,8 @@ public class CollectionDaoPojo implements Collection, Serializable{
         this.pkId = collection.getPkId();
         this.name = collection.getName();
         this.description = collection.getDescription();
-        this.mainCollection = new CollectionDaoPojo(collection.getMainCollection());
-        this.subCollections = CollectionDaoPojo.lstCollectionDaoPojo(collection.getSubCollections());
+        this.mainCollection = collection.getMainCollection() != null ? new CollectionDaoPojo(collection.getMainCollection()) : null;
+        this.subCollections = !collection.getSubCollections().isEmpty() ? CollectionDaoPojo.lstCollectionDaoPojo(collection.getSubCollections()) : null;
     }
     public static List<CollectionDaoPojo> lstCollectionDaoPojo(List<? extends Collection> collections){
         List<CollectionDaoPojo> lstCollection = new ArrayList<CollectionDaoPojo>();

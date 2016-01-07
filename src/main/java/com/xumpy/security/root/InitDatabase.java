@@ -9,15 +9,18 @@ import java.util.Properties;
 import javax.sql.DataSource;
 import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -70,18 +73,6 @@ public class InitDatabase {
         return dataSource;
     }
     
-    Properties hibernateProperties() {
-        return new Properties() {
-            private static final long serialVersionUID = 1L;
-
-            {
-                setProperty("hibernate.dialect", hibernateDialect);
-                setProperty("hibernate.globally_quoted_identifiers", "true");
-                setProperty("hibernate.ejb.entitymanager_factory_name", "HIBERNATE");
-             }
-        };
-    }
-    
     Properties hibernatePropertiesJPA() {
         return new Properties() {
             private static final long serialVersionUID = 1L;
@@ -89,12 +80,24 @@ public class InitDatabase {
             {
                 setProperty("hibernate.dialect", hibernateDialect);
                 setProperty("hibernate.globally_quoted_identifiers", "true");
+                setProperty("hibernate.current_session_context_class", "org.springframework.orm.hibernate4.SpringSessionContext");
                 setProperty("hibernate.ejb.entitymanager_factory_name", "HIBERNATE_JPA");
              }
         };
     }
     
     @Bean
+    @Primary
+    @Qualifier(value="jpaTransactionManager")
+    public JpaTransactionManager jpaTransactionManager() {
+        JpaTransactionManager txManager = new JpaTransactionManager();
+        txManager.setEntityManagerFactory(entityManagerFactory().getNativeEntityManagerFactory());
+        
+        return txManager;
+    }
+    
+    @Bean
+    @Qualifier(value="transactionManager")
     public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
         HibernateTransactionManager txManager = new HibernateTransactionManager();
         txManager.setSessionFactory(sessionFactory);

@@ -23,25 +23,25 @@ public class JobsGroupPricesSrvImpl implements JobsGroupPricesSrv{
     @Autowired JobsGroupPricesDaoImpl jobsGroupPricesDao;
     
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public JobsGroupPrices select(Integer pk_id) {
         return jobsGroupPricesDao.select(pk_id);
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public List<JobsGroupPrices> selectAllJobGroupPrices() {
         return jobsGroupPricesDao.selectAll();
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public List<JobsGroupPrices> selectAllJobGroupPrices(JobsGroup jobsGroup) {
         return jobsGroupPricesDao.selectAllJobGroupPrices(jobsGroup);
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public JobsGroupPrices save(JobsGroupPrices jobsGroupPrices) {
         JobsGroupPricesSrvPojo jobsGroupPricesSrv = new JobsGroupPricesSrvPojo(jobsGroupPrices);
         
@@ -54,7 +54,7 @@ public class JobsGroupPricesSrvImpl implements JobsGroupPricesSrv{
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public void delete(JobsGroupPrices jobsGroupPrices) {
         jobsGroupPricesDao.delete(jobsGroupPrices);
     }

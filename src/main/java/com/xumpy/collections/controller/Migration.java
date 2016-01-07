@@ -5,20 +5,12 @@
  */
 package com.xumpy.collections.controller;
 
-import com.xumpy.collections.dao.crud.PersonCollectionStatusDao;
-import com.xumpy.collections.domain.PersonCollectionStatus;
-import com.xumpy.migration.collections.mysql.WriteJeromCSV;
-import static com.xumpy.migration.collections.mysql.WriteJeromCSV.build;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.List;
-import org.apache.commons.io.IOUtils;
+import com.xumpy.collections.services.MigrationSrv;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -29,20 +21,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @Scope("session")
 public class Migration {
-    @Autowired PersonCollectionStatusDao personCollectionStatusDao;
+    @Autowired MigrationSrv migrationSrv;
     
     private static Logger log = Logger.getLogger(Migration.class);
     
     @RequestMapping("/migration/migrate_jerom")
-    public @ResponseBody String migrateJerom() throws ParseException, FileNotFoundException, IOException{
-        FileInputStream inputStream = new FileInputStream(WriteJeromCSV.class.getClassLoader().getResource("testData/verzameling.csv").getPath());
-        String content = IOUtils.toString(inputStream);
-
-        List<WriteJeromCSV.Lijst> lstLijst = build(content);
-        
-        for(PersonCollectionStatus personCollectionStatus: personCollectionStatusDao.findAll()){
-            log.info(personCollectionStatus.getName());
-        }
+    public @ResponseBody String migrateJerom() throws Exception{
+        migrationSrv.migrate();
         
         return "200";
     }

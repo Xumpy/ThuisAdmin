@@ -18,6 +18,7 @@ public interface PersonenSrv {
     Personen delete(Personen personen);
     public List<Personen> findAllPersonen();
     public Personen findPersoon(Integer persoonId);
+    public Personen findPersoonByUsername(String username);
     public Personen createRegisterUser(RegisterUserPage registerUserPage);
     public Personen getWhoAmI();
 }

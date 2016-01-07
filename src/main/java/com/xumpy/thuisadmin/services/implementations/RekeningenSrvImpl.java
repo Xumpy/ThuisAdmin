@@ -33,7 +33,7 @@ public class RekeningenSrvImpl implements RekeningenSrv{
     private UserInfo userInfo;
     
     @Override
-    @Transactional(readOnly=false)
+    @Transactional(readOnly=false, value="transactionManager")
     public void save(NieuwRekening nieuwRekening) {
         RekeningenSrvPojo rekening = new RekeningenSrvPojo();
         
@@ -52,19 +52,19 @@ public class RekeningenSrvImpl implements RekeningenSrv{
     }
 
     @Override
-    @Transactional(readOnly=false)
+    @Transactional(readOnly=false, value="transactionManager")
     public void update(Rekeningen rekeningen) {
         rekeningenDao.update(rekeningen);
     }
 
     @Override
-    @Transactional(readOnly=false)
+    @Transactional(readOnly=false, value="transactionManager")
     public void delete(Rekeningen rekeningen) {
         rekeningenDao.delete(rekeningen);
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public RekeningBedragTotal findAllRekeningen() {
         RekeningBedragTotal rekeningBedragTotal = new RekeningBedragTotal();
         List<Rekeningen> rekeningen = rekeningenDao.findAllRekeningen();
@@ -82,7 +82,7 @@ public class RekeningenSrvImpl implements RekeningenSrv{
     }
     
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public Rekeningen findRekening(Integer rekeningId){
         return rekeningenDao.findRekening(rekeningId);
     }

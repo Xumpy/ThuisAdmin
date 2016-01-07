@@ -13,5 +13,4 @@ import org.springframework.data.repository.CrudRepository;
  * @author nico
  */
 public interface CollectionDao  extends CrudRepository<CollectionDaoPojo, Integer>{
-    
 }

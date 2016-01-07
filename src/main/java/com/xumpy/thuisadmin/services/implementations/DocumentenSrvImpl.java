@@ -27,7 +27,7 @@ public class DocumentenSrvImpl implements DocumentenSrv{
     private DocumentenDaoImpl documentenDao;
     
     @Override
-    @Transactional(readOnly=false)
+    @Transactional(readOnly=false, value="transactionManager")
     public void save(Documenten document) {
         DocumentenSrvPojo documentenSrvPojo = new DocumentenSrvPojo(document);
         
@@ -40,31 +40,31 @@ public class DocumentenSrvImpl implements DocumentenSrv{
     }
 
     @Override
-    @Transactional(readOnly=false)
+    @Transactional(readOnly=false, value="transactionManager")
     public void update(Documenten document) {
         documentenDao.update(new DocumentenSrvPojo(document));
     }
 
     @Override
-    @Transactional(readOnly=false)
+    @Transactional(readOnly=false, value="transactionManager")
     public void delete(Documenten document) {
         documentenDao.delete(new DocumentenSrvPojo(document));
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public List<DocumentenReport> fetchDocumentenReport() {
         return documentenDao.fetchDocumentenReport();
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public Documenten fetchDocument(Integer documentId){
         return documentenDao.fetchDocument(documentId);
     }
     
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public List<Documenten> fetchDocumentByBedrag(Integer bedragId){
         return documentenDao.fetchDocumentByBedrag(bedragId);
     }

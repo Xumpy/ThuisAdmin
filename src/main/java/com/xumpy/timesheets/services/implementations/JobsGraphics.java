@@ -190,7 +190,7 @@ public class JobsGraphics {
         return overviewWork;
     }
     
-    @Transactional
+    @Transactional(value="transactionManager")
     public OverviewWork overviewWork(String beginMonth, String endMonth, List<? extends JobsGroup> lstJobsGroup) throws ParseException{
         Date firstDay = CustomDateUtils.getFirstDayOfMonth(beginMonth);
         Date lastDay = CustomDateUtils.getLastDayOfMonth(endMonth);

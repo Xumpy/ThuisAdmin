@@ -41,19 +41,19 @@ public class TickedJobsSrvImpl implements TickedJobsSrv{
     @Autowired JobsDaoImpl jobsDao;
     
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public TickedJobs select(Integer pk_id) {
         return tickedJobsDao.select(pk_id);
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public List<TickedJobs> selectAllTickedJobs() {
         return tickedJobsDao.selectAllTickedJobs();
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public TickedJobs save(TickedJobs tickedJobs) {
         TickedJobsSrvPojo tickedJobsSrv = new TickedJobsSrvPojo(tickedJobs);
         if (tickedJobs.getPk_id() == null){
@@ -66,13 +66,13 @@ public class TickedJobsSrvImpl implements TickedJobsSrv{
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public void delete(TickedJobs tickedJobs) {
         tickedJobsDao.delete(tickedJobs);
     }
     
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public TickedJobsLstCtrlPojo allNotProcessedTickedJobs(){
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         
@@ -134,7 +134,7 @@ public class TickedJobsSrvImpl implements TickedJobsSrv{
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public void processTickedJobs(List<TickedJobsCtrlPojo> tickedJobs) {
         for(TickedJobsCtrlPojo tickedJob: tickedJobs){
             if (tickedJob.getSelectedJobId() != null){
@@ -161,7 +161,7 @@ public class TickedJobsSrvImpl implements TickedJobsSrv{
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public List<TickedJobs> selectTickedJobsByJob(Jobs job) {
         return tickedJobsDao.selectTickedJobsByJob(job);
     }

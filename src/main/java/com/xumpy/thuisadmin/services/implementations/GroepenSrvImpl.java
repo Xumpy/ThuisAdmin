@@ -34,7 +34,7 @@ public class GroepenSrvImpl implements GroepenSrv{
     private UserInfo userInfo;
     
     @Override
-    @Transactional(readOnly=false)
+    @Transactional(readOnly=false, value="transactionManager")
     public Groepen save(Groepen groepen) {
         GroepenSrvPojo groepenSrvPojo = new GroepenSrvPojo(groepen);
         if (groepenSrvPojo.getPk_id() == null){
@@ -51,26 +51,26 @@ public class GroepenSrvImpl implements GroepenSrv{
     }
 
     @Override
-    @Transactional(readOnly=false)
+    @Transactional(readOnly=false, value="transactionManager")
     public Groepen delete(Groepen groepen) {
         groepenDao.delete(groepen);
         return groepen;
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public List<Groepen> findAllGroepen() {
         return groepenDao.findAllGroepen();
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public Groepen findGroep(Integer groepId) {
         return groepenDao.findGroep(groepId);
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public List<Groepen> findAllHoofdGroepen() {
         return groepenDao.findAllHoofdGroepen();
     }
@@ -90,7 +90,7 @@ public class GroepenSrvImpl implements GroepenSrv{
     }
     
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public List<Groepen> findAllGroepen(Integer hoofdGroepId) {
         return groepenDao.findAllGroepen(hoofdGroepId);
     }
@@ -149,7 +149,7 @@ public class GroepenSrvImpl implements GroepenSrv{
     }
  
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public List<GroepenTree> groepTree(Integer selectedGroepId) {
         Groepen selectedGroep = null;
         List<Groepen> lstGroepen = groepenDao.findAllGroepen();

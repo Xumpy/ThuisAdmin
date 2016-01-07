@@ -78,7 +78,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     public static final String DELETE = "DELETE";
     
     @Override
-    @Transactional(readOnly=false)
+    @Transactional(readOnly=false, value="transactionManager")
     public Bedragen save(NieuwBedrag nieuwBedrag) {
         nieuwBedrag.setPersoon(new PersonenSrvPojo(userInfo.getPersoon()));
         BedragenDaoPojo bedragen = new BedragenDaoPojo(convertNieuwBedrag(nieuwBedrag));
@@ -97,7 +97,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     }
 
     @Override
-    @Transactional(readOnly=false)
+    @Transactional(readOnly=false, value="transactionManager")
     public Bedragen delete(NieuwBedrag nieuwBedrag) {
         nieuwBedrag.setPersoon(new PersonenSrvPojo(userInfo.getPersoon()));
         Bedragen bedragen = convertNieuwBedrag(nieuwBedrag);
@@ -112,7 +112,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public List<RekeningOverzicht> graphiekBedrag(Rekeningen rekening, Date beginDate, Date eindDate) {
         boolean showBedragPublicGroep = false;
         List<Bedragen> lstBedragenSrv = bedragenDao.BedragInPeriode(beginDate, eindDate, rekening, showBedragPublicGroep);
@@ -130,7 +130,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public FinanceOverzichtGroep graphiekOverzichtGroep(Date beginDate, Date eindDate, boolean showBedragPublicGroep) {
         
         List<Bedragen> bedragInPeriode = bedragenDao.BedragInPeriode(beginDate, eindDate, null, showBedragPublicGroep);
@@ -177,7 +177,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public OverzichtGroepBedragenTotal rapportOverzichtGroepBedragen(Integer typeGroepId, 
                                                                      Date beginDate, 
                                                                      Date eindDate,
@@ -223,7 +223,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     }
     
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public OverzichtGroepBedragenTotal rapportOverzichtGroepBedragen(Integer typeGroepId, 
                                                                      Integer typeGroepKostOpbrengst, 
                                                                      Date beginDate, 
@@ -261,7 +261,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public BeheerBedragenReportLst reportBedragen(BeheerBedragenReportLst beheerBedragenReportLst, Integer offset, Rekeningen rekening, String searchText) {
         
         List<BeheerBedragenReport> beheerBedragenReport = new ArrayList<BeheerBedragenReport>();
@@ -276,7 +276,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public Bedragen findBedrag(Integer bedragId) {
         return bedragenDao.findBedrag(bedragId);
     }
@@ -631,7 +631,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     }
         
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public List<Bedragen> selectBedragenInPeriode(Date beginDate, Date endDate){
         List<Bedragen> bedragen = bedragenDao.BedragInPeriode(beginDate, endDate, null, false);
         

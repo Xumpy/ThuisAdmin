@@ -117,7 +117,7 @@ public class TickedJobsDetailSrv {
         return tickedJobsDetail;
     }
     
-    @Transactional
+    @Transactional(value="transactionManager")
     public Map<JobsGroupSrvPojo, Map<String, String>> tickedOverviewMonth(String month) throws ParseException{
         List<Jobs> jobs = jobsDao.selectPeriode(CustomDateUtils.getFirstDayOfMonth(month), CustomDateUtils.getLastDayOfMonth(month));
         
