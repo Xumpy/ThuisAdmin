@@ -104,16 +104,4 @@ public class CollectionDetailDaoPojo implements CollectionDetail, Serializable{
     public void setImageMime(String imageMime) {
         this.imageMime = imageMime;
     }
-    
-    public CollectionDetailDaoPojo(){}
-    public CollectionDetailDaoPojo(CollectionDetail collectionDetail){
-        this.pkId = collectionDetail.getPkId();
-        this.collection = new CollectionDaoPojo(collectionDetail.getCollection());
-        this.description = collectionDetail.getDescription();
-        this.name = collectionDetail.getName();
-        this.code = collectionDetail.getCode();
-        this.image = collectionDetail.getImage();
-        this.imageName = collectionDetail.getImageName();
-        this.imageMime = collectionDetail.getImageMime();
-    }
 }

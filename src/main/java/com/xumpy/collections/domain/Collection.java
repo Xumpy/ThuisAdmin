@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface Collection {
     Integer getPkId();
-    Collection getMainCollection();
+    Integer getMainCollectionId();
     List<? extends Collection> getSubCollections();
     String getName();
     String getDescription();

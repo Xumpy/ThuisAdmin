@@ -80,6 +80,7 @@ public class InitDatabase {
             {
                 setProperty("hibernate.dialect", hibernateDialect);
                 setProperty("hibernate.globally_quoted_identifiers", "true");
+                setProperty("hibernate.hbm2ddl.auto", "none");
                 setProperty("hibernate.current_session_context_class", "org.springframework.orm.hibernate4.SpringSessionContext");
                 setProperty("hibernate.ejb.entitymanager_factory_name", "HIBERNATE_JPA");
              }
