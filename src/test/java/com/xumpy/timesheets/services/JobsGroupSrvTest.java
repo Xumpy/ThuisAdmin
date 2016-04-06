@@ -12,6 +12,7 @@ import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.services.implementations.JobsGroupSrvImpl;
 import com.xumpy.timesheets.controller.model.JobsInJobsGroup;
+import com.xumpy.timesheets.dao.model.JobsGroupDaoPojo;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,20 +33,20 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class JobsGroupSrvTest {
     @Mock JobsGroupDaoImpl jobsGroupDao;
-    @Mock JobsGroup jobsGroup;
+    @Mock JobsGroupDaoPojo jobsGroup;
     @Mock Company company;
     
     @InjectMocks JobsGroupSrvImpl jobsGroupSrv;
     
     @Test
     public void testSelect(){
-        when(jobsGroupDao.select(1)).thenReturn(jobsGroup);
+        when(jobsGroupDao.findOne(1)).thenReturn(jobsGroup);
         assertEquals(jobsGroup, jobsGroupSrv.select(1));
     }
     
     @Test
     public void testSelectAllJobGroups(){
-        List<JobsGroup> lstJobsGroups = new ArrayList<JobsGroup>();
+        List<JobsGroupDaoPojo> lstJobsGroups = new ArrayList<JobsGroupDaoPojo>();
         lstJobsGroups.add(jobsGroup);
         lstJobsGroups.add(jobsGroup);
         lstJobsGroups.add(jobsGroup);
@@ -63,7 +64,7 @@ public class JobsGroupSrvTest {
         when(jobsGroup.getCompany()).thenReturn(company);
         when(company.getPk_id()).thenReturn(1);
         
-        jobsGroup = jobsGroupSrv.save(jobsGroup);
+        jobsGroup = new JobsGroupDaoPojo(jobsGroupSrv.save(jobsGroup));
         
         assertNotNull(jobsGroup.getPk_id());
     }
@@ -76,7 +77,7 @@ public class JobsGroupSrvTest {
         when(jobsGroup.getCompany()).thenReturn(company);
         when(company.getPk_id()).thenReturn(1);
         
-        jobsGroup = jobsGroupSrv.save(jobsGroup);
+        jobsGroup = new JobsGroupDaoPojo(jobsGroupSrv.save(jobsGroup));
         
         assertEquals(new Integer(1), jobsGroup.getPk_id());
     }
@@ -153,7 +154,7 @@ public class JobsGroupSrvTest {
         lstJobsGroup.add(jobsGroup2);
         lstJobsGroup.add(jobsGroup3);
         
-        List<JobsGroup> lstJobsGroupResult = jobsGroupSrv.filterJobsGroupWithJobsInJobsGroup(lstJobsGroup, lstJobsInJobsGroup);
+        List<? extends JobsGroup> lstJobsGroupResult = jobsGroupSrv.filterJobsGroupWithJobsInJobsGroup(lstJobsGroup, lstJobsInJobsGroup);
         
         List<JobsGroup> lstJobsGroupExpectedResult = new ArrayList<JobsGroup>();
         lstJobsGroupExpectedResult.add(jobsGroup2);

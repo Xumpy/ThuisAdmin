@@ -5,8 +5,8 @@
  */
 package com.xumpy.timesheets.services;
 
-import com.xumpy.timesheets.dao.JobsDao;
 import com.xumpy.timesheets.dao.TickedJobsDao;
+import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
 import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.domain.TickedJobs;
@@ -36,7 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TickedJobsDetailSrv {
     
     @Autowired private TickedJobsDao tickedJobsDao;
-    @Autowired private JobsDao jobsDao;
+    @Autowired private JobsDaoImpl jobsDao;
     
     public static TickedJobsDetail calculate(List<? extends TickedJobs> tickedJobs){
         TickedJobsDetail tickedJobsDetail = new TickedJobsDetail();
@@ -119,7 +119,7 @@ public class TickedJobsDetailSrv {
     
     @Transactional(value="transactionManager")
     public Map<JobsGroupSrvPojo, Map<String, String>> tickedOverviewMonth(String month) throws ParseException{
-        List<Jobs> jobs = jobsDao.selectPeriode(CustomDateUtils.getFirstDayOfMonth(month), CustomDateUtils.getLastDayOfMonth(month));
+        List<? extends Jobs> jobs = jobsDao.selectPeriode(CustomDateUtils.getFirstDayOfMonth(month), CustomDateUtils.getLastDayOfMonth(month));
         
         List<JobsGroup> jobsGroups = new ArrayList<JobsGroup>();
         for(Jobs job: jobs){
@@ -137,9 +137,11 @@ public class TickedJobsDetailSrv {
             Map worked = new HashMap<String, String>();
             
             for(Jobs job: jobs){
+                System.out.println(job.getPk_id());
                 if (jobsGroup.getPk_id().equals(job.getJobsGroup().getPk_id())){
                     List<TickedJobs> tickedJobs = tickedJobsDao.selectTickedJobsByJob(job);
-
+                    System.out.println(tickedJobs.size());
+                    
                     TickedJobsDetail jobsDetail = calculate(tickedJobs, new BigDecimal(30));
 
                     timesheetWorked = timesheetWorked.add(job.getWorkedHours());

@@ -5,6 +5,10 @@
  */
 package com.xumpy.thuisadmin.dao;
 
+import com.xumpy.security.model.UserInfo;
+import com.xumpy.security.root.InitDatabase;
+import com.xumpy.security.root.InitOldDatabase;
+import com.xumpy.security.root.UserService;
 import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
 import com.xumpy.thuisadmin.dao.model.GroepenDaoPojo;
 import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
@@ -24,25 +28,33 @@ import static org.junit.Assert.assertNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
+import org.mockito.Mockito;
 import static org.mockito.Mockito.when;
-import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author nicom
  */
-@RunWith(MockitoJUnitRunner.class)
-@EnableTransactionManagement
-public class BedragenDaoTest extends Setup{
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {InitDatabase.class, InitOldDatabase.class, UserService.class})
+@ActiveProfiles("junit")
+public class BedragenDaoTest{
+    @Autowired PersonenDao personenDao;
+    @Autowired GroepenDao groepenDao;
+    @Autowired RekeningenDao rekeningenDao;
+    @Autowired BedragenDao bedragenDao;
+    @Autowired UserInfo userInfo;
     
     private Personen personen;
     private Groepen groep;
     private Rekeningen rekening;
     
-    @Mock Bedragen bedrag;
+    Bedragen bedrag;
     
     private static final Integer BEDRAG_PK_ID = 30;
     
@@ -51,10 +63,13 @@ public class BedragenDaoTest extends Setup{
     private Date endDate;
 
     @Before
+    @Transactional
     public void setUpBedragen(){
         personen = personenDao.findPersoon(1);
         groep = groepenDao.findGroep(1);
         rekening = rekeningenDao.findRekening(1);
+        
+        bedrag = Mockito.mock(Bedragen.class);
         
         when(bedrag.getPk_id()).thenReturn(BEDRAG_PK_ID);
         when(bedrag.getBedrag()).thenReturn(new BigDecimal(200));
@@ -102,6 +117,7 @@ public class BedragenDaoTest extends Setup{
     }
     
     @Test
+    @Transactional
     public void testSave(){
         bedragenDao.save(bedrag);
         Bedragen bedragTest = bedragenDao.findBedrag(BEDRAG_PK_ID);
@@ -109,6 +125,7 @@ public class BedragenDaoTest extends Setup{
     }
     
     @Test
+    @Transactional
     public void testUpdate(){
         bedragenDao.save(bedrag);
         
@@ -121,26 +138,30 @@ public class BedragenDaoTest extends Setup{
     }
     
     @Test
+    @Transactional
     public void testDelete(){
         bedragenDao.save(bedrag);
         Bedragen bedragForDelete = bedragenDao.findBedrag(BEDRAG_PK_ID);
         
-        resetTransaction();
+        //resetTransaction();
         
-        bedragenDao.delete(bedragForDelete);
+        bedragenDao.save(bedragForDelete);
+        
+        bedragenDao.delete(new BedragenDaoPojo(bedragForDelete));
         
         Bedragen bedragNull = bedragenDao.findBedrag(BEDRAG_PK_ID);
         assertNull(bedragNull);
     }
     
     @Test
+    @Transactional
     public void testReportBedragen() throws ParseException{
         List<Bedragen> lstBedragenExpected = new ArrayList<Bedragen>();
         
         bedrag = bedragenDao.findBedrag(24);
         lstBedragenExpected.add(bedrag);
         
-        when(loginPersoon.getPk_id()).thenReturn(2);
+        userInfo.setPersoon(personenDao.findPersoon(2));
         rekening = rekeningenDao.findRekening(3);
         List<Bedragen> lstBedragenResult = bedragenDao.reportBedragen(rekening, 0, "nog een test");
         
@@ -148,12 +169,14 @@ public class BedragenDaoTest extends Setup{
     }
     
     @Test
+    @Transactional
     public void testGetNewPkId(){
         Integer newPkId = bedragenDao.getNewPkId();
         assertEquals(newPkId, new Integer(27));
     }
     
     @Test
+    @Transactional
     public void testSomBedragDatum() throws ParseException{
         startDate = new Date(dt.parse("2015-02-18").getTime());
         endDate = new Date(dt.parse("2015-02-23").getTime());
@@ -164,7 +187,9 @@ public class BedragenDaoTest extends Setup{
     }
     
     @Test
+    @Transactional
     public void testBedragenInPeriode() throws ParseException{
+        userInfo.setPersoon(personenDao.findPersoon(1));
         startDate = new Date(dt.parse("2015-02-18").getTime());
         endDate = new Date(dt.parse("2015-02-23").getTime());
         
@@ -178,7 +203,9 @@ public class BedragenDaoTest extends Setup{
     }
     
     @Test
+    @Transactional
     public void testGetBedragAtDate() throws ParseException{
+        userInfo.setPersoon(personenDao.findPersoon(1));
         startDate = new Date(dt.parse("2015-02-18").getTime());
         endDate = new Date(dt.parse("2015-02-23").getTime());
         
@@ -190,8 +217,9 @@ public class BedragenDaoTest extends Setup{
     }
     
     @Test
+    @Transactional
     public void testReportBedragenNull() throws ParseException{
-        when(loginPersoon.getPk_id()).thenReturn(2);
+        userInfo.setPersoon(personenDao.findPersoon(2));
         rekening = rekeningenDao.findRekening(3);
         List<Bedragen> lstBedragenResult = bedragenDao.reportBedragen(rekening, 0, null);
         

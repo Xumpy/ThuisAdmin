@@ -18,10 +18,10 @@ import java.util.List;
  */
 public interface JobsGroupSrv {
     JobsGroup select(Integer pk_id);
-    List<JobsGroup> selectAllJobGroups();
-    List<JobsGroup> selectAllGroupsInJobs(List<Jobs> jobs);
+    List<? extends JobsGroup> selectAllJobGroups();
+    List<? extends JobsGroup> selectAllGroupsInJobs(List<Jobs> jobs);
     JobsGroup save(JobsGroup jobsGroup);
     void delete(JobsGroup jobsGroup);
-    public List<JobsGroup> filterJobsGroupWithJobsInJobsGroup(List<JobsGroup> lstJobsGroup, List<JobsInJobsGroup> lstJobsInJobsGroup);
+    public List<? extends JobsGroup> filterJobsGroupWithJobsInJobsGroup(List<? extends JobsGroup> lstJobsGroup, List<JobsInJobsGroup> lstJobsInJobsGroup);
     public Overview addJobsGroupInOverview(Overview overview, JobsGroup jobsGroup) throws ParseException;
 }

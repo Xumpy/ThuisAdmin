@@ -8,6 +8,8 @@ package com.xumpy.timesheets.services;
 import com.xumpy.timesheets.controller.model.Overview;
 import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
 import com.xumpy.timesheets.dao.model.CompanyDaoPojo;
+import com.xumpy.timesheets.dao.model.JobsDaoPojo;
+import com.xumpy.timesheets.dao.model.JobsGroupDaoPojo;
 import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.services.implementations.JobsGroupSrvImpl;
@@ -37,7 +39,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class JobsSrvImplTest {
     @Mock JobsDaoImpl jobsDao;
-    @Mock Jobs jobs;
+    @Mock JobsDaoPojo jobs;
     @Mock JobsGroup jobsGroup;
     @Mock Overview overview;
     @Mock CompanyDaoPojo company;
@@ -48,14 +50,14 @@ public class JobsSrvImplTest {
     
     @Test
     public void testSelect(){
-        when(jobsDao.select(1)).thenReturn(jobs);
+        when(jobsDao.findOne(1)).thenReturn(jobs);
         assertEquals(jobs, jobsSrv.select(1));
     }
     
     @Test
     public void testSelectDate(){
         Date date = Mockito.mock(Date.class);
-        List<Jobs> lstJobs = new ArrayList<Jobs>();
+        List<JobsDaoPojo> lstJobs = new ArrayList<JobsDaoPojo>();
         lstJobs.add(jobs);
         
         when(jobsDao.selectDate(date)).thenReturn(lstJobs);
@@ -68,7 +70,7 @@ public class JobsSrvImplTest {
         Date startDate = Mockito.mock(Date.class);
         Date endDate = Mockito.mock(Date.class);
         
-        List<Jobs> lstJobs = new ArrayList<Jobs>();
+        List<JobsDaoPojo> lstJobs = new ArrayList<JobsDaoPojo>();
         lstJobs.add(jobs);
         
         when(jobsDao.selectPeriode(startDate, endDate)).thenReturn(lstJobs);
@@ -85,11 +87,12 @@ public class JobsSrvImplTest {
         
         when(jobs.getPk_id()).thenReturn(null);
         when(jobs.getJobDate()).thenReturn(date);
-        when(jobs.getJobsGroup()).thenReturn(jobsGroup);
+        JobsGroupDaoPojo jobsGroupDaoPojo = new JobsGroupDaoPojo(jobsGroup);
+        when(jobs.getJobsGroup()).thenReturn(jobsGroupDaoPojo);
         when(jobs.getRemarks()).thenReturn("Test");
         when(jobs.getWorkedHours()).thenReturn(new BigDecimal("7.6"));
         
-        jobs = jobsSrv.save(jobs);
+        jobs = new JobsDaoPojo(jobsSrv.save(jobs));
         
         assertNotNull(jobs.getPk_id());
     }
@@ -103,11 +106,12 @@ public class JobsSrvImplTest {
         
         when(jobs.getPk_id()).thenReturn(1);
         when(jobs.getJobDate()).thenReturn(date);
-        when(jobs.getJobsGroup()).thenReturn(jobsGroup);
+        JobsGroupDaoPojo jobsGroupDaoPojo = new JobsGroupDaoPojo(jobsGroup);
+        when(jobs.getJobsGroup()).thenReturn(jobsGroupDaoPojo);
         when(jobs.getRemarks()).thenReturn("Test");
         when(jobs.getWorkedHours()).thenReturn(new BigDecimal("7.6"));
         
-        jobs = jobsSrv.save(jobs);
+        jobs = new JobsDaoPojo(jobsSrv.save(jobs));
         
         assertEquals(new Integer(1), jobs.getPk_id());
     }
@@ -123,11 +127,11 @@ public class JobsSrvImplTest {
         String month = "05/2015";
         Date startPeriode = df.parse("01/05/2015");
         Date endPeriode = df.parse("31/05/2015");
-        List<Jobs> lstJobs = new ArrayList<Jobs>();
+        List<JobsDaoPojo> lstJobs = new ArrayList<JobsDaoPojo>();
         lstJobs.add(jobs);
         
         when(jobsDao.selectPeriode(startPeriode, endPeriode)).thenReturn(lstJobs);
-        List<Jobs> lstJobsResult = jobsSrv.selectMonth(month);
+        List<? extends Jobs> lstJobsResult = jobsSrv.selectMonth(month);
         
         assertEquals(lstJobs, lstJobsResult);
     }
@@ -182,11 +186,6 @@ public class JobsSrvImplTest {
         JobsSrvPojo job3 = Mockito.mock(JobsSrvPojo.class);
         JobsSrvPojo job4 = Mockito.mock(JobsSrvPojo.class);
         
-        List<Jobs> periode = new ArrayList<Jobs>();
-        periode.add(job1);
-        periode.add(job2);
-        when(jobsDao.selectPeriode(inPeriode, endPeriode)).thenReturn(periode);
-        
         when(job1.getJobDate()).thenReturn(inPeriode);
         when(job2.getJobDate()).thenReturn(inPeriode);
         when(job3.getJobDate()).thenReturn(inPeriode);
@@ -196,6 +195,12 @@ public class JobsSrvImplTest {
         when(job2.getJobsGroup()).thenReturn(jobsGroup1);
         when(job3.getJobsGroup()).thenReturn(jobsGroup2);
         when(job4.getJobsGroup()).thenReturn(jobsGroup1);
+        
+        List<JobsDaoPojo> periode = new ArrayList<JobsDaoPojo>();
+        periode.add(new JobsDaoPojo(job1));
+        periode.add(new JobsDaoPojo(job2));
+        
+        when(jobsDao.selectPeriode(inPeriode, endPeriode)).thenReturn(periode);
         
         List<JobsSrvPojo> jobsInJobsInGroup = new ArrayList<JobsSrvPojo>();
         jobsInJobsInGroup.add(job1);
@@ -211,7 +216,8 @@ public class JobsSrvImplTest {
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         Date date = df.parse("01/03/2015");
         when(jobs.getJobDate()).thenReturn(date);
-        when(jobs.getJobsGroup()).thenReturn(jobsGroup);
+        JobsGroupDaoPojo jobsGroupDaoPojo = new JobsGroupDaoPojo(jobsGroup);
+        when(jobs.getJobsGroup()).thenReturn(jobsGroupDaoPojo);
         when(jobsGroup.getCompany()).thenReturn(company);
         when(company.getPk_id()).thenReturn(1);
         
@@ -256,7 +262,8 @@ public class JobsSrvImplTest {
         Date date = df.parse("01/03/2015");
         when(jobs.getJobDate()).thenReturn(date);
         when(jobsGroup.getName()).thenReturn("Test");
-        when(jobs.getJobsGroup()).thenReturn(jobsGroup);
+        JobsGroupDaoPojo jobsGroupDaoPojo = new JobsGroupDaoPojo(jobsGroup);
+        when(jobs.getJobsGroup()).thenReturn(jobsGroupDaoPojo);
         when(jobs.getWorkedHours()).thenReturn(new BigDecimal("7.6"));
         
         when(jobsGroup.getCompany()).thenReturn(company);
@@ -292,11 +299,6 @@ public class JobsSrvImplTest {
         Jobs job3 = Mockito.mock(Jobs.class);
         Jobs job4 = Mockito.mock(Jobs.class);
         
-        List<Jobs> periode = new ArrayList<Jobs>();
-        periode.add(job1);
-        periode.add(job2);
-        when(jobsDao.selectPeriode(inPeriode, endPeriode)).thenReturn(periode);
-        
         when(job1.getJobDate()).thenReturn(inPeriode);
         when(job2.getJobDate()).thenReturn(inPeriode);
         when(job3.getJobDate()).thenReturn(inPeriode);
@@ -305,10 +307,19 @@ public class JobsSrvImplTest {
         when(jobsGroup1.getName()).thenReturn("Test");
         when(jobsGroup2.getName()).thenReturn("Test2");
         
+        when(jobsGroup1.getDescription()).thenReturn("Test");
+        when(jobsGroup2.getDescription()).thenReturn("Test2");
+        
+        
         when(job1.getJobsGroup()).thenReturn(jobsGroup1);
         when(job2.getJobsGroup()).thenReturn(jobsGroup1);
         when(job3.getJobsGroup()).thenReturn(jobsGroup2);
         when(job4.getJobsGroup()).thenReturn(jobsGroup1);
+        
+        List<JobsDaoPojo> periode = new ArrayList<JobsDaoPojo>();
+        periode.add(new JobsDaoPojo(job1));
+        periode.add(new JobsDaoPojo(job2));
+        when(jobsDao.selectPeriode(inPeriode, endPeriode)).thenReturn(periode);
         
         assertEquals(31, jobsSrv.selectMonthJobsInJobGroup("03/2015", overview).get(0).getJobs().size());
         assertEquals("Test", jobsSrv.selectMonthJobsInJobGroup("03/2015", overview).get(0).getJobs().get(0).getJobsGroup().getName());

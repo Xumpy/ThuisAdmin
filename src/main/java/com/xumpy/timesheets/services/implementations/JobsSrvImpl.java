@@ -14,6 +14,7 @@ import com.xumpy.timesheets.services.JobsGroupSrv;
 import com.xumpy.timesheets.services.JobsSrv;
 import com.xumpy.timesheets.services.model.JobsGroupSrvPojo;
 import com.xumpy.timesheets.controller.model.JobsInJobsGroup;
+import com.xumpy.timesheets.dao.model.JobsDaoPojo;
 import com.xumpy.timesheets.services.model.JobsSrvPojo;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -39,18 +40,18 @@ public class JobsSrvImpl implements JobsSrv{
     @Override
     @Transactional(readOnly=false, value="transactionManager")
     public Jobs select(Integer pk_id) {
-        return jobsDao.select(pk_id);
+        return jobsDao.findOne(pk_id);
     }
 
     @Override
     @Transactional(readOnly=false, value="transactionManager")
-    public List<Jobs> selectDate(Date date) {
+    public List<? extends Jobs> selectDate(Date date) {
         return jobsDao.selectDate(date);
     }
 
     @Override
     @Transactional(readOnly=false, value="transactionManager")
-    public List<Jobs> selectPeriode(Date startDate, Date endDate) {
+    public List<? extends Jobs> selectPeriode(Date startDate, Date endDate) {
         return jobsDao.selectPeriode(startDate, endDate);
     }
 
@@ -62,9 +63,9 @@ public class JobsSrvImpl implements JobsSrv{
         }
         
         if (!jobs.getWorkedHours().equals(new BigDecimal(0))){
-            jobsDao.save(jobsSrvPojo);
+            jobsDao.save(new JobsDaoPojo(jobsSrvPojo));
         } else {
-            jobsDao.delete(jobs);
+            jobsDao.delete(new JobsDaoPojo(jobs));
         }
         
         return jobsSrvPojo;    
@@ -79,12 +80,12 @@ public class JobsSrvImpl implements JobsSrv{
     @Override
     @Transactional(readOnly=false, value="transactionManager")
     public void delete(Jobs jobs) {
-        jobsDao.delete(jobs);
+        jobsDao.delete(new JobsDaoPojo(jobs));
     }
 
     @Override
     @Transactional(readOnly=false, value="transactionManager")
-    public List<Jobs> selectMonth(String month) throws ParseException {
+    public List<? extends Jobs> selectMonth(String month) throws ParseException {
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         Date startDate = df.parse("01/" + month);
         
@@ -114,7 +115,7 @@ public class JobsSrvImpl implements JobsSrv{
     @Override
     @Transactional(readOnly=false, value="transactionManager")
     public List<JobsInJobsGroup> selectPeriodeJobsInJobGroup(Date startDate, Date endDate) {
-        List<Jobs> allJobsInPeriode = jobsDao.selectPeriode(startDate, endDate);
+        List<? extends Jobs> allJobsInPeriode = jobsDao.selectPeriode(startDate, endDate);
         List<JobsInJobsGroup> jobsInAllJobGroup = new ArrayList<JobsInJobsGroup>();
         
         for(Jobs job: allJobsInPeriode){

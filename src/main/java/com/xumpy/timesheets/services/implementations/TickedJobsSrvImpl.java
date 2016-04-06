@@ -17,16 +17,11 @@ import com.xumpy.timesheets.domain.TickedJobs;
 import com.xumpy.timesheets.services.TickedJobsSrv;
 import com.xumpy.timesheets.services.model.JobsSrvPojo;
 import com.xumpy.timesheets.services.model.TickedJobsSrvPojo;
-import java.sql.SQLException;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -110,7 +105,7 @@ public class TickedJobsSrvImpl implements TickedJobsSrv{
                     cal.set(Calendar.MILLISECOND, 0);
                     
                     List<JobsCtrlPojo> allJobs = new ArrayList<JobsCtrlPojo>();
-                    List<Jobs> selectedJobs = jobsDao.selectDate(cal.getTime());
+                    List<? extends Jobs> selectedJobs = jobsDao.selectDate(cal.getTime());
   
                     for(Jobs job: selectedJobs){
                         allJobs.add(new JobsCtrlPojo(job));

@@ -8,6 +8,8 @@ package com.xumpy.timesheets.services;
 import com.xumpy.timesheets.services.implementations.JobsGraphics;
 import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
 import com.xumpy.timesheets.dao.model.CompanyDaoPojo;
+import com.xumpy.timesheets.dao.model.JobsDaoPojo;
+import com.xumpy.timesheets.dao.model.JobsGroupDaoPojo;
 import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.domain.OverviewWork.OverviewWork;
@@ -36,22 +38,24 @@ public class JobsGraphicsTest {
     
     @InjectMocks JobsGraphics jobsGraphics;
     
-    private List<Jobs> jobs = new ArrayList<Jobs>();
+    private List<JobsDaoPojo> jobs = new ArrayList<JobsDaoPojo>();
     
     @Before
     public void setUp() throws ParseException{
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         
-        Jobs job1 = Mockito.mock(Jobs.class);
-        Jobs job2 = Mockito.mock(Jobs.class);
-        Jobs job3 = Mockito.mock(Jobs.class);
-        Jobs job4 = Mockito.mock(Jobs.class);
-        Jobs job5 = Mockito.mock(Jobs.class);
-        Jobs job6 = Mockito.mock(Jobs.class);
+        JobsDaoPojo job1 = Mockito.mock(JobsDaoPojo.class);
+        JobsDaoPojo job2 = Mockito.mock(JobsDaoPojo.class);
+        JobsDaoPojo job3 = Mockito.mock(JobsDaoPojo.class);
+        JobsDaoPojo job4 = Mockito.mock(JobsDaoPojo.class);
+        JobsDaoPojo job5 = Mockito.mock(JobsDaoPojo.class);
+        JobsDaoPojo job6 = Mockito.mock(JobsDaoPojo.class);
         
         JobsGroup jobsGroup1 = Mockito.mock(JobsGroup.class);
         JobsGroup jobsGroup2 = Mockito.mock(JobsGroup.class);
        
+        when(company.getDailyPayedHours()).thenReturn(new BigDecimal(7.6));
+        
         when(jobsGroup1.getPk_id()).thenReturn(1);
         when(jobsGroup2.getPk_id()).thenReturn(2);
         when(jobsGroup1.getCompany()).thenReturn(company);
@@ -64,12 +68,15 @@ public class JobsGraphicsTest {
         when(job5.getJobDate()).thenReturn(df.parse("01/03/2015"));
         when(job6.getJobDate()).thenReturn(df.parse("31/03/2015"));
         
-        when(job1.getJobsGroup()).thenReturn(jobsGroup1);
-        when(job2.getJobsGroup()).thenReturn(jobsGroup1);
-        when(job3.getJobsGroup()).thenReturn(jobsGroup2);
-        when(job4.getJobsGroup()).thenReturn(jobsGroup2);
-        when(job5.getJobsGroup()).thenReturn(jobsGroup1);
-        when(job6.getJobsGroup()).thenReturn(jobsGroup1);
+        JobsGroupDaoPojo jobsGroupDaoPojo1 = new JobsGroupDaoPojo(jobsGroup1);
+        JobsGroupDaoPojo jobsGroupDaoPojo2 = new JobsGroupDaoPojo(jobsGroup2);
+        
+        when(job1.getJobsGroup()).thenReturn(jobsGroupDaoPojo1);
+        when(job2.getJobsGroup()).thenReturn(jobsGroupDaoPojo1);
+        when(job3.getJobsGroup()).thenReturn(jobsGroupDaoPojo2);
+        when(job4.getJobsGroup()).thenReturn(jobsGroupDaoPojo2);
+        when(job5.getJobsGroup()).thenReturn(jobsGroupDaoPojo1);
+        when(job6.getJobsGroup()).thenReturn(jobsGroupDaoPojo1);
         
         when(job1.getWorkedHours()).thenReturn(new BigDecimal(8));
         when(job2.getWorkedHours()).thenReturn(new BigDecimal(4));
@@ -100,6 +107,7 @@ public class JobsGraphicsTest {
         MathContext mc = new MathContext(3, RoundingMode.HALF_UP);
         
         when(company.getDailyPayedHours()).thenReturn(new BigDecimal(7.6));
+        
         JobsGroup jobsGroup1 = Mockito.mock(JobsGroup.class);
         JobsGroup jobsGroup2 = Mockito.mock(JobsGroup.class);
         

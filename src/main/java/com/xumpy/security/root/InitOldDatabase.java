@@ -18,7 +18,6 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
  *
  * @author nico
  */
-@ComponentScan({"com.xumpy.dao.*"})
 @Configuration
 public class InitOldDatabase {
     @Autowired LocalContainerEntityManagerFactoryBean entityManagerFactory;

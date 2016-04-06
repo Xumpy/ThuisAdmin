@@ -71,7 +71,7 @@ public class JobsGroupCtrl implements JobsGroup, Serializable{
         this.company = jobsGroup.getCompany() == null ? null : new CompanyCtrlPojo(jobsGroup.getCompany());
     }
     
-    public static List<JobsGroupCtrl> allJobsGroupCtrl(List<JobsGroup> allJobsGroup){
+    public static List<JobsGroupCtrl> allJobsGroupCtrl(List<? extends JobsGroup> allJobsGroup){
         List<JobsGroupCtrl> lstJobsGroupCtrl = new ArrayList<JobsGroupCtrl>();
         
         for (JobsGroup jobsGroup: allJobsGroup){

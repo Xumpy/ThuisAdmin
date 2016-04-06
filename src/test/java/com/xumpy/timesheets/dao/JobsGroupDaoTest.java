@@ -5,93 +5,114 @@
  */
 package com.xumpy.timesheets.dao;
 
+import com.xumpy.security.root.InitDatabase;
+import com.xumpy.security.root.InitOldDatabase;
+import com.xumpy.security.root.UserService;
+import com.xumpy.timesheets.dao.implementations.CompanyDaoImpl;
+import com.xumpy.timesheets.dao.implementations.JobsGroupDaoImpl;
 import com.xumpy.timesheets.dao.model.CompanyDaoPojo;
 import com.xumpy.timesheets.dao.model.JobsGroupDaoPojo;
 import com.xumpy.timesheets.domain.JobsGroup;
 import java.util.List;
+import org.hibernate.SessionFactory;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import static org.mockito.Mockito.when;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author nicom
  */
-@RunWith(MockitoJUnitRunner.class)
-public class JobsGroupDaoTest extends Setup{
-    @Mock CompanyDaoPojo company;
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {InitDatabase.class, InitOldDatabase.class, UserService.class})
+@ActiveProfiles("junit")
+public class JobsGroupDaoTest{
+    @Autowired JobsGroupDaoImpl jobsGroupDao;
+    @Autowired CompanyDaoImpl companyDao;
+    @Autowired SessionFactory sessionFactory;
+    
+    @Transactional
+    private CompanyDaoPojo getCompany(){
+        return new CompanyDaoPojo(companyDao.findOne(1));
+    }
     
     @Test
+    @Transactional(value="jpaTransactionManager")
     public void testSelect(){
-        JobsGroup jobsGroup = jobsGroupDao.select(1);
+        JobsGroup jobsGroup = jobsGroupDao.findOne(1);
         
         assertEquals("JIRA-TEST1", jobsGroup.getName());
     }
     
     @Test
+    @Transactional(value="jpaTransactionManager")
     public void testInsert(){
         JobsGroupDaoPojo jobsGroup = new JobsGroupDaoPojo();
         jobsGroup.setPk_id(101);
         jobsGroup.setName("New Test");
-        jobsGroup.setCompany(company);
+        jobsGroup.setCompany(getCompany());
         
-        when(company.getPk_id()).thenReturn(1);
         jobsGroupDao.save(jobsGroup);
 
-        JobsGroup jobsGroupSelect = jobsGroupDao.select(101);
+        JobsGroup jobsGroupSelect = jobsGroupDao.findOne(101);
         
         assertEquals("New Test", jobsGroupSelect.getName());
     }
     
     @Test
+    @Transactional(value="jpaTransactionManager")
     public void testUpdate(){
-        JobsGroupDaoPojo jobsGroupSelect1 = new JobsGroupDaoPojo(jobsGroupDao.select(1));
+        JobsGroupDaoPojo jobsGroupSelect1 = new JobsGroupDaoPojo(jobsGroupDao.findOne(1));
         
         jobsGroupSelect1.setName("New Test");
         jobsGroupDao.save(jobsGroupSelect1);
         
-        JobsGroupDaoPojo jobsGroupSelect2 = new JobsGroupDaoPojo(jobsGroupDao.select(1));
+        JobsGroupDaoPojo jobsGroupSelect2 = new JobsGroupDaoPojo(jobsGroupDao.findOne(1));
         
         assertEquals("New Test", jobsGroupSelect2.getName());
     }
     
     @Test
+    @Transactional(value="jpaTransactionManager")
     public void testDelete(){
         JobsGroupDaoPojo jobsGroup = new JobsGroupDaoPojo();
         jobsGroup.setPk_id(101);
         jobsGroup.setName("New Test");
-        jobsGroup.setCompany(company);
-        
-        when(company.getPk_id()).thenReturn(1);
+        jobsGroup.setCompany(getCompany());
         
         jobsGroupDao.save(jobsGroup);
         
-        JobsGroup jobsGroupSelect1 = jobsGroupDao.select(101);
+        JobsGroupDaoPojo jobsGroupSelect1 = jobsGroupDao.findOne(101);
         
         assertEquals(jobsGroup.getPk_id(), jobsGroupSelect1.getPk_id());
         
-        resetTransaction();
-        
         jobsGroupDao.delete(jobsGroupSelect1);
         
-        jobsGroupSelect1 = jobsGroupDao.select(101);
+        jobsGroupSelect1 = jobsGroupDao.findOne(101);
         
         assertNull(jobsGroupSelect1);
     }
     
     @Test
+    @Transactional
     public void testSelectAllJobGroups(){
-        List<JobsGroup> jobsGroup = jobsGroupDao.selectAllJobGroups();
+        List<JobsGroupDaoPojo> jobsGroup = jobsGroupDao.selectAllJobGroups();
         
         assertTrue(jobsGroup.size() > 1);
     }
     
     @Test
+    @Transactional
     public void testGetNewPkId(){
         assertEquals(new Integer(4), jobsGroupDao.getNewPkId());
     }

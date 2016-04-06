@@ -5,7 +5,8 @@
  */
 package com.xumpy.timesheets.services.implementations;
 
-import com.xumpy.timesheets.dao.CompanyDao;
+import com.xumpy.timesheets.dao.implementations.CompanyDaoImpl;
+import com.xumpy.timesheets.dao.model.CompanyDaoPojo;
 import com.xumpy.timesheets.domain.Company;
 import com.xumpy.timesheets.services.CompanySrv;
 import com.xumpy.timesheets.services.model.CompanySrvPojo;
@@ -21,17 +22,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CompanySrvImpl implements CompanySrv{
 
-    @Autowired CompanyDao companyDao;
+    @Autowired CompanyDaoImpl companyDao;
     
     @Override
     @Transactional(value="transactionManager")
     public Company select(Integer pk_id) {
-        return companyDao.select(pk_id);
+        return companyDao.findOne(pk_id);
     }
 
     @Override
     @Transactional(value="transactionManager")
-    public List<Company> selectAll() {
+    public List<? extends Company> selectAll() {
         return companyDao.selectAll();
     }
 
@@ -43,7 +44,7 @@ public class CompanySrvImpl implements CompanySrv{
         if (companySrvPojo.getPk_id() == null){
             companySrvPojo.setPk_id(companyDao.getNextPkId());
         }
-        companyDao.save(companySrvPojo);
+        companyDao.save(new CompanyDaoPojo(companySrvPojo));
         
         return companySrvPojo;
     }
@@ -51,7 +52,7 @@ public class CompanySrvImpl implements CompanySrv{
     @Override
     @Transactional(value="transactionManager")
     public void delete(Company company) {
-        companyDao.delete(company);
+        companyDao.delete(new CompanyDaoPojo(company));
     }
     
 }

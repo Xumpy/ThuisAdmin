@@ -5,6 +5,7 @@
  */
 package com.xumpy.security.root;
 
+import com.xumpy.security.model.UserInfo;
 import java.util.Properties;
 import javax.sql.DataSource;
 import org.apache.log4j.Logger;
@@ -12,6 +13,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
@@ -32,7 +34,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 
 @EnableTransactionManagement
-@EnableJpaRepositories("com.xumpy.*")
+@EnableJpaRepositories({ "com.xumpy.thuisadmin.dao.*", "com.xumpy.timesheets.dao.*" })
+@ComponentScan({ "com.xumpy.thuisadmin.dao.*", "com.xumpy.timesheets.dao.*" })
 public class InitDatabase { 
     private static Logger log = Logger.getLogger(InitDatabase.class);
     
@@ -56,6 +59,11 @@ public class InitDatabase {
     @PropertySource("classpath:tst_local-database.properties")
     static class tst_local{ }
     
+    @Configuration
+    @Profile("junit")
+    @PropertySource("classpath:junit-database.properties")
+    static class junit{ }
+    
     @Value("${jdbc.driverclass}") private String driverClassName;
     @Value("${jdbc.url}") private String url;
     @Value("${jdbc.username}") private String username;
@@ -73,7 +81,7 @@ public class InitDatabase {
         return dataSource;
     }
     
-    Properties hibernatePropertiesJPA() {
+    public Properties hibernatePropertiesJPA() {
         return new Properties() {
             private static final long serialVersionUID = 1L;
 
@@ -132,5 +140,10 @@ public class InitDatabase {
                  "com.xumpy.collections.dao.*");
          
          return localContainerEntityManagerFactoryBean;
+     }
+     
+     @Bean
+     public UserInfo userInfo(){
+         return new UserInfo();
      }
 }

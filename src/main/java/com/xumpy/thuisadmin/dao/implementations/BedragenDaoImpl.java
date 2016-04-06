@@ -59,6 +59,7 @@ public class BedragenDaoImpl implements BedragenDao{
     public void delete(Bedragen bedragen) {
         BedragenDaoPojo bedragenDaoPojo = new BedragenDaoPojo(bedragen);
         
+        bedragenDaoPojo = (BedragenDaoPojo) sessionFactory.getCurrentSession().merge(bedragenDaoPojo);
         sessionFactory.getCurrentSession().delete(bedragenDaoPojo);
         sessionFactory.getCurrentSession().flush();
     }

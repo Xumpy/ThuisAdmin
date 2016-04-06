@@ -13,6 +13,7 @@ import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.services.JobsGroupSrv;
 import com.xumpy.timesheets.services.model.JobsGroupSrvPojo;
 import com.xumpy.timesheets.controller.model.JobsInJobsGroup;
+import com.xumpy.timesheets.dao.model.JobsGroupDaoPojo;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +33,12 @@ public class JobsGroupSrvImpl implements JobsGroupSrv{
     @Override
     @Transactional(readOnly=false, value="transactionManager")
     public JobsGroup select(Integer pk_id) {
-        return jobsGroupDao.select(pk_id);
+        return jobsGroupDao.findOne(pk_id);
     }
 
     @Override
     @Transactional(readOnly=false, value="transactionManager")
-    public List<JobsGroup> selectAllJobGroups() {
+    public List<? extends JobsGroup> selectAllJobGroups() {
         return jobsGroupDao.selectAllJobGroups();
     }
 
@@ -50,7 +51,7 @@ public class JobsGroupSrvImpl implements JobsGroupSrv{
             jobsGroupSrvPojo.setPk_id(jobsGroupDao.getNewPkId());
         }
         
-        jobsGroupDao.save(jobsGroupSrvPojo);
+        jobsGroupDao.save(new JobsGroupDaoPojo(jobsGroupSrvPojo));
         
         return jobsGroupSrvPojo;
     }
@@ -58,7 +59,7 @@ public class JobsGroupSrvImpl implements JobsGroupSrv{
     @Override
     @Transactional(readOnly=false, value="transactionManager")
     public void delete(JobsGroup jobsGroup) {
-        jobsGroupDao.delete(jobsGroup);
+        jobsGroupDao.delete(new JobsGroupDaoPojo(jobsGroup));
     }
 
     @Override
@@ -75,7 +76,7 @@ public class JobsGroupSrvImpl implements JobsGroupSrv{
     }
 
     @Override
-    public List<JobsGroup> filterJobsGroupWithJobsInJobsGroup(List<JobsGroup> lstJobsGroup, List<JobsInJobsGroup> lstJobsInJobsGroup) {
+    public List<? extends JobsGroup> filterJobsGroupWithJobsInJobsGroup(List<? extends JobsGroup> lstJobsGroup, List<JobsInJobsGroup> lstJobsInJobsGroup) {
         List<JobsGroup> lstJobsGroupResult = new ArrayList<JobsGroup>();
         
         for (JobsGroup jobsGroup: lstJobsGroup){

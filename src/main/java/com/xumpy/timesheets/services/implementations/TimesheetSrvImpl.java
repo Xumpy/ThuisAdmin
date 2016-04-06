@@ -7,13 +7,12 @@ package com.xumpy.timesheets.services.implementations;
 
 import com.itextpdf.text.DocumentException;
 import com.xumpy.itext.services.TimeSheet;
-import com.xumpy.timesheets.dao.JobsDao;
-import com.xumpy.timesheets.dao.JobsGroupDao;
+import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
+import com.xumpy.timesheets.dao.implementations.JobsGroupDaoImpl;
 import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.services.TimesheetSrv;
 import com.xumpy.utilities.CustomDateUtils;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
@@ -35,8 +34,8 @@ public class TimesheetSrvImpl implements TimesheetSrv{
 
     private Logger log = Logger.getLogger(TimesheetSrvImpl.class.getName());
     
-    @Autowired JobsDao jobsDao;
-    @Autowired JobsGroupDao jobsGroupDao;
+    @Autowired JobsDaoImpl jobsDao;
+    @Autowired JobsGroupDaoImpl jobsGroupDao;
     
     @Override
     @Transactional(value="transactionManager")
@@ -45,12 +44,12 @@ public class TimesheetSrvImpl implements TimesheetSrv{
             log.info("JobsGroupId: " + jobsGroupId);
             log.info("Month: " + month);
             
-            List<Jobs> jobs = jobsDao.selectPeriode(CustomDateUtils.getFirstDayOfMonth(month), CustomDateUtils.getLastDayOfMonth(month));
+            List<? extends Jobs> jobs = jobsDao.selectPeriode(CustomDateUtils.getFirstDayOfMonth(month), CustomDateUtils.getLastDayOfMonth(month));
             List<Jobs> jobsInGroup = new ArrayList<Jobs>();
             
             log.info("Get Jobs total: " + jobs.size());
             
-            JobsGroup jobsGroup = jobsGroupDao.select(jobsGroupId);
+            JobsGroup jobsGroup = jobsGroupDao.findOne(jobsGroupId);
             
             for (Jobs job: jobs){
                 if (job.getJobsGroup().getPk_id().equals(jobsGroup.getPk_id())){

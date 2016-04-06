@@ -5,18 +5,23 @@
  */
 package com.xumpy.thuisadmin.dao;
 
-import com.xumpy.thuisadmin.dao.model.GroepenDaoPojo;
-import static org.junit.Assert.assertEquals;
+import com.xumpy.security.root.InitDatabase;
+import com.xumpy.security.root.InitOldDatabase;
+import com.xumpy.security.root.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  *
  * @author nicom
  */
-@RunWith(MockitoJUnitRunner.class)
-public class GroepenDaoTest extends Setup{
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {InitDatabase.class, InitOldDatabase.class, UserService.class})
+@ActiveProfiles("junit")
+public class GroepenDaoTest{
     @Test
     public void testHoofdGroep(){
         /*

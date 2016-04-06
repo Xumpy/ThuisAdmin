@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface CompanySrv {
     public Company select(Integer pk_id);
-    public List<Company> selectAll();
+    public List<? extends Company> selectAll();
     public Company save(Company company);
     public void delete(Company company);
 }

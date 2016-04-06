@@ -55,7 +55,7 @@ public class CompanyCtrlPojo implements Company, Serializable{
         this.pk_id = company.getPk_id();
     }
     
-    public static List<CompanyCtrlPojo> allCompanies(List<Company> companies){
+    public static List<CompanyCtrlPojo> allCompanies(List<? extends Company> companies){
         List<CompanyCtrlPojo> lstCompanyCtrlPojo = new ArrayList<CompanyCtrlPojo>();
         
         for(Company company: companies){

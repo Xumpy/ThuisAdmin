@@ -70,6 +70,7 @@ public class JobsGraphics {
         BigDecimal payedHours = new BigDecimal(0);
         
         for (BigDecimal payedHoursFromList: lstPayedHours){
+            System.out.println("payedHoursFromList: " + payedHoursFromList);
             if (payedHoursFromList.compareTo(payedHours) > 0){
                 payedHours = payedHoursFromList;
             }
@@ -155,7 +156,7 @@ public class JobsGraphics {
         return overviewWorkDetails;
     }
     
-    public List<Jobs> getJobsInMonth(List<Jobs> jobs, String Month) throws ParseException{
+    public List<Jobs> getJobsInMonth(List<? extends Jobs> jobs, String Month) throws ParseException{
         List<Jobs> filteredJobs = new ArrayList<Jobs>();
         
         for(Jobs job: jobs){
@@ -195,7 +196,7 @@ public class JobsGraphics {
         Date firstDay = CustomDateUtils.getFirstDayOfMonth(beginMonth);
         Date lastDay = CustomDateUtils.getLastDayOfMonth(endMonth);
         
-        List<Jobs> jobs = jobsDao.selectPeriode(firstDay, lastDay);
+        List<? extends Jobs> jobs = jobsDao.selectPeriode(firstDay, lastDay);
         List<Jobs> filteredJobs = new ArrayList<Jobs>();
         
         for(Jobs job: jobs){
