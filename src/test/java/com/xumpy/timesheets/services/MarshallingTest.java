@@ -46,7 +46,7 @@ public class MarshallingTest {
         
         TestClass testClass = new TestClass();
         
-        Map<String, String> mapke= new HashMap<String, String>();
+        Map<String, String> mapke= new LinkedHashMap<String, String>();
         
         mapke.put("test1", "1");
         mapke.put("test2", "2");
@@ -58,7 +58,7 @@ public class MarshallingTest {
         test.put(testClass, mapke);
         
         String output = new String(mapper.writeValueAsBytes(new ConvertMapForMarshalling().convert(test)));
-        String expected = "[{\"key\":{\"name\":null,\"id\":null},\"value\":{\"test4\":\"4\",\"test2\":\"2\",\"test3\":\"3\",\"test1\":\"1\"}}]";
+        String expected = "[{\"key\":{\"name\":null,\"id\":null},\"value\":{\"test1\":\"1\",\"test2\":\"2\",\"test3\":\"3\",\"test4\":\"4\"}}]";
         assertEquals(expected, output);
     }
 }
