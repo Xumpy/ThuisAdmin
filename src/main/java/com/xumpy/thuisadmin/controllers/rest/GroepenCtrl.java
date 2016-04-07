@@ -29,12 +29,12 @@ public class GroepenCtrl implements Serializable{
     private GroepenSrv groepenSrv;
     
     @RequestMapping("/json/groepen")
-    public @ResponseBody List<Groepen> fetchGroepen(){
+    public @ResponseBody List<? extends Groepen> fetchGroepen(){
         return groepenSrv.findAllGroepen();
     }
     
     @RequestMapping("/json/hoofdGroepen")
-    public @ResponseBody List<Groepen> fetchHoofdGroepen(){
+    public @ResponseBody List<? extends Groepen> fetchHoofdGroepen(){
         return groepenSrv.findAllHoofdGroepen();
     }
     
@@ -44,7 +44,7 @@ public class GroepenCtrl implements Serializable{
     }
     
     @RequestMapping("/json/subGroepen/{hoofdGroepId}")
-    public @ResponseBody List<Groepen> fetchSubGroepen(@PathVariable Integer hoofdGroepId){
+    public @ResponseBody List<? extends Groepen> fetchSubGroepen(@PathVariable Integer hoofdGroepId){
         return groepenSrv.findAllGroepen(hoofdGroepId);
     }
     

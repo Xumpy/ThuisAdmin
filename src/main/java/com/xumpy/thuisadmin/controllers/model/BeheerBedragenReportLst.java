@@ -5,6 +5,7 @@
  */
 package com.xumpy.thuisadmin.controllers.model;
 
+import java.io.Serializable;
 import java.util.List;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("session")
-public class BeheerBedragenReportLst {
+public class BeheerBedragenReportLst implements Serializable{
     private boolean showPrevious;
     private boolean showNext;
     private List<BeheerBedragenReport> beheerBedragenReport;

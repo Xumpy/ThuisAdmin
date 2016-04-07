@@ -6,10 +6,7 @@
 package com.xumpy.timesheets.dao.implementations;
 
 import com.xumpy.timesheets.dao.model.CompanyDaoPojo;
-import com.xumpy.timesheets.domain.Company;
 import java.util.List;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

@@ -11,13 +11,11 @@ import com.xumpy.thuisadmin.controllers.model.FinanceOverzichtGroep;
 import com.xumpy.thuisadmin.controllers.model.OverzichtGroepBedragenInp;
 import com.xumpy.thuisadmin.controllers.model.OverzichtGroepBedragenTotal;
 import com.xumpy.thuisadmin.controllers.model.RekeningOverzicht;
-import com.xumpy.thuisadmin.controllers.model.finances.overviewMonthCategory.OverviewMonthCategoryReport;
 import com.xumpy.thuisadmin.services.BedragenSrv;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,8 +65,10 @@ public class FetchGraphiekOverview implements Serializable{
 
             Date startDate = format.parse(strStartDate);
             Date eindDate = format.parse(strEindDate);
-
-            return bedragenSrv.graphiekOverzichtGroep(startDate, eindDate, financeOverview.isShowPublicGroep());  
+            
+            Integer showPublicGroep = financeOverview.isShowPublicGroep() ? 1 : 0;
+            
+            return bedragenSrv.graphiekOverzichtGroep(startDate, eindDate, showPublicGroep);  
         } else {
             return null;
         }
@@ -86,11 +86,14 @@ public class FetchGraphiekOverview implements Serializable{
             Date startDate = format.parse(strStartDate);
             Date eindDate = format.parse(strEindDate);
             
+            Integer showPublicGroep = overzichtGroepBedragenInp.isShowPublicGroep() ? 1 : 0;
+            
             return bedragenSrv.rapportOverzichtGroepBedragen(overzichtGroepBedragenInp.getTypeGroepId(), 
                                                              overzichtGroepBedragenInp.getTypeGroepKostOpbrengst(),
                                                              startDate,
                                                              eindDate,
-                                                             overzichtGroepBedragenInp.isShowPublicGroep());
+                                                             showPublicGroep,
+                                                             overzichtGroepBedragenTotal);
         } else {
             return null;
         }

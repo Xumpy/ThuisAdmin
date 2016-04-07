@@ -105,7 +105,7 @@ public class GroepenSrvTest {
         allBedragen.add(bedrag4);
         allBedragen.add(bedrag5);
         
-        List<Groepen> mainGroups = groepenSrv.findAllHoofdGroepen(allBedragen);
+        List<? extends Groepen> mainGroups = groepenSrv.findAllHoofdGroepen(allBedragen);
         List<Groepen> expectedMainGroups = new ArrayList<Groepen>();
         expectedMainGroups.add(groep1);
         expectedMainGroups.add(groep2);

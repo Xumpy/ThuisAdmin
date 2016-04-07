@@ -9,11 +9,11 @@ import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.dao.implementations.GroepenDaoImpl;
 import com.xumpy.thuisadmin.dao.model.GroepenDaoPojo;
 import com.xumpy.thuisadmin.controllers.model.GroepenTree;
+import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
 import com.xumpy.thuisadmin.domain.Bedragen;
 import com.xumpy.thuisadmin.domain.Groepen;
 import com.xumpy.thuisadmin.services.GroepenSrv;
-import com.xumpy.thuisadmin.services.model.GroepenSrvPojo;
-import com.xumpy.thuisadmin.services.model.PersonenSrvPojo;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Nico
  */
 @Service
-public class GroepenSrvImpl implements GroepenSrv{
+public class GroepenSrvImpl implements GroepenSrv, Serializable{
 
     @Autowired
     private GroepenDaoImpl groepenDao;
@@ -36,10 +36,10 @@ public class GroepenSrvImpl implements GroepenSrv{
     @Override
     @Transactional(readOnly=false, value="transactionManager")
     public Groepen save(Groepen groepen) {
-        GroepenSrvPojo groepenSrvPojo = new GroepenSrvPojo(groepen);
+        GroepenDaoPojo groepenSrvPojo = new GroepenDaoPojo(groepen);
         if (groepenSrvPojo.getPk_id() == null){
             groepenSrvPojo.setPk_id(groepenDao.getNewPkId());
-            groepenSrvPojo.setPersoon(new PersonenSrvPojo(userInfo.getPersoon()));
+            groepenSrvPojo.setPersoon(new PersonenDaoPojo(userInfo.getPersoon()));
             groepenDao.save(groepenSrvPojo);
         } else {
             if (groepen.getPersoon().getUsername().equals(userInfo.getPersoon().getUsername())){
@@ -53,30 +53,30 @@ public class GroepenSrvImpl implements GroepenSrv{
     @Override
     @Transactional(readOnly=false, value="transactionManager")
     public Groepen delete(Groepen groepen) {
-        groepenDao.delete(groepen);
+        groepenDao.delete(new GroepenDaoPojo(groepen));
         return groepen;
     }
 
     @Override
     @Transactional(value="transactionManager")
-    public List<Groepen> findAllGroepen() {
-        return groepenDao.findAllGroepen();
+    public List<? extends Groepen> findAllGroepen() {
+        return groepenDao.findAllGroepen(userInfo.getPersoon().getPk_id());
     }
 
     @Override
     @Transactional(value="transactionManager")
     public Groepen findGroep(Integer groepId) {
-        return groepenDao.findGroep(groepId);
+        return groepenDao.findOne(groepId);
     }
 
     @Override
     @Transactional(value="transactionManager")
-    public List<Groepen> findAllHoofdGroepen() {
-        return groepenDao.findAllHoofdGroepen();
+    public List<? extends Groepen> findAllHoofdGroepen() {
+        return groepenDao.findAllHoofdGroepen(userInfo.getPersoon().getPk_id());
     }
 
     @Override
-    public List<Groepen> findAllHoofdGroepen(List<Bedragen> bedragen){
+    public List<? extends Groepen> findAllHoofdGroepen(List<? extends Bedragen> bedragen){
         List<Groepen> groepen = new ArrayList<Groepen>();
         System.out.println(bedragen.size());
             
@@ -91,7 +91,7 @@ public class GroepenSrvImpl implements GroepenSrv{
     
     @Override
     @Transactional(value="transactionManager")
-    public List<Groepen> findAllGroepen(Integer hoofdGroepId) {
+    public List<? extends Groepen> findAllGroepen(Integer hoofdGroepId) {
         return groepenDao.findAllGroepen(hoofdGroepId);
     }
 
@@ -108,7 +108,7 @@ public class GroepenSrvImpl implements GroepenSrv{
         }   
     }
     
-    private List<GroepenTree> selectSubGroep(List<Groepen> allGroepen, Groepen hoofdGroep, Groepen selectedGroep){
+    private List<GroepenTree> selectSubGroep(List<? extends Groepen> allGroepen, Groepen hoofdGroep, Groepen selectedGroep){
         List<GroepenTree> lstGroepenTree = new ArrayList<GroepenTree>();
         List<Groepen> lstGroepen = new ArrayList<Groepen>();
         
@@ -152,7 +152,7 @@ public class GroepenSrvImpl implements GroepenSrv{
     @Transactional(value="transactionManager")
     public List<GroepenTree> groepTree(Integer selectedGroepId) {
         Groepen selectedGroep = null;
-        List<Groepen> lstGroepen = groepenDao.findAllGroepen();
+        List<? extends Groepen> lstGroepen = groepenDao.findAllGroepen(userInfo.getPersoon().getPk_id());
         
         List<GroepenTree> lstGroepTree = new ArrayList<GroepenTree>();
         
@@ -170,7 +170,7 @@ public class GroepenSrvImpl implements GroepenSrv{
             groepenTree.setGroep(hoofdGroep);
                     
             if (selectedGroepId != null) {
-                selectedGroep = groepenDao.findGroep(selectedGroepId);
+                selectedGroep = groepenDao.findOne(selectedGroepId);
                 
                 if (selectedGroepInHoofdGroep(selectedGroep, hoofdGroep)){
                     groepenTree.setCollapsed("");

@@ -16,13 +16,13 @@ import java.util.List;
  */
 public class RekeningBedragTotal implements Serializable {
     private BigDecimal totaal;
-    private List<Rekeningen> rekeningen;
+    private List<? extends Rekeningen> rekeningen;
 
-    public List<Rekeningen> getRekeningen() {
+    public List<? extends Rekeningen> getRekeningen() {
         return rekeningen;
     }
 
-    public void setRekeningen(List<Rekeningen> rekeningen) {
+    public void setRekeningen(List<? extends Rekeningen> rekeningen) {
         this.rekeningen = rekeningen;
     }
 

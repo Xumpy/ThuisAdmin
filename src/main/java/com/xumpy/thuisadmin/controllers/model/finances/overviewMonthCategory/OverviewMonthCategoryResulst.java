@@ -29,10 +29,10 @@ public class OverviewMonthCategoryResulst {
         this.overviewMonthCategory = overviewMonthCategory;
     }
     
-    public OverviewMonthCategoryResulst(List<Bedragen> bedragen, GroepenSrv groepenSrv, BedragenSrv bedragenSrv){
+    public OverviewMonthCategoryResulst(List<? extends Bedragen> bedragen, GroepenSrv groepenSrv, BedragenSrv bedragenSrv){
         overviewMonthCategory = new ArrayList<List<Object>>();
         
-        List<Groepen> mainGroups = groepenSrv.findAllHoofdGroepen(bedragen);
+        List<? extends Groepen> mainGroups = groepenSrv.findAllHoofdGroepen(bedragen);
         List<String> months = bedragenSrv.findAllMonthsBedragen(bedragen);
 
         List<Object> firstRow = new ArrayList<Object>();

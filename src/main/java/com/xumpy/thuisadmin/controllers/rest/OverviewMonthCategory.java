@@ -11,6 +11,7 @@ import com.xumpy.thuisadmin.domain.Bedragen;
 import com.xumpy.thuisadmin.domain.Groepen;
 import com.xumpy.thuisadmin.services.BedragenSrv;
 import com.xumpy.thuisadmin.services.GroepenSrv;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,10 +31,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @Scope("session")
-public class OverviewMonthCategory {
+public class OverviewMonthCategory implements Serializable{
     @Autowired GroepenSrv groepenSrv;
     @Autowired BedragenSrv bedragenSrv;
     @Autowired OverviewMonthCategoryInput overviewMonthCategoryInput;
+    @Autowired public OverzichtGroepBedragenTotal overzichtGroepBedragenTotal;
     
     @RequestMapping("/json/overviewMonthCategoryHeader")
     public @ResponseBody OverviewMonthCategoryInput getOverviewMonthCategoryHeader(){
@@ -42,7 +44,7 @@ public class OverviewMonthCategory {
     
     @RequestMapping("/json/fetchMainGroups")
     public @ResponseBody List<MainGroups> fetchMainGroups(){
-        List<Groepen> allMainGroups = groepenSrv.findAllHoofdGroepen();
+        List<? extends Groepen> allMainGroups = groepenSrv.findAllHoofdGroepen();
         List<MainGroups> mainGroups = new ArrayList<MainGroups>();
         
         for (Groepen groep: allMainGroups){
@@ -71,7 +73,7 @@ public class OverviewMonthCategory {
             mainGroups.add(mainGroup.getPk_id());
         }
         
-        List<Bedragen> bedragen = bedragenSrv.filterBedragenWithMainGroup(bedragenSrv.selectBedragenInPeriode(startDate, endDate), mainGroups);
+        List<? extends Bedragen> bedragen = bedragenSrv.filterBedragenWithMainGroup(bedragenSrv.selectBedragenInPeriode(startDate, endDate), mainGroups);
         OverviewMonthCategoryResulst overviewMonthCategoryResult = new OverviewMonthCategoryResulst(bedragen, groepenSrv, bedragenSrv);
         
         return overviewMonthCategoryResult;
@@ -90,7 +92,8 @@ public class OverviewMonthCategory {
         OverzichtGroepBedragenTotal overzichtGroep = bedragenSrv.rapportOverzichtGroepBedragen(overviewMonthCategoryReport.getMainGroup(), 
                                                                                                startDate,
                                                                                                endDate,
-                                                                                               false);
+                                                                                               0,
+                                                                                               overzichtGroepBedragenTotal);
         overzicht.setOverzichtGroepBedragen(overzichtGroep.getOverzichtGroepBedragen());
         overzicht.setSomBedrag(overzichtGroep.getSomBedrag());
         

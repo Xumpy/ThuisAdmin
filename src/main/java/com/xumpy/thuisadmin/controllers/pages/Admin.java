@@ -5,6 +5,7 @@
  */
 package com.xumpy.thuisadmin.controllers.pages;
 
+import java.io.Serializable;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author Nico
  */
 @Controller
-public class Admin {
+public class Admin implements Serializable{
     @RequestMapping(value = "admin/rekeningen")
     public String viewOverzichtPerGroep(){
         return "admin/rekeningen";

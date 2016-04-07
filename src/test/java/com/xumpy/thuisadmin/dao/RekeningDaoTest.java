@@ -9,6 +9,7 @@ import com.xumpy.security.model.UserInfo;
 import com.xumpy.security.root.InitDatabase;
 import com.xumpy.security.root.InitOldDatabase;
 import com.xumpy.security.root.UserService;
+import com.xumpy.thuisadmin.dao.implementations.PersonenDaoImpl;
 import com.xumpy.thuisadmin.dao.implementations.RekeningenDaoImpl;
 import java.math.BigDecimal;
 import static org.junit.Assert.assertEquals;
@@ -31,13 +32,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class RekeningDaoTest{
     
     @Autowired RekeningenDaoImpl rekeningenDao;
-    @Autowired PersonenDao personenDao;
+    @Autowired PersonenDaoImpl personenDao;
     @Autowired UserInfo userInfo;
     
     @Test
-    @Transactional
+    @Transactional(value="jpaTransactionManager")
     public void testTotalRekening(){
-        userInfo.setPersoon(personenDao.findPersoon(1));
-        assertEquals(rekeningenDao.totalAllRekeningen(), new BigDecimal(2250));
+        userInfo.setPersoon(personenDao.findOne(1));
+        assertEquals(rekeningenDao.totalAllRekeningen(userInfo.getPersoon().getPk_id()), new BigDecimal(2250));
     }
 }

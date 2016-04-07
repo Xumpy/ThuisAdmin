@@ -18,13 +18,14 @@ import com.xumpy.thuisadmin.controllers.model.RekeningOverzicht;
 import com.xumpy.thuisadmin.dao.implementations.GroepenDaoImpl;
 import com.xumpy.thuisadmin.dao.implementations.RekeningenDaoImpl;
 import com.xumpy.thuisadmin.domain.Bedragen;
-import com.xumpy.thuisadmin.domain.Groepen;
-import com.xumpy.thuisadmin.domain.Personen;
-import com.xumpy.thuisadmin.domain.Rekeningen;
 import com.xumpy.thuisadmin.services.model.BedragenSrvPojo;
 import com.xumpy.thuisadmin.services.model.GroepenSrvPojo;
 import com.xumpy.thuisadmin.services.model.RekeningenSrvPojo;
 import com.xumpy.security.model.UserInfo;
+import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
+import com.xumpy.thuisadmin.dao.model.GroepenDaoPojo;
+import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
+import com.xumpy.thuisadmin.dao.model.RekeningenDaoPojo;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,6 +45,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.when;
 import org.mockito.Spy;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 /**
  *
@@ -62,20 +65,20 @@ public class BedragenSrvTest{
     @Mock BeheerBedragenReport beheerBedragenReport;    
     
     @Mock OverzichtGroepBedragenTotal overzichtGroepBedragenTotal;
-    @Mock Bedragen bedrag1;
-    @Mock Bedragen bedrag2;
-    @Mock Bedragen bedrag3;
-    @Mock Bedragen bedrag4;
-    @Mock Bedragen bedrag5;
+    @Mock BedragenDaoPojo bedrag1;
+    @Mock BedragenDaoPojo bedrag2;
+    @Mock BedragenDaoPojo bedrag3;
+    @Mock BedragenDaoPojo bedrag4;
+    @Mock BedragenDaoPojo bedrag5;
     
-    @Mock Groepen mainGroup;
-    @Mock Groepen groepNegatief;
-    @Mock Groepen groepPositief;
+    @Mock GroepenDaoPojo mainGroup;
+    @Mock GroepenDaoPojo groepNegatief;
+    @Mock GroepenDaoPojo groepPositief;
     
-    @Mock Rekeningen rekening1;
-    @Mock Rekeningen rekening2;
+    @Mock RekeningenDaoPojo rekening1;
+    @Mock RekeningenDaoPojo rekening2;
 
-    @Mock Personen persoon;
+    @Mock PersonenDaoPojo persoon;
     @Mock UserInfo userInfo;
     
     @InjectMocks BedragenSrvImpl bedragenSrv;
@@ -134,7 +137,6 @@ public class BedragenSrvTest{
         when(nieuwBedrag.getGroep()).thenReturn(groepPositiefSrvPojo);
         when(bedragenDao.getNewPkId()).thenReturn(1);
         
-        Mockito.doNothing().when(bedragenDao).save(Mockito.any(Bedragen.class));
         Bedragen bedragTest = bedragenSrv.save(nieuwBedrag);
         
         assertEquals(new Integer(1), bedragTest.getPk_id());
@@ -195,8 +197,8 @@ public class BedragenSrvTest{
   
     @Test
     public void testIsRekeningUniqueTrue() throws ParseException{
-        RekeningenSrvPojo rekening = new RekeningenSrvPojo();
-        RekeningenSrvPojo rekening2 = new RekeningenSrvPojo();
+        RekeningenDaoPojo rekening = new RekeningenDaoPojo();
+        RekeningenDaoPojo rekening2 = new RekeningenDaoPojo();
         rekening.setPk_id(1);
         rekening2.setPk_id(1);
         
@@ -206,7 +208,7 @@ public class BedragenSrvTest{
         bedragen.add(bedrag3);
         
         when(bedrag1.getRekening()).thenReturn(rekening);
-        when(bedrag2.getRekening()).thenReturn(rekening2);
+        when(bedrag2.getRekening()).thenReturn(rekening);
         when(bedrag3.getRekening()).thenReturn(rekening);
         
         assertEquals(true, bedragenSrv.isRekeningUnique(bedragen));
@@ -224,9 +226,9 @@ public class BedragenSrvTest{
         bedragen.add(bedrag2);
         bedragen.add(bedrag3);
         
-        when(bedrag1.getRekening()).thenReturn(rekening);
-        when(bedrag2.getRekening()).thenReturn(rekening2);
-        when(bedrag3.getRekening()).thenReturn(rekening);
+        when(bedrag1.getRekening()).thenReturn(new RekeningenDaoPojo(rekening));
+        when(bedrag2.getRekening()).thenReturn(new RekeningenDaoPojo(rekening2));
+        when(bedrag3.getRekening()).thenReturn(new RekeningenDaoPojo(rekening));
         
         assertEquals(false, bedragenSrv.isRekeningUnique(bedragen));
     }
@@ -477,7 +479,7 @@ public class BedragenSrvTest{
         overviewRekeningTestData.put(dt.parse("2015-02-19"), new BigDecimal(300));
         overviewRekeningTestData.put(dt.parse("2015-02-20"), new BigDecimal(2300));
         
-        when(bedragenDao.getBedragAtDate(bedrag1.getDatum(), null)).thenReturn(new BigDecimal(450));
+        when(bedragenSrv.getBedragAtDate(bedrag1.getDatum(), null)).thenReturn(new BigDecimal(450));
         
         Map overviewRekeningData = bedragenSrv.OverviewRekeningData(bedragen);
         
@@ -495,16 +497,18 @@ public class BedragenSrvTest{
     public void testBeheerBedragenReportLst(){
         BeheerBedragenReportLst beheerBedragen = new BeheerBedragenReportLst();
         
-        List<Bedragen> lstBedragen = new ArrayList<Bedragen>();
-        lstBedragen.add(bedrag1);
-        lstBedragen.add(bedrag2);
-        lstBedragen.add(bedrag3);
-        
         when(bedrag1.getPk_id()).thenReturn(1);
         when(bedrag2.getPk_id()).thenReturn(2);
         when(bedrag3.getPk_id()).thenReturn(3);
         
-        when(bedragenDao.reportBedragen(rekening1, 1, null)).thenReturn(lstBedragen);
+        List<BedragenDaoPojo> lstBedragen = new ArrayList<BedragenDaoPojo>();
+        lstBedragen.add(new BedragenDaoPojo(bedrag1));
+        lstBedragen.add(new BedragenDaoPojo(bedrag2));
+        lstBedragen.add(new BedragenDaoPojo(bedrag3));
+        
+        Pageable topTen = new PageRequest(1, 10); 
+        
+        when(bedragenDao.reportBedragen(rekening1.getPk_id(), null, userInfo.getPersoon().getPk_id(), topTen)).thenReturn(lstBedragen);
         
         beheerBedragen = bedragenSrv.reportBedragen(beheerBedragen, 1, rekening1, null);
         
@@ -513,68 +517,16 @@ public class BedragenSrvTest{
         assertEquals(lstBedragen.get(2).getPk_id(), beheerBedragen.getBeheerBedragenReport().get(2).getPk_id());
     }
     
-    //Integration Test (not done here!)
-    @Test
-    @Ignore
-    public void testRapportOverzichtGroepBedragen() throws ParseException{
-        List<Bedragen> lstBedragen = new ArrayList<Bedragen>();
-        lstBedragen.add(bedrag1);
-        lstBedragen.add(bedrag2);
-        lstBedragen.add(bedrag3);
-        
-        when(bedragenDao.BedragInPeriode(dt.parse("2015-02-18"), dt.parse("2015-02-23"), null, true)).thenReturn(lstBedragen);
-        when(groepenDao.findGroep(1)).thenReturn(groepNegatief);
-        
-        OverzichtGroepBedragenTotal overzichtGroepBedragenTotal = 
-                bedragenSrv.rapportOverzichtGroepBedragen(1, 0, dt.parse("2015-02-18"), dt.parse("2015-02-23"), true);
-        
-        assertEquals(new BigDecimal(250), overzichtGroepBedragenTotal.getSomBedrag());
-    }
-    
-    //Integration Test (not done here!)
-    @Test
-    @Ignore
-    public void testRapportOverzichtGroepBedragenWithoutTypeKostOpbrengsten() throws ParseException{
-        List<Bedragen> lstBedragen = new ArrayList<Bedragen>();
-        lstBedragen.add(bedrag1);
-        lstBedragen.add(bedrag2);
-        lstBedragen.add(bedrag3);
-        
-        when(bedrag1.getBedrag()).thenReturn(new BigDecimal(100));
-        when(bedrag2.getBedrag()).thenReturn(new BigDecimal(100));
-        when(bedrag3.getBedrag()).thenReturn(new BigDecimal(100));
-        
-        when(mainGroup.getPk_id()).thenReturn(1);
-        when(groepPositief.getPk_id()).thenReturn(2);
-        when(groepNegatief.getPk_id()).thenReturn(3);
-        when(groepPositief.getHoofdGroep()).thenReturn(mainGroup);
-        when(groepNegatief.getHoofdGroep()).thenReturn(mainGroup);
-        when(groepPositief.getNegatief()).thenReturn(0);
-        when(groepNegatief.getNegatief()).thenReturn(1);
-        
-        when(bedrag1.getGroep()).thenReturn(groepPositief);
-        when(bedrag2.getGroep()).thenReturn(groepNegatief);
-        when(bedrag3.getGroep()).thenReturn(groepPositief);
-        
-        when(bedragenDao.BedragInPeriode(dt.parse("2015-02-18"), dt.parse("2015-02-23"), null, true)).thenReturn(lstBedragen);
-        when(groepenDao.findGroep(1)).thenReturn(mainGroup);
-        
-        OverzichtGroepBedragenTotal overzichtGroepBedragenTotal = 
-                bedragenSrv.rapportOverzichtGroepBedragen(1, dt.parse("2015-02-18"), dt.parse("2015-02-23"), true);
-        
-        assertEquals(new BigDecimal(100), overzichtGroepBedragenTotal.getSomBedrag());
-    }
-    
     @Test
     public void testGraphiekOverzichtGroep() throws ParseException{
-        List<Bedragen> lstBedragen = new ArrayList<Bedragen>();
-        lstBedragen.add(bedrag1);
-        lstBedragen.add(bedrag2);
-        lstBedragen.add(bedrag3);
+        List<BedragenDaoPojo> lstBedragen = new ArrayList<BedragenDaoPojo>();
+        lstBedragen.add(new BedragenDaoPojo(bedrag1));
+        lstBedragen.add(new BedragenDaoPojo(bedrag2));
+        lstBedragen.add(new BedragenDaoPojo(bedrag3));
         
-        when(bedragenDao.BedragInPeriode(dt.parse("2015-02-18"), dt.parse("2015-02-23"), null, true)).thenReturn(lstBedragen);
+        when(bedragenDao.BedragInPeriode(dt.parse("2015-02-18"), dt.parse("2015-02-23"), null, 1, userInfo.getPersoon().getPk_id())).thenReturn(lstBedragen);
         
-        FinanceOverzichtGroep financeOverzichtGroep = bedragenSrv.graphiekOverzichtGroep(dt.parse("2015-02-18"), dt.parse("2015-02-23"), true);
+        FinanceOverzichtGroep financeOverzichtGroep = bedragenSrv.graphiekOverzichtGroep(dt.parse("2015-02-18"), dt.parse("2015-02-23"), 1);
         
         assertEquals(new Double("250.00"), financeOverzichtGroep.getTotaal_kosten());
         assertEquals(new Double("2000.00"), financeOverzichtGroep.getTotaal_opbrengsten());
@@ -582,16 +534,16 @@ public class BedragenSrvTest{
     
     @Test
     public void testGraphiekOverzichtGroepFilterInterRekening() throws ParseException{
-        List<Bedragen> lstBedragen = new ArrayList<Bedragen>();
-        lstBedragen.add(bedrag1);
-        lstBedragen.add(bedrag2);
-        lstBedragen.add(bedrag3);
-        
         when(groepPositief.getCodeId()).thenReturn("INTER_REKENING");
         
-        when(bedragenDao.BedragInPeriode(dt.parse("2015-02-18"), dt.parse("2015-02-23"), null, true)).thenReturn(lstBedragen);
+        List<BedragenDaoPojo> lstBedragen = new ArrayList<BedragenDaoPojo>();
+        lstBedragen.add(new BedragenDaoPojo(bedrag1));
+        lstBedragen.add(new BedragenDaoPojo(bedrag2));
+        lstBedragen.add(new BedragenDaoPojo(bedrag3));
         
-        FinanceOverzichtGroep financeOverzichtGroep = bedragenSrv.graphiekOverzichtGroep(dt.parse("2015-02-18"), dt.parse("2015-02-23"), true);
+        when(bedragenDao.BedragInPeriode(dt.parse("2015-02-18"), dt.parse("2015-02-23"), null, 1, userInfo.getPersoon().getPk_id())).thenReturn(lstBedragen);
+        
+        FinanceOverzichtGroep financeOverzichtGroep = bedragenSrv.graphiekOverzichtGroep(dt.parse("2015-02-18"), dt.parse("2015-02-23"), 1);
         
         assertEquals(new Double("250.00"), financeOverzichtGroep.getTotaal_kosten());
         assertEquals(new Double("0.0"), financeOverzichtGroep.getTotaal_opbrengsten());
@@ -599,11 +551,6 @@ public class BedragenSrvTest{
     
     @Test
     public void testGraphiekBedrag() throws ParseException{
-        List<Bedragen> lstBedragen = new ArrayList<Bedragen>();
-        lstBedragen.add(bedrag1);
-        lstBedragen.add(bedrag2);
-        lstBedragen.add(bedrag3);
-        
         when(bedrag1.getRekening()).thenReturn(rekening1);
         when(bedrag1.getDatum()).thenReturn(dt.parse("2015-02-18"));
         when(bedrag2.getRekening()).thenReturn(rekening1);
@@ -611,9 +558,14 @@ public class BedragenSrvTest{
         when(bedrag3.getRekening()).thenReturn(rekening1);
         when(bedrag3.getDatum()).thenReturn(dt.parse("2015-02-20"));
         
-        when(bedragenDao.BedragInPeriode(dt.parse("2015-02-18"), dt.parse("2015-02-23"), rekening1, false)).thenReturn(lstBedragen);
+        List<BedragenDaoPojo> lstBedragen = new ArrayList<BedragenDaoPojo>();
+        lstBedragen.add(bedrag1);
+        lstBedragen.add(bedrag2);
+        lstBedragen.add(bedrag3);
+        
+        when(bedragenDao.BedragInPeriode(dt.parse("2015-02-18"), dt.parse("2015-02-23"), rekening1.getPk_id(), 0, userInfo.getPersoon().getPk_id())).thenReturn(lstBedragen);
         when(rekening1.getWaarde()).thenReturn(new BigDecimal(2000));
-        when(bedragenDao.getBedragAtDate(bedrag1.getDatum(), bedrag1.getRekening())).thenReturn(new BigDecimal(2000));
+        when(bedragenSrv.getBedragAtDate(bedrag1.getDatum(), bedrag1.getRekening())).thenReturn(new BigDecimal(2000));
         
         List<RekeningOverzicht> lstRekeningOverzicht = bedragenSrv.graphiekBedrag(rekening1, dt.parse("2015-02-18"), dt.parse("2015-02-23"));
         
@@ -685,7 +637,7 @@ public class BedragenSrvTest{
         when(groepNegatief.getNegatief()).thenReturn(1);
         when(rekening1.getWaarde()).thenReturn(new BigDecimal("2000"));
         
-        when(bedragenDao.findBedrag(1)).thenReturn(bedrag2);
+        when(bedragenDao.findOne(1)).thenReturn(bedrag2);
                 
         Bedragen bedrag = bedragenSrv.processRekeningBedrag(bedrag1, bedragenSrv.UPDATE);
         
@@ -713,7 +665,7 @@ public class BedragenSrvTest{
         when(rekening1.getWaarde()).thenReturn(new BigDecimal(900));
         
         BedragenSrvPojo bedragSrvPojoMock = new BedragenSrvPojo(bedrag1);
-        when(rekeningenDao.findRekening(2)).thenReturn(newRekening);
+        when(rekeningenDao.findOne(2)).thenReturn(new RekeningenDaoPojo(newRekening));
         
         newRekening = new RekeningenSrvPojo(bedragenSrv.moveBedragToRekening(bedragSrvPojoMock, newRekening));
         
@@ -797,7 +749,7 @@ public class BedragenSrvTest{
     
     @Test
     public void testFindMainBedragen() throws ParseException{
-        Groepen mainGroup2 = Mockito.mock(Groepen.class);
+        GroepenDaoPojo mainGroup2 = Mockito.mock(GroepenDaoPojo.class);
         when(mainGroup.getPk_id()).thenReturn(1);
         when(mainGroup2.getPk_id()).thenReturn(2);
         when(groepNegatief.getHoofdGroep()).thenReturn(mainGroup);
@@ -840,22 +792,22 @@ public class BedragenSrvTest{
     
     @Test
     public void testSelectBedragenInPeriode() throws ParseException{
-        List<Bedragen> allBedragen = new ArrayList<Bedragen>();
+        List<BedragenDaoPojo> allBedragen = new ArrayList<BedragenDaoPojo>();
         allBedragen.add(bedrag1);
         allBedragen.add(bedrag2);
         allBedragen.add(bedrag3);
         allBedragen.add(bedrag4);
         allBedragen.add(bedrag5);
         
-        when(bedragenDao.BedragInPeriode(dt.parse("2015-02-01"), dt.parse("2015-01-31"), null, false)).thenReturn(allBedragen);
+        when(bedragenDao.BedragInPeriode(dt.parse("2015-02-01"), dt.parse("2015-01-31"), null, 0, userInfo.getPersoon().getPk_id())).thenReturn(allBedragen);
         
         assertEquals(allBedragen, bedragenSrv.selectBedragenInPeriode(dt.parse("2015-02-01"), dt.parse("2015-01-31")));
     }
     
     @Test
     public void filterBedragenWithMainGroup() throws ParseException{
-        Groepen mainGroup2 = Mockito.mock(Groepen.class);
-        Groepen mainGroup3 = Mockito.mock(Groepen.class);
+        GroepenDaoPojo mainGroup2 = Mockito.mock(GroepenDaoPojo.class);
+        GroepenDaoPojo mainGroup3 = Mockito.mock(GroepenDaoPojo.class);
         
         when(mainGroup.getPk_id()).thenReturn(1);
         when(mainGroup2.getPk_id()).thenReturn(2);
@@ -885,6 +837,56 @@ public class BedragenSrvTest{
         expectedResult.add(bedrag2);
         
         assertEquals(expectedResult, bedragenSrv.filterBedragenWithMainGroup(allBedragen, mainGroup));
+    }
+    
+    @Test
+    @Ignore
+    public void testRapportOverzichtGroepBedragen() throws ParseException{
+        List<BedragenDaoPojo> lstBedragen = new ArrayList<BedragenDaoPojo>();
+        lstBedragen.add(new BedragenDaoPojo(bedrag1));
+        lstBedragen.add(new BedragenDaoPojo(bedrag2));
+        lstBedragen.add(new BedragenDaoPojo(bedrag3));
+        
+        when(bedragenDao.BedragInPeriode(dt.parse("2015-02-18"), dt.parse("2015-02-23"), null, 1, userInfo.getPersoon().getPk_id())).thenReturn(lstBedragen);
+        when(groepenDao.findOne(1)).thenReturn(groepNegatief);
+        
+        OverzichtGroepBedragenTotal overzichtGroepBedragenTot = 
+                bedragenSrv.rapportOverzichtGroepBedragen(1, 0, dt.parse("2015-02-18"), dt.parse("2015-02-23"), 1, overzichtGroepBedragenTotal);
+        
+        assertEquals(new BigDecimal(250), overzichtGroepBedragenTot.getSomBedrag());
+    }
+    
+    @Test
+    @Ignore
+    public void testRapportOverzichtGroepBedragenWithoutTypeKostOpbrengsten() throws ParseException{
+        when(bedrag1.getBedrag()).thenReturn(new BigDecimal(100));
+        when(bedrag2.getBedrag()).thenReturn(new BigDecimal(100));
+        when(bedrag3.getBedrag()).thenReturn(new BigDecimal(100));
+        
+        when(mainGroup.getPk_id()).thenReturn(1);
+        when(groepPositief.getPk_id()).thenReturn(2);
+        when(groepNegatief.getPk_id()).thenReturn(3);
+        when(groepPositief.getHoofdGroep()).thenReturn(mainGroup);
+        when(groepNegatief.getHoofdGroep()).thenReturn(mainGroup);
+        when(groepPositief.getNegatief()).thenReturn(0);
+        when(groepNegatief.getNegatief()).thenReturn(1);
+        
+        when(bedrag1.getGroep()).thenReturn(groepPositief);
+        when(bedrag2.getGroep()).thenReturn(groepNegatief);
+        when(bedrag3.getGroep()).thenReturn(groepPositief);
+                
+        List<BedragenDaoPojo> lstBedragen = new ArrayList<BedragenDaoPojo>();
+        lstBedragen.add(bedrag1);
+        lstBedragen.add(bedrag2);
+        lstBedragen.add(bedrag3);
+        
+        when(bedragenDao.BedragInPeriode(dt.parse("2015-02-18"), dt.parse("2015-02-23"), null, 1, 1)).thenReturn(lstBedragen);
+        when(groepenDao.findOne(1)).thenReturn(mainGroup);
+        
+        OverzichtGroepBedragenTotal overzichtGroepBedragenTot = 
+                bedragenSrv.rapportOverzichtGroepBedragen(1, dt.parse("2015-02-18"), dt.parse("2015-02-23"), 1, overzichtGroepBedragenTotal);
+        
+        assertEquals(new BigDecimal(100), overzichtGroepBedragenTot.getSomBedrag());
     }
 }
 

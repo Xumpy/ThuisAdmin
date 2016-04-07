@@ -17,10 +17,10 @@ import java.util.List;
 public interface GroepenSrv {
     Groepen save(Groepen groepen);
     Groepen delete(Groepen groepen);
-    public List<Groepen> findAllHoofdGroepen();
-    public List<Groepen> findAllHoofdGroepen(List<Bedragen> bedragen);
-    public List<Groepen> findAllGroepen(Integer hoofdGroepId);
-    public List<Groepen> findAllGroepen();
+    public List<? extends Groepen> findAllHoofdGroepen();
+    public List<? extends Groepen> findAllHoofdGroepen(List<? extends Bedragen> bedragen);
+    public List<? extends Groepen> findAllGroepen(Integer hoofdGroepId);
+    public List<? extends Groepen> findAllGroepen();
     public Groepen findGroep(Integer groepId);
     public List<GroepenTree> groepTree(Integer selectedGroepId);
 }

@@ -16,7 +16,7 @@ import java.util.List;
 public interface PersonenSrv {
     Personen save(Personen personen);
     Personen delete(Personen personen);
-    public List<Personen> findAllPersonen();
+    public List<? extends Personen> findAllPersonen();
     public Personen findPersoon(Integer persoonId);
     public Personen findPersoonByUsername(String username);
     public Personen createRegisterUser(RegisterUserPage registerUserPage);

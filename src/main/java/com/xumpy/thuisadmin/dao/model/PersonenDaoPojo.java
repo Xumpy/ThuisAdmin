@@ -6,16 +6,11 @@
 package com.xumpy.thuisadmin.dao.model;
 
 import com.xumpy.thuisadmin.domain.Personen;
-import java.io.Serializable;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.Serializable;;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import org.hibernate.validator.constraints.NotEmpty;
 /**
  *

@@ -8,7 +8,13 @@ package com.xumpy.thuisadmin.dao;
 import com.xumpy.security.model.UserInfo;
 import com.xumpy.security.root.InitDatabase;
 import com.xumpy.security.root.InitOldDatabase;
+import com.xumpy.security.root.InitServices;
 import com.xumpy.security.root.UserService;
+import com.xumpy.thuisadmin.controllers.model.OverzichtGroepBedragenTotal;
+import com.xumpy.thuisadmin.dao.implementations.BedragenDaoImpl;
+import com.xumpy.thuisadmin.dao.implementations.GroepenDaoImpl;
+import com.xumpy.thuisadmin.dao.implementations.PersonenDaoImpl;
+import com.xumpy.thuisadmin.dao.implementations.RekeningenDaoImpl;
 import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
 import com.xumpy.thuisadmin.dao.model.GroepenDaoPojo;
 import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
@@ -17,6 +23,7 @@ import com.xumpy.thuisadmin.domain.Bedragen;
 import com.xumpy.thuisadmin.domain.Groepen;
 import com.xumpy.thuisadmin.domain.Personen;
 import com.xumpy.thuisadmin.domain.Rekeningen;
+import com.xumpy.thuisadmin.services.BedragenSrv;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,6 +38,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -41,14 +50,15 @@ import org.springframework.transaction.annotation.Transactional;
  * @author nicom
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {InitDatabase.class, InitOldDatabase.class, UserService.class})
+@ContextConfiguration(classes = {InitDatabase.class, InitOldDatabase.class, InitServices.class, UserService.class})
 @ActiveProfiles("junit")
 public class BedragenDaoTest{
-    @Autowired PersonenDao personenDao;
-    @Autowired GroepenDao groepenDao;
-    @Autowired RekeningenDao rekeningenDao;
-    @Autowired BedragenDao bedragenDao;
+    @Autowired PersonenDaoImpl personenDao;
+    @Autowired GroepenDaoImpl groepenDao;
+    @Autowired RekeningenDaoImpl rekeningenDao;
+    @Autowired BedragenDaoImpl bedragenDao;
     @Autowired UserInfo userInfo;
+    @Autowired BedragenSrv bedragenSrv;
     
     private Personen personen;
     private Groepen groep;
@@ -63,11 +73,11 @@ public class BedragenDaoTest{
     private Date endDate;
 
     @Before
-    @Transactional
+    @Transactional(value="jpaTransactionManager")
     public void setUpBedragen(){
-        personen = personenDao.findPersoon(1);
-        groep = groepenDao.findGroep(1);
-        rekening = rekeningenDao.findRekening(1);
+        personen = personenDao.findOne(1);
+        groep = groepenDao.findOne(1);
+        rekening = rekeningenDao.findOne(1);
         
         bedrag = Mockito.mock(Bedragen.class);
         
@@ -82,8 +92,8 @@ public class BedragenDaoTest{
     
     private List<Bedragen> fetchTestBedragen() throws ParseException{
         List<Bedragen> lstBedragen = new ArrayList<Bedragen>();
-        GroepenDaoPojo groepNegatief = new GroepenDaoPojo(groepenDao.findGroep(2));
-        GroepenDaoPojo groepPositief = new GroepenDaoPojo(groepenDao.findGroep(3));
+        GroepenDaoPojo groepNegatief = new GroepenDaoPojo(groepenDao.findOne(2));
+        GroepenDaoPojo groepPositief = new GroepenDaoPojo(groepenDao.findOne(3));
         
         for (int i=0; i<8; i++){
             BedragenDaoPojo bedrag = new BedragenDaoPojo();
@@ -117,111 +127,114 @@ public class BedragenDaoTest{
     }
     
     @Test
-    @Transactional
+    @Transactional(value="jpaTransactionManager")
     public void testSave(){
-        bedragenDao.save(bedrag);
-        Bedragen bedragTest = bedragenDao.findBedrag(BEDRAG_PK_ID);
+        bedragenDao.save(new BedragenDaoPojo(bedrag));
+        Bedragen bedragTest = bedragenDao.findOne(BEDRAG_PK_ID);
         assertEquals(bedrag.getPk_id(), bedragTest.getPk_id());
     }
     
     @Test
-    @Transactional
+    @Transactional(value="jpaTransactionManager")
     public void testUpdate(){
-        bedragenDao.save(bedrag);
+        bedragenDao.save(new BedragenDaoPojo(bedrag));
         
-        BedragenDaoPojo bedragForUpdate = new BedragenDaoPojo(bedragenDao.findBedrag(BEDRAG_PK_ID));
+        BedragenDaoPojo bedragForUpdate = new BedragenDaoPojo(bedragenDao.findOne(BEDRAG_PK_ID));
         bedragForUpdate.setBedrag(new BigDecimal(2000));
         bedragenDao.save(bedragForUpdate);
         
-        Bedragen bedragTest = bedragenDao.findBedrag(BEDRAG_PK_ID);
+        Bedragen bedragTest = bedragenDao.findOne(BEDRAG_PK_ID);
         assertEquals(new BigDecimal(2000), bedragTest.getBedrag());
     }
     
     @Test
-    @Transactional
+    @Transactional(value="jpaTransactionManager")
     public void testDelete(){
-        bedragenDao.save(bedrag);
-        Bedragen bedragForDelete = bedragenDao.findBedrag(BEDRAG_PK_ID);
-        
-        //resetTransaction();
-        
-        bedragenDao.save(bedragForDelete);
+        bedragenDao.save(new BedragenDaoPojo(bedrag));
+        Bedragen bedragForDelete = bedragenDao.findOne(BEDRAG_PK_ID);
+
+        bedragenDao.save(new BedragenDaoPojo(bedragForDelete));
         
         bedragenDao.delete(new BedragenDaoPojo(bedragForDelete));
         
-        Bedragen bedragNull = bedragenDao.findBedrag(BEDRAG_PK_ID);
+        Bedragen bedragNull = bedragenDao.findOne(BEDRAG_PK_ID);
         assertNull(bedragNull);
     }
     
     @Test
-    @Transactional
+    @Transactional(value="jpaTransactionManager")
     public void testReportBedragen() throws ParseException{
         List<Bedragen> lstBedragenExpected = new ArrayList<Bedragen>();
         
-        bedrag = bedragenDao.findBedrag(24);
+        bedrag = bedragenDao.findOne(24);
         lstBedragenExpected.add(bedrag);
         
-        userInfo.setPersoon(personenDao.findPersoon(2));
-        rekening = rekeningenDao.findRekening(3);
-        List<Bedragen> lstBedragenResult = bedragenDao.reportBedragen(rekening, 0, "nog een test");
+        userInfo.setPersoon(personenDao.findOne(2));
+        rekening = rekeningenDao.findOne(3);
+        
+        Pageable topTen = new PageRequest(0, 10); 
+        List<? extends Bedragen> lstBedragenResult = bedragenDao.reportBedragen(rekening.getPk_id(), "nog een test", userInfo.getPersoon().getPk_id(), topTen);
         
         assertEquals(lstBedragenExpected, lstBedragenResult);
     }
     
     @Test
-    @Transactional
+    @Transactional(value="jpaTransactionManager")
     public void testGetNewPkId(){
         Integer newPkId = bedragenDao.getNewPkId();
         assertEquals(newPkId, new Integer(27));
     }
     
     @Test
-    @Transactional
+    @Transactional(value="jpaTransactionManager")
     public void testSomBedragDatum() throws ParseException{
         startDate = new Date(dt.parse("2015-02-18").getTime());
         endDate = new Date(dt.parse("2015-02-23").getTime());
         
-        BigDecimal somBedrag = bedragenDao.somBedragDatum(rekening, startDate);
+        BigDecimal somBedrag = bedragenDao.somBedragDatum(rekening.getPk_id(), startDate);
         
         assertEquals(new BigDecimal(1550), somBedrag);
     }
     
     @Test
-    @Transactional
+    @Transactional(value="jpaTransactionManager")
     public void testBedragenInPeriode() throws ParseException{
-        userInfo.setPersoon(personenDao.findPersoon(1));
+        userInfo.setPersoon(personenDao.findOne(1));
         startDate = new Date(dt.parse("2015-02-18").getTime());
         endDate = new Date(dt.parse("2015-02-23").getTime());
         
         List<Bedragen> checkBedragen = fetchTestBedragen();
         
-        List<Bedragen> bedragInPeriode = bedragenDao.BedragInPeriode(startDate, endDate, rekening, false);
+        List<? extends Bedragen> bedragInPeriode = bedragenDao.BedragInPeriode(startDate, endDate, rekening.getPk_id(), 0, userInfo.getPersoon().getPk_id());
 
         for(int i=0; i<checkBedragen.size();i++){
             assertEquals(checkBedragen.get(i).getPk_id(), bedragInPeriode.get(i).getPk_id());
         }
     }
     
+    //Integration test must be called in dao (for real database) but accesses service layer :(
     @Test
-    @Transactional
+    @Transactional(value="jpaTransactionManager")
     public void testGetBedragAtDate() throws ParseException{
-        userInfo.setPersoon(personenDao.findPersoon(1));
+        userInfo.setPersoon(personenDao.findOne(1));
         startDate = new Date(dt.parse("2015-02-18").getTime());
         endDate = new Date(dt.parse("2015-02-23").getTime());
         
-        BigDecimal bedragAtStartDate = bedragenDao.getBedragAtDate(startDate, rekening);
-        BigDecimal bedragAtEndDate = bedragenDao.getBedragAtDate(endDate, rekening);
+        BigDecimal bedragAtStartDate = bedragenSrv.getBedragAtDate(startDate, rekening);
+        BigDecimal bedragAtEndDate = bedragenSrv.getBedragAtDate(endDate, rekening);
         
         assertEquals(new BigDecimal(450), bedragAtStartDate);
         assertEquals(new BigDecimal(2080), bedragAtEndDate);
     }
     
     @Test
-    @Transactional
+    @Transactional(value="jpaTransactionManager")
     public void testReportBedragenNull() throws ParseException{
-        userInfo.setPersoon(personenDao.findPersoon(2));
-        rekening = rekeningenDao.findRekening(3);
-        List<Bedragen> lstBedragenResult = bedragenDao.reportBedragen(rekening, 0, null);
+        userInfo.setPersoon(personenDao.findOne(2));
+        rekening = rekeningenDao.findOne(3);
+        
+        Pageable topTen = new PageRequest(0, 10); 
+        List<? extends Bedragen> lstBedragenResult = bedragenDao.reportBedragen(rekening.getPk_id(), null, userInfo.getPersoon().getPk_id(), topTen);
         
         assertEquals(true, (lstBedragenResult.size() > 0)); // No Error occured
     }

@@ -9,8 +9,6 @@ import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.controllers.model.BeheerBedragenInp;
 import com.xumpy.thuisadmin.controllers.model.BeheerBedragenReport;
 import com.xumpy.thuisadmin.dao.implementations.BedragenDaoImpl;
-import static com.xumpy.thuisadmin.dao.implementations.BedragenDaoImpl.NEGATIEF;
-import static com.xumpy.thuisadmin.dao.implementations.BedragenDaoImpl.POSITIEF;
 import com.xumpy.thuisadmin.dao.implementations.GroepenDaoImpl;
 import com.xumpy.thuisadmin.dao.implementations.RekeningenDaoImpl;
 import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
@@ -21,6 +19,7 @@ import com.xumpy.thuisadmin.controllers.model.OverzichtGroep;
 import com.xumpy.thuisadmin.controllers.model.OverzichtGroepBedragen;
 import com.xumpy.thuisadmin.controllers.model.OverzichtGroepBedragenTotal;
 import com.xumpy.thuisadmin.controllers.model.RekeningOverzicht;
+import com.xumpy.thuisadmin.dao.model.RekeningenDaoPojo;
 import com.xumpy.thuisadmin.domain.Bedragen;
 import com.xumpy.thuisadmin.domain.Groepen;
 import com.xumpy.thuisadmin.domain.Rekeningen;
@@ -48,6 +47,8 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,16 +70,16 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     @Autowired
     private UserInfo userInfo;
     
-    @Autowired public OverzichtGroepBedragenTotal overzichtGroepBedragenTotal;
-    
     static final Logger Log = Logger.getLogger(BedragenSrvImpl.class.getName());
 
+    public static final String NEGATIEF = "NEGATIEF";
+    public static final String POSITIEF = "POSITIEF";
     public static final String UPDATE = "UPDATE";
     public static final String INSERT = "INSERT";
     public static final String DELETE = "DELETE";
     
     @Override
-    @Transactional(readOnly=false, value="transactionManager")
+    @Transactional
     public Bedragen save(NieuwBedrag nieuwBedrag) {
         nieuwBedrag.setPersoon(new PersonenSrvPojo(userInfo.getPersoon()));
         BedragenDaoPojo bedragen = new BedragenDaoPojo(convertNieuwBedrag(nieuwBedrag));
@@ -90,14 +91,14 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         } else {
             bedragen = new BedragenDaoPojo(processRekeningBedrag(bedragen, UPDATE));
         }
-        rekeningenDao.update(bedragen.getRekening());
+        rekeningenDao.save(new RekeningenDaoPojo(bedragen.getRekening()));
         bedragenDao.save(bedragen);
         
         return bedragen;
     }
 
     @Override
-    @Transactional(readOnly=false, value="transactionManager")
+    @Transactional
     public Bedragen delete(NieuwBedrag nieuwBedrag) {
         nieuwBedrag.setPersoon(new PersonenSrvPojo(userInfo.getPersoon()));
         Bedragen bedragen = convertNieuwBedrag(nieuwBedrag);
@@ -105,17 +106,21 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         
         Rekeningen rekening = bedragen.getRekening();
 
-        rekeningenDao.update(rekening);
-        bedragenDao.delete(bedragen);
+        rekeningenDao.save(new RekeningenDaoPojo(rekening));
+        bedragenDao.delete(new BedragenDaoPojo(bedragen));
         
         return bedragen;
     }
 
     @Override
-    @Transactional(value="transactionManager")
+    @Transactional
     public List<RekeningOverzicht> graphiekBedrag(Rekeningen rekening, Date beginDate, Date eindDate) {
-        boolean showBedragPublicGroep = false;
-        List<Bedragen> lstBedragenSrv = bedragenDao.BedragInPeriode(beginDate, eindDate, rekening, showBedragPublicGroep);
+        List<? extends Bedragen> lstBedragenSrv;
+        if (rekening == null){
+            lstBedragenSrv = bedragenDao.BedragInPeriode(beginDate, eindDate, null, 0, userInfo.getPersoon().getPk_id());
+        } else {
+            lstBedragenSrv = bedragenDao.BedragInPeriode(beginDate, eindDate, rekening.getPk_id(), 0, userInfo.getPersoon().getPk_id());
+        }
         
         Map overzichtBedragen = OverviewRekeningData(lstBedragenSrv);
         
@@ -130,14 +135,13 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     }
 
     @Override
-    @Transactional(value="transactionManager")
-    public FinanceOverzichtGroep graphiekOverzichtGroep(Date beginDate, Date eindDate, boolean showBedragPublicGroep) {
-        
-        List<Bedragen> bedragInPeriode = bedragenDao.BedragInPeriode(beginDate, eindDate, null, showBedragPublicGroep);
+    @Transactional
+    public FinanceOverzichtGroep graphiekOverzichtGroep(Date beginDate, Date eindDate, Integer showBedragPublicGroep) {
+        List<? extends Bedragen> bedragInPeriode = bedragenDao.BedragInPeriode(beginDate, eindDate, null, showBedragPublicGroep, userInfo.getPersoon().getPk_id());
         
         FinanceOverzichtGroep financeOverzichtGroep = new FinanceOverzichtGroep();
         
-        List<Bedragen> lstBedragen = bedragInPeriode;
+        List<? extends Bedragen> lstBedragen = bedragInPeriode;
         
         Map<Groepen, Map<String, BigDecimal>> bedragenOverzicht = OverviewRekeningGroep(bedragInPeriode);
         
@@ -159,13 +163,13 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
                 overzichtGroep.setNaam(groep.getNaam());
 
                 Map<String, BigDecimal> bedragen = (Map<String, BigDecimal>)entry.getValue();
-                overzichtGroep.setTotaal_kosten(bedragen.get(bedragenDao.NEGATIEF).doubleValue());
-                overzichtGroep.setTotaal_opbrengsten(bedragen.get(bedragenDao.POSITIEF).doubleValue());
+                overzichtGroep.setTotaal_kosten(bedragen.get(NEGATIEF).doubleValue());
+                overzichtGroep.setTotaal_opbrengsten(bedragen.get(POSITIEF).doubleValue());
 
                 overzichtGroepen.add(overzichtGroep);
 
-                totaalKosten = totaalKosten.add(bedragen.get(bedragenDao.NEGATIEF));
-                totaalOpbrengsten = totaalOpbrengsten.add(bedragen.get(bedragenDao.POSITIEF));
+                totaalKosten = totaalKosten.add(bedragen.get(NEGATIEF));
+                totaalOpbrengsten = totaalOpbrengsten.add(bedragen.get(POSITIEF));
             }
         }
         financeOverzichtGroep.setTotaal_kosten(totaalKosten.doubleValue());
@@ -177,19 +181,20 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     }
 
     @Override
-    @Transactional(value="transactionManager")
+    @Transactional
     public OverzichtGroepBedragenTotal rapportOverzichtGroepBedragen(Integer typeGroepId, 
                                                                      Date beginDate, 
                                                                      Date eindDate,
-                                                                     boolean showBedragPublicGroep) {
-        List<Bedragen> lstBedragenInPeriode = bedragenDao.BedragInPeriode(beginDate, eindDate, null, showBedragPublicGroep);
+                                                                     Integer showBedragPublicGroep,
+                                                                     OverzichtGroepBedragenTotal overzichtGroepBedragenTotal) {
+        List<? extends Bedragen> lstBedragenInPeriode = bedragenDao.BedragInPeriode(beginDate, eindDate, null, showBedragPublicGroep, userInfo.getPersoon().getPk_id());
         
-        Groepen groepenSrv = groepenDao.findGroep(typeGroepId);
+        Groepen groepenSrv = groepenDao.findOne(typeGroepId);
 
         Integer negatief = new Integer(0);
         
-        List<Bedragen> lstBedragenNeg = getBedragenInGroep(lstBedragenInPeriode, groepenSrv, 1);
-        List<Bedragen> lstBedragenPos = getBedragenInGroep(lstBedragenInPeriode, groepenSrv, 0);
+        List<? extends Bedragen> lstBedragenNeg = getBedragenInGroep(lstBedragenInPeriode, groepenSrv, 1);
+        List<? extends Bedragen> lstBedragenPos = getBedragenInGroep(lstBedragenInPeriode, groepenSrv, 0);
 
         List<OverzichtGroepBedragen> overzichtGroepBedragen = new ArrayList<OverzichtGroepBedragen>();
         
@@ -223,15 +228,16 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     }
     
     @Override
-    @Transactional(value="transactionManager")
+    @Transactional
     public OverzichtGroepBedragenTotal rapportOverzichtGroepBedragen(Integer typeGroepId, 
                                                                      Integer typeGroepKostOpbrengst, 
                                                                      Date beginDate, 
                                                                      Date eindDate,
-                                                                     boolean showBedragPublicGroep) {
-        List<Bedragen> lstBedragenInPeriode = bedragenDao.BedragInPeriode(beginDate, eindDate, null, showBedragPublicGroep);
+                                                                     Integer showBedragPublicGroep,
+                                                                     OverzichtGroepBedragenTotal overzichtGroepBedragenTotal) {
+        List<? extends Bedragen> lstBedragenInPeriode = bedragenDao.BedragInPeriode(beginDate, eindDate, null, showBedragPublicGroep, userInfo.getPersoon().getPk_id());
         
-        Groepen groepenSrv = groepenDao.findGroep(typeGroepId);
+        Groepen groepenSrv = groepenDao.findOne(typeGroepId);
 
         Integer negatief = new Integer(0);
         
@@ -240,7 +246,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         } else {
             negatief = 1;
         }
-        List<Bedragen> lstBedragen = getBedragenInGroep(lstBedragenInPeriode, groepenSrv, negatief);
+        List<? extends Bedragen> lstBedragen = getBedragenInGroep(lstBedragenInPeriode, groepenSrv, negatief);
         List<OverzichtGroepBedragen> overzichtGroepBedragen = new ArrayList<OverzichtGroepBedragen>();
         
         BigDecimal somOverzicht = new BigDecimal(0);
@@ -261,12 +267,21 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     }
 
     @Override
-    @Transactional(value="transactionManager")
+    @Transactional
     public BeheerBedragenReportLst reportBedragen(BeheerBedragenReportLst beheerBedragenReportLst, Integer offset, Rekeningen rekening, String searchText) {
         
         List<BeheerBedragenReport> beheerBedragenReport = new ArrayList<BeheerBedragenReport>();
         
-        for (Bedragen bedrag: bedragenDao.reportBedragen(rekening, offset, searchText)){
+        Pageable topTen = new PageRequest(offset, 10);
+        
+        Integer rekeningId;
+        if (rekening == null){
+            rekeningId = null;
+        } else {
+            rekeningId = rekening.getPk_id();
+        }
+        
+        for (Bedragen bedrag: bedragenDao.reportBedragen(rekeningId, searchText, userInfo.getPersoon().getPk_id(), topTen)){
             beheerBedragenReport.add(new BeheerBedragenReport(bedrag));
         }
         
@@ -278,17 +293,17 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     @Override
     @Transactional(value="transactionManager")
     public Bedragen findBedrag(Integer bedragId) {
-        return bedragenDao.findBedrag(bedragId);
+        return bedragenDao.findOne(bedragId);
     }
     
-    public Map OverviewRekeningData(List<Bedragen> bedragen){
+    public Map OverviewRekeningData(List<? extends Bedragen> bedragen){
         Map overviewRekeningData = new LinkedHashMap();
 
         BigDecimal rekeningStand;
         if (isRekeningUnique(bedragen)){
-            rekeningStand = bedragenDao.getBedragAtDate(bedragen.get(0).getDatum(), bedragen.get(0).getRekening());
+            rekeningStand = getBedragAtDate(bedragen.get(0).getDatum(), bedragen.get(0).getRekening());
         } else {
-            rekeningStand = bedragenDao.getBedragAtDate(bedragen.get(0).getDatum(), null);
+            rekeningStand = getBedragAtDate(bedragen.get(0).getDatum(), null);
         }
         overviewRekeningData.put(bedragen.get(0).getDatum(), rekeningStand);
         
@@ -348,7 +363,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     }
     
     @Override
-    public List<Bedragen> orderByGroup(List<Bedragen> bedragen){
+    public List<? extends Bedragen> orderByGroup(List<? extends Bedragen> bedragen){
         List<String> groupNames = new ArrayList<String>();
         
         for (Bedragen bedrag: bedragen){
@@ -372,7 +387,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         return orderBedragen;
     }
     
-    public BigDecimal getTotalRekeningBedragen(List<Bedragen> bedragen){
+    public BigDecimal getTotalRekeningBedragen(List<? extends Bedragen> bedragen){
         BigDecimal totaalRekeningen = new BigDecimal(0);
         List<Rekeningen> rekeningen = new ArrayList<Rekeningen>();
         
@@ -389,7 +404,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         return totaalRekeningen;
     }
     
-    public boolean isRekeningUnique(List<Bedragen> bedragen){
+    public boolean isRekeningUnique(List<? extends Bedragen> bedragen){
         List<Rekeningen> rekeningen = new ArrayList<Rekeningen>();
         
         for(Bedragen bedrag: bedragen){
@@ -405,7 +420,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         }
     }
     
-    public Map<Groepen, Map<String, BigDecimal>> OverviewRekeningGroep(List<Bedragen> bedragen){
+    public Map<Groepen, Map<String, BigDecimal>> OverviewRekeningGroep(List<? extends Bedragen> bedragen){
         Map<Groepen, Map<String, BigDecimal>> overviewRekeningGroep = new LinkedHashMap<Groepen, Map<String, BigDecimal>>();
         
         for (Bedragen bedrag: bedragen){
@@ -438,7 +453,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         return overviewRekeningGroep;
     }
     
-    public List<Bedragen> getBedragenInGroep(List<Bedragen> bedragen, Groepen hoofdGroep, Integer negatief){
+    public List<? extends Bedragen> getBedragenInGroep(List<? extends Bedragen> bedragen, Groepen hoofdGroep, Integer negatief){
         List<Bedragen> bedragenInGroep = new ArrayList<Bedragen>();
         
         for(Bedragen bedrag: bedragen){
@@ -502,7 +517,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         } 
         
         if (transaction.equals(UPDATE)){
-            BedragenSrvPojo oldBedrag = new BedragenSrvPojo(bedragenDao.findBedrag(bedragenSrvPojo.getPk_id()));
+            BedragenSrvPojo oldBedrag = new BedragenSrvPojo(bedragenDao.findOne(bedragenSrvPojo.getPk_id()));
             
             if (!oldBedrag.getRekening().equals(bedragenSrvPojo.getRekening())){
                 rekening = new RekeningenSrvPojo(moveBedragToRekening(oldBedrag, rekening));
@@ -545,13 +560,13 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         
         if (bedrag.getGroep().getNegatief().equals(0)){
             bedrag.getRekening().setWaarde(bedrag.getRekening().getWaarde().subtract(bedrag.getBedrag()));
-            rekeningenDao.save(bedrag.getRekening());
-            rekening2 = rekeningenDao.findRekening(rekening2.getPk_id());
+            rekeningenDao.save(new RekeningenDaoPojo(bedrag.getRekening()));
+            rekening2 = rekeningenDao.findOne(rekening2.getPk_id());
             rekening2SrvPojo.setWaarde(rekening2.getWaarde().add(bedrag.getBedrag()));
         } else {
             bedrag.getRekening().setWaarde(bedrag.getRekening().getWaarde().add(bedrag.getBedrag()));
-            rekeningenDao.save(bedrag.getRekening());
-            rekening2 = rekeningenDao.findRekening(rekening2.getPk_id());
+            rekeningenDao.save(new RekeningenDaoPojo(bedrag.getRekening()));
+            rekening2 = rekeningenDao.findOne(rekening2.getPk_id());
             rekening2SrvPojo.setWaarde(rekening2.getWaarde().subtract(bedrag.getBedrag()));
         }
         return rekening2SrvPojo;
@@ -574,7 +589,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     }
     
     @Override
-    public List<String> findAllMonthsBedragen(List<Bedragen> bedragen){
+    public List<String> findAllMonthsBedragen(List<? extends Bedragen> bedragen){
         SimpleDateFormat dt = new SimpleDateFormat("MM/yyyy"); 
         List<String> months = new ArrayList<String>();
         
@@ -588,7 +603,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     }
     
     @Override
-    public Map<Integer, BigDecimal> findMainBedragen(List<Bedragen> bedragen, String Month){
+    public Map<Integer, BigDecimal> findMainBedragen(List<? extends Bedragen> bedragen, String Month){
         SimpleDateFormat dt = new SimpleDateFormat("MM/yyyy"); 
         Map<GroepenSrvPojo, BigDecimal> mainBedragenPerGroup = new HashMap<GroepenSrvPojo, BigDecimal>();
         
@@ -631,15 +646,15 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     }
         
     @Override
-    @Transactional(value="transactionManager")
-    public List<Bedragen> selectBedragenInPeriode(Date beginDate, Date endDate){
-        List<Bedragen> bedragen = bedragenDao.BedragInPeriode(beginDate, endDate, null, false);
+    @Transactional(value="jpaTransactionManager")
+    public List<? extends Bedragen> selectBedragenInPeriode(Date beginDate, Date endDate){
+        List<? extends Bedragen> bedragen = bedragenDao.BedragInPeriode(beginDate, endDate, null, 0, userInfo.getPersoon().getPk_id());
         
         return bedragen;
     }
     
     @Override
-    public List<Bedragen> filterBedragenWithMainGroup(List<Bedragen> bedragen, List<Integer> MainGroupId){
+    public List<? extends Bedragen> filterBedragenWithMainGroup(List<? extends Bedragen> bedragen, List<Integer> MainGroupId){
         List<Bedragen> result = new ArrayList<Bedragen>();
         
         for (Bedragen bedrag: bedragen){
@@ -649,5 +664,31 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         }
         
         return result;
+    }
+    
+    @Override
+    @Transactional(value="jpaTransactionManager")
+    public BigDecimal getBedragAtDate(Date date, Rekeningen rekening){
+        BigDecimal rekeningStand;
+        
+        List<BedragenDaoPojo> lstBedragen;
+        if (rekening != null){
+            lstBedragen = bedragenDao.getBedragenUntilDate(date, rekening.getPk_id(), userInfo.getPersoon().getPk_id());
+            rekeningStand = rekening.getWaarde();
+        } else {
+            lstBedragen = bedragenDao.getBedragenUntilDate(date, null, userInfo.getPersoon().getPk_id());
+            rekeningStand = rekeningenDao.totalAllRekeningen(userInfo.getPersoon().getPk_id());
+        }
+        
+        for (BedragenDaoPojo bedrag: lstBedragen){
+            if (bedrag.getGroep().getNegatief().equals(1)){
+                rekeningStand = rekeningStand.add(bedrag.getBedrag());
+            }
+            if (bedrag.getGroep().getNegatief().equals(0)){
+                rekeningStand = rekeningStand.subtract(bedrag.getBedrag());
+            }
+        }
+        
+        return rekeningStand;
     }
 }

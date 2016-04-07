@@ -12,6 +12,7 @@ import com.xumpy.thuisadmin.services.DocumentenSrv;
 import com.xumpy.thuisadmin.services.model.BedragenSrvPojo;
 import com.xumpy.thuisadmin.services.model.DocumentenSrvPojo;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author Nico
  */
 @Controller
-public class Finances {
+public class Finances implements Serializable{
     @Autowired
     private BedragenSrv bedragenSrv;
     

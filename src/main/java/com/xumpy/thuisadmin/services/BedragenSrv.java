@@ -13,8 +13,6 @@ import com.xumpy.thuisadmin.controllers.model.RekeningOverzicht;
 import com.xumpy.thuisadmin.domain.Bedragen;
 import com.xumpy.thuisadmin.domain.Groepen;
 import com.xumpy.thuisadmin.domain.Rekeningen;
-import com.xumpy.thuisadmin.services.model.BedragenSrvPojo;
-import com.xumpy.thuisadmin.services.model.GroepenSrvPojo;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -32,24 +30,27 @@ public interface BedragenSrv {
     public List<RekeningOverzicht> graphiekBedrag(Rekeningen rekening,
                                          Date beginDate,
                                          Date eindDate);
-    public FinanceOverzichtGroep graphiekOverzichtGroep(Date beginDate, Date eindDate, boolean showBedragPublicGroep);
+    public FinanceOverzichtGroep graphiekOverzichtGroep(Date beginDate, Date eindDate, Integer showBedragPublicGroep);
     public OverzichtGroepBedragenTotal rapportOverzichtGroepBedragen(Integer typeGroepId, 
                                                                      Date beginDate, 
                                                                      Date eindDate,
-                                                                     boolean showBedragPublicGroep);
+                                                                     Integer showBedragPublicGroep,
+                                                                     OverzichtGroepBedragenTotal overzichtGroepBedragenTotal);
     public OverzichtGroepBedragenTotal rapportOverzichtGroepBedragen(Integer typeGroepId, 
                                                                      Integer typeGroepKostOpbrengst, 
                                                                      Date beginDate, 
                                                                      Date eindDate,
-                                                                     boolean showBedragPublicGroep);
+                                                                     Integer showBedragPublicGroep,
+                                                                     OverzichtGroepBedragenTotal overzichtGroepBedragenTotal);
     public Bedragen findBedrag(Integer bedragId);
     
     public OverzichtGroepBedragenTotal filterOverzichtGroepBedragenTotalGroep(OverzichtGroepBedragenTotal overzichtGroepBedragenTotal, Groepen groep);
     public OverzichtGroepBedragenTotal filterOverzichtGroepBedragenTotalFilter(OverzichtGroepBedragenTotal overzichtGroepBedragenTotal, String filter);
-    public List<Bedragen> orderByGroup(List<Bedragen> bedragen);
-    public List<String> findAllMonthsBedragen(List<Bedragen> bedragen);
-    public Map<Integer, BigDecimal> findMainBedragen(List<Bedragen> bedragen, String Month);
+    public List<? extends Bedragen> orderByGroup(List<? extends Bedragen> bedragen);
+    public List<String> findAllMonthsBedragen(List<? extends Bedragen> bedragen);
+    public Map<Integer, BigDecimal> findMainBedragen(List<? extends Bedragen> bedragen, String Month);
     
-    public List<Bedragen> selectBedragenInPeriode(Date beginDate, Date endDate);
-    public List<Bedragen> filterBedragenWithMainGroup(List<Bedragen> bedragen, List<Integer> MainGroupId);
+    public List<? extends Bedragen> selectBedragenInPeriode(Date beginDate, Date endDate);
+    public List<? extends Bedragen> filterBedragenWithMainGroup(List<? extends Bedragen> bedragen, List<Integer> MainGroupId);
+    public BigDecimal getBedragAtDate(Date date, Rekeningen rekening);
 }

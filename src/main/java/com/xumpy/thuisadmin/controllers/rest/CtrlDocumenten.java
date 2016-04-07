@@ -72,7 +72,7 @@ public class CtrlDocumenten implements Serializable{
  
     @RequestMapping("/json/fetch_bedrag_documenten/{bedragId}")
      public @ResponseBody List<NieuwDocument> fetchDocumentByBedrag(@PathVariable Integer bedragId){
-         List<Documenten> documenten = documentenSrv.fetchDocumentByBedrag(bedragId);
+         List<? extends Documenten> documenten = documentenSrv.fetchDocumentByBedrag(bedragId);
          
          List<NieuwDocument> nieuwDocumenten = new ArrayList<NieuwDocument>();
          

@@ -12,6 +12,7 @@ import com.xumpy.thuisadmin.controllers.model.RegisterUserPage;
 import com.xumpy.thuisadmin.domain.Personen;
 import com.xumpy.thuisadmin.services.PersonenSrv;
 import com.xumpy.thuisadmin.services.model.PersonenSrvPojo;
+import java.io.Serializable;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Nico
  */
 @Service
-public class PersonenSrvImpl implements PersonenSrv{
+public class PersonenSrvImpl implements PersonenSrv, Serializable{
 
     @Autowired
     private PersonenDaoImpl personenDao;
@@ -31,7 +32,7 @@ public class PersonenSrvImpl implements PersonenSrv{
     private UserInfo userInfo;
     
     @Override
-    @Transactional(readOnly=false, value="transactionManager")
+    @Transactional
     public Personen save(Personen personen) {
         PersonenSrvPojo personenSrvPojo = new PersonenSrvPojo(personen);
         
@@ -41,36 +42,34 @@ public class PersonenSrvImpl implements PersonenSrv{
         
         if (personenSrvPojo.getPk_id() == null){
             personenSrvPojo.setPk_id(personenDao.getNewPkId());
-            personenDao.save(personenSrvPojo);
-        } else {
-            personenDao.update(personenSrvPojo);
         }
+        personenDao.save(new PersonenDaoPojo(personenSrvPojo));
         userInfo.updateBean(personenSrvPojo);
         
         return personenSrvPojo;
     }
 
     @Override
-    @Transactional(readOnly=false, value="transactionManager")
+    @Transactional
     public Personen delete(Personen personen) {
-        personenDao.delete(personen);
+        personenDao.delete(new PersonenDaoPojo(personen));
         return personen;
     }
 
     @Override
-    @Transactional(value="transactionManager")
-    public List<Personen> findAllPersonen() {
+    @Transactional
+    public List<? extends Personen> findAllPersonen() {
         return personenDao.findAllPersonen();
     }
 
     @Override
-    @Transactional(value="transactionManager")
+    @Transactional
     public Personen findPersoon(Integer persoonId) {
-        return personenDao.findPersoon(persoonId);
+        return personenDao.findOne(persoonId);
     }
     
     @Override
-    @Transactional(value="transactionManager")
+    @Transactional
     public Personen findPersoonByUsername(String username) {
         return personenDao.findPersoonByUsername(username);
     }

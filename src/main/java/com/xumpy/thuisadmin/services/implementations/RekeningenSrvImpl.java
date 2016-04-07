@@ -9,10 +9,12 @@ import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.dao.implementations.RekeningenDaoImpl;
 import com.xumpy.thuisadmin.controllers.model.NieuwRekening;
 import com.xumpy.thuisadmin.controllers.model.RekeningBedragTotal;
+import com.xumpy.thuisadmin.dao.model.RekeningenDaoPojo;
 import com.xumpy.thuisadmin.domain.Rekeningen;
 import com.xumpy.thuisadmin.services.RekeningenSrv;
 import com.xumpy.thuisadmin.services.model.PersonenSrvPojo;
 import com.xumpy.thuisadmin.services.model.RekeningenSrvPojo;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Nico
  */
 @Service
-public class RekeningenSrvImpl implements RekeningenSrv{
+public class RekeningenSrvImpl implements RekeningenSrv, Serializable{
 
     @Autowired
     private RekeningenDaoImpl rekeningenDao;
@@ -44,30 +46,29 @@ public class RekeningenSrvImpl implements RekeningenSrv{
         
         if (nieuwRekening.getPk_id() == null){
             rekening.setPk_id(rekeningenDao.getNewPkId());
-            rekeningenDao.save(rekening);
+            rekeningenDao.save(new RekeningenDaoPojo(rekening));
         } else {
-            rekening.setPk_id(nieuwRekening.getPk_id());
-            rekeningenDao.update(rekening);
+            rekeningenDao.save(new RekeningenDaoPojo(rekening));
         }
     }
 
     @Override
     @Transactional(readOnly=false, value="transactionManager")
     public void update(Rekeningen rekeningen) {
-        rekeningenDao.update(rekeningen);
+        rekeningenDao.save(new RekeningenDaoPojo(rekeningen));
     }
 
     @Override
     @Transactional(readOnly=false, value="transactionManager")
     public void delete(Rekeningen rekeningen) {
-        rekeningenDao.delete(rekeningen);
+        rekeningenDao.delete(new RekeningenDaoPojo(rekeningen));
     }
 
     @Override
     @Transactional(value="transactionManager")
     public RekeningBedragTotal findAllRekeningen() {
         RekeningBedragTotal rekeningBedragTotal = new RekeningBedragTotal();
-        List<Rekeningen> rekeningen = rekeningenDao.findAllRekeningen();
+        List<? extends Rekeningen> rekeningen = rekeningenDao.findAllRekeningen(userInfo.getPersoon().getPk_id());
         
         BigDecimal totaal = new BigDecimal(0);
         
@@ -84,6 +85,6 @@ public class RekeningenSrvImpl implements RekeningenSrv{
     @Override
     @Transactional(value="transactionManager")
     public Rekeningen findRekening(Integer rekeningId){
-        return rekeningenDao.findRekening(rekeningId);
+        return rekeningenDao.findOne(rekeningId);
     }
 }

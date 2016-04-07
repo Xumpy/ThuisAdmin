@@ -34,8 +34,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 
 @EnableTransactionManagement
-@EnableJpaRepositories({ "com.xumpy.timesheets.dao.*", "com.xumpy.collections.dao.*" })
-@ComponentScan({ "com.xumpy.thuisadmin.dao.*" })
+@EnableJpaRepositories({ "com.xumpy.thuisadmin.dao.*", "com.xumpy.timesheets.dao.*", "com.xumpy.collections.dao.*" })
+@ComponentScan("com.xumpy.thuisadmin.dao.*")
 public class InitDatabase { 
     private static Logger log = Logger.getLogger(InitDatabase.class);
     

@@ -5,6 +5,7 @@
  */
 package com.xumpy.thuisadmin.controllers.pages;
 
+import java.io.Serializable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author nicom
  */
 @Controller
-public class Register {
+public class Register implements Serializable{
     @RequestMapping(value = "register/register_user")
     public String viewOverview(){
         return "register/register_user";

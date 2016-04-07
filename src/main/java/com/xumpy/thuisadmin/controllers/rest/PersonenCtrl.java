@@ -30,7 +30,7 @@ public class PersonenCtrl implements Serializable{
     private PersonenSrv personenSrv;
     
     @RequestMapping("/json/personen")
-    public @ResponseBody List<Personen> fetchPersonen(){
+    public @ResponseBody List<? extends Personen> fetchPersonen(){
         return personenSrv.findAllPersonen();
     }
     
