@@ -5,8 +5,8 @@
  */
 package com.xumpy.timesheets.services;
 
-import com.xumpy.timesheets.dao.TickedJobsDao;
 import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
+import com.xumpy.timesheets.dao.implementations.TickedJobsDaoImpl;
 import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.domain.TickedJobs;
@@ -35,7 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class TickedJobsDetailSrv {
     
-    @Autowired private TickedJobsDao tickedJobsDao;
+    @Autowired private TickedJobsDaoImpl tickedJobsDao;
     @Autowired private JobsDaoImpl jobsDao;
     
     public static TickedJobsDetail calculate(List<? extends TickedJobs> tickedJobs){
@@ -139,7 +139,7 @@ public class TickedJobsDetailSrv {
             for(Jobs job: jobs){
                 System.out.println(job.getPk_id());
                 if (jobsGroup.getPk_id().equals(job.getJobsGroup().getPk_id())){
-                    List<TickedJobs> tickedJobs = tickedJobsDao.selectTickedJobsByJob(job);
+                    List<? extends TickedJobs> tickedJobs = tickedJobsDao.selectTickedJobsByJob(job.getPk_id());
                     System.out.println(tickedJobs.size());
                     
                     TickedJobsDetail jobsDetail = calculate(tickedJobs, new BigDecimal(30));

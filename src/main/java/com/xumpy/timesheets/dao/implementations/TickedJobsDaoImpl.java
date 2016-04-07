@@ -5,14 +5,11 @@
  */
 package com.xumpy.timesheets.dao.implementations;
 
-import com.xumpy.timesheets.dao.TickedJobsDao;
 import com.xumpy.timesheets.dao.model.TickedJobsDaoPojo;
-import com.xumpy.timesheets.domain.Jobs;
-import com.xumpy.timesheets.domain.TickedJobs;
 import java.util.List;
-import org.hibernate.Query;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -20,46 +17,14 @@ import org.springframework.stereotype.Repository;
  * @author nicom
  */
 @Repository
-public class TickedJobsDaoImpl implements TickedJobsDao{
+public interface TickedJobsDaoImpl extends CrudRepository<TickedJobsDaoPojo, Integer>{
 
-    @Autowired SessionFactory sessionFactory;
-    
-    @Override
-    public TickedJobs select(Integer pk_id) {
-        return (TickedJobsDaoPojo) sessionFactory.getCurrentSession().get(TickedJobsDaoPojo.class, pk_id);
-    }
+    @Query("from TickedJobsDaoPojo")
+    public List<TickedJobsDaoPojo> selectAllTickedJobs();
 
-    @Override
-    public List<TickedJobs> selectAllTickedJobs() {
-        return sessionFactory.getCurrentSession().createQuery("from TickedJobsDaoPojo").list();
-    }
+    @Query("select coalesce(max(pk_id),0) + 1 as pk_id from TickedJobsDaoPojo")
+    public Integer getNewPkId();
 
-    @Override
-    public void save(TickedJobs tickedJobs) {
-        TickedJobsDaoPojo tickedJobsDoaPojo = new TickedJobsDaoPojo(tickedJobs);
-        
-        sessionFactory.getCurrentSession().merge(tickedJobsDoaPojo);
-    }
-
-    @Override
-    public void delete(TickedJobs tickedJobs) {
-        TickedJobsDaoPojo tickedJobsDoaPojo = new TickedJobsDaoPojo(tickedJobs);
-        
-        sessionFactory.getCurrentSession().delete(tickedJobsDoaPojo);
-    }
-
-    @Override
-    public Integer getNewPkId() {
-        return ((Integer) sessionFactory.getCurrentSession().createQuery("select coalesce(max(pk_id),0) as pk_id from TickedJobsDaoPojo").list().get(0)) + 1;
-    }
-
-    @Override
-    public List<TickedJobs> selectTickedJobsByJob(Jobs job) {
-        Query query = sessionFactory.getCurrentSession().createQuery("from TickedJobsDaoPojo where job.pk_id = :jobId order by ticked asc");
-        
-        query.setInteger("jobId", job.getPk_id());
-        
-        return query.list();
-    }
-    
+    @Query("from TickedJobsDaoPojo where job.pk_id = :jobId order by ticked asc")
+    public List<TickedJobsDaoPojo> selectTickedJobsByJob(@Param("jobId") Integer jobId);
 }

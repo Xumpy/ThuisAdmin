@@ -38,19 +38,19 @@ public class JobsSrvImpl implements JobsSrv{
     @Autowired JobsGroupSrv jobsGroupSrv;
     
     @Override
-    @Transactional(readOnly=false, value="transactionManager")
+    @Transactional
     public Jobs select(Integer pk_id) {
         return jobsDao.findOne(pk_id);
     }
 
     @Override
-    @Transactional(readOnly=false, value="transactionManager")
+    @Transactional
     public List<? extends Jobs> selectDate(Date date) {
         return jobsDao.selectDate(date);
     }
 
     @Override
-    @Transactional(readOnly=false, value="transactionManager")
+    @Transactional
     public List<? extends Jobs> selectPeriode(Date startDate, Date endDate) {
         return jobsDao.selectPeriode(startDate, endDate);
     }
@@ -72,19 +72,19 @@ public class JobsSrvImpl implements JobsSrv{
     }
     
     @Override
-    @Transactional(readOnly=false, value="transactionManager")
+    @Transactional
     public Jobs save(Jobs jobs) {
         return saveInTransaction(jobs);
     }
 
     @Override
-    @Transactional(readOnly=false, value="transactionManager")
+    @Transactional
     public void delete(Jobs jobs) {
         jobsDao.delete(new JobsDaoPojo(jobs));
     }
 
     @Override
-    @Transactional(readOnly=false, value="transactionManager")
+    @Transactional
     public List<? extends Jobs> selectMonth(String month) throws ParseException {
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         Date startDate = df.parse("01/" + month);
@@ -98,7 +98,7 @@ public class JobsSrvImpl implements JobsSrv{
     }
 
     @Override
-    @Transactional(readOnly=false, value="transactionManager")
+    @Transactional
     public List<? extends Jobs> saveJobs(List<? extends Jobs> jobs) {
         List<JobsSrvPojo> lstJobSrvPojo = new ArrayList<JobsSrvPojo>();
         
@@ -113,7 +113,7 @@ public class JobsSrvImpl implements JobsSrv{
     }
 
     @Override
-    @Transactional(readOnly=false, value="transactionManager")
+    @Transactional
     public List<JobsInJobsGroup> selectPeriodeJobsInJobGroup(Date startDate, Date endDate) {
         List<? extends Jobs> allJobsInPeriode = jobsDao.selectPeriode(startDate, endDate);
         List<JobsInJobsGroup> jobsInAllJobGroup = new ArrayList<JobsInJobsGroup>();
@@ -223,7 +223,7 @@ public class JobsSrvImpl implements JobsSrv{
     }
 
     @Override
-    @Transactional(readOnly=false, value="transactionManager")
+    @Transactional
     public List<JobsInJobsGroup> selectMonthJobsInJobGroup(String month, Overview overview) throws ParseException {
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         Date startDate = df.parse("01/" + month);

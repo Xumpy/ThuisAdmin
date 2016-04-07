@@ -6,6 +6,7 @@
 package com.xumpy.timesheets.services.implementations;
 
 import com.xumpy.timesheets.dao.implementations.JobsGroupPricesDaoImpl;
+import com.xumpy.timesheets.dao.model.JobsGroupPricesDaoPojo;
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.domain.JobsGroupPrices;
 import com.xumpy.timesheets.services.JobsGroupPricesSrv;
@@ -23,25 +24,25 @@ public class JobsGroupPricesSrvImpl implements JobsGroupPricesSrv{
     @Autowired JobsGroupPricesDaoImpl jobsGroupPricesDao;
     
     @Override
-    @Transactional(value="transactionManager")
+    @Transactional
     public JobsGroupPrices select(Integer pk_id) {
-        return jobsGroupPricesDao.select(pk_id);
+        return jobsGroupPricesDao.findOne(pk_id);
     }
 
     @Override
-    @Transactional(value="transactionManager")
-    public List<JobsGroupPrices> selectAllJobGroupPrices() {
+    @Transactional
+    public List<? extends JobsGroupPrices> selectAllJobGroupPrices() {
         return jobsGroupPricesDao.selectAll();
     }
 
     @Override
-    @Transactional(value="transactionManager")
-    public List<JobsGroupPrices> selectAllJobGroupPrices(JobsGroup jobsGroup) {
-        return jobsGroupPricesDao.selectAllJobGroupPrices(jobsGroup);
+    @Transactional
+    public List<? extends JobsGroupPrices> selectAllJobGroupPrices(JobsGroup jobsGroup) {
+        return jobsGroupPricesDao.selectAllJobGroupPrices(jobsGroup.getPk_id());
     }
 
     @Override
-    @Transactional(value="transactionManager")
+    @Transactional
     public JobsGroupPrices save(JobsGroupPrices jobsGroupPrices) {
         JobsGroupPricesSrvPojo jobsGroupPricesSrv = new JobsGroupPricesSrvPojo(jobsGroupPrices);
         
@@ -49,14 +50,14 @@ public class JobsGroupPricesSrvImpl implements JobsGroupPricesSrv{
             jobsGroupPricesSrv.setPk_id(jobsGroupPricesDao.getNextPkId());
         }
         
-        jobsGroupPricesDao.save(jobsGroupPricesSrv);
+        jobsGroupPricesDao.save(new JobsGroupPricesDaoPojo(jobsGroupPricesSrv));
         return jobsGroupPricesSrv;
     }
 
     @Override
-    @Transactional(value="transactionManager")
+    @Transactional
     public void delete(JobsGroupPrices jobsGroupPrices) {
-        jobsGroupPricesDao.delete(jobsGroupPrices);
+        jobsGroupPricesDao.delete(new JobsGroupPricesDaoPojo(jobsGroupPrices));
     }
     
 }

@@ -25,19 +25,19 @@ public class CompanySrvImpl implements CompanySrv{
     @Autowired CompanyDaoImpl companyDao;
     
     @Override
-    @Transactional(value="transactionManager")
+    @Transactional
     public Company select(Integer pk_id) {
         return companyDao.findOne(pk_id);
     }
 
     @Override
-    @Transactional(value="transactionManager")
+    @Transactional
     public List<? extends Company> selectAll() {
         return companyDao.selectAll();
     }
 
     @Override
-    @Transactional(value="transactionManager")
+    @Transactional
     public Company save(Company company) {
         CompanySrvPojo companySrvPojo = new CompanySrvPojo(company);
         
@@ -50,7 +50,7 @@ public class CompanySrvImpl implements CompanySrv{
     }
 
     @Override
-    @Transactional(value="transactionManager")
+    @Transactional
     public void delete(Company company) {
         companyDao.delete(new CompanyDaoPojo(company));
     }

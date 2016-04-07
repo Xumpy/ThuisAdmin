@@ -17,8 +17,8 @@ import java.util.List;
  */
 public interface TickedJobsSrv {
     TickedJobs select(Integer pk_id);
-    List<TickedJobs> selectAllTickedJobs();
-    List<TickedJobs> selectTickedJobsByJob(Jobs job);
+    List<? extends TickedJobs> selectAllTickedJobs();
+    List<? extends TickedJobs> selectTickedJobsByJob(Jobs job);
     TickedJobs save(TickedJobs tickedJobs);
     void delete(TickedJobs tickedJobs);
     public TickedJobsLstCtrlPojo allNotProcessedTickedJobs();

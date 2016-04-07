@@ -5,14 +5,12 @@
  */
 package com.xumpy.timesheets.dao.implementations;
 
-import com.xumpy.timesheets.dao.JobsGroupPricesDao;
 import com.xumpy.timesheets.dao.model.JobsGroupPricesDaoPojo;
 import com.xumpy.timesheets.domain.JobsGroup;
-import com.xumpy.timesheets.domain.JobsGroupPrices;
 import java.util.List;
-import org.hibernate.Query;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -20,44 +18,14 @@ import org.springframework.stereotype.Repository;
  * @author nicom
  */
 @Repository
-public class JobsGroupPricesDaoImpl implements JobsGroupPricesDao{
+public interface JobsGroupPricesDaoImpl extends CrudRepository<JobsGroupPricesDaoPojo, Integer>{
 
-    @Autowired SessionFactory sessionFactory;
-    
-    @Override
-    public JobsGroupPrices select(Integer pk_id) {
-        Query query = sessionFactory.getCurrentSession().createQuery("From JobsGroupPricesDaoPojo where pk_id = :pk_id");
-        query.setInteger("pk_id", pk_id);
-        
-        return (JobsGroupPricesDaoPojo) query.list().get(0);
-    }
+    @Query("From JobsGroupPricesDaoPojo")
+    public List<JobsGroupPricesDaoPojo> selectAll();
 
-    @Override
-    public List<JobsGroupPrices> selectAll() {
-        return sessionFactory.getCurrentSession().createQuery("From JobsGroupPricesDaoPojo").list();
-    }
+    @Query("select coalesce(max(pk_id),0) + 1 as pk_id from JobsGroupPricesDaoPojo")
+    public Integer getNextPkId();
 
-    @Override
-    public void save(JobsGroupPrices jobsGroupPrices) {
-        sessionFactory.getCurrentSession().merge(new JobsGroupPricesDaoPojo(jobsGroupPrices));
-    }
-
-    @Override
-    public void delete(JobsGroupPrices jobsGroupPrices) {
-        sessionFactory.getCurrentSession().delete(new JobsGroupPricesDaoPojo(jobsGroupPrices));
-    }
-    
-    @Override
-    public Integer getNextPkId() {
-        return ((Integer) sessionFactory.getCurrentSession().createQuery("select coalesce(max(pk_id),0) as pk_id from JobsGroupPricesDaoPojo").uniqueResult()) + 1;
-    }
-
-    @Override
-    public List<JobsGroupPrices> selectAllJobGroupPrices(JobsGroup jobsGroup) {
-        Query query = sessionFactory.getCurrentSession().createQuery("from JobsGroupPricesDaoPojo where jobsGroup.pk_id = :jobsGroupId");
-        
-        query.setInteger("jobsGroupId", jobsGroup.getPk_id());
-        
-        return query.list();
-    }
+    @Query("from JobsGroupPricesDaoPojo where jobsGroup.pk_id = :jobsGroupId")
+    public List<JobsGroupPricesDaoPojo> selectAllJobGroupPrices(@Param("jobsGroup") Integer jobsGroupId);
 }

@@ -12,6 +12,7 @@ import com.xumpy.timesheets.controller.model.TickedJobsCtrlPojo;
 import com.xumpy.timesheets.controller.model.TickedJobsLstCtrlPojo;
 import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
 import com.xumpy.timesheets.dao.implementations.TickedJobsDaoImpl;
+import com.xumpy.timesheets.dao.model.TickedJobsDaoPojo;
 import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.TickedJobs;
 import com.xumpy.timesheets.services.TickedJobsSrv;
@@ -36,43 +37,43 @@ public class TickedJobsSrvImpl implements TickedJobsSrv{
     @Autowired JobsDaoImpl jobsDao;
     
     @Override
-    @Transactional(value="transactionManager")
+    @Transactional
     public TickedJobs select(Integer pk_id) {
-        return tickedJobsDao.select(pk_id);
+        return tickedJobsDao.findOne(pk_id);
     }
 
     @Override
-    @Transactional(value="transactionManager")
-    public List<TickedJobs> selectAllTickedJobs() {
+    @Transactional
+    public List<? extends TickedJobs> selectAllTickedJobs() {
         return tickedJobsDao.selectAllTickedJobs();
     }
 
     @Override
-    @Transactional(value="transactionManager")
+    @Transactional
     public TickedJobs save(TickedJobs tickedJobs) {
         TickedJobsSrvPojo tickedJobsSrv = new TickedJobsSrvPojo(tickedJobs);
         if (tickedJobs.getPk_id() == null){
             tickedJobsSrv.setPk_id(tickedJobsDao.getNewPkId());
         }
         
-        tickedJobsDao.save(tickedJobsSrv);
+        tickedJobsDao.save(new TickedJobsDaoPojo(tickedJobsSrv));
         
         return tickedJobsSrv;
     }
 
     @Override
-    @Transactional(value="transactionManager")
+    @Transactional
     public void delete(TickedJobs tickedJobs) {
-        tickedJobsDao.delete(tickedJobs);
+        tickedJobsDao.delete(new TickedJobsDaoPojo(tickedJobs));
     }
     
     @Override
-    @Transactional(value="transactionManager")
+    @Transactional
     public TickedJobsLstCtrlPojo allNotProcessedTickedJobs(){
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         
         TickedJobsLstCtrlPojo tickedJobsFiltered = new TickedJobsLstCtrlPojo();
-        List<TickedJobs> tickedJobsAll = tickedJobsDao.selectAllTickedJobs();
+        List<? extends TickedJobs> tickedJobsAll = tickedJobsDao.selectAllTickedJobs();
         try { 
             List<TimeRecording> timeRecordings = LoadSqlLite.loadTimeRecordings("/tmp/timeRecording.db");
             
@@ -129,7 +130,7 @@ public class TickedJobsSrvImpl implements TickedJobsSrv{
     }
 
     @Override
-    @Transactional(value="transactionManager")
+    @Transactional
     public void processTickedJobs(List<TickedJobsCtrlPojo> tickedJobs) {
         for(TickedJobsCtrlPojo tickedJob: tickedJobs){
             if (tickedJob.getSelectedJobId() != null){
@@ -150,14 +151,14 @@ public class TickedJobsSrvImpl implements TickedJobsSrv{
                     tickedJobsSrvPojo.setPk_id(tickedJobsDao.getNewPkId());
                 }
 
-                tickedJobsDao.save(tickedJobsSrvPojo);
+                tickedJobsDao.save(new TickedJobsDaoPojo(tickedJobsSrvPojo));
             }
         }
     }
 
     @Override
-    @Transactional(value="transactionManager")
-    public List<TickedJobs> selectTickedJobsByJob(Jobs job) {
-        return tickedJobsDao.selectTickedJobsByJob(job);
+    @Transactional
+    public List<? extends TickedJobs> selectTickedJobsByJob(Jobs job) {
+        return tickedJobsDao.selectTickedJobsByJob(job.getPk_id());
     }
 }

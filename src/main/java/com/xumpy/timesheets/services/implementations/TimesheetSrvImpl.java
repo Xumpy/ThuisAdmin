@@ -38,7 +38,7 @@ public class TimesheetSrvImpl implements TimesheetSrv{
     @Autowired JobsGroupDaoImpl jobsGroupDao;
     
     @Override
-    @Transactional(value="transactionManager")
+    @Transactional
     public OutputStream getTimesheet(Integer jobsGroupId, String month, OutputStream outputStream){
         try {
             log.info("JobsGroupId: " + jobsGroupId);

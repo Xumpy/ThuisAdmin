@@ -7,12 +7,11 @@ package com.xumpy.timesheets.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.xumpy.timesheets.controller.model.TickedJobsCtrlPojo;
-import com.xumpy.timesheets.dao.TickedJobsDao;
 import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
+import com.xumpy.timesheets.dao.implementations.TickedJobsDaoImpl;
 import com.xumpy.timesheets.dao.model.JobsDaoPojo;
 import com.xumpy.timesheets.dao.model.JobsGroupDaoPojo;
-import com.xumpy.timesheets.domain.Jobs;
-import com.xumpy.timesheets.domain.JobsGroup;
+import com.xumpy.timesheets.dao.model.TickedJobsDaoPojo;
 import com.xumpy.timesheets.domain.TickedJobs;
 import com.xumpy.timesheets.services.model.TickedJobsDetail;
 import com.xumpy.utilities.CustomDateUtils;
@@ -41,7 +40,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class TickedJobsDetailSrvTest {
     
-    @Mock private TickedJobsDao tickedJobsDao;
+    @Mock private TickedJobsDaoImpl tickedJobsDao;
     @Mock private JobsDaoImpl jobsDao;
     @InjectMocks private TickedJobsDetailSrv tickedJobsDetailSrv;
     
@@ -270,17 +269,17 @@ public class TickedJobsDetailSrvTest {
         JobsDaoPojo job1 = Mockito.mock(JobsDaoPojo.class);
         JobsDaoPojo job2 = Mockito.mock(JobsDaoPojo.class);
         
-        List<TickedJobs> tickedJobs1 = new ArrayList<TickedJobs>();
-        TickedJobs tickedJob1 = Mockito.mock(TickedJobs.class);
-        TickedJobs tickedJob2 = Mockito.mock(TickedJobs.class);
-        TickedJobs tickedJob3 = Mockito.mock(TickedJobs.class);
-        TickedJobs tickedJob4 = Mockito.mock(TickedJobs.class);
+        List<TickedJobsDaoPojo> tickedJobs1 = new ArrayList<TickedJobsDaoPojo>();
+        TickedJobsDaoPojo tickedJob1 = Mockito.mock(TickedJobsDaoPojo.class);
+        TickedJobsDaoPojo tickedJob2 = Mockito.mock(TickedJobsDaoPojo.class);
+        TickedJobsDaoPojo tickedJob3 = Mockito.mock(TickedJobsDaoPojo.class);
+        TickedJobsDaoPojo tickedJob4 = Mockito.mock(TickedJobsDaoPojo.class);
         
-        List<TickedJobs> tickedJobs2 = new ArrayList<TickedJobs>();
-        TickedJobs tickedJob5 = Mockito.mock(TickedJobs.class);
-        TickedJobs tickedJob6 = Mockito.mock(TickedJobs.class);
-        TickedJobs tickedJob7 = Mockito.mock(TickedJobs.class);
-        TickedJobs tickedJob8 = Mockito.mock(TickedJobs.class);
+        List<TickedJobsDaoPojo> tickedJobs2 = new ArrayList<TickedJobsDaoPojo>();
+        TickedJobsDaoPojo tickedJob5 = Mockito.mock(TickedJobsDaoPojo.class);
+        TickedJobsDaoPojo tickedJob6 = Mockito.mock(TickedJobsDaoPojo.class);
+        TickedJobsDaoPojo tickedJob7 = Mockito.mock(TickedJobsDaoPojo.class);
+        TickedJobsDaoPojo tickedJob8 = Mockito.mock(TickedJobsDaoPojo.class);
         
         when(job1.getWorkedHours()).thenReturn(new BigDecimal(8));
         when(job2.getWorkedHours()).thenReturn(new BigDecimal(8));
@@ -325,13 +324,13 @@ public class TickedJobsDetailSrvTest {
         tickedJobs1.add(tickedJob2);
         tickedJobs1.add(tickedJob3);
         tickedJobs1.add(tickedJob4);
-        when(tickedJobsDao.selectTickedJobsByJob(job1)).thenReturn(tickedJobs1);
+        when(tickedJobsDao.selectTickedJobsByJob(job1.getPk_id())).thenReturn(tickedJobs1);
         
         tickedJobs2.add(tickedJob5);
         tickedJobs2.add(tickedJob6);
         tickedJobs2.add(tickedJob7);
         tickedJobs2.add(tickedJob8);
-        when(tickedJobsDao.selectTickedJobsByJob(job2)).thenReturn(tickedJobs2);
+        when(tickedJobsDao.selectTickedJobsByJob(job2.getPk_id())).thenReturn(tickedJobs2);
         
         
         Map<String, String> result = new HashMap<String, String>();

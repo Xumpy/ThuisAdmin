@@ -15,8 +15,8 @@ import java.util.List;
  */
 public interface JobsGroupPricesSrv {
     JobsGroupPrices select(Integer pk_id);
-    List<JobsGroupPrices> selectAllJobGroupPrices();
-    List<JobsGroupPrices> selectAllJobGroupPrices(JobsGroup jobsGroup);
+    List<? extends JobsGroupPrices> selectAllJobGroupPrices();
+    List<? extends JobsGroupPrices> selectAllJobGroupPrices(JobsGroup jobsGroup);
     JobsGroupPrices save(JobsGroupPrices jobsGroupPrices);
     void delete(JobsGroupPrices jobsGroupPrices);
 }
