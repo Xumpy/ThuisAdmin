@@ -48,6 +48,7 @@ public class RekeningenSrvImpl implements RekeningenSrv, Serializable{
             rekening.setPk_id(rekeningenDao.getNewPkId());
             rekeningenDao.save(new RekeningenDaoPojo(rekening));
         } else {
+            rekening.setPk_id(nieuwRekening.getPk_id());
             rekeningenDao.save(new RekeningenDaoPojo(rekening));
         }
     }

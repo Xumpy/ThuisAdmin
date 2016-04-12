@@ -40,7 +40,7 @@ public class PersonenCtrl implements Serializable{
     }
     
     @RequestMapping("/json/savePersoon")
-    public @ResponseBody String saveRekening(@RequestBody PersonenDaoPojo persoon){
+    public @ResponseBody String savePersoon(@RequestBody PersonenDaoPojo persoon){
         personenSrv.save(persoon);
         
         return "saved";

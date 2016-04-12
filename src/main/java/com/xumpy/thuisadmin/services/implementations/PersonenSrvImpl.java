@@ -13,7 +13,12 @@ import com.xumpy.thuisadmin.domain.Personen;
 import com.xumpy.thuisadmin.services.PersonenSrv;
 import com.xumpy.thuisadmin.services.model.PersonenSrvPojo;
 import java.io.Serializable;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,19 +39,21 @@ public class PersonenSrvImpl implements PersonenSrv, Serializable{
     @Override
     @Transactional
     public Personen save(Personen personen) {
-        PersonenSrvPojo personenSrvPojo = new PersonenSrvPojo(personen);
+        PersonenDaoPojo personenDaoPojo = new PersonenDaoPojo(personen);
         
-        if (!personenSrvPojo.getMd5_password().isEmpty()){
-            personenSrvPojo.set_password(personen.getMd5_password());
+        if (personenDaoPojo.getMd5_password().equals("")){
+            personenDaoPojo.setMd5_password(personenDao.findOne(personenDaoPojo.getPk_id()).getMd5_password());
+        } else {
+            personenDaoPojo.setMd5_password(getMD5Password(personenDaoPojo.getMd5_password()));
         }
         
-        if (personenSrvPojo.getPk_id() == null){
-            personenSrvPojo.setPk_id(personenDao.getNewPkId());
+        if (personenDaoPojo.getPk_id() == null){
+            personenDaoPojo.setPk_id(personenDao.getNewPkId());
         }
-        personenDao.save(new PersonenDaoPojo(personenSrvPojo));
-        userInfo.updateBean(personenSrvPojo);
+        personenDao.save(personenDaoPojo);
+        userInfo.updateBean(personenDaoPojo);
         
-        return personenSrvPojo;
+        return personenDaoPojo;
     }
 
     @Override
@@ -89,5 +96,17 @@ public class PersonenSrvImpl implements PersonenSrv, Serializable{
     @Override
     public Personen getWhoAmI(){
         return userInfo.getPersoon();
+    }
+
+    @Override
+    public String getMD5Password(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            return (new HexBinaryAdapter()).marshal(md.digest(password.getBytes())).toLowerCase();
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(PersonenDaoPojo.class.getName()).log(Level.SEVERE, null, ex);
+            
+            return null;
+        }
     }
 }

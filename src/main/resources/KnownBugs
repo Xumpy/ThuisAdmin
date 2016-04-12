@@ -1,7 +1,2 @@
-(!) Changing username/password
-=> update ta_personen set MD5_PASSWORD="61db2047aa0c1f30a95a3584573c649b" where pk_id = 1;
-(!) Something wrong with zicht rekening bedragen
-(!) Creating new rekening
-
-Serialization Errors when booting
+Serialization Errors when booting => Not critical to go to prodution
 ArrayIndexOutOfBoundException when booting because of no data

@@ -11,6 +11,8 @@ import com.xumpy.security.root.UserService;
 import com.xumpy.thuisadmin.dao.implementations.PersonenDaoImpl;
 import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
 import com.xumpy.thuisadmin.domain.Personen;
+import com.xumpy.thuisadmin.services.PersonenSrv;
+import com.xumpy.thuisadmin.services.implementations.PersonenSrvImpl;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,11 +27,11 @@ import org.springframework.transaction.annotation.Transactional;
  * @author nicom
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {InitDatabase.class, InitOldDatabase.class, UserService.class})
+@ContextConfiguration(classes = {InitDatabase.class, InitOldDatabase.class, UserService.class, PersonenSrvImpl.class})
 @ActiveProfiles("junit")
 public class PersonenDaoTest{
     PersonenDaoPojo persoonTest123 = new PersonenDaoPojo();
-    
+    @Autowired PersonenSrv personenSrv;
     @Autowired PersonenDaoImpl personenDao;
     
     @Test
@@ -46,5 +48,16 @@ public class PersonenDaoTest{
         Personen persoonGetTest123 = personenDao.findPersoonByUsername("test123");
         
         assertEquals(persoonGetTest123.getNaam(), "test123");
+    }
+    
+    @Test
+    @Transactional(value="jpaTransactionManager")
+    public void testSaveUser(){
+        PersonenDaoPojo persoon1 = personenDao.findOne(1);
+        persoon1.setMd5_password("");
+        personenSrv.save(persoon1);
+        Personen persoon2 = personenDao.findOne(1);
+        
+        assertEquals(persoon1.getMd5_password(), persoon2.getMd5_password());
     }
 }

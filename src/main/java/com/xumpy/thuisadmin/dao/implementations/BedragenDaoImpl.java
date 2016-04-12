@@ -42,13 +42,13 @@ public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer
     
     @Query("from BedragenDaoPojo where (datum >= :startDate and datum <= :endDate)"
             + " and (:rekeningId is null or rekening.pk_id = :rekeningId) and "
-            + " ((:showPublicGroepen = 0 and (persoon.pk_id = :persoonId)) or (groep.publicGroep = :showPublicGroepen))")
+            + " ((:showPublicGroepen = 0 and (persoon.pk_id = :persoonId)) or (groep.publicGroep = :showPublicGroepen)) order by datum asc, bedrag asc")
     public List<BedragenDaoPojo> BedragInPeriode(@Param("startDate") Date startDate, 
                                                     @Param("endDate") Date endDate, 
                                                     @Param("rekeningId") Integer rekeningId, 
                                                     @Param("showPublicGroepen") Integer showPublicGroepen,
                                                     @Param("persoonId") Integer persoonId);
     
-    @Query("from BedragenDaoPojo where (:rekeningId is null or rekening.pk_id = :rekeningId) and persoon.pk_id = :persoonId and datum > :datum")
+    @Query("from BedragenDaoPojo where (:rekeningId is null or rekening.pk_id = :rekeningId) and persoon.pk_id = :persoonId and datum > :datum order by datum asc, bedrag asc")
     public List<BedragenDaoPojo> getBedragenUntilDate(@Param("datum") Date date, @Param("rekeningId") Integer rekeningId, @Param("persoonId") Integer persoonId);
 }

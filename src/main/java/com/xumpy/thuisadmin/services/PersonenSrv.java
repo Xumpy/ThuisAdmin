@@ -20,5 +20,6 @@ public interface PersonenSrv {
     public Personen findPersoon(Integer persoonId);
     public Personen findPersoonByUsername(String username);
     public Personen createRegisterUser(RegisterUserPage registerUserPage);
+    public String getMD5Password(String password);
     public Personen getWhoAmI();
 }

@@ -191,8 +191,6 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         
         Groepen groepenSrv = groepenDao.findOne(typeGroepId);
 
-        Integer negatief = new Integer(0);
-        
         List<? extends Bedragen> lstBedragenNeg = getBedragenInGroep(lstBedragenInPeriode, groepenSrv, 1);
         List<? extends Bedragen> lstBedragenPos = getBedragenInGroep(lstBedragenInPeriode, groepenSrv, 0);
 
@@ -201,7 +199,6 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         BigDecimal somOverzicht = new BigDecimal(0);
         
         for(Bedragen bedrag: lstBedragenNeg){
-            System.out.println(bedrag);
             OverzichtGroepBedragen overzichtGroepBedrag = new OverzichtGroepBedragen();
             
             BedragenSrvPojo bedragSrvPojo = new BedragenSrvPojo(bedrag);
@@ -213,7 +210,6 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         }
         
         for(Bedragen bedrag: lstBedragenPos){
-            System.out.println(bedrag);
             OverzichtGroepBedragen overzichtGroepBedrag = new OverzichtGroepBedragen();
             overzichtGroepBedrag.setWithBedrag(bedrag);
             
@@ -238,7 +234,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         List<? extends Bedragen> lstBedragenInPeriode = bedragenDao.BedragInPeriode(beginDate, eindDate, null, showBedragPublicGroep, userInfo.getPersoon().getPk_id());
         
         Groepen groepenSrv = groepenDao.findOne(typeGroepId);
-
+        
         Integer negatief = new Integer(0);
         
         if (typeGroepKostOpbrengst.equals(1)){
@@ -247,6 +243,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
             negatief = 1;
         }
         List<? extends Bedragen> lstBedragen = getBedragenInGroep(lstBedragenInPeriode, groepenSrv, negatief);
+        
         List<OverzichtGroepBedragen> overzichtGroepBedragen = new ArrayList<OverzichtGroepBedragen>();
         
         BigDecimal somOverzicht = new BigDecimal(0);
@@ -258,9 +255,8 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
             overzichtGroepBedragen.add(overzichtGroepBedrag);
             somOverzicht = somOverzicht.add(overzichtGroepBedrag.getBedrag());
         }
-        System.out.println(somOverzicht);
-            
         overzichtGroepBedragenTotal.setSomBedrag(somOverzicht);
+        
         overzichtGroepBedragenTotal.setOverzichtGroepBedragen(overzichtGroepBedragen);
 
         return overzichtGroepBedragenTotal;
@@ -457,7 +453,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         List<Bedragen> bedragenInGroep = new ArrayList<Bedragen>();
         
         for(Bedragen bedrag: bedragen){
-            if (GroepenSrvImpl.getHoofdGroep(bedrag.getGroep()).equals(hoofdGroep)  && bedrag.getGroep().getNegatief().equals(negatief)){
+            if (GroepenSrvImpl.getHoofdGroep(bedrag.getGroep()).getPk_id().equals(hoofdGroep.getPk_id())  && bedrag.getGroep().getNegatief().equals(negatief)){
                 bedragenInGroep.add(bedrag);
             }
         }
@@ -522,7 +518,6 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
             if (!oldBedrag.getRekening().equals(bedragenSrvPojo.getRekening())){
                 rekening = new RekeningenSrvPojo(moveBedragToRekening(oldBedrag, rekening));
             }
-            System.out.println(rekening.getWaarde());
             
             if (bedragenSrvPojo.getGroep().getNegatief().equals(1)){
                 if (oldBedrag.getGroep().getNegatief().equals(1)){

@@ -85,6 +85,9 @@ public class BedragenSrvTest{
     
     @Before
     public void SetUp() throws ParseException{
+        when(groepNegatief.getPk_id()).thenReturn(1);
+        when(groepPositief.getPk_id()).thenReturn(2);
+        
         when(bedrag1.getDatum()).thenReturn(dt.parse("2015-02-18"));
         when(bedrag1.getRekening()).thenReturn(rekening1);
         when(bedrag1.getBedrag()).thenReturn(new BigDecimal(100));
@@ -840,7 +843,6 @@ public class BedragenSrvTest{
     }
     
     @Test
-    @Ignore
     public void testRapportOverzichtGroepBedragen() throws ParseException{
         List<BedragenDaoPojo> lstBedragen = new ArrayList<BedragenDaoPojo>();
         lstBedragen.add(new BedragenDaoPojo(bedrag1));
@@ -848,16 +850,15 @@ public class BedragenSrvTest{
         lstBedragen.add(new BedragenDaoPojo(bedrag3));
         
         when(bedragenDao.BedragInPeriode(dt.parse("2015-02-18"), dt.parse("2015-02-23"), null, 1, userInfo.getPersoon().getPk_id())).thenReturn(lstBedragen);
-        when(groepenDao.findOne(1)).thenReturn(groepNegatief);
+        when(groepenDao.findOne(groepNegatief.getPk_id())).thenReturn(groepNegatief);
         
         OverzichtGroepBedragenTotal overzichtGroepBedragenTot = 
-                bedragenSrv.rapportOverzichtGroepBedragen(1, 0, dt.parse("2015-02-18"), dt.parse("2015-02-23"), 1, overzichtGroepBedragenTotal);
+                bedragenSrv.rapportOverzichtGroepBedragen(groepNegatief.getPk_id(), 0, dt.parse("2015-02-18"), dt.parse("2015-02-23"), 1, new OverzichtGroepBedragenTotal());
         
         assertEquals(new BigDecimal(250), overzichtGroepBedragenTot.getSomBedrag());
     }
     
     @Test
-    @Ignore
     public void testRapportOverzichtGroepBedragenWithoutTypeKostOpbrengsten() throws ParseException{
         when(bedrag1.getBedrag()).thenReturn(new BigDecimal(100));
         when(bedrag2.getBedrag()).thenReturn(new BigDecimal(100));
@@ -880,11 +881,13 @@ public class BedragenSrvTest{
         lstBedragen.add(bedrag2);
         lstBedragen.add(bedrag3);
         
-        when(bedragenDao.BedragInPeriode(dt.parse("2015-02-18"), dt.parse("2015-02-23"), null, 1, 1)).thenReturn(lstBedragen);
-        when(groepenDao.findOne(1)).thenReturn(mainGroup);
+        when(bedragenDao.BedragInPeriode(dt.parse("2015-02-18"), dt.parse("2015-02-23"), null, 1, userInfo.getPersoon().getPk_id())).thenReturn(lstBedragen);
+        
+        when(groepenDao.findOne(mainGroup.getPk_id())).thenReturn(mainGroup);
+        when(groepenDao.findOne(groepPositief.getPk_id())).thenReturn(groepPositief);
         
         OverzichtGroepBedragenTotal overzichtGroepBedragenTot = 
-                bedragenSrv.rapportOverzichtGroepBedragen(1, dt.parse("2015-02-18"), dt.parse("2015-02-23"), 1, overzichtGroepBedragenTotal);
+                bedragenSrv.rapportOverzichtGroepBedragen(mainGroup.getPk_id(), dt.parse("2015-02-18"), dt.parse("2015-02-23"), 1, new OverzichtGroepBedragenTotal());
         
         assertEquals(new BigDecimal(100), overzichtGroepBedragenTot.getSomBedrag());
     }

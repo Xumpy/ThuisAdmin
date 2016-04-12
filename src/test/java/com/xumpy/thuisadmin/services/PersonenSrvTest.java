@@ -55,4 +55,9 @@ public class PersonenSrvTest {
         Personen persoonFetch = personenSrv.getWhoAmI();
         assertEquals(persoonFetch.getNaam(), "Nico");
     }
+    
+    @Test
+    public void testUser(){
+        assertEquals("61db2047aa0c1f30a95a3584573c649b", personenSrv.getMD5Password("pcat3900"));
+    }
 }

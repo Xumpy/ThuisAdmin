@@ -92,7 +92,7 @@ public class GroepenSrvImpl implements GroepenSrv, Serializable{
     @Override
     @Transactional(value="transactionManager")
     public List<? extends Groepen> findAllGroepen(Integer hoofdGroepId) {
-        return groepenDao.findAllGroepen(hoofdGroepId);
+        return groepenDao.findAllGroepen(hoofdGroepId, userInfo.getPersoon().getPk_id());
     }
 
     private Boolean selectedGroepInHoofdGroep(Groepen groep, Groepen checkGroep){
