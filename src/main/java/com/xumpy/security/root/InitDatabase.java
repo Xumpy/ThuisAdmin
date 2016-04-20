@@ -86,6 +86,7 @@ public class InitDatabase {
             private static final long serialVersionUID = 1L;
 
             {
+                setProperty("hibernate.show_sql", "false");
                 setProperty("hibernate.dialect", hibernateDialect);
                 setProperty("hibernate.globally_quoted_identifiers", "true");
                 setProperty("hibernate.current_session_context_class", "org.springframework.orm.hibernate4.SpringSessionContext");

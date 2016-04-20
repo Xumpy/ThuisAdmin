@@ -46,6 +46,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -265,6 +266,8 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     @Override
     @Transactional
     public BeheerBedragenReportLst reportBedragen(BeheerBedragenReportLst beheerBedragenReportLst, Integer offset, Rekeningen rekening, String searchText) {
+        
+        searchText = StringUtils.isEmpty(searchText) ? null : "%" + searchText + "%";
         
         List<BeheerBedragenReport> beheerBedragenReport = new ArrayList<BeheerBedragenReport>();
         

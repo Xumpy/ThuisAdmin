@@ -5,13 +5,13 @@
  */
 package com.xumpy.thuisadmin.controllers.model;
 
-import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
 import com.xumpy.thuisadmin.domain.Bedragen;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 
 /**
@@ -23,6 +23,8 @@ import org.springframework.context.annotation.Scope;
 public class BeheerBedragenReport implements Serializable{
     
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    
+    private static Logger log = Logger.getLogger(BeheerBedragenReport.class);
     
     @Id
     private Integer pk_id;
@@ -150,5 +152,13 @@ public class BeheerBedragenReport implements Serializable{
         return true;
     }
     
-    
+    public void debug(){
+        log.info("pk_id:" + pk_id);
+        log.info("type_groep:" + type_groep);
+        log.info("rekening:" + rekening);
+        log.info("persoon:" + persoon);
+        log.info("bedrag:" + bedrag);
+        log.info("datum:" + datum);
+        log.info("omschrijving:" + omschrijving);
+    }
 }

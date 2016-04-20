@@ -7,6 +7,7 @@ package com.xumpy.thuisadmin.controllers.model;
 
 import java.io.Serializable;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +22,8 @@ public class BeheerBedragenReportLst implements Serializable{
     private boolean showNext;
     private List<BeheerBedragenReport> beheerBedragenReport;
 
+    private static Logger log = Logger.getLogger(BeheerBedragenReportLst.class);
+    
     public boolean isShowPrevious() {
         return showPrevious;
     }
@@ -48,5 +51,15 @@ public class BeheerBedragenReportLst implements Serializable{
     public BeheerBedragenReportLst(){
         this.showNext = true;
         this.showPrevious = false;
+    }
+    
+    public void debug(){
+        log.info("showPrevious: " + showPrevious);
+        log.info("showNext: " + showNext);
+        for(BeheerBedragenReport report: beheerBedragenReport){
+            log.info("--------------------");
+            report.debug();
+            log.info("--------------------");
+        }
     }
 }
