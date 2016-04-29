@@ -5,6 +5,7 @@
  */
 package com.xumpy.timesheets.controller.pages;
 
+import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
@@ -16,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -38,6 +40,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 public class TimesheetsCtrl {
     @Autowired TimesheetSrv timesheetSrv;
+    
+    private Logger log = Logger.getLogger(TimesheetsCtrl.class);
     
     @RequestMapping(value = "timesheets/overview")
     public String timesheetsOverview(){
@@ -106,32 +110,8 @@ public class TimesheetsCtrl {
     
     @RequestMapping(value="timesheets/saveSSHSQLite")
     public String saveSSHSQLite(@RequestParam("ip") String ip) throws IOException{
-        try{
+        Runtime.getRuntime().exec(new String[] {"/bin/sh","-c", "sshpass -p 'pcat3900' scp -r root@" + ip + ":/data/data/com.dynamicg.timerecording/files/timeRecording.db /tmp/timeRecording.db"});
         
-            JSch jsch = new JSch();
-            Session session = null;
-            session = jsch.getSession("root",ip,22);
-            session.setPassword("pcat3900");
-            session.setConfig("StrictHostKeyChecking", "no");
-            session.connect();
-
-            ChannelSftp channel = null;
-            channel = (ChannelSftp)session.openChannel("sftp");
-            channel.connect();
-
-            File localFile = new File("/tmp/timeRecording.db");
-
-
-            BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(localFile));
-            channel.get("/data/data/com.dynamicg.timerecording/files/timeRecording.db", stream);
-            
-            channel.disconnect();
-            session.disconnect();
-            
-            stream.close();
-        } catch (Exception ex){
-            System.out.println("Error occured while fetching the file from ssh");
-        }
         return "redirect:/timesheets/importTimeRecordings";
     }
     
