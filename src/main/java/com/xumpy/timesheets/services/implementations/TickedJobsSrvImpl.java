@@ -80,7 +80,7 @@ public class TickedJobsSrvImpl implements TickedJobsSrv{
             for (TimeRecording timeRecording: timeRecordings){
                 boolean found = false;
                 for (TickedJobs tickedJob: tickedJobsAll){
-                    if (timeRecording.getSqlite_id().equals(tickedJob.getSqlite_id())){
+                    if (timeRecording.getTicked().equals(format.format(tickedJob.getTicked()))){
                         found = true;
                     }
                 }
