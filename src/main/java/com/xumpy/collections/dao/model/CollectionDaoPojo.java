@@ -5,6 +5,7 @@
  */
 package com.xumpy.collections.dao.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.xumpy.collections.domain.Collection;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,11 +38,15 @@ public class CollectionDaoPojo implements Collection, Serializable{
         return this.pkId;
     }
 
-    @Override
     public Collection getMainCollection() {
         return this.mainCollection;
     }
 
+    @Override
+    public Integer getMainCollectionId(){
+        return this.mainCollection != null ? this.mainCollection.getPkId() : null;
+    }
+    
     @Override
     public String getName() {
         return this.name;
@@ -78,19 +83,24 @@ public class CollectionDaoPojo implements Collection, Serializable{
     }
     
     public CollectionDaoPojo(){}
-    public CollectionDaoPojo(Collection collection){
+    public CollectionDaoPojo(Collection collection, CollectionDaoPojo mainCollection){
         this.pkId = collection.getPkId();
         this.name = collection.getName();
         this.description = collection.getDescription();
-        this.mainCollection = collection.getMainCollection() != null ? new CollectionDaoPojo(collection.getMainCollection()) : null;
-        this.subCollections = !collection.getSubCollections().isEmpty() ? CollectionDaoPojo.lstCollectionDaoPojo(collection.getSubCollections()) : null;
+        this.mainCollection = mainCollection;
+        this.subCollections = !collection.getSubCollections().isEmpty() ? CollectionDaoPojo.lstCollectionDaoPojo(collection.getSubCollections(), this) : null;
     }
-    public static List<CollectionDaoPojo> lstCollectionDaoPojo(List<? extends Collection> collections){
+    public static List<CollectionDaoPojo> lstCollectionDaoPojo(List<? extends Collection> collections, CollectionDaoPojo mainCollection){
         List<CollectionDaoPojo> lstCollection = new ArrayList<CollectionDaoPojo>();
         for(Collection collection: collections){
-            lstCollection.add(new CollectionDaoPojo(collection));
+            lstCollection.add(new CollectionDaoPojo(collection, mainCollection));
         }
         
         return lstCollection;
+    }
+    
+    @Override
+    public String toString(){
+        return "CollectionDaoPojo with this.pkId : " + this.pkId;
     }
 }

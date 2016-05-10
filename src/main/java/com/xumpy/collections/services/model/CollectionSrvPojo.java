@@ -8,6 +8,7 @@ package com.xumpy.collections.services.model;
 import com.xumpy.collections.domain.Collection;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -15,19 +16,20 @@ import java.util.List;
  */
 public class CollectionSrvPojo implements Collection{
     private Integer pkId;
-    private CollectionSrvPojo mainCollection;
+    private Integer mainCollectionId;
     private List<CollectionSrvPojo> subCollections;
     private String name;
     private String description;
+    private static Logger log = Logger.getLogger(CollectionSrvPojo.class);
     
     @Override
     public Integer getPkId() {
         return this.pkId;
     }
-
+    
     @Override
-    public Collection getMainCollection() {
-        return this.mainCollection;
+    public Integer getMainCollectionId(){
+        return this.mainCollectionId;
     }
 
     @Override
@@ -48,11 +50,11 @@ public class CollectionSrvPojo implements Collection{
     public void setPkId(Integer pkId) {
         this.pkId = pkId;
     }
-
-    public void setMainCollection(CollectionSrvPojo mainCollection) {
-        this.mainCollection = mainCollection;
+    
+    public void setMainCollectionId(Integer mainCollectionId){
+        this.mainCollectionId = mainCollectionId;
     }
-
+    
     public void setSubCollections(List<CollectionSrvPojo> subCollections) {
         this.subCollections = subCollections;
     }
@@ -71,11 +73,14 @@ public class CollectionSrvPojo implements Collection{
         this.pkId = collection.getPkId();
         this.name = collection.getName();
         this.description = collection.getDescription();
-        this.mainCollection = collection.getMainCollection() != null ? new CollectionSrvPojo(collection.getMainCollection()) : null;
+        this.mainCollectionId = collection.getMainCollectionId();
         this.subCollections = !collection.getSubCollections().isEmpty() ? lstCollectionSrvPojo(collection.getSubCollections()) : null;
     }
     public static List<CollectionSrvPojo> lstCollectionSrvPojo(List<? extends Collection> collections){
         List<CollectionSrvPojo> lstCollection = new ArrayList<CollectionSrvPojo>();
+        
+        log.info("Value collections: " + collections);
+ 
         for(Collection collection: collections){
             lstCollection.add(new CollectionSrvPojo(collection));
         }

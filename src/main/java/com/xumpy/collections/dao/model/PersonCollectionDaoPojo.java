@@ -67,12 +67,4 @@ public class PersonCollectionDaoPojo implements PersonCollection, Serializable{
     public void setPersonCollectionStatus(PersonCollectionStatusDaoPojo personCollectionStatus) {
         this.personCollectionStatus = personCollectionStatus;
     }
-    
-    public PersonCollectionDaoPojo(){}
-    public PersonCollectionDaoPojo(PersonCollection personCollection){
-        this.pkId = personCollection.getPkId();
-        this.person = new PersonenDaoPojo(personCollection.getPerson());
-        this.collectionDetail = new CollectionDetailDaoPojo(personCollection.getCollectionDetail());
-        this.personCollectionStatus = new PersonCollectionStatusDaoPojo(personCollection.getPersonCollectionStatus());
-    }
 }

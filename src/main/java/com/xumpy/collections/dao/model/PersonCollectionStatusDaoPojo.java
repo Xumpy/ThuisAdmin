@@ -51,11 +51,4 @@ public class PersonCollectionStatusDaoPojo implements PersonCollectionStatus, Se
     public void setDescription(String description) {
         this.description = description;
     }
-    
-    public PersonCollectionStatusDaoPojo(){}
-    public PersonCollectionStatusDaoPojo(PersonCollectionStatus personCollectionStatus){
-        this.pkId = personCollectionStatus.getPkId();
-        this.name = personCollectionStatus.getName();
-        this.description = personCollectionStatus.getDescription();
-    }
 }
