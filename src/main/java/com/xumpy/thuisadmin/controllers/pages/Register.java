@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class Register implements Serializable{
-    @RequestMapping(value = "register/register_user")
+    @RequestMapping(value = "/register/register_user")
     public String viewOverview(){
         return "register/register_user";
     }

@@ -7,6 +7,9 @@ package com.xumpy.security.model;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.xumpy.thuisadmin.domain.Personen;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+
 import java.io.Serializable;
 
 /**

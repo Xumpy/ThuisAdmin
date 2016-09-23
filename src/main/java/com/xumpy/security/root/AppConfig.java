@@ -16,10 +16,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-/**
- *
- * @author nicom
- */
+
 @Configuration
 @EnableWebSecurity
 public class AppConfig extends WebSecurityConfigurerAdapter{
@@ -44,20 +41,19 @@ public class AppConfig extends WebSecurityConfigurerAdapter{
                 .antMatchers("/register/**").permitAll()
                 .antMatchers("/resources/**").permitAll()
                 .antMatchers("/login").permitAll()
+                .antMatchers("/styles/**").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .formLogin()
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .loginPage("/login")
-                .loginProcessingUrl("/j_spring_security_check")
                 .defaultSuccessUrl("/finances/overview", true)
                 .failureUrl("/login?error")
                 .permitAll()
             .and()
                 .logout()
-                    .logoutUrl("/j_spring_security_logout")
-                    .logoutSuccessUrl("/login");		
+                .permitAll();
     }
     
     @Override

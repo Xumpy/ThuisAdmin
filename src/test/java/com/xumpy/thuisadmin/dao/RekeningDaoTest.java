@@ -5,9 +5,8 @@
  */
 package com.xumpy.thuisadmin.dao;
 
+import com.xumpy.Application;
 import com.xumpy.security.model.UserInfo;
-import com.xumpy.security.root.InitDatabase;
-import com.xumpy.security.root.InitOldDatabase;
 import com.xumpy.security.root.UserService;
 import com.xumpy.thuisadmin.dao.implementations.PersonenDaoImpl;
 import com.xumpy.thuisadmin.dao.implementations.RekeningenDaoImpl;
@@ -16,9 +15,13 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -27,8 +30,11 @@ import org.springframework.transaction.annotation.Transactional;
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {InitDatabase.class, InitOldDatabase.class, UserService.class})
-@ActiveProfiles("junit")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@WebAppConfiguration()
+@SpringApplicationConfiguration(classes = Application.class)
+@ActiveProfiles("junit-database")
+@Sql(scripts="/data.sql")
 public class RekeningDaoTest{
     
     @Autowired RekeningenDaoImpl rekeningenDao;
@@ -36,9 +42,9 @@ public class RekeningDaoTest{
     @Autowired UserInfo userInfo;
     
     @Test
-    @Transactional(value="jpaTransactionManager")
+    @Transactional
     public void testTotalRekening(){
         userInfo.setPersoon(personenDao.findOne(1));
-        assertEquals(rekeningenDao.totalAllRekeningen(userInfo.getPersoon().getPk_id()), new BigDecimal(2250));
+        assertEquals(rekeningenDao.totalAllRekeningen(userInfo.getPersoon().getPk_id()), new BigDecimal(2250).setScale(2));
     }
 }

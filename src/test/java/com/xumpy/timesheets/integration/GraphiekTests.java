@@ -5,9 +5,8 @@
  */
 package com.xumpy.timesheets.integration;
 
+import com.xumpy.Application;
 import com.xumpy.security.model.UserInfo;
-import com.xumpy.security.root.InitDatabase;
-import com.xumpy.security.root.InitOldDatabase;
 import com.xumpy.security.root.UserService;
 import com.xumpy.thuisadmin.controllers.model.RekeningOverzicht;
 import com.xumpy.thuisadmin.dao.implementations.BedragenDaoImpl;
@@ -26,22 +25,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import static junit.framework.Assert.assertEquals;
+
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
-/**
- *
- * @author nico
- */
-@Category(LocalTestProfile.class) // Test will only work with specific production database which can be migrated
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {InitDatabase.class, InitOldDatabase.class, UserService.class, BedragenSrvImpl.class})
-@ActiveProfiles("tst_local")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@WebAppConfiguration()
+@SpringApplicationConfiguration(classes = Application.class)
+@ActiveProfiles("junit-database")
+@Sql(scripts="/data.sql")
+@Ignore /* Only works with integration test with the database, this has to be refactored but is not important for now */
 public class GraphiekTests {
     
     @Autowired BedragenSrv bedragenSrv;

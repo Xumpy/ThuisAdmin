@@ -47,6 +47,7 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.lang.StringUtils;
+import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -644,7 +645,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     }
         
     @Override
-    @Transactional(value="jpaTransactionManager")
+    @Transactional
     public List<? extends Bedragen> selectBedragenInPeriode(Date beginDate, Date endDate){
         List<? extends Bedragen> bedragen = bedragenDao.BedragInPeriode(beginDate, endDate, null, 0, userInfo.getPersoon().getPk_id());
         
@@ -665,7 +666,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     }
     
     @Override
-    @Transactional(value="jpaTransactionManager")
+    @Transactional
     public BigDecimal getBedragAtDate(Date date, Rekeningen rekening){
         BigDecimal rekeningStand;
         

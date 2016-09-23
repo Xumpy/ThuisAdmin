@@ -5,8 +5,7 @@
  */
 package com.xumpy.timesheets.dao;
 
-import com.xumpy.security.root.InitDatabase;
-import com.xumpy.security.root.InitOldDatabase;
+import com.xumpy.Application;
 import com.xumpy.security.root.UserService;
 import com.xumpy.timesheets.dao.implementations.CompanyDaoImpl;
 import com.xumpy.timesheets.dao.implementations.JobsGroupDaoImpl;
@@ -18,15 +17,16 @@ import org.hibernate.SessionFactory;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -34,12 +34,12 @@ import org.springframework.transaction.annotation.Transactional;
  * @author nicom
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {InitDatabase.class, InitOldDatabase.class, UserService.class})
-@ActiveProfiles("junit")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("junit-database")
+@Sql(scripts="/data.sql")
 public class JobsGroupDaoTest{
     @Autowired JobsGroupDaoImpl jobsGroupDao;
     @Autowired CompanyDaoImpl companyDao;
-    @Autowired SessionFactory sessionFactory;
     
     @Transactional
     private CompanyDaoPojo getCompany(){
@@ -47,7 +47,7 @@ public class JobsGroupDaoTest{
     }
     
     @Test
-    @Transactional(value="jpaTransactionManager")
+    @Transactional
     public void testSelect(){
         JobsGroup jobsGroup = jobsGroupDao.findOne(1);
         
@@ -55,7 +55,7 @@ public class JobsGroupDaoTest{
     }
     
     @Test
-    @Transactional(value="jpaTransactionManager")
+    @Transactional
     public void testInsert(){
         JobsGroupDaoPojo jobsGroup = new JobsGroupDaoPojo();
         jobsGroup.setPk_id(101);
@@ -70,7 +70,7 @@ public class JobsGroupDaoTest{
     }
     
     @Test
-    @Transactional(value="jpaTransactionManager")
+    @Transactional
     public void testUpdate(){
         JobsGroupDaoPojo jobsGroupSelect1 = new JobsGroupDaoPojo(jobsGroupDao.findOne(1));
         
@@ -83,7 +83,7 @@ public class JobsGroupDaoTest{
     }
     
     @Test
-    @Transactional(value="jpaTransactionManager")
+    @Transactional
     public void testDelete(){
         JobsGroupDaoPojo jobsGroup = new JobsGroupDaoPojo();
         jobsGroup.setPk_id(101);

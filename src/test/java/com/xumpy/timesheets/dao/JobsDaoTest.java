@@ -5,11 +5,8 @@
  */
 package com.xumpy.timesheets.dao;
 
-import com.xumpy.security.SpringConfig;
-import com.xumpy.security.root.InitDatabase;
-import com.xumpy.security.root.InitOldDatabase;
+import com.xumpy.Application;
 import com.xumpy.security.root.UserService;
-import com.xumpy.security.servlet.DispatcherConfig;
 import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
 import com.xumpy.timesheets.dao.implementations.JobsGroupDaoImpl;
 import com.xumpy.timesheets.dao.model.JobsDaoPojo;
@@ -24,28 +21,26 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- *
- * @author nicom
- */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {InitDatabase.class, InitOldDatabase.class, UserService.class})
-@ActiveProfiles("junit")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("junit-database")
+@Sql(scripts="/data.sql")
 public class JobsDaoTest{
     @Autowired public JobsGroupDaoImpl jobsGroupDao;
     @Autowired public JobsDaoImpl jobsDao;
     
     @Test
-    @Transactional(value="jpaTransactionManager")
+    @Transactional
     public void testSelect(){
         Jobs jobs = jobsDao.findOne(1);
         
@@ -53,7 +48,7 @@ public class JobsDaoTest{
     }
     
     @Test
-    @Transactional(value="jpaTransactionManager")
+    @Transactional
     public void testInsert(){
         JobsDaoPojo jobs = new JobsDaoPojo();
         jobs.setPk_id(101);
@@ -69,7 +64,7 @@ public class JobsDaoTest{
     }
     
     @Test
-    @Transactional(value="jpaTransactionManager")
+    @Transactional
     public void testUpdate(){
         JobsDaoPojo jobsSelect1 = new JobsDaoPojo(jobsDao.findOne(1));
         
@@ -82,7 +77,7 @@ public class JobsDaoTest{
     }
     
     @Test
-    @Transactional(value="jpaTransactionManager")
+    @Transactional
     public void testDelete(){
         Jobs jobsSelect1 = jobsDao.findOne(1);
         //resetTransaction();
@@ -95,7 +90,7 @@ public class JobsDaoTest{
     }
     
     @Test
-    @Transactional(value="jpaTransactionManager")
+    @Transactional
     public void testSelectDate() throws ParseException{
         SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
         Date date = df.parse("2015/03/23");

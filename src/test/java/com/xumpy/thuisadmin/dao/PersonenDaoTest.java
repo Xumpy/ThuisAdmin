@@ -5,8 +5,7 @@
  */
 package com.xumpy.thuisadmin.dao;
 
-import com.xumpy.security.root.InitDatabase;
-import com.xumpy.security.root.InitOldDatabase;
+import com.xumpy.Application;
 import com.xumpy.security.root.UserService;
 import com.xumpy.thuisadmin.dao.implementations.PersonenDaoImpl;
 import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
@@ -17,9 +16,13 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -27,15 +30,18 @@ import org.springframework.transaction.annotation.Transactional;
  * @author nicom
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {InitDatabase.class, InitOldDatabase.class, UserService.class, PersonenSrvImpl.class})
-@ActiveProfiles("junit")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@WebAppConfiguration()
+@SpringApplicationConfiguration(classes = Application.class)
+@ActiveProfiles("junit-database")
+@Sql(scripts="/data.sql")
 public class PersonenDaoTest{
     PersonenDaoPojo persoonTest123 = new PersonenDaoPojo();
     @Autowired PersonenSrv personenSrv;
     @Autowired PersonenDaoImpl personenDao;
     
     @Test
-    @Transactional(value="jpaTransactionManager")
+    @Transactional
     public void testSave(){
         persoonTest123.setPk_id(3);
         persoonTest123.setNaam("test123");
@@ -51,7 +57,7 @@ public class PersonenDaoTest{
     }
     
     @Test
-    @Transactional(value="jpaTransactionManager")
+    @Transactional
     public void testSaveUser(){
         PersonenDaoPojo persoon1 = personenDao.findOne(1);
         persoon1.setMd5_password("");

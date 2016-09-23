@@ -9,6 +9,7 @@ import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.EntityManagerFactory;
 import org.hibernate.Session;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -30,10 +31,12 @@ public class UserService implements UserDetailsService {
     @Autowired UserInfo userInfo;
     
     @Autowired
-    private SessionFactory sessionFactory;
+    private EntityManagerFactory entityManagerFactory;
     
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
+        
         Session session = sessionFactory.openSession();
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
         authorities.add(new SimpleGrantedAuthority("USER"));
