@@ -47,7 +47,7 @@
                     <td></td>
                     <td>
                         <select id="rekening" class="form-control" ng-model="ticked.selectedJobId"
-                              ng-options="job.pk_id as job.jobsGroup.name + ' ' + job.workedHours for job in ticked.jobs">
+                              ng-options="job.pkId as job.jobsGroup.name + ' ' + job.workedHours for job in ticked.jobs">
                               <option value="">--Kies Job--</option>
                         </select>
                     </td>

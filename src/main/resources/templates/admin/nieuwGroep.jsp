@@ -9,7 +9,7 @@
             data-angular-treeview="true"
             data-tree-id="groepTree"
             data-tree-model="groepTreeData"
-            data-node-id="groep.pk_id"
+            data-node-id="groep.pkId"
             data-node-label="groep.naam"
             data-node-children="subGroep">
         </div>
@@ -17,7 +17,7 @@
             <form class="col-lg-2" ng-submit="saveGroep()">
                 <input class="col-lg-12 btn btn-primary" type="submit" value="Save"/>
             </form>
-            <form ng-show="groep.pk_id !== ''" class="col-lg-2" ng-submit="deleteGroep()">
+            <form ng-show="groep.pkId !== ''" class="col-lg-2" ng-submit="deleteGroep()">
                 <input class="col-lg-12 btn btn-primary" type="submit" value="Delete"/>
             </form>
         </div>
@@ -67,7 +67,7 @@
             </thead>
             <tbody>
                 <tr ng-repeat="groep in emptyGroepen">
-                        <td><a href="/ThuisAdmin/admin/nieuwGroep/{{groep.pk_id}}">Edit</a></td>
+                        <td><a href="/ThuisAdmin/admin/nieuwGroep/{{groep.pkId}}">Edit</a></td>
                         <td>{{groep.hoofdGroep.naam}}</td>
                         <td>{{groep.naam}}</td>
                         <td>{{groep.omschrijving}}</td>
@@ -98,8 +98,8 @@
                 }
             }, false);
 
-            if ("<c:out value="${pk_id}"/>" !== ""){
-              $http.get("/ThuisAdmin/json/groepen/<c:out value="${pk_id}"/>").success( function(data){
+            if ("<c:out value="${pkId}"/>" !== ""){
+              $http.get("/ThuisAdmin/json/groepen/<c:out value="${pkId}"/>").success( function(data){
                   $scope.groep = data;
                   
                   if ($scope.groep.negatief === 1){
@@ -126,18 +126,18 @@
                     });
                   }
                   else {
-                    $http.get("/ThuisAdmin/json/groepTree/" + $scope.groep.hoofdGroep.pk_id).success( function(data){
+                    $http.get("/ThuisAdmin/json/groepTree/" + $scope.groep.hoofdGroep.pkId).success( function(data){
                         $scope.groepTreeData = data;
                     });
                 }
-                  var pkId = "<c:out value="${pk_id}"/>";
+                  var pkId = "<c:out value="${pkId}"/>";
                   $http.get("/ThuisAdmin/json/subGroepen/" + pkId).success( function(data){
                       $scope.groepen = data;
                   });
               });
             } else { 
                 $scope.groep = {
-                    pk_id: null,
+                    pkId: null,
                     hoofdGroep: null,
                     naam: "",
                     omschrijving: "",
@@ -156,10 +156,10 @@
                     $scope.groep.persoon = $scope.registeredPersoon;
                 }
                 
-                if ($scope.registeredPersoon.pk_id !== $scope.groep.persoon.pk_id){
+                if ($scope.registeredPersoon.pkId !== $scope.groep.persoon.pkId){
                     bootbox.alert("You are not allowed to change this group because you are not the owner!", function(){
                         try {
-                            $(location).attr('href','/ThuisAdmin/admin/nieuwGroep/' + $scope.groep.hoofdGroep.pk_id);
+                            $(location).attr('href','/ThuisAdmin/admin/nieuwGroep/' + $scope.groep.hoofdGroep.pkId);
                         } catch(ex){
                             $(location).attr('href','/ThuisAdmin/admin/groepen');
                         }
@@ -185,7 +185,7 @@
 
                     $http.post("/ThuisAdmin/json/saveGroep", $scope.groep).success( function() {
                         try {
-                            $(location).attr('href','/ThuisAdmin/admin/nieuwGroep/' + $scope.groep.hoofdGroep.pk_id);
+                            $(location).attr('href','/ThuisAdmin/admin/nieuwGroep/' + $scope.groep.hoofdGroep.pkId);
                         } catch(ex){
                             $(location).attr('href','/ThuisAdmin/admin/groepen');
                         }

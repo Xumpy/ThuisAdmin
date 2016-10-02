@@ -17,26 +17,26 @@ import javax.persistence.Id;
 @Entity
 public class NieuwDocument implements Serializable {
     @Id
-    private Integer pk_id;
+    private Integer pkId;
     
-    private Integer bedrag_id;
+    private Integer bedragId;
     private String omschrijving;
     private Date datum;
             
-    public Integer getPk_id() {
-        return pk_id;
+    public Integer getPkId() {
+        return pkId;
     }
 
-    public void setPk_id(Integer pk_id) {
-        this.pk_id = pk_id;
+    public void setPkId(Integer pkId) {
+        this.pkId = pkId;
     }
 
-    public Integer getBedrag_id() {
-        return bedrag_id;
+    public Integer getBedragId() {
+        return bedragId;
     }
 
-    public void setBedrag_id(Integer bedrag_id) {
-        this.bedrag_id = bedrag_id;
+    public void setBedragId(Integer bedragId) {
+        this.bedragId = bedragId;
     }
 
     public String getOmschrijving() {

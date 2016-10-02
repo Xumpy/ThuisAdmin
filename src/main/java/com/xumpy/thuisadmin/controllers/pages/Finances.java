@@ -17,11 +17,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -75,7 +71,13 @@ public class Finances implements Serializable{
     public String nieuwBedragDocument(@PathVariable Integer bedragId, Model model){
         model.addAttribute("bedragId", bedragId);
         model.addAttribute("document", new NieuwDocument());
-        
+
+        NieuwDocument nieuwDocument = new NieuwDocument();
+        nieuwDocument.setBedragId(bedragId);
+        nieuwDocument.setOmschrijving("");
+
+        model.addAttribute("document", nieuwDocument);
+
         return "finances/nieuwDocument";
     }
      
@@ -92,9 +94,9 @@ public class Finances implements Serializable{
         
         model.addAttribute("bedragId", document.getBedrag().getPk_id());
         NieuwDocument nieuwDocument = new NieuwDocument();
-        nieuwDocument.setBedrag_id(document.getBedrag().getPk_id());
+        nieuwDocument.setBedragId(document.getBedrag().getPk_id());
         nieuwDocument.setOmschrijving(document.getOmschrijving());
-        nieuwDocument.setPk_id(document.getPk_id());
+        nieuwDocument.setPkId(document.getPk_id());
         
         model.addAttribute("document", nieuwDocument);
         
@@ -102,24 +104,26 @@ public class Finances implements Serializable{
     }
     
     
-    @RequestMapping(value="/finances/nieuwBedragDocument/saveDocument", method = RequestMethod.POST)
+    @PostMapping("/finances/nieuwBedragDocument/saveDocument")
     public String saveBedragDocument(@ModelAttribute("document") NieuwDocument document, @RequestParam("file") MultipartFile file) throws IOException{
+        System.out.println("document.getBedragId(): " + document.getBedragId());
+
         DocumentenSrvPojo bedragDocument = new DocumentenSrvPojo();
-        
-        bedragDocument.setBedrag(new BedragenSrvPojo(bedragenSrv.findBedrag(document.getBedrag_id())));
+
+        bedragDocument.setBedrag(new BedragenSrvPojo(bedragenSrv.findBedrag(document.getBedragId())));
         //bedragDocument.setDatum(document.getDatum());
         bedragDocument.setDocument(file.getBytes());
         bedragDocument.setDocument_mime(file.getContentType());
         bedragDocument.setDocument_naam(file.getOriginalFilename());
         bedragDocument.setOmschrijving(document.getOmschrijving());
-        bedragDocument.setPk_id(document.getPk_id());
+        bedragDocument.setPk_id(document.getPkId());
         
         Log.info("File bytes: " + file.getBytes().length);
-        Log.info("Document PK_ID: " + document.getPk_id());
+        Log.info("Document PK_ID: " + document.getPkId());
         
-        if (file.getBytes().length == 0 && document.getPk_id() != null){
+        if (file.getBytes().length == 0 && document.getPkId() != null){
            System.out.println("nest");
-           Documenten bedragDocumentOld = documentenSrv.fetchDocument(document.getPk_id());
+           Documenten bedragDocumentOld = documentenSrv.fetchDocument(document.getPkId());
            bedragDocument.setDocument(bedragDocumentOld.getDocument());
            bedragDocument.setDocument_mime(bedragDocumentOld.getDocument_mime());
            bedragDocument.setDocument_naam(bedragDocumentOld.getDocument_naam());
@@ -127,6 +131,6 @@ public class Finances implements Serializable{
         
         documentenSrv.save(bedragDocument);
         
-        return "redirect:/finances/nieuwBedrag/" + document.getBedrag_id();
+        return "redirect:/finances/nieuwBedrag/" + document.getBedragId();
     }
 }

@@ -27,7 +27,7 @@
             </thead>
             <tbody>
                 <tr ng-repeat="company in emptyCompanies">
-                    <td><a href="editCompanies/{{company.pk_id}}">Edit</a></td>
+                    <td><a href="editCompanies/{{company.pkId}}">Edit</a></td>
                     <td>{{company.name}}</td>
                     <td>{{company.dailyPayedHours}}</td>
                 </tr>

@@ -24,7 +24,7 @@
             </thead>
             <tbody>
                 <tr ng-repeat="rekening in emptyRekeningen">
-                        <td><a href="nieuwRekening/{{rekening.pk_id}}">Edit</a></td>
+                        <td><a href="nieuwRekening/{{rekening.pkId}}">Edit</a></td>
                         <td>{{rekening.waarde}}</td>
                         <td>{{rekening.naam}}</td>
                         <td>{{rekening.laatst_bijgewerkt}}</td>

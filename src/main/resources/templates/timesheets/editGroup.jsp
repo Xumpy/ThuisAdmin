@@ -13,7 +13,7 @@
             <form class="col-lg-1" ng-submit="saveGroup()">
                 <input class="col-lg-12 btn btn-primary" type="submit" value="Save"/>
             </form>
-            <form ng-show="rekening.pk_id !== ''" class="col-lg-1" ng-submit="deleteGroup()">
+            <form ng-show="rekening.pkId !== ''" class="col-lg-1" ng-submit="deleteGroup()">
                 <input class="col-lg-12 btn btn-primary" type="submit" value="Delete"/>
             </form>
         </div>
@@ -34,7 +34,7 @@
               <label for="inputCompany" class="col-lg-2 control-label">Company</label>
               <div class="col-lg-4">
                 <select class="form-control" ng-model="group.company"
-                        ng-options="company.name for company in companies track by company.pk_id">
+                        ng-options="company.name for company in companies track by company.pkId">
                             <option value="">-- No Company --</option>
                 </select>
               </div>
@@ -59,7 +59,7 @@
             </thead>
             <tbody>
                 <tr ng-repeat="groupPrice in emptyGroupPrices">
-                    <td><a href="editGroupPrice/{{group.pk_id}}">Edit</a></td>
+                    <td><a href="editGroupPrice/{{group.pkId}}">Edit</a></td>
                     <td>{{groupPrice.startDate}}</td>
                     <td>{{groupPrice.endDate}}</td>
                     <td>{{groupPrice.pricePerHour}}</td>
@@ -78,13 +78,13 @@
     <script type="text/javascript">
         app.controller("fController", function($scope, $http) {
             <%@include file="/resources/template/globalScope.html" %>
-            if ("<c:out value="${pk_id}"/>" !== ""){
-              $http.get("/ThuisAdmin/json/fetch_job_group/<c:out value="${pk_id}"/>").success( function(data){
+            if ("<c:out value="${pkId}"/>" !== ""){
+              $http.get("/ThuisAdmin/json/fetch_job_group/<c:out value="${pkId}"/>").success( function(data){
                   $scope.group = data;
               });  
             } else {
               $scope.group = {
-                  pk_id: "",
+                  pkId: "",
                   name: "",
                   description: "",
                   company: {}

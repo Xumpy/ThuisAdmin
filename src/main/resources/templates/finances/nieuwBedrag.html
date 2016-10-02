@@ -63,10 +63,10 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="document in emptyDocumenten">
-                            <td><a href="/ThuisAdmin/finances/editBedragDocument/{{document.pk_id}}">Edit</a></td>
+                            <td><a th:href="@{/finances/editBedragDocument/{{document.pkId}}}">Edit</a></td>
                             <td>{{document.datum}}</td>
                             <td>{{document.omschrijving}}</td>
-                            <td><a href="/ThuisAdmin/json/fetch_document/{{document.pk_id}}">Download</a></td>
+                            <td><a th:href="@{/json/fetch_document/{{document.pkId}}}">Download</a></td>
                     </tr>
                 </tbody>
                 <tfoot>
@@ -81,7 +81,7 @@
             <script th:inline="javascript">
                 app.controller("fController", function($scope, $http) {
                     var pk_id = /*[[${pk_id}]]*/;
-                    if (pk_id !== ""){
+                    if (pk_id !== null){
                         var url = /*[[@{/json/find_bedrag/}]]*/;
                         $http.get(url + pk_id).success( function(dataBedrag){
                             $scope.bedrag = dataBedrag;
@@ -93,7 +93,7 @@
                             $http.get(url + $scope.bedrag.pk_id).success( function(data){
                                 $scope.documenten = data;
                             });
-                            var url = /*[[@{/json/nieuwBedragDocument/}]]*/;
+                            var url = /*[[@{/finances/nieuwBedragDocument/}]]*/;
                             $scope.nieuwDocument = (function(){
                                 $(location).attr('href',url + $scope.bedrag.pk_id);
                             });

@@ -54,7 +54,7 @@
                 <tr ng-repeat="tickedOverview in tickedOverviewDetails">
                     <td>Project: </td><td>{{tickedOverview.key.name}}</td>
                     <td>Overtime in minutes: </td><td>{{(tickedOverview.value.actualWorked - tickedOverview.value.timesheetWorked)}}</td>
-                    <td><a href="/ThuisAdmin/timesheets/printTimesheet?jobsGroupId={{tickedOverview.key.pk_id}}&month={{tempSelectMonth}}">Print PDF</a>
+                    <td><a href="/ThuisAdmin/timesheets/printTimesheet?jobsGroupId={{tickedOverview.key.pkId}}&month={{tempSelectMonth}}">Print PDF</a>
                     </td>
                 </tr>
             </table>

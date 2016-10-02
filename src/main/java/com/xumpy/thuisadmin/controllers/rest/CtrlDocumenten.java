@@ -5,7 +5,6 @@
  */
 package com.xumpy.thuisadmin.controllers.rest;
 
-import com.xumpy.thuisadmin.dao.model.DocumentenDaoPojo;
 import com.xumpy.thuisadmin.controllers.model.DocumentenReport;
 import com.xumpy.thuisadmin.controllers.model.NieuwDocument;
 import com.xumpy.thuisadmin.domain.Documenten;
@@ -46,7 +45,7 @@ public class CtrlDocumenten implements Serializable{
     public @ResponseBody String deleteDocument(@RequestBody NieuwDocument nieuwDocument){
         DocumentenSrvPojo document = new DocumentenSrvPojo();
         
-        document.setPk_id(nieuwDocument.getPk_id());
+        document.setPk_id(nieuwDocument.getPkId());
         document.setOmschrijving(nieuwDocument.getOmschrijving());
         
         documentenSrv.delete(document);
@@ -78,10 +77,10 @@ public class CtrlDocumenten implements Serializable{
          
          for(Documenten document: documenten){
              NieuwDocument nieuwDocument = new NieuwDocument();
-             nieuwDocument.setBedrag_id(document.getBedrag().getPk_id());
+             nieuwDocument.setBedragId(document.getBedrag().getPk_id());
              //nieuwDocument.setDatum(document.getDatum());
              nieuwDocument.setOmschrijving(document.getOmschrijving());
-             nieuwDocument.setPk_id(document.getPk_id());
+             nieuwDocument.setPkId(document.getPk_id());
              
              nieuwDocumenten.add(nieuwDocument);
          }

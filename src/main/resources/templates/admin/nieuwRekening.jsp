@@ -9,7 +9,7 @@
             <form class="col-lg-1" ng-submit="saveRekening()">
                 <input class="col-lg-12 btn btn-primary" type="submit" value="Save"/>
             </form>
-            <form ng-show="rekening.pk_id !== ''" class="col-lg-1" ng-submit="deleteRekening()">
+            <form ng-show="rekening.pkId !== ''" class="col-lg-1" ng-submit="deleteRekening()">
                 <input class="col-lg-12 btn btn-primary" type="submit" value="Delete"/>
             </form>
         </div>
@@ -34,13 +34,13 @@
         
         app.controller("fController", function($scope, $http) {
             <%@include file="/resources/template/globalScope.html" %>
-            if ("<c:out value="${pk_id}"/>" !== ""){
-              $http.get("/ThuisAdmin/json/rekeningen/<c:out value="${pk_id}"/>").success( function(data){
+            if ("<c:out value="${pkId}"/>" !== ""){
+              $http.get("/ThuisAdmin/json/rekeningen/<c:out value="${pkId}"/>").success( function(data){
                   $scope.rekening = data;
               });  
             } else {
               $scope.rekening = {
-                  pk_id: "",
+                  pkId: "",
                   waarde: "",
                   naam: "",
                   laatst_bijgewerkt: datum

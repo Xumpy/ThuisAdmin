@@ -26,7 +26,7 @@
             </thead>
             <tbody>
                 <tr ng-repeat="groep in emptyGroepen">
-                        <td><a href="nieuwGroep/{{groep.pk_id}}">Edit</a></td>
+                        <td><a href="nieuwGroep/{{groep.pkId}}">Edit</a></td>
                         <td>{{groep.hoofdGroep.naam}}</td>
                         <td>{{groep.naam}}</td>
                         <td>{{groep.omschrijving}}</td>

@@ -13,7 +13,7 @@
             <form class="col-lg-1" ng-submit="saveCompany()">
                 <input class="col-lg-12 btn btn-primary" type="submit" value="Save"/>
             </form>
-            <form ng-show="rekening.pk_id !== ''" class="col-lg-1" ng-submit="deleteCompany()">
+            <form ng-show="rekening.pkId !== ''" class="col-lg-1" ng-submit="deleteCompany()">
                 <input class="col-lg-12 btn btn-primary" type="submit" value="Delete"/>
             </form>
         </div>
@@ -35,13 +35,13 @@
     <script type="text/javascript">
         app.controller("fController", function($scope, $http) {
             <%@include file="/resources/template/globalScope.html" %>
-            if ("<c:out value="${pk_id}"/>" !== ""){
-              $http.post("/ThuisAdmin/json/fetch_company", '<c:out value="${pk_id}"/>').success( function(data){
+            if ("<c:out value="${pkId}"/>" !== ""){
+              $http.post("/ThuisAdmin/json/fetch_company", '<c:out value="${pkId}"/>').success( function(data){
                   $scope.company = data;
               });  
             } else {
               $scope.company = {
-                  pk_id: "",
+                  pkId: "",
                   name: "",
                   dailyPayedHours: ""
               };
