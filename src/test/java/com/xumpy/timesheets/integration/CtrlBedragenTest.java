@@ -20,6 +20,8 @@ import com.xumpy.utilities.LocalTestProfile;
 import java.util.List;
 import org.apache.log4j.Logger;
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -55,6 +57,7 @@ public class CtrlBedragenTest {
     private static Logger log = Logger.getLogger(CtrlBedragenTest.class);
     
     @Test
+    @Ignore
     public void testFetchBedragen(){
         userInfo.setPersoon(persoonDao.findOne(1));
         BeheerBedragenReportLst beheerBedragenReportLst = new BeheerBedragenReportLst();

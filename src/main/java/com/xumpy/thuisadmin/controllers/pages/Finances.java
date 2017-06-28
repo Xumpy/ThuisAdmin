@@ -62,7 +62,7 @@ public class Finances implements Serializable{
     public String viewOverzichtPerGroep(){
         return "finances/overzichtPerGroep";
     }
-    
+
     @RequestMapping(value = "finances/nieuwBedrag/{bedragId}")
     public String viewNieuwBedrag(@PathVariable Integer bedragId, Model model){
         model.addAttribute("pk_id", bedragId);
@@ -83,7 +83,12 @@ public class Finances implements Serializable{
     public String OverviewMonthCategory(){
         return "finances/OverviewMonthCategory";
     }
-    
+
+    @RequestMapping(value = "finances/OverviewMonth")
+    public String OverviewMonth(){
+        return "finances/OverviewMonth";
+    }
+
     @RequestMapping(value="/finances/editBedragDocument/{documentId}")
     public String editBedragDocument(@PathVariable Integer documentId, Model model){
         model.addAttribute("pk_id", documentId);

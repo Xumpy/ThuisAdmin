@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import static junit.framework.Assert.assertEquals;
+
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -42,6 +44,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {InitDatabase.class, InitOldDatabase.class, UserService.class, BedragenSrvImpl.class})
 @ActiveProfiles("tst_local")
+@Ignore
 public class GraphiekTests {
     
     @Autowired BedragenSrv bedragenSrv;

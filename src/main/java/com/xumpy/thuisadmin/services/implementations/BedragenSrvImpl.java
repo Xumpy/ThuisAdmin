@@ -689,4 +689,25 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         
         return rekeningStand;
     }
+
+    @Override
+    @Transactional(value="jpaTransactionManager")
+    public Map<String, BigDecimal> getPositiveNegativeBedragen(Date startDate, Date endDate){
+        Map<String, BigDecimal> bedragen = new HashMap<String, BigDecimal>();
+
+        List<BedragenDaoPojo> bedragenDaoPojos = bedragenDao.BedragInPeriode(startDate, endDate, userInfo.getPersoon().getPk_id());
+
+        bedragen.put("POS", new BigDecimal(0));
+        bedragen.put("NEG", new BigDecimal(0));
+
+        for (BedragenDaoPojo bedragenDaoPojo: bedragenDaoPojos){
+            if (bedragenDaoPojo.getGroep().getNegatief() == 1){
+                bedragen.put("NEG", bedragen.get("NEG").add(bedragenDaoPojo.getBedrag()));
+            } else {
+                bedragen.put("POS", bedragen.get("POS").add(bedragenDaoPojo.getBedrag()));
+            }
+        }
+
+        return bedragen;
+    }
 }
