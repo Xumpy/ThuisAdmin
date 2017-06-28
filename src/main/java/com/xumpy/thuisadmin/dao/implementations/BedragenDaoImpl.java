@@ -51,6 +51,7 @@ public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer
 
     @Query("from BedragenDaoPojo where (datum >= :startDate and datum <= :endDate)"
             + " and (persoon.pk_id = :persoonId)"
+            + " and groep.pk_id not in (2,3,4)"
             + " order by datum asc, bedrag asc")
     public List<BedragenDaoPojo> BedragInPeriode(@Param("startDate") Date startDate,
                                                  @Param("endDate") Date endDate,

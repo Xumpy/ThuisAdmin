@@ -61,16 +61,10 @@
 
             $scope.$watchCollection('OverviewMonthCategory', function(){
                 if ($scope.OverviewMonthCategory !== undefined){
-                    alert(JSON.stringify($scope.OverviewMonthCategory));
-                    var jsonData = [
-                        ['Year', 'Sales', 'Expenses', 'Profit'],
-                        ['2014', 1000, 400, 200],
-                        ['2015', 1170, 460, 250],
-                        ['2016', 660, 1120, 300],
-                        ['2017', 1030, 540, 350]
-                    ];
-
-                    drawChart(jsonData);
+                    var res = $http.post('/ThuisAdmin/json/fetchOverviewMonth', $scope.OverviewMonthCategory);
+                    res.success(function(data) {
+                        drawChart(data.values);
+                    });
                 }
             });
 

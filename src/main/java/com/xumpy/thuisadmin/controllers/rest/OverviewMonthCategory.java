@@ -80,24 +80,16 @@ public class OverviewMonthCategory implements Serializable{
         return overviewMonthCategoryResult;
     }
 
-    @RequestMapping("/json/fetchOverviewMonthCategory")
+    @RequestMapping("/json/fetchOverviewMonth")
     public @ResponseBody BarGraphic fetchMonthBedragen(@RequestBody OverviewMonthCategoryInput overviewMonthCategory) throws ParseException{
-        SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
-        Date startDate = dt.parse("01/" + overviewMonthCategory.getBeginDate());
-        Calendar c = Calendar.getInstance();
-        c.setTime(dt.parse("01/" + overviewMonthCategory.getEndDate()));
-        c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
-        Date endDate = c.getTime();
+        List<Object> headers = new ArrayList<Object>();
 
-        List<Integer> mainGroups = new ArrayList<Integer>();
-        for(MainGroupValue mainGroup: overviewMonthCategory.getMainGroupValues()){
-            mainGroups.add(mainGroup.getPk_id());
-        }
+        headers.add("Maand");
+        headers.add("Opbrengsten");
+        headers.add("Kosten");
 
-        List<? extends Bedragen> bedragen = bedragenSrv.filterBedragenWithMainGroup(bedragenSrv.selectBedragenInPeriode(startDate, endDate), mainGroups);
-        OverviewMonthCategoryResulst overviewMonthCategoryResult = new OverviewMonthCategoryResulst(bedragen, groepenSrv, bedragenSrv);
-
-        return overviewMonthCategoryResult;
+        BarGraphic barGraphic = new BarGraphic(headers, bedragenSrv.getBedragenInMonthRange(overviewMonthCategory.getBeginDate(), overviewMonthCategory.getEndDate()));
+        return barGraphic;
     }
 
     @RequestMapping("/json/report_overzicht_groep_bedragen_per_maand")

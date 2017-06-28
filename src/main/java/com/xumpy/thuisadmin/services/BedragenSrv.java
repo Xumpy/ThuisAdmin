@@ -16,6 +16,7 @@ import com.xumpy.thuisadmin.domain.Rekeningen;
 import com.xumpy.thuisadmin.services.model.BedragenSrvPojo;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -69,4 +70,6 @@ public interface BedragenSrv {
     public BigDecimal getBedragAtDate(Date date, Rekeningen rekening);
 
     public Map<String, BigDecimal> getPositiveNegativeBedragen(Date startDate, Date endDate);
+    public List<List<Object>> getBedragenInMonthRange(String startMonth, String endMonth) throws ParseException;
+
 }
