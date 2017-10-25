@@ -28,8 +28,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  * 
  */
 @RunWith(MockitoJUnitRunner.class)
-@Ignore
-public class MainSetup {
+public abstract class MainSetup {
     @Mock public Personen loginPersoon;
     @Spy public UserInfo userInfo;
     @Mock public SessionFactory sessionFactory;

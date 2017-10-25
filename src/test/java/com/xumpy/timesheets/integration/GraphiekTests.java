@@ -40,11 +40,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  *
  * @author nico
  */
+@Ignore
 @Category(LocalTestProfile.class) // Test will only work with specific production database which can be migrated
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {InitDatabase.class, InitOldDatabase.class, UserService.class, BedragenSrvImpl.class})
-@ActiveProfiles("tst_local")
-@Ignore
+@ActiveProfiles("dev")
 public class GraphiekTests {
     
     @Autowired BedragenSrv bedragenSrv;
