@@ -16,9 +16,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>unknown.binary</groupId>
-            <artifactId>org-apache-commons-logging</artifactId>
-            <version>SNAPSHOT</version>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.2</version>
         </dependency>
 
         <dependency>
@@ -82,10 +82,9 @@
             <version>3.2.5.RELEASE</version>
         </dependency>
         <dependency>
-            <groupId>unknown.binary</groupId>
-            <artifactId>spring-orm-4.0.1.RELEASE</artifactId>
-            <version>SNAPSHOT</version>
-            <type>jar</type>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>4.0.1.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
