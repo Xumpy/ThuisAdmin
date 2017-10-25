@@ -891,5 +891,32 @@ public class BedragenSrvTest{
         
         assertEquals(new BigDecimal(100), overzichtGroepBedragenTot.getSomBedrag());
     }
+
+    @Test
+    public void testGetAllMonths(){
+        String beginMonth = "02/2017";
+        String endMonth = "06/2018";
+
+        List<String> expectedResult = new ArrayList<String>();
+        expectedResult.add("02/2017");
+        expectedResult.add("03/2017");
+        expectedResult.add("04/2017");
+        expectedResult.add("05/2017");
+        expectedResult.add("06/2017");
+        expectedResult.add("07/2017");
+        expectedResult.add("08/2017");
+        expectedResult.add("09/2017");
+        expectedResult.add("10/2017");
+        expectedResult.add("11/2017");
+        expectedResult.add("12/2017");
+        expectedResult.add("01/2018");
+        expectedResult.add("02/2018");
+        expectedResult.add("03/2018");
+        expectedResult.add("04/2018");
+        expectedResult.add("05/2018");
+        expectedResult.add("06/2018");
+
+        assertEquals(expectedResult, bedragenSrv.getAllMonths(beginMonth, endMonth));
+    }
 }
 

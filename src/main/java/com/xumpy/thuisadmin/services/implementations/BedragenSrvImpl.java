@@ -34,15 +34,7 @@ import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -689,5 +681,80 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         }
         
         return rekeningStand;
+    }
+
+    @Override
+    @Transactional(value="jpaTransactionManager")
+    public Map<String, BigDecimal> getPositiveNegativeBedragen(Date startDate, Date endDate){
+        Map<String, BigDecimal> bedragen = new HashMap<String, BigDecimal>();
+
+        List<BedragenDaoPojo> bedragenDaoPojos = bedragenDao.BedragInPeriode(startDate, endDate, userInfo.getPersoon().getPk_id());
+
+        bedragen.put("POS", new BigDecimal(0));
+        bedragen.put("NEG", new BigDecimal(0));
+
+        for (BedragenDaoPojo bedragenDaoPojo: bedragenDaoPojos){
+            if (bedragenDaoPojo.getGroep().getNegatief() == 1){
+                bedragen.put("NEG", bedragen.get("NEG").add(bedragenDaoPojo.getBedrag()));
+            } else {
+                bedragen.put("POS", bedragen.get("POS").add(bedragenDaoPojo.getBedrag()));
+            }
+        }
+
+        return bedragen;
+    }
+
+    public List<List<Object>> getBedragenInMonthRange(String startMonth, String endMonth) throws ParseException {
+        List<List<Object>> bedragenInMonthRange = new ArrayList<List<Object>>();
+
+        for(String month: getAllMonths(startMonth, endMonth)){
+            SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
+            Date startDate = dt.parse("01/" + month);
+            Calendar c = Calendar.getInstance();
+            c.setTime(startDate);
+            c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+            Date endDate = c.getTime();
+
+            Map<String, BigDecimal> bedragen = getPositiveNegativeBedragen(startDate, endDate);
+
+            List<Object> values = new ArrayList<Object>();
+            values.add(month);
+            values.add(bedragen.get("POS"));
+            values.add(bedragen.get("NEG"));
+
+            bedragenInMonthRange.add(values);
+        }
+
+        return bedragenInMonthRange;
+    }
+
+
+    private Integer monthToInteger(String monthYear){
+        String[] monthSplit = monthYear.split("/");
+        Integer month = Integer.parseInt(monthSplit[0]);
+        Integer year = Integer.parseInt(monthSplit[1]);
+
+        return (year * 12) + month;
+    }
+
+    private String integerToMonth(Integer monthInteger){
+        Integer month = monthInteger % 12;
+        Integer year = (int) Math.floor(monthInteger / 12);
+
+        if (month == 0){
+            month = 12;
+            year = year - 1;
+        }
+
+        return String.format("%02d", month) + "/" + Integer.toString(year);
+    }
+
+    public List<String> getAllMonths(String startMonth, String endMonth){
+        List<String> allMonths = new ArrayList<String>();
+        for(int i=monthToInteger(startMonth); i<=monthToInteger(endMonth); i++){
+            allMonths.add(integerToMonth(i));
+        }
+
+        return allMonths;
     }
 }

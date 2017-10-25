@@ -5,6 +5,7 @@
  */
 package com.xumpy.thuisadmin.controllers.rest;
 
+import com.xumpy.thuisadmin.controllers.model.BarGraphic;
 import com.xumpy.thuisadmin.controllers.model.OverzichtGroepBedragenTotal;
 import com.xumpy.thuisadmin.controllers.model.finances.overviewMonthCategory.*;
 import com.xumpy.thuisadmin.domain.Bedragen;
@@ -78,7 +79,19 @@ public class OverviewMonthCategory implements Serializable{
         
         return overviewMonthCategoryResult;
     }
-    
+
+    @RequestMapping("/json/fetchOverviewMonth")
+    public @ResponseBody BarGraphic fetchMonthBedragen(@RequestBody OverviewMonthCategoryInput overviewMonthCategory) throws ParseException{
+        List<Object> headers = new ArrayList<Object>();
+
+        headers.add("Maand");
+        headers.add("Opbrengsten");
+        headers.add("Kosten");
+
+        BarGraphic barGraphic = new BarGraphic(headers, bedragenSrv.getBedragenInMonthRange(overviewMonthCategory.getBeginDate(), overviewMonthCategory.getEndDate()));
+        return barGraphic;
+    }
+
     @RequestMapping("/json/report_overzicht_groep_bedragen_per_maand")
     public @ResponseBody OverzichtGroepBedragenTotal fetchReportOverzichtGroepBedragenPerMonth(@RequestBody OverviewMonthCategoryReport overviewMonthCategoryReport) throws ParseException {
         SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy"); 
