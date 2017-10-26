@@ -95,7 +95,6 @@ public class GroepenSrvPojo implements Groepen{
 
     @Override
     public boolean equals(Object objGroep) {
-        System.out.println("Entered equals");
         GroepenSrvPojo groep = (GroepenSrvPojo)objGroep;
         
         return this.pk_id.equals(groep.getPk_id());
@@ -105,7 +104,6 @@ public class GroepenSrvPojo implements Groepen{
     public int hashCode() {
         int hash = 7;
         hash = 13 * hash + (this.pk_id != null ? this.pk_id.hashCode() : 0);
-        System.out.println("My hashcode: " + hash);
         return hash;
     }
     

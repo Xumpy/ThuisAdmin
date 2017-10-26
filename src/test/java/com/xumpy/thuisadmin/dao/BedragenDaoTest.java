@@ -32,19 +32,26 @@ import java.sql.Date;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+
+import com.xumpy.timesheets.services.session.SessionTimesheet;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 
 /**
  *
@@ -53,6 +60,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {InitDatabase.class, InitOldDatabase.class, InitServices.class, UserService.class})
 @ActiveProfiles("junit")
+@WebAppConfiguration
 public class BedragenDaoTest{
     @Autowired PersonenDaoImpl personenDao;
     @Autowired GroepenDaoImpl groepenDao;
@@ -60,7 +68,7 @@ public class BedragenDaoTest{
     @Autowired BedragenDaoImpl bedragenDao;
     @Autowired UserInfo userInfo;
     @Autowired BedragenSrv bedragenSrv;
-    
+
     private Personen personen;
     private Groepen groep;
     private Rekeningen rekening;

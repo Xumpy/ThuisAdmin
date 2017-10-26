@@ -15,19 +15,22 @@
                     <input class="btn btn-primary" type="submit" value="Process Completed Ticked Jobs"/>
                 </form>
             </div>
-            <div class="col-lg-5">
+            <div class="col-lg-4">
                 <form class="col-lg-12 form-horizontal" method="post" action="/ThuisAdmin/timesheets/saveSQLite" enctype="multipart/form-data">
                     <input class="col-lg-4" name="file" id="file" type="file">
                     <input class="col-lg-6 btn btn-primary" type="submit" value="Upload New File"/>
                 </form>
             </div>
-            <div class="col-lg-5">
+            <div class="col-lg-6">
                 <form class="col-lg-12 form-inline" method="post" action="/ThuisAdmin/timesheets/saveSSHSQLite" enctype="multipart/form-data">
                     <div class="col-lg-4 form-group">
                         <input class="col-lg-12 form-control" name="ip" id="ip" placeholder="IP Address" type="text">
                     </div>
-                    <div class="col-lg-6 form-group">
-                        <input class="col-lg-12 btn btn-primary" type="submit" value="Upload From SSH Server"/>
+                    <div class="col-lg-3 form-group">
+                        <input class="col-lg-12 btn btn-primary" name="ssh" type="submit" value="SSH"/>
+                    </div>
+                    <div class="col-lg-3 form-group">
+                        <input class="col-lg-12 btn btn-primary" name="web" type="submit" value="Web"/>
                     </div>
                 </form>
             </div>

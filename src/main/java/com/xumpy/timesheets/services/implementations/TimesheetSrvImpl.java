@@ -7,18 +7,24 @@ package com.xumpy.timesheets.services.implementations;
 
 import com.itextpdf.text.DocumentException;
 import com.xumpy.itext.services.TimeSheet;
+import com.xumpy.thuisadmin.dao.sqlite.model.TimeRecording;
 import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
 import com.xumpy.timesheets.dao.implementations.JobsGroupDaoImpl;
 import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.services.TimesheetSrv;
+import com.xumpy.timesheets.services.rest.RestTimesheet;
+import com.xumpy.timesheets.services.rest.RestTimesheetDetail;
+import com.xumpy.timesheets.services.rest.RestTimesheetHour;
+import com.xumpy.timesheets.services.rest.TimesheetWebService;
 import com.xumpy.utilities.CustomDateUtils;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
+import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +39,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class TimesheetSrvImpl implements TimesheetSrv{
 
     private Logger log = Logger.getLogger(TimesheetSrvImpl.class.getName());
-    
+    private DateFormat format = new SimpleDateFormat("ddMMyyyy", Locale.ENGLISH);
+    private static final int MONTHS_TO_GET_FROM_WEBSERVICE = 2;
+
     @Autowired JobsDaoImpl jobsDao;
     @Autowired JobsGroupDaoImpl jobsGroupDao;
-    
+    @Autowired TimesheetWebService timesheetWebService;
     @Override
     @Transactional
     public OutputStream getTimesheet(Integer jobsGroupId, String month, OutputStream outputStream){
@@ -74,5 +82,53 @@ public class TimesheetSrvImpl implements TimesheetSrv{
         
         return null;
     }
-    
+
+    private String getStartDate(){
+        Date referenceDate = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(referenceDate);
+        c.add(Calendar.MONTH, -MONTHS_TO_GET_FROM_WEBSERVICE);
+        return format.format(c.getTime());
+    }
+
+    private String getEndDate(){
+        return format.format(new Date());
+    }
+
+    private TimeRecording createTimeRecording(Integer seqId, String hoursBatch, Integer ticked){
+        TimeRecording timeRecording = new TimeRecording();
+
+        timeRecording.setSqlite_id(seqId);
+        timeRecording.setStarted(ticked);
+        timeRecording.setTicked(hoursBatch);
+
+        return timeRecording;
+    }
+
+    private String createFullDate(String dateIn, String hoursIn){
+        return dateIn + " " + hoursIn;
+    }
+
+    private List<TimeRecording> transformRestTimesheetToTimeRecording(RestTimesheet restTimesheet){
+        List<TimeRecording> timeRecordings = new LinkedList<TimeRecording>();
+
+        for (RestTimesheetDetail restTimesheetDetail: restTimesheet.getBatches()){
+            if (restTimesheetDetail.getHoursBatchIn() != null){
+                for(RestTimesheetHour hoursBatchIn: restTimesheetDetail.getHoursBatchIn()){
+                    timeRecordings.add(createTimeRecording(hoursBatchIn.getSeqNr(), createFullDate(restTimesheetDetail.getDate(), hoursBatchIn.getHours()), 10));
+                }
+            }
+            if (restTimesheetDetail.getHoursBatchOut() != null){
+                for(RestTimesheetHour hoursBatchOut: restTimesheetDetail.getHoursBatchOut()){
+                    timeRecordings.add(createTimeRecording(hoursBatchOut.getSeqNr(), createFullDate(restTimesheetDetail.getDate(), hoursBatchOut.getHours()), 20));
+                }
+            }
+        }
+
+        return timeRecordings;
+    }
+
+    public List<TimeRecording> getTimeRecordingFromWeb(String ip){
+        return transformRestTimesheetToTimeRecording(timesheetWebService.callWebService(ip, getStartDate(), getEndDate()));
+    }
 }

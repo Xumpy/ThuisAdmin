@@ -37,9 +37,7 @@ public class PersonenSrvTest {
         registerUser.setVoornaam("test123");
         registerUser.setUsername("test123");
         registerUser.setPassword("test123");
-        
-        System.out.println("Test");
-        
+
         PersonenSrvPojo persoon = new PersonenSrvPojo(personenSrv.createRegisterUser(registerUser));
         persoon.set_password(persoon.getMd5_password());
         

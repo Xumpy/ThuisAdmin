@@ -78,8 +78,7 @@ public class GroepenSrvImpl implements GroepenSrv, Serializable{
     @Override
     public List<? extends Groepen> findAllHoofdGroepen(List<? extends Bedragen> bedragen){
         List<Groepen> groepen = new ArrayList<Groepen>();
-        System.out.println(bedragen.size());
-            
+
         for (Bedragen bedrag: bedragen){
             if (!groepen.contains(getHoofdGroep(bedrag.getGroep()))){
                 groepen.add(getHoofdGroep(bedrag.getGroep()));

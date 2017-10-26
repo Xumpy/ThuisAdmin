@@ -5,7 +5,6 @@
  */
 package com.xumpy.timesheets.services.implementations;
 
-import com.xumpy.thuisadmin.dao.sqlite.LoadSqlLite;
 import com.xumpy.thuisadmin.dao.sqlite.model.TimeRecording;
 import com.xumpy.timesheets.controller.model.JobsCtrlPojo;
 import com.xumpy.timesheets.controller.model.TickedJobsCtrlPojo;
@@ -23,9 +22,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import com.xumpy.timesheets.services.session.SessionTimesheet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
+
 /**
  *
  * @author nicom
@@ -35,7 +39,8 @@ public class TickedJobsSrvImpl implements TickedJobsSrv{
 
     @Autowired TickedJobsDaoImpl tickedJobsDao;
     @Autowired JobsDaoImpl jobsDao;
-    
+    @Autowired SessionTimesheet sessionTimesheet;
+
     @Override
     @Transactional
     public TickedJobs select(Integer pk_id) {
@@ -75,8 +80,8 @@ public class TickedJobsSrvImpl implements TickedJobsSrv{
         TickedJobsLstCtrlPojo tickedJobsFiltered = new TickedJobsLstCtrlPojo();
         List<? extends TickedJobs> tickedJobsAll = tickedJobsDao.selectAllTickedJobs();
         try { 
-            List<TimeRecording> timeRecordings = LoadSqlLite.loadTimeRecordings("/tmp/timeRecording.db");
-            
+            List<TimeRecording> timeRecordings = sessionTimesheet.getTimesheetTable();
+
             for (TimeRecording timeRecording: timeRecordings){
                 boolean found = false;
                 for (TickedJobs tickedJob: tickedJobsAll){
@@ -123,7 +128,7 @@ public class TickedJobsSrvImpl implements TickedJobsSrv{
             }
             
         } catch (Exception ex) {
-            System.out.println("Error occured loading SQLite Database");
+            System.out.println(ex.getMessage());
         }
         
         return tickedJobsFiltered;
