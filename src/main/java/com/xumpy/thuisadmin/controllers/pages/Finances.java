@@ -127,7 +127,6 @@ public class Finances implements Serializable{
         Log.info("Document PK_ID: " + document.getPkId());
         
         if (file.getBytes().length == 0 && document.getPkId() != null){
-           System.out.println("nest");
            Documenten bedragDocumentOld = documentenSrv.fetchDocument(document.getPkId());
            bedragDocument.setDocument(bedragDocumentOld.getDocument());
            bedragDocument.setDocument_mime(bedragDocumentOld.getDocument_mime());

@@ -1,0 +1,49 @@
+{
+  "batches": [
+    {
+      "date": "2017-10-12",
+      "hoursBatchIn": [
+        "08:47:00"
+      ],
+      "hoursBatchOut": [
+        "04:42:00"
+      ]
+    },
+    {
+      "date": "2017-10-13",
+      "hoursBatchIn": [
+        "07:43:00"
+      ],
+      "hoursBatchOut": [
+        "03:59:00"
+      ]
+    },
+    {
+      "date": "2017-10-17",
+      "hoursBatchIn": [
+        "07:33:00"
+      ],
+      "hoursBatchOut": [
+        "04:00:00"
+      ]
+    },
+    {
+      "date": "2017-10-18",
+      "hoursBatchIn": [
+        "07:40:00"
+      ],
+      "hoursBatchOut": [
+        "04:01:00"
+      ]
+    },
+    {
+      "date": "2017-10-19",
+      "hoursBatchIn": [
+        "07:47:00"
+      ],
+      "hoursBatchOut": [
+        "04:22:00"
+      ]
+    }
+  ]
+}

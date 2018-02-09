@@ -1,0 +1,113 @@
+<html layout:decorator="views/layout" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+    <body>
+        <div layout:fragment="content">
+            <div class="col-lg-12">
+                <form class="col-lg-1" ng-submit="saveGroup()">
+                    <input class="col-lg-12 btn btn-primary" type="submit" value="Save"/>
+                </form>
+                <form ng-show="rekening.pk_id !== ''" class="col-lg-1" ng-submit="deleteGroup()">
+                    <input class="col-lg-12 btn btn-primary" type="submit" value="Delete"/>
+                </form>
+            </div>
+            <div class="col-lg-6 well">
+                <div class="form-group col-lg-12">
+                  <label for="inputNaam" class="col-lg-2 control-label">Naam</label>
+                  <div class="col-lg-4">
+                    <input class="form-control" id="inputNaam" ng-model="group.name" placeholder="Naam" type="text"/>
+                  </div>
+                </div>
+                <div class="form-group col-lg-12">
+                  <label for="inputVoornaam" class="col-lg-2 control-label">Description</label>
+                  <div class="col-lg-4">
+                    <input class="form-control" id="inputVoornaam" ng-model="group.description" placeholder="Description" type="text"/>
+                  </div>
+                </div>
+                <div class="form-group col-lg-12">
+                  <label for="inputCompany" class="col-lg-2 control-label">Company</label>
+                  <div class="col-lg-4">
+                    <select class="form-control" ng-model="group.company"
+                            ng-options="company.name for company in companies track by company.pk_id">
+                                <option value="">-- No Company --</option>
+                    </select>
+                  </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <form class="form-horizontal" action="editGroupPrice">
+                    <div class="col-lg-1">
+                        <input class="btn btn-primary" type="submit" value="New Price"/>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-12">
+                <table st-safe-src="groupPrices" st-table="emptyGroupPrices" class="table table-striped table-hover ">
+                <thead>
+                  <tr>
+                      <th></th>
+                      <th st-sort="startDate">Start Date</th>
+                      <th st-sort="endDate">End Date</th>
+                      <th st-sort="price">Price per hour</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="groupPrice in emptyGroupPrices">
+                        <td><a href="editGroupPrice/{{group.pk_id}}">Edit</a></td>
+                        <td>{{groupPrice.startDate}}</td>
+                        <td>{{groupPrice.endDate}}</td>
+                        <td>{{groupPrice.pricePerHour}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" class="text-center">
+                                <div st-pagination="" st-items-by-page="10" st-displayed-pages="100"></div>
+                        </td>
+                    </tr>
+                </tfoot>
+                </table>
+            </div>
+            <script th:inline="javascript">
+                app.controller("fController", function($scope, $http) {
+                    var pk_id = /*[[${pk_id}]]*/;
+                    if (pk_id !== ""){
+                        var url = /*[[@{/json/fetch_job_group/}]]*/;
+                        $http.get(url + pk_id).success( function(data){
+                            $scope.group = data;
+                        });
+                    } else {
+                        $scope.group = {
+                            pk_id: "",
+                            name: "",
+                            description: "",
+                            company: {}
+                        };
+                    }
+
+                    $scope.saveGroup = (function(){
+                        $http.post(/*[[@{/json/save_job_group}]]*/, $scope.group).success( function() {
+                            $(location).attr('href',/*[[@{/timesheets/group}]]*/);
+                        }).error( function() {
+                            bootbox.alert("Error occured during save");
+                        });
+                    });
+
+                    $scope.deleteGroup = (function(){
+                        bootbox.confirm("Are you sure you want to delete this Group?", function(result) {
+                            if (result === true){
+                                $http.post(/*[[@{/json/delete_job_group}]]*/, $scope.group).success( function() {
+                                    $(location).attr('href',/*[[@{/timesheets/group}]]*/);
+                                }).error( function(){
+                                    bootbox.alert("Error occured during delete");
+                                });
+                            }
+                        });
+                    });
+
+                    $http.get(/*[[@{/json/fetch_all_companies}]]*/).success( function(data){
+                        $scope.companies = data;
+                    });
+                });
+            </script>
+        </div>
+    </body>
+</html>

@@ -137,11 +137,9 @@ public class TickedJobsDetailSrv {
             Map worked = new HashMap<String, String>();
             
             for(Jobs job: jobs){
-                System.out.println(job.getPk_id());
                 if (jobsGroup.getPk_id().equals(job.getJobsGroup().getPk_id())){
                     List<? extends TickedJobs> tickedJobs = tickedJobsDao.selectTickedJobsByJob(job.getPk_id());
-                    System.out.println(tickedJobs.size());
-                    
+
                     TickedJobsDetail jobsDetail = calculate(tickedJobs, new BigDecimal(30));
 
                     timesheetWorked = timesheetWorked.add(job.getWorkedHours());

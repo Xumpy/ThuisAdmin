@@ -63,10 +63,10 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="document in emptyDocumenten">
-                            <td><a th:href="@{/finances/editBedragDocument/{{document.pkId}}}">Edit</a></td>
+                            <td><a th:href="@{/finances/editBedragDocument/{{document.pk_id}}}">Edit</a></td>
                             <td>{{document.datum}}</td>
                             <td>{{document.omschrijving}}</td>
-                            <td><a th:href="@{/json/fetch_document/{{document.pkId}}}">Download</a></td>
+                            <td><a th:href="@{/json/fetch_document/{{document.pk_id}}}">Download</a></td>
                     </tr>
                 </tbody>
                 <tfoot>

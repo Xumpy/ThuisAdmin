@@ -71,10 +71,7 @@ public class GroepenSrvTest {
         
         groepEq1.setPk_id(1);
         groepEq2.setPk_id(1);
-        
-        if (groepEq1.equals(groepEq2)){
-            System.out.println("---- Equals");
-        }
+
         assertEquals(groepEq1, groepEq2);
     }
     

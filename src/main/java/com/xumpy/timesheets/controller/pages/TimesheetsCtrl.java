@@ -5,28 +5,23 @@
  */
 package com.xumpy.timesheets.controller.pages;
 
-import com.jcraft.jsch.Channel;
-import com.jcraft.jsch.ChannelSftp;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.Session;
-import com.xumpy.timesheets.controller.model.JobsGroupCtrl;
+import com.xumpy.thuisadmin.dao.sqlite.LoadSqlLite;
 import com.xumpy.timesheets.services.TimesheetSrv;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.sql.SQLException;
 import javax.servlet.http.HttpServletResponse;
+
+import com.xumpy.timesheets.services.session.SessionTimesheet;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,7 +35,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 public class TimesheetsCtrl {
     @Autowired TimesheetSrv timesheetSrv;
-    
+    @Autowired SessionTimesheet sessionTimesheet;
+
     private Logger log = Logger.getLogger(TimesheetsCtrl.class);
     
     @RequestMapping(value = "timesheets/overview")
@@ -108,13 +104,27 @@ public class TimesheetsCtrl {
         return "redirect:/timesheets/importTimeRecordings";
     }
     
-    @RequestMapping(value="timesheets/saveSSHSQLite")
+    @RequestMapping(params="ssh", value="timesheets/saveSSHSQLite")
     public String saveSSHSQLite(@RequestParam("ip") String ip) throws IOException{
         Runtime.getRuntime().exec(new String[] {"/bin/sh","-c", "sshpass -p 'pcat3900' scp -r root@" + ip + ":/data/data/com.dynamicg.timerecording/files/timeRecording.db /tmp/timeRecording.db"});
-        
+        try {
+            sessionTimesheet.setTimesheetTable(LoadSqlLite.loadTimeRecordings("/tmp/timeRecording.db"));
+        } catch (ClassNotFoundException exception) {
+            throw new RuntimeException(exception);
+        } catch (SQLException exception) {
+            throw new RuntimeException(exception);
+        }
+
         return "redirect:/timesheets/importTimeRecordings";
     }
-    
+
+    @RequestMapping(params="web", value="timesheets/saveSSHSQLite")
+    public String saveWebService(@RequestParam("ip") String ip) throws IOException{
+        sessionTimesheet.setTimesheetTable(timesheetSrv.getTimeRecordingFromWeb(ip));
+
+        return "redirect:/timesheets/importTimeRecordings";
+    }
+
     @RequestMapping(value="timesheets/printTimesheet", method = RequestMethod.GET)
     public @ResponseBody ResponseEntity<byte[]> fetchDocumentBlob(@RequestParam Integer jobsGroupId, @RequestParam String month, HttpServletResponse response) throws IOException{
         OutputStream out = response.getOutputStream();

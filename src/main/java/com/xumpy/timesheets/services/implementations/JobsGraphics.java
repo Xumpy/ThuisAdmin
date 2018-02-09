@@ -70,7 +70,6 @@ public class JobsGraphics {
         BigDecimal payedHours = new BigDecimal(0);
         
         for (BigDecimal payedHoursFromList: lstPayedHours){
-            System.out.println("payedHoursFromList: " + payedHoursFromList);
             if (payedHoursFromList.compareTo(payedHours) > 0){
                 payedHours = payedHoursFromList;
             }
