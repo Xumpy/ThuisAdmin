@@ -40,7 +40,7 @@ public class JobsSrvImpl implements JobsSrv{
     @Override
     @Transactional
     public Jobs select(Integer pk_id) {
-        return jobsDao.findOne(pk_id);
+        return jobsDao.findById(pk_id).get();
     }
 
     @Override

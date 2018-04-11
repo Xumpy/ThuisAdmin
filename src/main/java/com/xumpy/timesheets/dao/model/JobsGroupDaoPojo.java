@@ -36,6 +36,9 @@ public class JobsGroupDaoPojo implements JobsGroup, Serializable {
     @JoinColumn(name="FK_COMPANY_ID")
     private CompanyDaoPojo company;
 
+    @Column(name="CLOSED")
+    private Boolean closed;
+
     public void setCompany(CompanyDaoPojo company) {
         this.company = company;
     }
@@ -68,12 +71,22 @@ public class JobsGroupDaoPojo implements JobsGroup, Serializable {
     }
     
     public JobsGroupDaoPojo(){}
-    
+
+    @Override
+    public Boolean getClosed() {
+        return closed;
+    }
+
+    public void setClosed(Boolean closed) {
+        this.closed = closed;
+    }
+
     public JobsGroupDaoPojo(JobsGroup jobsGroup){
         this.description = jobsGroup.getDescription();
         this.name = jobsGroup.getName();
         this.pk_id = jobsGroup.getPk_id();
         this.company = jobsGroup.getCompany() == null ? null : new CompanyDaoPojo(jobsGroup.getCompany());
+        this.closed = jobsGroup.getClosed();
     }
 
     @Override

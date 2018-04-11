@@ -23,7 +23,10 @@ public interface RekeningenDaoImpl extends CrudRepository<RekeningenDaoPojo, Int
 
     @Query("select coalesce(max(pk_id),0) + 1 as pk_id from RekeningenDaoPojo")
     public Integer getNewPkId();
-    
+
+    @Query("from RekeningenDaoPojo where coalesce(closed, 0) !=  1 and persoon.pk_id = :persoonId")
+    public List<Rekeningen> findAllOpenRekeningen(@Param("persoonId") Integer persoonId);
+
     @Query("from RekeningenDaoPojo where persoon.pk_id = :persoonId")
     public List<Rekeningen> findAllRekeningen(@Param("persoonId") Integer persoonId);
     

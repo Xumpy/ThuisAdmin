@@ -72,7 +72,7 @@ public class DocumentenSrvImpl implements DocumentenSrv, Serializable{
     @Override
     @Transactional(value="transactionManager")
     public Documenten fetchDocument(Integer documentId){
-        return documentenDao.findOne(documentId);
+        return documentenDao.findById(documentId).get();
     }
     
     @Override

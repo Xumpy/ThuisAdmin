@@ -18,6 +18,7 @@ public class JobsGroupSrvPojo implements JobsGroup, Serializable{
     private String name;
     private String description;
     private CompanySrvPojo company;
+    private Boolean closed;
 
     public void setCompany(CompanySrvPojo company) {
         this.company = company;
@@ -51,12 +52,22 @@ public class JobsGroupSrvPojo implements JobsGroup, Serializable{
     }
     
     public JobsGroupSrvPojo(){}
-    
+
+    @Override
+    public Boolean getClosed() {
+        return closed;
+    }
+
+    public void setClosed(Boolean closed) {
+        this.closed = closed;
+    }
+
     public JobsGroupSrvPojo(JobsGroup jobsGroup){
         this.description = jobsGroup.getDescription();
         this.name = jobsGroup.getName();
         this.pk_id = jobsGroup.getPk_id();
         this.company = jobsGroup.getCompany() == null ? null : new CompanySrvPojo(jobsGroup.getCompany());
+        this.closed = jobsGroup.getClosed();
     }
 
     @Override

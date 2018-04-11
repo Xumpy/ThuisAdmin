@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Invoices" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="692e7455-bcc9-43d2-a07c-bb11e172be36">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/Users/nico/Projects/Personal/ThuisAdmin/src/main/resources/jasperreports/Invoices_detail.jasper"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="INVOICE_ID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT" class="net.sf.jasperreports.engine.JasperReport"/>
+	<queryString>
+		<![CDATA[SELECT DISTINCT TA_INVOICES.INVOICE_ID AS invoice_id,
+       DATE_FORMAT(TA_INVOICES.INVOICE_DATE, "%d-%m-%Y") AS invoice_date,
+       TA_INVOICES.INVOICE_DUE_DATE AS invoice_due_date,
+       TA_INVOICES.INVOICE_REF AS invoice_ref,
+       TA_INVOICES.VAT_NUMBER AS vat_number,
+       TRUNCATE(TA_INVOICES.VAT_AMOUNT, 1) AS vat_amount,
+       TA_INVOICES.DESCRIPTION AS description,
+       TA_REKENINGEN.NAAM as naam,
+       TRUNCATE((SELECT SUM(TI.AMOUNT * J.WORKED_HOURS)
+                 FROM TA_JOBS_INVOICES  TI
+                 JOIN TA_JOBS J
+                   ON (J.PK_ID = TI.FK_JOB_ID)
+                 WHERE FK_INVOICE_ID = $P{INVOICE_ID}), 2) AS total_amount,
+       TA_COMPANY.NAME AS company_name,
+       CONCAT(TA_COMPANY.STREET, ' ', TA_COMPANY.NUMBER) AS company_street_number,
+       CONCAT(TA_COMPANY.POSTAL_CODE, ' ', TA_COMPANY.CITY) AS company_postal_code_city,
+       TA_INVOICES.VAT_NUMBER AS company_vat_number,
+       CONCAT(TA_REKENINGEN.BANK, ' ', TA_REKENINGEN.REKENING_NR) AS rekening_number,
+       TA_PERSONEN.VAT_NUMBER AS own_vat_number
+FROM TA_INVOICES
+LEFT JOIN TA_REKENINGEN
+  ON (TA_REKENINGEN.PK_ID = TA_INVOICES.FK_REKENING_ID)
+LEFT JOIN TA_JOBS_INVOICES
+  ON (TA_JOBS_INVOICES.FK_INVOICE_ID = TA_INVOICES.PK_ID)
+LEFT JOIN TA_JOBS
+  ON (TA_JOBS_INVOICES.FK_JOB_ID = TA_JOBS.PK_ID)
+LEFT JOIN TA_JOB_GROUPS
+  ON (TA_JOB_GROUPS.PK_ID = TA_JOBS.FK_JOB_GROUP_ID)
+LEFT JOIN TA_COMPANY
+  ON (TA_COMPANY.PK_ID = TA_JOB_GROUPS.FK_COMPANY_ID)
+LEFT JOIN TA_PERSONEN
+  ON (TA_REKENINGEN.FK_PERSONEN_ID = TA_PERSONEN.PK_ID)
+WHERE TA_INVOICES.PK_ID = $P{INVOICE_ID}]]>
+	</queryString>
+	<field name="invoice_id" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="invoice_date" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="invoice_due_date" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="invoice_ref" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="vat_number" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="vat_amount" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="description" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="naam" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="total_amount" class="java.math.BigDecimal"/>
+	<field name="company_name" class="java.lang.String"/>
+	<field name="company_street_number" class="java.lang.String"/>
+	<field name="company_postal_code_city" class="java.lang.String"/>
+	<field name="company_vat_number" class="java.lang.String"/>
+	<field name="rekening_number" class="java.lang.String"/>
+	<field name="own_vat_number" class="java.lang.String"/>
+	<variable name="amount_incl_vat" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$F{total_amount}.divide(100).multiply($F{vat_amount}).add($F{total_amount})]]></variableExpression>
+	</variable>
+	<variable name="amount_vat" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$F{total_amount}.divide(100).multiply($F{vat_amount})]]></variableExpression>
+	</variable>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="141">
+			<frame>
+				<reportElement mode="Opaque" x="290" y="12" width="265" height="125" forecolor="#000000" backcolor="#FFFFFF" uuid="cfb56097-74e2-4576-9191-109cfc891f41"/>
+				<textField>
+					<reportElement x="107" y="11" width="147" height="12" forecolor="#000000" uuid="b16b2510-55be-45c1-954d-0837f8d43c2b"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{invoice_date}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="11" y="10" width="96" height="12" forecolor="#000000" uuid="ed1af33e-570a-4380-b7ac-1a2bcf1735f9"/>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Datum:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="107" y="22" width="147" height="12" uuid="25b58342-9ddc-4fd4-be4c-0c6f5ee9c031"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{invoice_id}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="11" y="22" width="96" height="12" uuid="166f235a-94f7-4d49-9c90-37c54d90e9e2"/>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Factuurnummer:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="11" y="34" width="96" height="12" uuid="25d15e26-8203-4400-82ef-ba0bef4638a3"/>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Gegevens:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="107" y="35" width="147" height="12" uuid="29f5c545-def5-45de-9386-6374b4c012a0"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[NM Consultancy]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="107" y="47" width="147" height="12" uuid="91a3411a-32ac-4877-ae64-1e05d429b1d9"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[Walstraat 17]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="107" y="59" width="147" height="12" uuid="a301687d-6298-4ca6-bbfa-0017b83f75a9"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[3900 Overpelt]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="107" y="71" width="147" height="12" uuid="1a17d304-09f8-4259-8b14-9bb17c959391"/>
+					<textFieldExpression><![CDATA[$F{rekening_number}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="11" y="83" width="96" height="12" uuid="38c3b717-9aa7-437d-9247-694986fc1060"/>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[BTW-nummer:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="107" y="83" width="147" height="12" uuid="26d9e6ae-25e1-4da6-9147-0f049b026510"/>
+					<textFieldExpression><![CDATA[$F{own_vat_number}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="12" y="22" width="188" height="96" uuid="de21c13b-79e4-497c-8b88-f920f6a5f239"/>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="188" height="12" uuid="d838ad69-411d-4b17-9f49-90dbfc464b13"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{company_name}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement positionType="Float" x="0" y="12" width="188" height="12" uuid="a501a44e-2a11-4ed3-bab1-240446a2e5fb"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{company_street_number}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement positionType="Float" x="0" y="24" width="188" height="12" uuid="b6bbc569-f2fe-46f8-8be4-2980cd6735ea"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{company_postal_code_city}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement positionType="Float" x="0" y="36" width="188" height="12" uuid="db87fd11-2b6e-45ae-90ed-097a75cfd213"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{company_vat_number}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="32">
+			<staticText>
+				<reportElement x="0" y="12" width="100" height="20" uuid="afe4cb5b-9b97-4cb0-9a76-601bb1c58aaf"/>
+				<text><![CDATA[Factuur]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="200">
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="70" uuid="f45be966-1e58-400c-a69c-e592ffa3ec9d"/>
+				<subreportParameter name="INVOICE_ID">
+					<subreportParameterExpression><![CDATA[$P{INVOICE_ID}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT}]]></subreportExpression>
+			</subreport>
+			<frame>
+				<reportElement x="200" y="88" width="355" height="50" uuid="4f1f8bca-7332-4766-aaf9-60e920fc08f5"/>
+				<textField pattern="€ ###0.00;€ -###0.00">
+					<reportElement x="215" y="1" width="115" height="12" uuid="d9ee7c5d-3710-44ec-b5e4-dcf7589b7de6"/>
+					<textElement textAlignment="Right">
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{total_amount}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="101" y="0" width="96" height="12" uuid="26682660-13b5-4a92-959f-b32308b83c22"/>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Subtotal:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="101" y="13" width="96" height="12" uuid="b68ae264-e629-4964-9fb4-41f3ed72adaf"/>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["BTW (" + $F{vat_amount} + "%)"]]></textFieldExpression>
+				</textField>
+				<textField pattern="€ ###0.00;€ -###0.00">
+					<reportElement x="215" y="13" width="115" height="12" uuid="97d7004f-c9e0-4435-88c6-a387b9391c05"/>
+					<textElement textAlignment="Right">
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{amount_vat}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="102" y="26" width="96" height="12" uuid="d26c1855-9f02-4fb9-bb4e-262c15374302"/>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Totaal]]></text>
+				</staticText>
+				<textField pattern="€ ###0.00;€ -###0.00">
+					<reportElement x="215" y="26" width="115" height="12" uuid="e3d7888a-0ead-4af3-9302-c16b1f5d8a6a"/>
+					<textElement textAlignment="Right">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{amount_incl_vat}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="53" y="12" width="277" height="1" uuid="5daad10e-3a8e-4ba1-b3a7-cbe6ecd68e82"/>
+				</line>
+				<line>
+					<reportElement x="53" y="25" width="277" height="1" uuid="bf974933-c5a9-4e31-be97-8df31eca2cbe"/>
+				</line>
+				<line>
+					<reportElement x="53" y="38" width="277" height="2" uuid="7af7eb91-8ca0-4323-b6cb-1754570fc3f8"/>
+				</line>
+				<line>
+					<reportElement x="197" y="0" width="1" height="40" uuid="2955aa3d-eee5-496b-b9bc-71db7b336c80"/>
+				</line>
+			</frame>
+			<textField>
+				<reportElement x="0" y="180" width="381" height="20" uuid="c0bd6b9a-ca6d-48c7-938f-ea3a6316245d"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Gelieve het factuurbedrag binnen 30 dagen te voldoen"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="cde21450-e765-44e1-89b6-b36de7916f17"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="2a71c68e-89f2-4600-9878-83db098a55de"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

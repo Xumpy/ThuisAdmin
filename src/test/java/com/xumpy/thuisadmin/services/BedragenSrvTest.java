@@ -29,14 +29,10 @@ import com.xumpy.thuisadmin.dao.model.RekeningenDaoPojo;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -110,14 +106,11 @@ public class BedragenSrvTest{
         when(bedrag3.getRekening()).thenReturn(rekening2);
         when(bedrag4.getBedrag()).thenReturn(new BigDecimal(150));
         when(bedrag4.getGroep()).thenReturn(groepNegatief);
-        when(bedrag4.getPersoon()).thenReturn(persoon);
-        
+
         when(bedrag5.getDatum()).thenReturn(dt.parse("2015-02-20"));
         when(bedrag3.getRekening()).thenReturn(rekening2);
-        when(bedrag5.getBedrag()).thenReturn(new BigDecimal(2000));
         when(bedrag5.getGroep()).thenReturn(groepPositief);
-        when(bedrag5.getPersoon()).thenReturn(persoon);
-        
+
         when(groepNegatief.getNaam()).thenReturn("Groep A");
         when(groepNegatief.getNegatief()).thenReturn(1);
         when(groepPositief.getNaam()).thenReturn("Groep B");
@@ -158,7 +151,7 @@ public class BedragenSrvTest{
         when(nieuwBedrag.getBedrag()).thenReturn("200");
         when(nieuwBedrag.getGroep()).thenReturn(groepPositiefSrvPojo);
         
-        when(bedragenSrv.findBedrag(1)).thenReturn(bedrag2); // This means previous bedrag was 150
+        when(bedragenDao.findById(1)).thenReturn(Optional.of(bedrag2)); // This means previous bedrag was 150
         
         Bedragen bedragTest = bedragenSrv.save(nieuwBedrag);
         
@@ -491,7 +484,7 @@ public class BedragenSrvTest{
     
     @Test
     public void testFindBedrag(){
-        when(bedragenSrv.findBedrag(1)).thenReturn(bedrag1);
+        when(bedragenDao.findById(1)).thenReturn(Optional.of(bedrag1));
         
         assertEquals(bedrag1, bedragenSrv.findBedrag(1));
     }
@@ -639,8 +632,8 @@ public class BedragenSrvTest{
         when(bedrag2.getBedrag()).thenReturn(new BigDecimal("400"));
         when(groepNegatief.getNegatief()).thenReturn(1);
         when(rekening1.getWaarde()).thenReturn(new BigDecimal("2000"));
-        
-        when(bedragenDao.findOne(1)).thenReturn(bedrag2);
+
+        when(bedragenDao.findById(1)).thenReturn(Optional.of(bedrag2));
                 
         Bedragen bedrag = bedragenSrv.processRekeningBedrag(bedrag1, bedragenSrv.UPDATE);
         
@@ -668,7 +661,7 @@ public class BedragenSrvTest{
         when(rekening1.getWaarde()).thenReturn(new BigDecimal(900));
         
         BedragenSrvPojo bedragSrvPojoMock = new BedragenSrvPojo(bedrag1);
-        when(rekeningenDao.findOne(2)).thenReturn(new RekeningenDaoPojo(newRekening));
+        when(rekeningenDao.findById(2)).thenReturn(Optional.of(new RekeningenDaoPojo(newRekening)));
         
         newRekening = new RekeningenSrvPojo(bedragenSrv.moveBedragToRekening(bedragSrvPojoMock, newRekening));
         
@@ -765,8 +758,6 @@ public class BedragenSrvTest{
         when(bedrag1.getGroep()).thenReturn(mainGroup);
         when(bedrag1.getBedrag()).thenReturn(new BigDecimal(100));
         when(bedrag2.getDatum()).thenReturn(dt.parse("2015-04-19"));
-        when(bedrag2.getGroep()).thenReturn(groepNegatief);
-        when(bedrag2.getBedrag()).thenReturn(new BigDecimal(50));
         when(bedrag3.getDatum()).thenReturn(dt.parse("2015-02-20"));
         when(bedrag3.getGroep()).thenReturn(groepNegatief);
         when(bedrag3.getBedrag()).thenReturn(new BigDecimal(100));
@@ -774,9 +765,7 @@ public class BedragenSrvTest{
         when(bedrag4.getGroep()).thenReturn(mainGroup2);
         when(bedrag4.getBedrag()).thenReturn(new BigDecimal(50));
         when(bedrag5.getDatum()).thenReturn(dt.parse("2015-04-20"));
-        when(bedrag5.getGroep()).thenReturn(mainGroup);
-        when(bedrag5.getBedrag()).thenReturn(new BigDecimal(100));
-        
+
         List<Bedragen> allBedragen = new ArrayList<Bedragen>();
         allBedragen.add(bedrag1);
         allBedragen.add(bedrag2);
@@ -850,7 +839,7 @@ public class BedragenSrvTest{
         lstBedragen.add(new BedragenDaoPojo(bedrag3));
         
         when(bedragenDao.BedragInPeriode(dt.parse("2015-02-18"), dt.parse("2015-02-23"), null, 1, userInfo.getPersoon().getPk_id())).thenReturn(lstBedragen);
-        when(groepenDao.findOne(groepNegatief.getPk_id())).thenReturn(groepNegatief);
+        when(groepenDao.findById(groepNegatief.getPk_id())).thenReturn(Optional.of(groepNegatief));
         
         OverzichtGroepBedragenTotal overzichtGroepBedragenTot = 
                 bedragenSrv.rapportOverzichtGroepBedragen(groepNegatief.getPk_id(), 0, dt.parse("2015-02-18"), dt.parse("2015-02-23"), 1, new OverzichtGroepBedragenTotal());
@@ -865,7 +854,6 @@ public class BedragenSrvTest{
         when(bedrag3.getBedrag()).thenReturn(new BigDecimal(100));
         
         when(mainGroup.getPk_id()).thenReturn(1);
-        when(groepPositief.getPk_id()).thenReturn(2);
         when(groepNegatief.getPk_id()).thenReturn(3);
         when(groepPositief.getHoofdGroep()).thenReturn(mainGroup);
         when(groepNegatief.getHoofdGroep()).thenReturn(mainGroup);
@@ -883,9 +871,8 @@ public class BedragenSrvTest{
         
         when(bedragenDao.BedragInPeriode(dt.parse("2015-02-18"), dt.parse("2015-02-23"), null, 1, userInfo.getPersoon().getPk_id())).thenReturn(lstBedragen);
         
-        when(groepenDao.findOne(mainGroup.getPk_id())).thenReturn(mainGroup);
-        when(groepenDao.findOne(groepPositief.getPk_id())).thenReturn(groepPositief);
-        
+        when(groepenDao.findById(mainGroup.getPk_id())).thenReturn(Optional.of(mainGroup));
+
         OverzichtGroepBedragenTotal overzichtGroepBedragenTot = 
                 bedragenSrv.rapportOverzichtGroepBedragen(mainGroup.getPk_id(), dt.parse("2015-02-18"), dt.parse("2015-02-23"), 1, new OverzichtGroepBedragenTotal());
         

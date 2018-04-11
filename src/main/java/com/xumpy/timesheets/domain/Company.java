@@ -15,4 +15,11 @@ public interface Company {
     public Integer getPk_id();
     public String getName();
     public BigDecimal getDailyPayedHours();
+    public String getStreet();
+    public String getNumber();
+    public String getPostalCode();
+    public String getCountry();
+    public String getCity();
+    public String getVatNumber();
+    public Boolean isTimeUnitDays();
 }

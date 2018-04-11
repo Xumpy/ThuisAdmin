@@ -21,6 +21,7 @@ public class JobsGroupCtrl implements JobsGroup, Serializable{
     private String description;
     private Integer checked;
     private CompanyCtrlPojo company;
+    private Boolean closed;
 
     public void setCompany(CompanyCtrlPojo company) {
         this.company = company;
@@ -62,13 +63,23 @@ public class JobsGroupCtrl implements JobsGroup, Serializable{
     }
     
     public JobsGroupCtrl(){}
-    
+
+    @Override
+    public Boolean getClosed() {
+        return closed;
+    }
+
+    public void setClosed(Boolean closed) {
+        this.closed = closed;
+    }
+
     public JobsGroupCtrl(JobsGroup jobsGroup){
         this.pk_id = jobsGroup.getPk_id();
         this.name = jobsGroup.getName();
         this.description = jobsGroup.getDescription();
         this.checked = 0;
         this.company = jobsGroup.getCompany() == null ? null : new CompanyCtrlPojo(jobsGroup.getCompany());
+        this.closed = jobsGroup.getClosed();
     }
     
     public static List<JobsGroupCtrl> allJobsGroupCtrl(List<? extends JobsGroup> allJobsGroup){

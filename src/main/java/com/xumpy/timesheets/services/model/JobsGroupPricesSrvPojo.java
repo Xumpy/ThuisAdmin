@@ -70,7 +70,7 @@ public class JobsGroupPricesSrvPojo implements JobsGroupPrices{
     
     public JobsGroupPricesSrvPojo(JobsGroupPrices jobsGroupPrices){
         this.endDate = jobsGroupPrices.getEndDate();
-        this.jobsGroup = jobsGroupPrices.getJobsGroup() == null ? new JobsGroupSrvPojo(jobsGroupPrices.getJobsGroup()): null;
+        this.jobsGroup = jobsGroupPrices.getJobsGroup() == null ? null : new JobsGroupSrvPojo(jobsGroupPrices.getJobsGroup());
         this.pk_id = jobsGroupPrices.getPk_id();
         this.pricePerHour = jobsGroupPrices.getPricePerHour();
         this.startDate = jobsGroupPrices.getStartDate();

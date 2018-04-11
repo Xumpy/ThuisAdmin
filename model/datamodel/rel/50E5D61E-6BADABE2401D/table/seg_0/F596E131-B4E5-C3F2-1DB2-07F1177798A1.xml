@@ -1,0 +1,118 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="F596E131-B4E5-C3F2-1DB2-07F1177798A1" name="TA_JOBS_INVOICES">
+<createdBy>nico</createdBy>
+<createdTime>2018-02-23 09:05:22 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<ordsAlias>table_16</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="PK_ID" id="8332BBDD-6970-5E65-04D8-96C21A6DE062">
+<createdBy>nico</createdBy>
+<createdTime>2018-02-23 09:06:28 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FK_JOB_ID" id="79EC6C73-04F9-171F-621C-230F7765A202">
+<createdBy>nico</createdBy>
+<createdTime>2018-02-23 09:12:48 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="84D22D4A-44A3-735B-ECA7-22C71FC4C936" referredColumn="922FF5ED-130B-DFF0-76AA-92F6058AA235"/>
+</associations>
+</Column>
+<Column name="FK_INVOICE_ID" id="122C3C8D-A5CF-D3A9-1BC9-F9F6CFE649FA">
+<createdBy>nico</createdBy>
+<createdTime>2018-02-23 09:13:05 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="39D35DBF-FE88-A309-E9B7-3B86282C93A2" referredColumn="1ECFDC52-C11C-A2F9-A284-818075D98FB9"/>
+</associations>
+</Column>
+<Column name="AMOUNT" id="44D7E5C2-4FCD-42A7-A755-4217D93940A5">
+<createdBy>nico</createdBy>
+<createdTime>2018-02-23 09:56:00 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="DESCRIPTION" id="16FECB7B-E5CD-A8FA-B9D2-4C24387A0C02">
+<createdBy>nico</createdBy>
+<createdTime>2018-02-23 12:07:44 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>255</dataTypeSize>
+<ownDataTypeParameters>255,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="TIME_UNIT_DAYS" id="227AAC8B-C9D0-D911-7FE4-036E31DB0FA1">
+<createdBy>nico</createdBy>
+<createdTime>2018-03-15 14:56:24 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT025</logicalDatatype>
+<dataTypeSize>1</dataTypeSize>
+<ownDataTypeParameters>1,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="BEED2785-F2BA-996C-4B65-B3BFAAD4B18C" name="TA_JOBS_INVOICES_PK">
+<createdBy>nico</createdBy>
+<createdTime>2018-02-23 09:06:32 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="8332BBDD-6970-5E65-04D8-96C21A6DE062"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="E5CF0DF8-573E-F164-8ED5-411D9481DF53" name="TA_JOBS_INVOICES_TA_JOBS_FK">
+<createdBy>nico</createdBy>
+<createdTime>2018-02-23 09:12:48 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="79EC6C73-04F9-171F-621C-230F7765A202"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="ACBCD27A-1441-D5A9-BE60-880E2EACE493" name="TA_JOBS_INVOICES_TA_INVOICES_FK">
+<createdBy>nico</createdBy>
+<createdTime>2018-02-23 09:13:05 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="122C3C8D-A5CF-D3A9-1BC9-F9F6CFE649FA"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

@@ -5,9 +5,11 @@
  */
 package com.xumpy.timesheets.controller.rest;
 
+import com.xumpy.timesheets.controller.model.InvoiceBuilderCtrlPojo;
 import com.xumpy.timesheets.controller.model.TickedJobsLstCtrlPojo;
 import com.xumpy.timesheets.services.TickedJobsDetailSrv;
 import com.xumpy.timesheets.services.TickedJobsSrv;
+import com.xumpy.timesheets.services.implementations.InvoiceBuilderSrvImpl;
 import com.xumpy.utilities.ConvertMapForMarshalling;
 import java.text.ParseException;
 import java.util.List;
@@ -27,7 +29,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class TickedJobsRestCtrl {
     @Autowired TickedJobsSrv tickedJobsSrv;
     @Autowired TickedJobsDetailSrv tickedJobsDetailSrv;
-    
+    @Autowired InvoiceBuilderSrvImpl invoiceBuilderSrv;
+
     @RequestMapping("/json/fetch_all_not_processed_ticked_jobs")
     public @ResponseBody TickedJobsLstCtrlPojo fetchAllNotProcessedTickedJobs(){
         return tickedJobsSrv.allNotProcessedTickedJobs();
@@ -44,5 +47,12 @@ public class TickedJobsRestCtrl {
     public @ResponseBody List tickedOverviewMonth(@RequestBody String month) throws ParseException{
         
         return new ConvertMapForMarshalling().convert(tickedJobsDetailSrv.tickedOverviewMonth(month));
+    }
+
+    @RequestMapping("/json/invoice_builder")
+    public @ResponseBody String invoiceBuilder(@RequestBody InvoiceBuilderCtrlPojo invoiceBuilder) throws ParseException {
+        invoiceBuilderSrv.build(invoiceBuilder);
+
+        return "200";
     }
 }

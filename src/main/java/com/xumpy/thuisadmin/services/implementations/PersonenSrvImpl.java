@@ -42,7 +42,7 @@ public class PersonenSrvImpl implements PersonenSrv, Serializable{
         PersonenDaoPojo personenDaoPojo = new PersonenDaoPojo(personen);
         
         if (personenDaoPojo.getMd5_password().equals("")){
-            personenDaoPojo.setMd5_password(personenDao.findOne(personenDaoPojo.getPk_id()).getMd5_password());
+            personenDaoPojo.setMd5_password(personenDao.findById(personenDaoPojo.getPk_id()).get().getMd5_password());
         } else {
             personenDaoPojo.setMd5_password(getMD5Password(personenDaoPojo.getMd5_password()));
         }
@@ -72,7 +72,7 @@ public class PersonenSrvImpl implements PersonenSrv, Serializable{
     @Override
     @Transactional
     public Personen findPersoon(Integer persoonId) {
-        return personenDao.findOne(persoonId);
+        return personenDao.findById(persoonId).get();
     }
     
     @Override

@@ -34,15 +34,16 @@ public class WriteDatabase {
         
         Connection connection = DriverManager.getConnection(jdbc, username, password);
 
-        String insertJobGroups = "INSERT INTO TA_JOB_GROUPS(PK_ID, JOB_NAME, DESCRIPTION)" + 
-                                " VALUES(?,?,?)";
+        String insertJobGroups = "INSERT INTO TA_JOB_GROUPS(PK_ID, JOB_NAME, DESCRIPTION, CLOSED)" +
+                                " VALUES(?,?,?,?)";
         PreparedStatement stmt = connection.prepareStatement(insertJobGroups);
         
         for(JobsGroupPojo jobsGroup: database.getJobsGroup()){
             stmt.setInt(1, jobsGroup.getPk_id());
             stmt.setString(2, jobsGroup.getName());
             stmt.setString(3, jobsGroup.getDescription());
-            
+            stmt.setBoolean(4, jobsGroup.getClosed());
+
             stmt.addBatch();
         }
         stmt.executeBatch();

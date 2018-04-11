@@ -23,6 +23,7 @@ public class PersonenSrvPojo implements Personen{
     private String voornaam;
     private String username;
     private String md5_password;
+    private String vatNumber;
 
     @Override
     public Integer getPk_id() {
@@ -77,6 +78,15 @@ public class PersonenSrvPojo implements Personen{
     }
 
     @Override
+    public String getVatNumber() {
+        return vatNumber;
+    }
+
+    public void setVatNumber(String vatNumber) {
+        this.vatNumber = vatNumber;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
@@ -101,6 +111,7 @@ public class PersonenSrvPojo implements Personen{
         this.pk_id = personen.getPk_id();
         this.username = personen.getUsername();
         this.voornaam = personen.getVoornaam();
+        this.vatNumber = personen.getVatNumber();
     }
     
     public void set_password(String password){

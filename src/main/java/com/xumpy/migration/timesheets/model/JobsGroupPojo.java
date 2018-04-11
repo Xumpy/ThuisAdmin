@@ -17,6 +17,7 @@ public class JobsGroupPojo implements JobsGroup{
     private String name;
     private String description;
     private Company company;
+    private Boolean closed;
 
     public void setCompany(Company company) {
         this.company = company;
@@ -53,5 +54,13 @@ public class JobsGroupPojo implements JobsGroup{
     public Company getCompany() {
         return this.company;
     }
-    
+
+    @Override
+    public Boolean getClosed() {
+        return closed;
+    }
+
+    public void setClosed(Boolean closed) {
+        this.closed = closed;
+    }
 }

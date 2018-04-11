@@ -28,21 +28,17 @@ import static junit.framework.Assert.assertEquals;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,classes = Application.class)
 @WebAppConfiguration()
-@SpringApplicationConfiguration(classes = Application.class)
 @ActiveProfiles("junit-database")
 @Sql(scripts="/data.sql")
 @Ignore /* Only works with integration test with the database, this has to be refactored but is not important for now */
@@ -58,7 +54,7 @@ public class GraphiekTests {
     
     @Test
     public void testGraphiek() throws ParseException{
-        userInfo.setPersoon(personenDao.findOne(1));
+        userInfo.setPersoon(personenDao.findById(1).get());
         
         Date startDate = format.parse("05/04/2014");
         Date eindDate = format.parse("13/04/2014");

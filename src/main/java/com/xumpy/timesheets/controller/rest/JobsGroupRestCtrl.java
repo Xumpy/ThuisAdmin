@@ -5,22 +5,14 @@
  */
 package com.xumpy.timesheets.controller.rest;
 
-import com.xumpy.timesheets.controller.model.CompanyCtrlPojo;
-import com.xumpy.timesheets.controller.model.JobsCtrlPojo;
-import com.xumpy.timesheets.controller.model.JobsGroupCtrl;
-import com.xumpy.timesheets.controller.model.Overview;
-import com.xumpy.timesheets.controller.model.OverviewWorkHeader;
+import com.xumpy.timesheets.controller.model.*;
 import com.xumpy.timesheets.domain.JobsGroup;
+import com.xumpy.timesheets.domain.JobsGroupPrices;
 import com.xumpy.timesheets.domain.OverviewWork.OverviewWork;
 import com.xumpy.timesheets.domain.TickedJobs;
-import com.xumpy.timesheets.services.CompanySrv;
+import com.xumpy.timesheets.services.*;
 import com.xumpy.timesheets.services.implementations.JobsGraphics;
-import com.xumpy.timesheets.services.JobsGroupSrv;
-import com.xumpy.timesheets.services.JobsSrv;
-import com.xumpy.timesheets.services.TickedJobsSrv;
-import com.xumpy.timesheets.controller.model.JobsInJobsGroup;
-import com.xumpy.timesheets.controller.model.TickedJobsCtrlPojo;
-import com.xumpy.timesheets.services.TickedJobsDetailSrv;
+import com.xumpy.timesheets.services.implementations.JobsGroupPricesSrvImpl;
 import com.xumpy.timesheets.services.model.JobsSrvPojo;
 import com.xumpy.timesheets.services.model.TickedJobsDetail;
 import com.xumpy.timesheets.services.model.TickedJobsSrvPojo;
@@ -49,6 +41,7 @@ public class JobsGroupRestCtrl {
     @Autowired Overview overview;
     @Autowired JobsGraphics jobsGraphics;
     @Autowired JobsGroupSrv jobsGroupSrv;
+    @Autowired JobsGroupPricesSrv jobsGroupPricesSrv;
     @Autowired JobsSrv jobsSrv;
     @Autowired CompanySrv companySrv;
     @Autowired TickedJobsSrv tickedJobsSrv;
@@ -57,7 +50,23 @@ public class JobsGroupRestCtrl {
     public @ResponseBody List<JobsGroupCtrl> fetchAllJobsGroup(){
         return JobsGroupCtrl.allJobsGroupCtrl(jobsGroupSrv.selectAllJobGroups());
     }
-    
+
+    @RequestMapping("/json/fetch_all_open_jobs_group")
+    public @ResponseBody List<JobsGroupCtrl> fetchAllOpenJobsGroup(){
+        return JobsGroupCtrl.allJobsGroupCtrl(jobsGroupSrv.selectAllOpenJobGroups());
+    }
+
+    @RequestMapping("/json/fetch_group_price/{jobGroupPriceId}")
+    public @ResponseBody JobsGroupPrices fetchJobGroupPrice(@PathVariable Integer jobGroupPriceId){
+        return jobsGroupPricesSrv.select(jobGroupPriceId);
+    }
+
+    @RequestMapping("/json/fetch_group_prices/{jobGroupId}")
+    public @ResponseBody List<? extends JobsGroupPrices> fetchAllJobsGroupPrices(@PathVariable Integer jobGroupId){
+        JobsGroup jobsGroup = jobsGroupSrv.select(jobGroupId);
+        return jobsGroupPricesSrv.selectAllJobGroupPrices(jobsGroup);
+    }
+
     @RequestMapping("/json/fetch_all_jobs_group_not_in_controller")
     public @ResponseBody List<JobsGroupCtrl> fetchAllJobsGroupNotInController(){
         return JobsGroupCtrl.allJobsGroupCtrl(
@@ -153,7 +162,21 @@ public class JobsGroupRestCtrl {
 
         return fetchOverviewMonth(overview.getMonth());
     }
-    
+
+    @RequestMapping("/json/save_job_group_price")
+    public @ResponseBody String saveJobGroupPrice(@RequestBody JobsGroupPricesCtrlPojo jobsGroupPrices){
+        jobsGroupPricesSrv.save(jobsGroupPrices);
+
+        return "200";
+    }
+
+    @RequestMapping("/json/delete_job_group_price")
+    public @ResponseBody String deleteJobGroupPrice(@RequestBody JobsGroupPricesCtrlPojo jobsGroupPrices){
+        jobsGroupPricesSrv.delete(jobsGroupPrices);
+
+        return "200";
+    }
+
     @RequestMapping("/json/fetch_all_companies")
     public @ResponseBody List<CompanyCtrlPojo> fetchAllCompanies(){
         return CompanyCtrlPojo.allCompanies(companySrv.selectAll());

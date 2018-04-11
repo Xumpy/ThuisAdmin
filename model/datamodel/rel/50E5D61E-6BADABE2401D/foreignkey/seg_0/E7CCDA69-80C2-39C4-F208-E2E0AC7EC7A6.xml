@@ -1,0 +1,16 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="E7CCDA69-80C2-39C4-F208-E2E0AC7EC7A6" containerWithKeyObject="CB4FB734-3A32-CE93-257F-4A3B45E4B22B" localFKIndex="80559033-F5D8-4CEA-0913-CB9DC8E12459" name="TA_INVOICES_TA_REKENINGEN_FK">
+<createdBy>nico</createdBy>
+<createdTime>2018-02-23 09:27:28 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<referredTableLongName>TA_REKENINGEN</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>4D927C3A-D9E9-D069-479C-F1783638AD62</referredTableID>
+<keyObject>C42C69B8-4E6D-0B29-516C-F194807FD2A3</keyObject>
+<referredKeyID>C42C69B8-4E6D-0B29-516C-F194807FD2A3</referredKeyID>
+<mandatory>false</mandatory>
+<refColNames>PK_ID</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

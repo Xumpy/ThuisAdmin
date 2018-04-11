@@ -33,13 +33,19 @@ public class JobsGroupSrvImpl implements JobsGroupSrv{
     @Override
     @Transactional
     public JobsGroup select(Integer pk_id) {
-        return jobsGroupDao.findOne(pk_id);
+        return jobsGroupDao.findById(pk_id).get();
     }
 
     @Override
     @Transactional
     public List<? extends JobsGroup> selectAllJobGroups() {
         return jobsGroupDao.selectAllJobGroups();
+    }
+
+    @Override
+    @Transactional
+    public List<? extends JobsGroup> selectAllOpenJobGroups() {
+        return jobsGroupDao.selectAllOpenJobGroups();
     }
 
     @Override

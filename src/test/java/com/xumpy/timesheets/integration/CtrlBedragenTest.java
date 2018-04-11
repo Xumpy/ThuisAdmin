@@ -53,7 +53,7 @@ public class CtrlBedragenTest {
     @Test
     @Ignore
     public void testFetchBedragen(){
-        userInfo.setPersoon(persoonDao.findOne(1));
+        userInfo.setPersoon(persoonDao.findById(1).get());
         BeheerBedragenReportLst beheerBedragenReportLst = new BeheerBedragenReportLst();
         
         BeheerBedragenInp beheerBedragenInp = new BeheerBedragenInp();

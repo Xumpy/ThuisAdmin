@@ -57,7 +57,7 @@ public class TimesheetSrvImpl implements TimesheetSrv{
             
             log.info("Get Jobs total: " + jobs.size());
             
-            JobsGroup jobsGroup = jobsGroupDao.findOne(jobsGroupId);
+            JobsGroup jobsGroup = jobsGroupDao.findById(jobsGroupId).get();
             
             for (Jobs job: jobs){
                 if (job.getJobsGroup().getPk_id().equals(jobsGroup.getPk_id())){

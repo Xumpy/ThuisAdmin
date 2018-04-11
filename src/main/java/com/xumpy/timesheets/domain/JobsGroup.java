@@ -18,4 +18,6 @@ public interface JobsGroup {
     Integer getPk_id();
     
     Company getCompany();
+
+    Boolean getClosed();
 }

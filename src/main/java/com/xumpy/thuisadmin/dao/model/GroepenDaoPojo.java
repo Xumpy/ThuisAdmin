@@ -51,7 +51,10 @@ public class GroepenDaoPojo implements Serializable, Groepen {
 
     @Column(name="PUBLIC_GROEP")
     private Integer publicGroep;
-    
+
+    @Column(name="CLOSED")
+    private Boolean closed;
+
     @Override
     public String getCodeId() {
         return codeId;
@@ -127,7 +130,16 @@ public class GroepenDaoPojo implements Serializable, Groepen {
     public GroepenDaoPojo(){
         
     }
-    
+
+    @Override
+    public Boolean getClosed() {
+        return closed;
+    }
+
+    public void setClosed(Boolean closed) {
+        this.closed = closed;
+    }
+
     public GroepenDaoPojo(Groepen groepen){
         this.codeId = groepen.getCodeId();
         this.hoofdGroep = groepen.getHoofdGroep()!=null ? new GroepenDaoPojo(groepen.getHoofdGroep()) : null;
@@ -137,5 +149,6 @@ public class GroepenDaoPojo implements Serializable, Groepen {
         this.persoon = groepen.getPersoon()!=null ? new PersonenDaoPojo(groepen.getPersoon()) : null;
         this.pk_id = groepen.getPk_id();
         this.publicGroep = groepen.getPublicGroep();
+        this.closed = groepen.getClosed();
     }
 }

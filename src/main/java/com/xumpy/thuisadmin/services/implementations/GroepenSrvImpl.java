@@ -66,7 +66,7 @@ public class GroepenSrvImpl implements GroepenSrv, Serializable{
     @Override
     @Transactional(value="transactionManager")
     public Groepen findGroep(Integer groepId) {
-        return groepenDao.findOne(groepId);
+        return groepenDao.findById(groepId).get();
     }
 
     @Override
@@ -151,7 +151,7 @@ public class GroepenSrvImpl implements GroepenSrv, Serializable{
     @Transactional(value="transactionManager")
     public List<GroepenTree> groepTree(Integer selectedGroepId) {
         Groepen selectedGroep = null;
-        List<? extends Groepen> lstGroepen = groepenDao.findAllGroepen(userInfo.getPersoon().getPk_id());
+        List<? extends Groepen> lstGroepen = groepenDao.findAllOpenGroepen(userInfo.getPersoon().getPk_id());
         
         List<GroepenTree> lstGroepTree = new ArrayList<GroepenTree>();
         
@@ -169,7 +169,7 @@ public class GroepenSrvImpl implements GroepenSrv, Serializable{
             groepenTree.setGroep(hoofdGroep);
                     
             if (selectedGroepId != null) {
-                selectedGroep = groepenDao.findOne(selectedGroepId);
+                selectedGroep = groepenDao.findById(selectedGroepId).get();
                 
                 if (selectedGroepInHoofdGroep(selectedGroep, hoofdGroep)){
                     groepenTree.setCollapsed("");

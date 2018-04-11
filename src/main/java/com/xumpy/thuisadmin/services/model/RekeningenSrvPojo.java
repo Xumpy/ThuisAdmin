@@ -19,6 +19,9 @@ public class RekeningenSrvPojo implements Rekeningen{
     private String naam;
     private Date laatst_bijgewerkt;
     private PersonenSrvPojo persoon;
+    private String bank;
+    private String rekeningNr;
+    private Boolean closed;
 
     @Override
     public Integer getPk_id() {
@@ -73,6 +76,24 @@ public class RekeningenSrvPojo implements Rekeningen{
     }
 
     @Override
+    public String getBank() {
+        return bank;
+    }
+
+    public void setBank(String bank) {
+        this.bank = bank;
+    }
+
+    @Override
+    public String getRekeningNr() {
+        return rekeningNr;
+    }
+
+    public void setRekeningNr(String rekeningNr) {
+        this.rekeningNr = rekeningNr;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
@@ -86,7 +107,16 @@ public class RekeningenSrvPojo implements Rekeningen{
         }
         return true;
     }
-    
+
+    @Override
+    public Boolean getClosed() {
+        return closed;
+    }
+
+    public void setClosed(Boolean closed) {
+        this.closed = closed;
+    }
+
     public RekeningenSrvPojo(){
         
     }
@@ -97,5 +127,8 @@ public class RekeningenSrvPojo implements Rekeningen{
         this.persoon = rekeningen.getPersoon()!=null ? new PersonenSrvPojo(rekeningen.getPersoon()) : null;
         this.pk_id = rekeningen.getPk_id();
         this.waarde = rekeningen.getWaarde();
+        this.rekeningNr = rekeningen.getRekeningNr();
+        this.bank = rekeningen.getBank();
+        this.closed = rekeningen.getClosed();
     }
 }

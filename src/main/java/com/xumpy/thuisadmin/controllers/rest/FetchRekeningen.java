@@ -34,6 +34,12 @@ public class FetchRekeningen implements Serializable{
     public @ResponseBody RekeningBedragTotal fetchRekeningen(){
         return rekeningenSrv.findAllRekeningen();
     }
+
+    @RequestMapping("/json/openRekeningen")
+    public @ResponseBody RekeningBedragTotal fetchOpenRekeningen(){
+        return rekeningenSrv.findAllOpenRekeningen();
+    }
+
     
     @RequestMapping("/json/rekeningen/{rekeningId}")
     public @ResponseBody RekeningenSrvPojo fetchRekening(@PathVariable Integer rekeningId){

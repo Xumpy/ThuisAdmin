@@ -284,20 +284,6 @@ public class TickedJobsDetailSrvTest {
         when(job1.getWorkedHours()).thenReturn(new BigDecimal(8));
         when(job2.getWorkedHours()).thenReturn(new BigDecimal(8));
         
-        when(tickedJob1.getTicked()).thenReturn(format.parse("2015-06-12 07:33:00"));
-        when(tickedJob1.isStarted()).thenReturn(true);
-        
-        when(tickedJob2.getTicked()).thenReturn(format.parse("2015-06-12 12:01:00"));
-        when(tickedJob2.isStarted()).thenReturn(false);
-        
-        when(tickedJob3.getTicked()).thenReturn(format.parse("2015-06-12 12:18:00"));
-        when(tickedJob3.isStarted()).thenReturn(true);
-        
-        when(tickedJob4.getTicked()).thenReturn(format.parse("2015-06-12 15:54:00"));
-        when(tickedJob4.isStarted()).thenReturn(false);
-        
-        // TickedJobs1 => 471
-        
         when(tickedJob5.getTicked()).thenReturn(format.parse("2015-06-15 07:42:00"));
         when(tickedJob5.isStarted()).thenReturn(true);
         

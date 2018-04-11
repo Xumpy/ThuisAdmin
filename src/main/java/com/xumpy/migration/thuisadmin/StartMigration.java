@@ -15,7 +15,7 @@ import java.sql.SQLException;
  * @author nicom
  */
 public class StartMigration {
-    public static void main(String[] args) throws ClassNotFoundException, SQLException {
+    public static void mainMigration(String[] args) throws ClassNotFoundException, SQLException {
         ReadDatabase readOracleDatabase = new ReadDatabase("jdbc:oracle:thin:@linuxservernico.no-ip.info:1521:orcl","prd_thuisadmin","pcat3900");
         DataBase oracleDB = readOracleDatabase.start();
         WriteDatabase writeMysqlDatabase = new WriteDatabase("jdbc:mysql://localhost:3333/prd_thuisadmin", "root", "pcat3900");

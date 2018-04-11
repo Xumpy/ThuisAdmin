@@ -15,4 +15,5 @@ public interface Personen {
     Integer getPk_id();
     String getUsername();
     String getVoornaam();
+    String getVatNumber();
 }

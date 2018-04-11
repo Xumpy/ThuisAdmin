@@ -27,7 +27,7 @@ public class CompanySrvImpl implements CompanySrv{
     @Override
     @Transactional
     public Company select(Integer pk_id) {
-        return companyDao.findOne(pk_id);
+        return companyDao.findById(pk_id).get();
     }
 
     @Override

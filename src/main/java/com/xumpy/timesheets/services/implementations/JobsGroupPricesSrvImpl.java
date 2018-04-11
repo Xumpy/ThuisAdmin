@@ -13,12 +13,14 @@ import com.xumpy.timesheets.services.JobsGroupPricesSrv;
 import com.xumpy.timesheets.services.model.JobsGroupPricesSrvPojo;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author nicom
  */
+@Service
 public class JobsGroupPricesSrvImpl implements JobsGroupPricesSrv{
 
     @Autowired JobsGroupPricesDaoImpl jobsGroupPricesDao;
@@ -26,7 +28,7 @@ public class JobsGroupPricesSrvImpl implements JobsGroupPricesSrv{
     @Override
     @Transactional
     public JobsGroupPrices select(Integer pk_id) {
-        return jobsGroupPricesDao.findOne(pk_id);
+        return jobsGroupPricesDao.findById(pk_id).get();
     }
 
     @Override

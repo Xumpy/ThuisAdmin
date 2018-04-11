@@ -18,5 +18,5 @@ public interface Groepen {
     Personen getPersoon();
     Integer getPk_id();
     Integer getPublicGroep();
-    
+    Boolean getClosed();
 }

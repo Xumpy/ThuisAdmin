@@ -19,4 +19,5 @@ public interface RekeningenSrv {
     void delete(Rekeningen rekeningen);
     public RekeningBedragTotal findAllRekeningen();
     public Rekeningen findRekening(Integer rekeningId);
+    public RekeningBedragTotal findAllOpenRekeningen();
 }

@@ -16,7 +16,26 @@ public class NieuwRekening {
     private String waarde;
     private String naam;
     private Date laatst_bijgewerkt;
-    
+    private String bank;
+    private String rekeningNr;
+    private Boolean closed;
+
+    public String getBank() {
+        return bank;
+    }
+
+    public void setBank(String bank) {
+        this.bank = bank;
+    }
+
+    public String getRekeningNr() {
+        return rekeningNr;
+    }
+
+    public void setRekeningNr(String rekeningNr) {
+        this.rekeningNr = rekeningNr;
+    }
+
     public Integer getPk_id() {
         return pk_id;
     }
@@ -47,5 +66,13 @@ public class NieuwRekening {
 
     public void setLaatst_bijgewerkt(Date laatst_bijgewerkt) {
         this.laatst_bijgewerkt = laatst_bijgewerkt;
+    }
+
+    public Boolean getClosed() {
+        return closed;
+    }
+
+    public void setClosed(Boolean closed) {
+        this.closed = closed;
     }
 }

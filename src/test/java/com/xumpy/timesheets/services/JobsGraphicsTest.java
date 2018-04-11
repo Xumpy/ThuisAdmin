@@ -106,14 +106,9 @@ public class JobsGraphicsTest {
     public void testOverviewWorkTest1() throws ParseException{
         MathContext mc = new MathContext(3, RoundingMode.HALF_UP);
         
-        when(company.getDailyPayedHours()).thenReturn(new BigDecimal(7.6));
-        
         JobsGroup jobsGroup1 = Mockito.mock(JobsGroup.class);
         JobsGroup jobsGroup2 = Mockito.mock(JobsGroup.class);
-        
-        when(jobsGroup1.getCompany()).thenReturn(company);
-        when(jobsGroup2.getCompany()).thenReturn(company);
-        
+
         when(jobsGroup1.getPk_id()).thenReturn(1);
         when(jobsGroup2.getPk_id()).thenReturn(2);
         
@@ -147,12 +142,10 @@ public class JobsGraphicsTest {
     
     @Test
     public void testOverviewWorkTest2() throws ParseException{
-        when(company.getDailyPayedHours()).thenReturn(new BigDecimal(7.6));
         JobsGroup jobsGroup1 = Mockito.mock(JobsGroup.class);
         
         when(jobsGroup1.getPk_id()).thenReturn(1);
-        when(jobsGroup1.getCompany()).thenReturn(company);
-        
+
         List<JobsGroup> jobsGroups = new ArrayList<JobsGroup>();
         jobsGroups.add(jobsGroup1);
         

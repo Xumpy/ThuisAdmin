@@ -13,20 +13,62 @@
                 <div class="form-group col-lg-12">
                   <label for="inputNaam" class="col-lg-2 control-label">Naam</label>
                   <div class="col-lg-4">
-                    <input class="form-control" id="inputNaam" ng-model="company.name" placeholder="Naam" type="text"/>
+                    <textarea class="form-control" id="inputNaam" ng-model="company.name" placeholder="Naam" type="text"/>
                   </div>
+                </div>
+                <div class="form-group col-lg-12">
+                    <label for="inputStreet" class="col-lg-2 control-label">Street</label>
+                    <div class="col-lg-4">
+                        <input class="form-control" id="inputStreet" ng-model="company.street" placeholder="Street" type="text"/>
+                    </div>
+                </div>
+                <div class="form-group col-lg-12">
+                    <label for="inputNumber" class="col-lg-2 control-label">Number</label>
+                    <div class="col-lg-4">
+                        <input class="form-control" id="inputNumber" ng-model="company.number" placeholder="Number" type="text"/>
+                    </div>
+                </div>
+                <div class="form-group col-lg-12">
+                    <label for="inputCity" class="col-lg-2 control-label">City</label>
+                    <div class="col-lg-4">
+                        <input class="form-control" id="inputCity" ng-model="company.city" placeholder="City" type="text"/>
+                    </div>
+                </div>
+                <div class="form-group col-lg-12">
+                    <label for="inputPostalCode" class="col-lg-2 control-label">Postal Code</label>
+                    <div class="col-lg-4">
+                        <input class="form-control" id="inputPostalCode" ng-model="company.postalCode" placeholder="Postal Code" type="text"/>
+                    </div>
+                </div>
+                <div class="form-group col-lg-12">
+                    <label for="inputCountry" class="col-lg-2 control-label">Country</label>
+                    <div class="col-lg-4">
+                        <input class="form-control" id="inputCountry" ng-model="company.country" placeholder="Country" type="text"/>
+                    </div>
+                </div>
+                <div class="form-group col-lg-12">
+                    <label for="inputVatNumber" class="col-lg-2 control-label">Vat Number</label>
+                    <div class="col-lg-4">
+                        <input class="form-control" id="inputVatNumber" ng-model="company.vatNumber" placeholder="Vat Number" type="text"/>
+                    </div>
                 </div>
                 <div class="form-group col-lg-12">
                   <label for="inputDailyPayedHours" class="col-lg-2 control-label">Daily Payed Hours</label>
                   <div class="col-lg-4">
-                    <input class="form-control" id="inputVoornaam" ng-model="company.dailyPayedHours" placeholder="Daily Payed Hours" type="text"/>
+                    <input class="form-control" id="inputDailyPayedHours" ng-model="company.dailyPayedHours" placeholder="Daily Payed Hours" type="text"/>
                   </div>
+                </div>
+                <div class="form-group col-lg-12">
+                    <label for="inputTimeUnitDays" class="col-lg-2 control-label">Daily Payed Hours</label>
+                    <div class="col-lg-4">
+                        <input class="form-control" id="inputTimeUnitDays" ng-model="company.timeUnitDays" placeholder="Daily Payed Hours" type="checkbox"/>
+                    </div>
                 </div>
             </div>
             <script th:inline="javascript">
                 app.controller("fController", function($scope, $http) {
                     var pk_id = /*[[${pk_id}]]*/;
-                    if (pk_id !== ""){
+                    if (pk_id !== null){
                         $http.post(/*[[@{/json/fetch_company}]]*/, pk_id).success( function(data){
                             $scope.company = data;
                         });

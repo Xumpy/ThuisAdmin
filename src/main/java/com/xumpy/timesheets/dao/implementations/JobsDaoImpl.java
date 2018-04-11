@@ -24,4 +24,7 @@ public interface JobsDaoImpl extends CrudRepository<JobsDaoPojo, Integer>{
     
     @Query("select max(pk_id) + 1 as pk_id from JobsDaoPojo")
     Integer getNewPkId();
+
+    @Query("from JobsDaoPojo where pk_id not in (select job.pk_id from InvoiceJobsDaoPojo) or pk_id = :currentJobId order by jobDate desc")
+    List<JobsDaoPojo> selectAllJobsNotInInvoice(@Param("currentJobId") Integer currentJobId);
 }

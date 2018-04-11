@@ -1,0 +1,140 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="CB4FB734-3A32-CE93-257F-4A3B45E4B22B" name="TA_INVOICES">
+<createdBy>nico</createdBy>
+<createdTime>2018-02-23 09:09:23 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<ordsAlias>table_18</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="PK_ID" id="1ECFDC52-C11C-A2F9-A284-818075D98FB9">
+<createdBy>nico</createdBy>
+<createdTime>2018-02-23 09:12:04 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FK_REKENING_ID" id="EAD0B7C0-F00A-73EF-2A57-B755F18EB300">
+<createdBy>nico</createdBy>
+<createdTime>2018-02-23 09:27:28 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="E7CCDA69-80C2-39C4-F208-E2E0AC7EC7A6" referredColumn="D2B01F67-702C-A560-74CE-738D1AF58970"/>
+</associations>
+</Column>
+<Column name="INVOICE_ID" id="35CA62CB-0958-53CE-9FAF-4E412117A2E5">
+<createdBy>nico</createdBy>
+<createdTime>2018-02-23 09:21:35 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="INVOICE_DATE" id="3C6A923A-84F9-FD05-A473-FA17B7A0659B">
+<createdBy>nico</createdBy>
+<createdTime>2018-02-23 09:21:56 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT007</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="INVOICE_DUE_DATE" id="B805E37F-6E66-C49D-2B0D-2E89F84B4499">
+<createdBy>nico</createdBy>
+<createdTime>2018-02-23 09:58:59 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT007</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="INVOICE_REF" id="10BD0714-C0B4-C877-31CB-B846AAAAE79B">
+<createdBy>nico</createdBy>
+<createdTime>2018-02-23 10:02:17 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>255</dataTypeSize>
+<ownDataTypeParameters>255,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="VAT_NUMBER" id="B4085388-1D4C-E207-8905-C9A75D97EFD5">
+<createdBy>nico</createdBy>
+<createdTime>2018-02-23 09:26:48 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>255</dataTypeSize>
+<ownDataTypeParameters>255,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="VAT_AMOUNT" id="51BE0F8E-F7E8-FACC-F5BF-D6DCE43F9F33">
+<createdBy>nico</createdBy>
+<createdTime>2018-02-23 09:57:43 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="DESCRIPTION" id="BCAF9D8F-5DA7-BBDC-7984-3D38F2670127">
+<createdBy>nico</createdBy>
+<createdTime>2018-02-23 09:18:56 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>255</dataTypeSize>
+<ownDataTypeParameters>255,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="75503E86-0BC1-24E0-DAD8-5039F0D6EC16" name="TA_INVOICES_PK">
+<createdBy>nico</createdBy>
+<createdTime>2018-02-23 09:12:04 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="1ECFDC52-C11C-A2F9-A284-818075D98FB9"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="80559033-F5D8-4CEA-0913-CB9DC8E12459" name="TA_INVOICES_TA_REKENINGEN_FK">
+<createdBy>nico</createdBy>
+<createdTime>2018-02-23 09:27:28 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="EAD0B7C0-F00A-73EF-2A57-B755F18EB300"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

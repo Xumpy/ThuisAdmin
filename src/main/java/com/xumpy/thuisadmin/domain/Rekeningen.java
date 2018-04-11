@@ -17,4 +17,7 @@ public interface Rekeningen {
     Personen getPersoon();
     Integer getPk_id();
     BigDecimal getWaarde();
+    String getBank();
+    String getRekeningNr();
+    Boolean getClosed();
 }

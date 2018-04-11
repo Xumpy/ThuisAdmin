@@ -31,7 +31,7 @@
             </div>
             <script th:inline="javascript">
                 app.controller("fController", function($scope, $http) {
-                    $http.get(/*[[@{/json/fetch_all_jobs_group}]]*/).success( function(data){
+                    $http.get(/*[[@{/json/fetch_all_open_jobs_group}]]*/).success( function(data){
                         $scope.groups = data;
                     });
 

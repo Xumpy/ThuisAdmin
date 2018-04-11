@@ -59,14 +59,47 @@ public class Finances implements Serializable{
         return "finances/overzichtPerGroep";
     }
 
+    @RequestMapping(value = "finances/invoices")
+    public String viewFinancesInvoices(){
+        return "finances/invoices";
+    }
+
+
+    @RequestMapping(value = "finances/nieuwInvoice")
+    public String viewFinancesNieuwInvoices(){
+        return "finances/nieuwInvoice";
+    }
+
+    @RequestMapping(value = "finances/nieuwInvoice/{invoiceId}")
+    public String viewNieuwRekening(@PathVariable Integer invoiceId, Model model){
+        model.addAttribute("pk_id", invoiceId);
+
+        return "finances/nieuwInvoice";
+    }
+
     @RequestMapping(value = "finances/nieuwBedrag/{bedragId}")
     public String viewNieuwBedrag(@PathVariable Integer bedragId, Model model){
         model.addAttribute("pk_id", bedragId);
         
         return "finances/nieuwBedrag";
     }
-    
-     
+
+    @RequestMapping(value = "finances/nieuwInvoice/editInvoiceJob/{invoiceId}")
+    public String editInvoiceJob(@PathVariable Integer invoiceId, Model model){
+        model.addAttribute("pk_id", invoiceId);
+
+        return "finances/newInvoiceJob";
+    }
+
+
+    @RequestMapping(value = "finances/newInvoiceJob/{invoiceId}")
+    public String newInvoiceJob(@PathVariable Integer invoiceId, Model model){
+        model.addAttribute("invoiceId", invoiceId);
+
+        return "finances/newInvoiceJob";
+    }
+
+
     @RequestMapping(value = "finances/nieuwBedragDocument/{bedragId}")
     public String nieuwBedragDocument(@PathVariable Integer bedragId, Model model){
         model.addAttribute("bedragId", bedragId);

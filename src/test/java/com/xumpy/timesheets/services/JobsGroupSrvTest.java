@@ -16,6 +16,8 @@ import com.xumpy.timesheets.dao.model.JobsGroupDaoPojo;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
@@ -40,7 +42,7 @@ public class JobsGroupSrvTest {
     
     @Test
     public void testSelect(){
-        when(jobsGroupDao.findOne(1)).thenReturn(jobsGroup);
+        when(jobsGroupDao.findById(1)).thenReturn(Optional.of(jobsGroup));
         assertEquals(jobsGroup, jobsGroupSrv.select(1));
     }
     

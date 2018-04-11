@@ -21,6 +21,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
@@ -50,7 +52,7 @@ public class JobsSrvImplTest {
     
     @Test
     public void testSelect(){
-        when(jobsDao.findOne(1)).thenReturn(jobs);
+        when(jobsDao.findById(1)).thenReturn(Optional.of(jobs));
         assertEquals(jobs, jobsSrv.select(1));
     }
     
@@ -178,7 +180,6 @@ public class JobsSrvImplTest {
         JobsGroup jobsGroup1 = Mockito.mock(JobsGroup.class);
         JobsGroup jobsGroup2 = Mockito.mock(JobsGroup.class);
         when(jobsGroup1.getCompany()).thenReturn(company);
-        when(jobsGroup2.getCompany()).thenReturn(company);
         when(company.getPk_id()).thenReturn(1);
         
         JobsSrvPojo job1 = Mockito.mock(JobsSrvPojo.class);
@@ -188,14 +189,10 @@ public class JobsSrvImplTest {
         
         when(job1.getJobDate()).thenReturn(inPeriode);
         when(job2.getJobDate()).thenReturn(inPeriode);
-        when(job3.getJobDate()).thenReturn(inPeriode);
-        when(job4.getJobDate()).thenReturn(outPeriode);
-        
+
         when(job1.getJobsGroup()).thenReturn(jobsGroup1);
         when(job2.getJobsGroup()).thenReturn(jobsGroup1);
-        when(job3.getJobsGroup()).thenReturn(jobsGroup2);
-        when(job4.getJobsGroup()).thenReturn(jobsGroup1);
-        
+
         List<JobsDaoPojo> periode = new ArrayList<JobsDaoPojo>();
         periode.add(new JobsDaoPojo(job1));
         periode.add(new JobsDaoPojo(job2));
@@ -218,9 +215,7 @@ public class JobsSrvImplTest {
         when(jobs.getJobDate()).thenReturn(date);
         JobsGroupDaoPojo jobsGroupDaoPojo = new JobsGroupDaoPojo(jobsGroup);
         when(jobs.getJobsGroup()).thenReturn(jobsGroupDaoPojo);
-        when(jobsGroup.getCompany()).thenReturn(company);
-        when(company.getPk_id()).thenReturn(1);
-        
+
         List<Jobs> allMonthJobs = new ArrayList<Jobs>();
         allMonthJobs.add(jobs);
         
@@ -239,10 +234,6 @@ public class JobsSrvImplTest {
         Date date2 = df.parse("02/03/2015");
         Jobs job1 = Mockito.mock(Jobs.class);
         Jobs job2 = Mockito.mock(Jobs.class);
-        when(job1.getJobDate()).thenReturn(date1);
-        when(job1.getJobDate()).thenReturn(date2);
-        when(job1.getJobsGroup()).thenReturn(jobsGroup);
-        when(job2.getJobsGroup()).thenReturn(jobsGroup);
         when(job1.getWorkedHours()).thenReturn(new BigDecimal("7.6"));
         when(job2.getPk_id()).thenReturn(null);
         when(job2.getWorkedHours()).thenReturn(new BigDecimal("0"));
@@ -266,9 +257,6 @@ public class JobsSrvImplTest {
         when(jobs.getJobsGroup()).thenReturn(jobsGroupDaoPojo);
         when(jobs.getWorkedHours()).thenReturn(new BigDecimal("7.6"));
         
-        when(jobsGroup.getCompany()).thenReturn(company);
-        when(company.getPk_id()).thenReturn(1);
-        
         List<Jobs> allMonthJobs = new ArrayList<Jobs>();
         allMonthJobs.add(jobs);
         
@@ -290,7 +278,6 @@ public class JobsSrvImplTest {
         JobsGroup jobsGroup1 = Mockito.mock(JobsGroup.class);
         JobsGroup jobsGroup2 = Mockito.mock(JobsGroup.class);
         when(jobsGroup1.getCompany()).thenReturn(company);
-        when(jobsGroup2.getCompany()).thenReturn(company);
         when(company.getPk_id()).thenReturn(1);
         
         
@@ -301,21 +288,14 @@ public class JobsSrvImplTest {
         
         when(job1.getJobDate()).thenReturn(inPeriode);
         when(job2.getJobDate()).thenReturn(inPeriode);
-        when(job3.getJobDate()).thenReturn(inPeriode);
-        when(job4.getJobDate()).thenReturn(outPeriode);
-        
+
         when(jobsGroup1.getName()).thenReturn("Test");
-        when(jobsGroup2.getName()).thenReturn("Test2");
-        
+
         when(jobsGroup1.getDescription()).thenReturn("Test");
-        when(jobsGroup2.getDescription()).thenReturn("Test2");
-        
-        
+
         when(job1.getJobsGroup()).thenReturn(jobsGroup1);
         when(job2.getJobsGroup()).thenReturn(jobsGroup1);
-        when(job3.getJobsGroup()).thenReturn(jobsGroup2);
-        when(job4.getJobsGroup()).thenReturn(jobsGroup1);
-        
+
         List<JobsDaoPojo> periode = new ArrayList<JobsDaoPojo>();
         periode.add(new JobsDaoPojo(job1));
         periode.add(new JobsDaoPojo(job2));

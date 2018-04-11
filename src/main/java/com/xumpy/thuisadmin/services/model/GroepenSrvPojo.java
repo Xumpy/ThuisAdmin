@@ -20,6 +20,7 @@ public class GroepenSrvPojo implements Groepen{
     private PersonenSrvPojo persoon;
     private String codeId;
     private Integer publicGroep;
+    private Boolean closed;
 
     @Override
     public Integer getPk_id() {
@@ -110,7 +111,16 @@ public class GroepenSrvPojo implements Groepen{
     public GroepenSrvPojo(){
         
     }
-    
+
+    @Override
+    public Boolean getClosed() {
+        return closed;
+    }
+
+    public void setClosed(Boolean closed) {
+        this.closed = closed;
+    }
+
     public GroepenSrvPojo(Groepen groepen){
         this.codeId = groepen.getCodeId();
         this.hoofdGroep = groepen.getHoofdGroep()!=null ? new GroepenSrvPojo(groepen.getHoofdGroep()): null;
@@ -120,5 +130,6 @@ public class GroepenSrvPojo implements Groepen{
         this.persoon = groepen.getPersoon()!=null ? new PersonenSrvPojo(groepen.getPersoon()) : null;
         this.pk_id = groepen.getPk_id();
         this.publicGroep = groepen.getPublicGroep();
+        this.closed = groepen.getClosed();
     }
 }

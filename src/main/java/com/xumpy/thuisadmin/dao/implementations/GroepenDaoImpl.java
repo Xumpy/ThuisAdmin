@@ -30,4 +30,13 @@ public interface GroepenDaoImpl extends CrudRepository<GroepenDaoPojo, Integer>{
 
     @Query("from GroepenDaoPojo where hoofdGroep.pk_id = :hoofdGroepId and (persoon.pk_id = :personenId or publicGroep = 1) order by negatief")
     public List<GroepenDaoPojo> findAllGroepen(@Param("hoofdGroepId") Integer hoofdGroepId, @Param("personenId") Integer personenId);
+
+    @Query("from GroepenDaoPojo where coalesce(closed, 0) !=  1 and (persoon.pk_id = :personenId or publicGroep = 1)")
+    public List<GroepenDaoPojo> findAllOpenGroepen(@Param("personenId") Integer personenId);
+
+    @Query("from GroepenDaoPojo where coalesce(closed, 0) !=  1 and fk_hoofd_type_groep_id is null and (persoon.pk_id = :personenId or publicGroep = 1)")
+    public List<GroepenDaoPojo> findAllOpenHoofdGroepen(@Param("personenId") Integer personenId);
+
+    @Query("from GroepenDaoPojo where coalesce(closed, 0) !=  1 and hoofdGroep.pk_id = :hoofdGroepId and (persoon.pk_id = :personenId or publicGroep = 1) order by negatief")
+    public List<GroepenDaoPojo> findAllOpenGroepen(@Param("hoofdGroepId") Integer hoofdGroepId, @Param("personenId") Integer personenId);
 }

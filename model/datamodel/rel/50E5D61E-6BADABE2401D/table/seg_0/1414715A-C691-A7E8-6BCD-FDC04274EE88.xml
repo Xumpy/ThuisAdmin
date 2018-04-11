@@ -60,6 +60,21 @@
 <colAssociation fkAssociation="99F2959E-BA91-F740-3EAA-04C3E5A5AA74" referredColumn="D2B01F67-702C-A560-74CE-738D1AF58970"/>
 </associations>
 </Column>
+<Column name="FK_INVOICE_ID" id="C9E88BB3-B779-912F-2827-69123A6F3D2F">
+<createdBy>nico</createdBy>
+<createdTime>2018-02-23 09:14:16 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="45B41641-11ED-F5D3-CB57-C2B9E75E6D4E" referredColumn="1ECFDC52-C11C-A2F9-A284-818075D98FB9"/>
+</associations>
+</Column>
 <Column name="BEDRAG" id="0A638DD7-68C3-D052-7C29-54760730F810">
 <createdBy>nicom</createdBy>
 <createdTime>2015-07-14 09:50:23 UTC</createdTime>
@@ -123,6 +138,16 @@
 <isSurrogateKey>false</isSurrogateKey>
 <indexColumnUsage>
 <colUsage columnID="49FBD5DC-E475-C43E-24C5-C87604440967"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="EA4769A3-077D-AA29-2C43-FBF3A6379858" name="TA_BEDRAGEN_TA_INVOICES_FK">
+<createdBy>nico</createdBy>
+<createdTime>2018-02-23 09:14:16 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="C9E88BB3-B779-912F-2827-69123A6F3D2F"/>
 </indexColumnUsage>
 </ind_PK_UK>
 </indexes>

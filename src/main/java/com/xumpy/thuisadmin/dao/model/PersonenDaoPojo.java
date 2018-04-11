@@ -36,7 +36,10 @@ public class PersonenDaoPojo implements Serializable, Personen{
     
     @Column(name="MD5_PASSWORD")
     private String md5_password;
-    
+
+    @Column(name="VAT_NUMBER")
+    private String vatNumber;
+
     @Override
     public Integer getPk_id() {
         return pk_id;
@@ -82,6 +85,15 @@ public class PersonenDaoPojo implements Serializable, Personen{
         this.md5_password = md5_password;
     }
 
+    @Override
+    public String getVatNumber() {
+        return vatNumber;
+    }
+
+    public void setVatNumber(String vatNumber) {
+        this.vatNumber = vatNumber;
+    }
+
     public PersonenDaoPojo(){
         
     }
@@ -92,5 +104,6 @@ public class PersonenDaoPojo implements Serializable, Personen{
         this.pk_id = personen.getPk_id();
         this.username = personen.getUsername();
         this.voornaam = personen.getVoornaam();
+        this.vatNumber = personen.getVatNumber();
     }
 }

@@ -139,4 +139,18 @@ public class TimesheetsCtrl {
         
         return null;
     }
+
+    @RequestMapping(value="timesheets/newGroupPrice/{groupId}")
+    public String newGroupPrice(@PathVariable Integer groupId, Model model){
+        model.addAttribute("groupId", groupId);
+
+        return "timesheets/editGroupPrice";
+    }
+
+    @RequestMapping(value="timesheets/editGroup/editGroupPrice/{groupPriceId}")
+    public String editGroupPrice(@PathVariable Integer groupPriceId, Model model){
+        model.addAttribute("pk_id", groupPriceId);
+
+        return "timesheets/editGroupPrice";
+    }
 }

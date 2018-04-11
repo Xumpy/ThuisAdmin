@@ -183,7 +183,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
                                                                      OverzichtGroepBedragenTotal overzichtGroepBedragenTotal) {
         List<? extends Bedragen> lstBedragenInPeriode = bedragenDao.BedragInPeriode(beginDate, eindDate, null, showBedragPublicGroep, userInfo.getPersoon().getPk_id());
         
-        Groepen groepenSrv = groepenDao.findOne(typeGroepId);
+        Groepen groepenSrv = groepenDao.findById(typeGroepId).get();
 
         List<? extends Bedragen> lstBedragenNeg = getBedragenInGroep(lstBedragenInPeriode, groepenSrv, 1);
         List<? extends Bedragen> lstBedragenPos = getBedragenInGroep(lstBedragenInPeriode, groepenSrv, 0);
@@ -227,7 +227,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
                                                                      OverzichtGroepBedragenTotal overzichtGroepBedragenTotal) {
         List<? extends Bedragen> lstBedragenInPeriode = bedragenDao.BedragInPeriode(beginDate, eindDate, null, showBedragPublicGroep, userInfo.getPersoon().getPk_id());
         
-        Groepen groepenSrv = groepenDao.findOne(typeGroepId);
+        Groepen groepenSrv = groepenDao.findById(typeGroepId).get();
         
         Integer negatief = new Integer(0);
         
@@ -285,29 +285,31 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     @Override
     @Transactional(value="transactionManager")
     public Bedragen findBedrag(Integer bedragId) {
-        return bedragenDao.findOne(bedragId);
+        return bedragenDao.findById(bedragId).get();
     }
     
     public Map OverviewRekeningData(List<? extends Bedragen> bedragen){
         Map overviewRekeningData = new LinkedHashMap();
 
-        BigDecimal rekeningStand;
-        if (isRekeningUnique(bedragen)){
-            rekeningStand = getBedragAtDate(bedragen.get(0).getDatum(), bedragen.get(0).getRekening());
-        } else {
-            rekeningStand = getBedragAtDate(bedragen.get(0).getDatum(), null);
-        }
-        overviewRekeningData.put(bedragen.get(0).getDatum(), rekeningStand);
-        
-        for (Integer i=1; i<bedragen.size(); i++){
-            if (!bedragen.get(i).getDatum().equals(bedragen.get(0).getDatum())){
-                if (bedragen.get(i).getGroep().getNegatief().equals(1)){
-                    rekeningStand = rekeningStand.subtract(bedragen.get(i).getBedrag());
+        if (bedragen.size() != 0) {
+            BigDecimal rekeningStand;
+            if (isRekeningUnique(bedragen)) {
+                rekeningStand = getBedragAtDate(bedragen.get(0).getDatum(), bedragen.get(0).getRekening());
+            } else {
+                rekeningStand = getBedragAtDate(bedragen.get(0).getDatum(), null);
+            }
+            overviewRekeningData.put(bedragen.get(0).getDatum(), rekeningStand);
+
+            for (Integer i = 1; i < bedragen.size(); i++) {
+                if (!bedragen.get(i).getDatum().equals(bedragen.get(0).getDatum())) {
+                    if (bedragen.get(i).getGroep().getNegatief().equals(1)) {
+                        rekeningStand = rekeningStand.subtract(bedragen.get(i).getBedrag());
+                    }
+                    if (bedragen.get(i).getGroep().getNegatief().equals(0)) {
+                        rekeningStand = rekeningStand.add(bedragen.get(i).getBedrag());
+                    }
+                    overviewRekeningData.put(bedragen.get(i).getDatum(), rekeningStand);
                 }
-                if (bedragen.get(i).getGroep().getNegatief().equals(0)){
-                    rekeningStand = rekeningStand.add(bedragen.get(i).getBedrag());
-                }
-                overviewRekeningData.put(bedragen.get(i).getDatum(), rekeningStand);
             }
         }
 
@@ -509,7 +511,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         } 
         
         if (transaction.equals(UPDATE)){
-            BedragenSrvPojo oldBedrag = new BedragenSrvPojo(bedragenDao.findOne(bedragenSrvPojo.getPk_id()));
+            BedragenSrvPojo oldBedrag = new BedragenSrvPojo(bedragenDao.findById(bedragenSrvPojo.getPk_id()).get());
             
             if (!oldBedrag.getRekening().equals(bedragenSrvPojo.getRekening())){
                 rekening = new RekeningenSrvPojo(moveBedragToRekening(oldBedrag, rekening));
@@ -552,12 +554,12 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         if (bedrag.getGroep().getNegatief().equals(0)){
             bedrag.getRekening().setWaarde(bedrag.getRekening().getWaarde().subtract(bedrag.getBedrag()));
             rekeningenDao.save(new RekeningenDaoPojo(bedrag.getRekening()));
-            rekening2 = rekeningenDao.findOne(rekening2.getPk_id());
+            rekening2 = rekeningenDao.findById(rekening2.getPk_id()).get();
             rekening2SrvPojo.setWaarde(rekening2.getWaarde().add(bedrag.getBedrag()));
         } else {
             bedrag.getRekening().setWaarde(bedrag.getRekening().getWaarde().add(bedrag.getBedrag()));
             rekeningenDao.save(new RekeningenDaoPojo(bedrag.getRekening()));
-            rekening2 = rekeningenDao.findOne(rekening2.getPk_id());
+            rekening2 = rekeningenDao.findById(rekening2.getPk_id()).get();
             rekening2SrvPojo.setWaarde(rekening2.getWaarde().subtract(bedrag.getBedrag()));
         }
         return rekening2SrvPojo;

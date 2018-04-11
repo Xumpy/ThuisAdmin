@@ -20,8 +20,8 @@ public class JobsInJobsGroup implements JobsGroup, Serializable{
     private String name;
     private String description;
     private CompanyCtrlPojo company;
-    
     private List<JobsCtrlPojo> jobs;
+    private Boolean closed;
 
     public void setCompany(CompanyCtrlPojo company) {
         this.company = company;
@@ -63,12 +63,22 @@ public class JobsInJobsGroup implements JobsGroup, Serializable{
     }
     
     public JobsInJobsGroup(){}
-    
+
+    @Override
+    public Boolean getClosed() {
+        return closed;
+    }
+
+    public void setClosed(Boolean closed) {
+        this.closed = closed;
+    }
+
     public JobsInJobsGroup(JobsGroup jobsGroup){
         this.description = jobsGroup.getDescription();
         this.name = jobsGroup.getName();
         this.pk_id = jobsGroup.getPk_id();
         this.company = new CompanyCtrlPojo(jobsGroup.getCompany());
+        this.closed = jobsGroup.getClosed();
     }
 
     @Override

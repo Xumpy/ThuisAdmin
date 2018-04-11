@@ -42,7 +42,7 @@ public class TickedJobsSrvImpl implements TickedJobsSrv{
     @Override
     @Transactional
     public TickedJobs select(Integer pk_id) {
-        return tickedJobsDao.findOne(pk_id);
+        return tickedJobsDao.findById(pk_id).get();
     }
 
     @Override

@@ -43,7 +43,10 @@ public class RekeningenSrvImpl implements RekeningenSrv, Serializable{
         rekening.setPersoon(new PersonenSrvPojo(userInfo.getPersoon()));
         rekening.setLaatst_bijgewerkt(nieuwRekening.getLaatst_bijgewerkt());
         rekening.setWaarde(BedragenSrvImpl.convertComma(nieuwRekening.getWaarde()));
-        
+        rekening.setBank(nieuwRekening.getBank());
+        rekening.setRekeningNr(nieuwRekening.getRekeningNr());
+        rekening.setClosed(nieuwRekening.getClosed());
+
         if (nieuwRekening.getPk_id() == null){
             rekening.setPk_id(rekeningenDao.getNewPkId());
             rekeningenDao.save(new RekeningenDaoPojo(rekening));
@@ -65,27 +68,35 @@ public class RekeningenSrvImpl implements RekeningenSrv, Serializable{
         rekeningenDao.delete(new RekeningenDaoPojo(rekeningen));
     }
 
-    @Override
-    @Transactional(value="transactionManager")
-    public RekeningBedragTotal findAllRekeningen() {
+    private RekeningBedragTotal buildRekeningBedragTotal(List<? extends Rekeningen> rekeningen){
         RekeningBedragTotal rekeningBedragTotal = new RekeningBedragTotal();
-        List<? extends Rekeningen> rekeningen = rekeningenDao.findAllRekeningen(userInfo.getPersoon().getPk_id());
-        
         BigDecimal totaal = new BigDecimal(0);
-        
+
         for (Rekeningen rekening: rekeningen){
             totaal = totaal.add(rekening.getWaarde());
         }
-        
+
         rekeningBedragTotal.setTotaal(totaal);
         rekeningBedragTotal.setRekeningen(rekeningen);
-        
+
         return rekeningBedragTotal;
     }
-    
+
+    @Override
+    @Transactional(value="transactionManager")
+    public RekeningBedragTotal findAllRekeningen() {
+        return buildRekeningBedragTotal(rekeningenDao.findAllRekeningen(userInfo.getPersoon().getPk_id()));
+    }
+
+    @Override
+    @Transactional(value="transactionManager")
+    public RekeningBedragTotal findAllOpenRekeningen() {
+        return buildRekeningBedragTotal(rekeningenDao.findAllOpenRekeningen(userInfo.getPersoon().getPk_id()));
+    }
+
     @Override
     @Transactional(value="transactionManager")
     public Rekeningen findRekening(Integer rekeningId){
-        return rekeningenDao.findOne(rekeningId);
+        return rekeningenDao.findById(rekeningId).get();
     }
 }

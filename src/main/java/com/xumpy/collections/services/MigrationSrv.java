@@ -62,8 +62,8 @@ public class MigrationSrv {
         colJerom.setMainCollection(colStrip);
         colJerom = collectionDao.save(colJerom);
         
-        PersonCollectionStatusDaoPojo notOwned = personCollectionStatusDao.findOne(1);
-        PersonCollectionStatusDaoPojo owned = personCollectionStatusDao.findOne(2);
+        PersonCollectionStatusDaoPojo notOwned = personCollectionStatusDao.findById(1).get();
+        PersonCollectionStatusDaoPojo owned = personCollectionStatusDao.findById(2).get();
         
         for (WriteJeromCSV.Lijst lijst: lstLijst){
             CollectionDetailDaoPojo collectionDetail = new CollectionDetailDaoPojo();

@@ -89,7 +89,7 @@
                         searchTekst: ""
                     }
 
-                    $http.get(/*[[@{/json/rekeningen}]]*/).success(function(data){
+                    $http.get(/*[[@{/json/openRekeningen}]]*/).success(function(data){
                         $scope.rekeningenTotaal = data;
                         $scope.rekeningen = $scope.rekeningenTotaal.rekeningen;
                     });

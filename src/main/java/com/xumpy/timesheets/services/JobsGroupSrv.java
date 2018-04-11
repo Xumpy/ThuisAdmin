@@ -19,6 +19,7 @@ import java.util.List;
 public interface JobsGroupSrv {
     JobsGroup select(Integer pk_id);
     List<? extends JobsGroup> selectAllJobGroups();
+    List<? extends JobsGroup> selectAllOpenJobGroups();
     List<? extends JobsGroup> selectAllGroupsInJobs(List<Jobs> jobs);
     JobsGroup save(JobsGroup jobsGroup);
     void delete(JobsGroup jobsGroup);
