@@ -5,7 +5,11 @@
  */
 package com.xumpy.thuisadmin.dao.model;
 
+import com.xumpy.security.model.InvoiceType;
+import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.domain.Bedragen;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -122,7 +126,7 @@ public class BedragenDaoPojo implements Serializable, Bedragen{
     public BedragenDaoPojo(){
         
     }
-    
+
     public BedragenDaoPojo(Bedragen bedragen){
         this.bedrag = bedragen.getBedrag();
         this.datum = bedragen.getDatum();

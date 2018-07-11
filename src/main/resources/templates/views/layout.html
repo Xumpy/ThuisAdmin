@@ -32,6 +32,7 @@
                   <li><a th:href="@{/finances/overview}">Overview</a></li>
                   <li><a th:href="@{/finances/overzichtPerGroep}">Overzicht Per Groep</a></li>
                   <li><a th:href="@{/finances/OverviewMonthCategory}">Overzicht Per Maand Per Groep</a></li>
+                  <li><a th:href="@{/finances/OverviewMonth}">Overzicht Per Maand</a></li>
                   <li><a th:href="@{/finances/beheerBedragen}">Beheer Bedragen</a></li>
                   <li><a th:href="@{/finances/invoices}">Facturen</a></li>
                   <li><a th:href="@{/finances/documenten}">Documenten</a></li>
@@ -57,6 +58,14 @@
               </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown">
+                <a aria-expanded="false" class="dropdown-toggle" data-toggle="dropdown" th:text="${@userInfo.invoiceType.type}"><b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <th:block th:object="${@userInfo}">
+                        <li th:each="invoiceType :*{invoiceTypes}"><a th:href="'/invoiceType/' + ${invoiceType}" th:text="${invoiceType.type}"/></li>
+                    </th:block>
+                </ul>
+              </li>
               <li><a th:href="@{/logout}">Logout</a></li>
             </ul>
         </div>

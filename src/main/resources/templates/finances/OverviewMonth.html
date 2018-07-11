@@ -1,0 +1,67 @@
+<html layout:decorator="views/layout" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<body>
+    <div layout:fragment="content">
+        <div class="col-lg-12">
+            <label for="beginDatum" class="col-lg-1 control-label">Begin Date</label>
+            <div class="col-lg-2">
+                <input data-provide="datepicker" data-date-format="mm/yyyy" class="datepicker form-control" id="beginDatum" placeholder="Begin Datum"
+                       type="text" ng-model="OverviewMonthCategory.beginDate" />
+            </div>
+            <label for="eindDatum" class="col-lg-1 control-label">End Date</label>
+            <div class="col-lg-2">
+                <input data-provide="datepicker" data-date-format="mm/yyyy" class="datepicker form-control" id="eindDatum" placeholder="Eind Datum"
+                       type="text" ng-model="OverviewMonthCategory.endDate" />
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="col-lg-7">
+                <div id="columnchart_material" style="height: 600px;"></div>
+            </div>
+        </div>
+        <script th:inline="javascript">
+            function drawChart(jsonData) {
+                if (jsonData !== null){
+                    var data = google.visualization.arrayToDataTable(jsonData);
+
+                    var options = {
+                        chart: {
+                            title: 'Monthly costs and income',
+                            subtitle: '',
+                        }
+                    };
+
+                    var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+
+                    chart.draw(data, google.charts.Bar.convertOptions(options));
+                }
+            }
+
+            $(".datepicker").datepicker( {
+                format: "mm/yyyy",
+                viewMode: "months",
+                minViewMode: "months"
+            });
+
+            app.controller("fController", function($scope, $http) {
+                $scope.$watchCollection('OverviewMonthCategory', function(){
+                    if ($scope.OverviewMonthCategory !== undefined){
+                        var url = /*[[@{/json/fetchOverviewMonth}]]*/;
+                        var res = $http.post(url, $scope.OverviewMonthCategory);
+                        res.success(function(data) {
+                            drawChart(data.values);
+                        });
+                    }
+                });
+
+                var url =/*[[@{/json/overviewMonthCategoryHeader}]]*/;
+                $http.post(url).success(function(data2){
+                    $scope.OverviewMonthCategory = {
+                        beginDate: data2.beginDate,
+                        endDate: data2.endDate
+                    }
+                });
+            });
+        </script>
+    </div>
+</body>
+</html>

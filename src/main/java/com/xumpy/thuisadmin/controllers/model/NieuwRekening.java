@@ -19,6 +19,15 @@ public class NieuwRekening {
     private String bank;
     private String rekeningNr;
     private Boolean closed;
+    private Boolean professional;
+
+    public Boolean getProfessional() {
+        return professional;
+    }
+
+    public void setProfessional(Boolean professional) {
+        this.professional = professional;
+    }
 
     public String getBank() {
         return bank;

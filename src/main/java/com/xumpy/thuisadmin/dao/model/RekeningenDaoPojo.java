@@ -56,6 +56,18 @@ public class RekeningenDaoPojo implements Serializable, Rekeningen {
     @Column(name="CLOSED")
     private Boolean closed;
 
+    @Column(name="PROFESSIONAL")
+    private Boolean professional;
+
+    @Override
+    public Boolean getProfessional() {
+        return professional;
+    }
+
+    public void setProfessional(Boolean professional) {
+        this.professional = professional;
+    }
+
     @Override
     public Integer getPk_id() {
         return pk_id;
@@ -141,5 +153,6 @@ public class RekeningenDaoPojo implements Serializable, Rekeningen {
         this.rekeningNr = rekeningen.getRekeningNr();
         this.bank = rekeningen.getBank();
         this.closed = rekeningen.getClosed();
+        this.professional = rekeningen.getProfessional();
     }
 }

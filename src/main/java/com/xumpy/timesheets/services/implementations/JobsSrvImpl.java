@@ -83,18 +83,33 @@ public class JobsSrvImpl implements JobsSrv{
         jobsDao.delete(new JobsDaoPojo(jobs));
     }
 
+    private Date getEndDateMonth(Date startDate){
+        Calendar c = Calendar.getInstance();
+        c.setTime(startDate);
+        c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+        Date endDate = c.getTime();
+
+        return endDate;
+    }
+
     @Override
     @Transactional
     public List<? extends Jobs> selectMonth(String month) throws ParseException {
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         Date startDate = df.parse("01/" + month);
-        
-        Calendar c = Calendar.getInstance();
-        c.setTime(startDate);
-        c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
-        Date endDate = c.getTime();
-        
+        Date endDate = getEndDateMonth(startDate);
+
         return jobsDao.selectPeriode(startDate, endDate);
+    }
+
+    @Override
+    @Transactional
+    public List<? extends Jobs> selectMonth(String month, Integer groupId) throws ParseException {
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        Date startDate = df.parse("01/" + month);
+        Date endDate = getEndDateMonth(startDate);
+        
+        return jobsDao.selectPeriodeGroup(startDate, endDate, groupId);
     }
 
     @Override

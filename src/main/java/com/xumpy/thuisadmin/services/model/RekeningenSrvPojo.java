@@ -22,6 +22,16 @@ public class RekeningenSrvPojo implements Rekeningen{
     private String bank;
     private String rekeningNr;
     private Boolean closed;
+    private Boolean professional;
+
+    @Override
+    public Boolean getProfessional() {
+        return professional;
+    }
+
+    public void setProfessional(Boolean professional) {
+        this.professional = professional;
+    }
 
     @Override
     public Integer getPk_id() {
@@ -130,5 +140,6 @@ public class RekeningenSrvPojo implements Rekeningen{
         this.rekeningNr = rekeningen.getRekeningNr();
         this.bank = rekeningen.getBank();
         this.closed = rekeningen.getClosed();
+        this.professional = rekeningen.getProfessional();
     }
 }

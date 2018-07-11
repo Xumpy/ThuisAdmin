@@ -30,6 +30,6 @@ public interface RekeningenDaoImpl extends CrudRepository<RekeningenDaoPojo, Int
     @Query("from RekeningenDaoPojo where persoon.pk_id = :persoonId")
     public List<Rekeningen> findAllRekeningen(@Param("persoonId") Integer persoonId);
     
-    @Query("select sum(waarde) from RekeningenDaoPojo where persoon.pk_id = :persoonId")
-    public BigDecimal totalAllRekeningen(@Param("persoonId") Integer persoonId);
+    @Query("select sum(waarde) from RekeningenDaoPojo where persoon.pk_id = :persoonId and coalesce(coalesce(:professional, professional), 0) = coalesce(professional, 0)")
+    public BigDecimal totalAllRekeningen(@Param("persoonId") Integer persoonId, @Param("professional") Boolean professional);
 }

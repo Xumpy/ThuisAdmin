@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -19,6 +21,7 @@ import java.io.Serializable;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class UserInfo implements Serializable{
     private Personen persoon;
+    private InvoiceType invoiceType;
 
     public Personen getPersoon() {
         return persoon;
@@ -30,5 +33,17 @@ public class UserInfo implements Serializable{
 
     public void updateBean(Personen persoon){
         this.persoon = persoon;
+    }
+
+    public InvoiceType getInvoiceType() {
+        return invoiceType;
+    }
+
+    public void setInvoiceType(InvoiceType invoiceType) {
+        this.invoiceType = invoiceType;
+    }
+
+    public List<Object> getInvoiceTypes(){
+        return Arrays.asList(InvoiceType.values());
     }
 }

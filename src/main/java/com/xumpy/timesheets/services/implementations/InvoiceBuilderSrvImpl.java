@@ -36,8 +36,25 @@ public class InvoiceBuilderSrvImpl {
         return cal.getTime();
     }
 
+    private Boolean doesJobExistsInJobs(Jobs job, List<InvoiceJobsDaoPojo> jobs){
+        if (jobs != null){
+            for(InvoiceJobsDaoPojo currentJob: jobs){
+                if (job.getJobDate().compareTo(currentJob.getJob().getJobDate()) == 0 &&
+                        job.getJobsGroup().getName().equals(currentJob.getJob().getJobsGroup().getName())){
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     private void saveInvoiceJobs(List<? extends Jobs> jobs, InvoicesDaoPojo invoicesDaoPojo){
         List<InvoiceJobsDaoPojo> invoiceJobsDaoPojos = new ArrayList<InvoiceJobsDaoPojo>();
+        List<InvoiceJobsDaoPojo> currentJobsInInvoice = null;
+
+        if (invoicesDaoPojo.getPkId() != null) currentJobsInInvoice = invoiceJobsDao.findAllJobsByInvoice(invoicesDaoPojo.getPkId());
+
         for (Jobs job: jobs){
             InvoiceJobsDaoPojo invoiceJobsDaoPojo = new InvoiceJobsDaoPojo();
             invoiceJobsDaoPojo.setAmount(jobsGroupPricesDao.selectPriceBetweenDate(job.getJobsGroup().getPk_id(), job.getJobDate()));
@@ -45,23 +62,39 @@ public class InvoiceBuilderSrvImpl {
             invoiceJobsDaoPojo.setJob(new JobsDaoPojo(job));
             invoiceJobsDaoPojo.setDescription(job.getJobsGroup().getName() + ": " + job.getJobsGroup().getDescription());
             invoiceJobsDaoPojo.setTimeUnitDays(job.getJobsGroup().getCompany().isTimeUnitDays());
-            invoiceJobsDaoPojos.add(invoiceJobsDaoPojo);
+
+            if (!doesJobExistsInJobs(job, currentJobsInInvoice)){
+                invoiceJobsDaoPojos.add(invoiceJobsDaoPojo);
+            }
         }
 
         invoiceJobsDao.saveAll(invoiceJobsDaoPojos);
     }
 
-    @Transactional
-    public void build(InvoiceBuilderCtrlPojo invoiceBuilder) throws ParseException {
-        JobsGroup jobsGroup = jobsGroupDao.findById(invoiceBuilder.getGroupId()).get();
-
+    private InvoicesDaoPojo buildNewInvoice(String invoiceId, String vatNumber){
         InvoicesDaoPojo invoicesDaoPojo = new InvoicesDaoPojo();
         invoicesDaoPojo.setInvoiceDate(new Date());
         invoicesDaoPojo.setInvoiceDueDate(datePlusOnMoth());
-        invoicesDaoPojo.setInvoiceId(invoiceBuilder.getInvoiceId());
-        invoicesDaoPojo.setVatNumber(jobsGroup.getCompany().getVatNumber());
+        invoicesDaoPojo.setInvoiceId(invoiceId);
+        invoicesDaoPojo.setVatNumber(vatNumber);
         invoicesDaoPojo.setVatAmount(new BigDecimal(21));
 
-        saveInvoiceJobs(jobsSrv.selectMonth(invoiceBuilder.getMonth()), invoicesDao.save(invoicesDaoPojo));
+        return invoicesDaoPojo;
+    }
+
+    @Transactional
+    public void build(InvoiceBuilderCtrlPojo invoiceBuilder) throws ParseException {
+        JobsGroup jobsGroup = jobsGroupDao.findById(invoiceBuilder.getGroupId()).get();
+        InvoicesDaoPojo invoicesDaoPojo;
+
+        List<InvoicesDaoPojo> invoices = invoicesDao.findAllInvoicesByInvoice(invoiceBuilder.getInvoiceId());
+        if (invoices.size() == 1){
+            invoicesDaoPojo = invoices.get(0);
+        } else {
+            invoicesDaoPojo = buildNewInvoice(invoiceBuilder.getInvoiceId(), jobsGroup.getCompany().getVatNumber());
+        }
+
+
+        saveInvoiceJobs(jobsSrv.selectMonth(invoiceBuilder.getMonth(), invoiceBuilder.getGroupId()), invoicesDao.save(invoicesDaoPojo));
     }
 }

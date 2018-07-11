@@ -20,4 +20,5 @@ public interface Rekeningen {
     String getBank();
     String getRekeningNr();
     Boolean getClosed();
+    Boolean getProfessional();
 }

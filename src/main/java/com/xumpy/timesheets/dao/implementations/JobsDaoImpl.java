@@ -18,10 +18,13 @@ import org.springframework.data.repository.query.Param;
 public interface JobsDaoImpl extends CrudRepository<JobsDaoPojo, Integer>{
     @Query("from JobsDaoPojo where jobDate = :date order by pk_id")
     List<JobsDaoPojo> selectDate(@Param("date") Date date);
-    
+
     @Query("from JobsDaoPojo where jobDate >= :startDate and jobDate <= :endDate order by pk_id")
     List<JobsDaoPojo> selectPeriode(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
-    
+
+    @Query("from JobsDaoPojo where jobDate >= :startDate and jobDate <= :endDate and jobsGroup.pk_id = :groupId order by pk_id")
+    List<JobsDaoPojo> selectPeriodeGroup(@Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("groupId") Integer groupId);
+
     @Query("select max(pk_id) + 1 as pk_id from JobsDaoPojo")
     Integer getNewPkId();
 

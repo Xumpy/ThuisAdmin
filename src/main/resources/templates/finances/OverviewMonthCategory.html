@@ -66,9 +66,6 @@
                 </div>
             </div>
             <script th:inline="javascript">
-                google.load("visualization", "1", {packages:["corechart"]});
-                google.setOnLoadCallback(drawVisualization);
-
                 $(".datepicker").datepicker( {
                     format: "mm/yyyy",
                     viewMode: "months",
@@ -142,7 +139,7 @@
                         if (jsonData.length > 1){
                             chart.draw(data, options);
                         } else {
-                            chart.draw(google.visualization.arrayToDataTable([["Month", "Average"], ["", 0]]), options);
+                            chart.draw(google.visualization.arrayToDataTable([ ['Month', 'Average'], ['', 0] ]), options);
                         }
                         google.visualization.events.addListener(chart, 'select', selectHandler);
                       }

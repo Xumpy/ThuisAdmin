@@ -21,7 +21,8 @@ import java.util.List;
 public interface JobsSrv {
     Jobs select(Integer pk_id);
     List<? extends Jobs> selectDate(Date date);
-    List<? extends Jobs> selectMonth(String month) throws ParseException;
+    public List<? extends Jobs> selectMonth(String month) throws ParseException;
+    List<? extends Jobs> selectMonth(String month, Integer groupId) throws ParseException;
     List<? extends Jobs> selectPeriode(Date startDate, Date endDate);
     public List<JobsInJobsGroup> selectMonthJobsInJobGroup(String month, Overview overview) throws ParseException;
     public List<JobsInJobsGroup> selectPeriodeJobsInJobGroup(Date startDate, Date endDate);

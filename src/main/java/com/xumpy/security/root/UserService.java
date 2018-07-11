@@ -5,6 +5,7 @@
  */
 package com.xumpy.security.root;
 
+import com.xumpy.security.model.InvoiceType;
 import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
 import java.util.ArrayList;
@@ -47,7 +48,8 @@ public class UserService implements UserDetailsService {
         PersonenDaoPojo internalPersoon = (PersonenDaoPojo)query.list().get(0);
         
         userInfo.setPersoon(internalPersoon);
-        
+        userInfo.setInvoiceType(InvoiceType.BOTH);
+
         User user = new User(userInfo.getPersoon().getUsername(), userInfo.getPersoon().getMd5_password(), authorities);
         
         session.close();

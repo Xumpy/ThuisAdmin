@@ -24,6 +24,7 @@ public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer
 
     @Query("from BedragenDaoPojo where persoon.pk_id = :persoonId "
             + "  and (:rekeningId is null or rekening.pk_id = :rekeningId)"
+            + "  and coalesce(coalesce(:professional, rekening.professional), 0) = coalesce(rekening.professional, 0)"
             + "  and (:searchText is null or lower(groep.naam) like :searchText " +
                 "  or lower(rekening.naam) like :searchText " +
                 "  or lower(persoon.naam) like :searchText " +
@@ -32,7 +33,7 @@ public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer
                 "  or cast(datum as string) like :searchText " +
                 "  or lower(omschrijving) like :searchText)" + 
                 "  order by datum desc")
-    public List<BedragenDaoPojo> reportBedragen(@Param("rekeningId") Integer rekeningId, @Param("searchText") String searchText, @Param("persoonId") Integer persoonId, Pageable pageable);
+    public List<BedragenDaoPojo> reportBedragen(@Param("rekeningId") Integer rekeningId, @Param("searchText") String searchText, @Param("persoonId") Integer persoonId, @Param("professional") Boolean professional, Pageable pageable);
     
     @Query("select coalesce(max(pk_id),0) + 1 as pk_id from BedragenDaoPojo")
     public Integer getNewPkId();
@@ -43,7 +44,7 @@ public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer
     @Query("from BedragenDaoPojo where (datum >= :startDate and datum <= :endDate)"
             + " and (:rekeningId is null or rekening.pk_id = :rekeningId) and "
             + " ((:showPublicGroepen = 0 and (persoon.pk_id = :persoonId)) or (groep.publicGroep = :showPublicGroepen)) order by datum asc, bedrag asc")
-    public List<BedragenDaoPojo> BedragInPeriode(@Param("startDate") Date startDate, 
+    public List<BedragenDaoPojo> BedragInPeriode(@Param("startDate") Date startDate,
                                                     @Param("endDate") Date endDate, 
                                                     @Param("rekeningId") Integer rekeningId, 
                                                     @Param("showPublicGroepen") Integer showPublicGroepen,

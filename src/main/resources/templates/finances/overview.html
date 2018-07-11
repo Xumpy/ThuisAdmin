@@ -45,7 +45,7 @@
                             $http.post(/*[[@{/json/setFinanceHeader}]]*/, $scope.financeOverview);
                     });
 
-                    $http.get(/*[[@{/json/rekeningen}]]*/).success(function(data){
+                    $http.get(/*[[@{/json/openRekeningen}]]*/).success(function(data){
                         $scope.rekeningen = data.rekeningen;
                     });
 

@@ -5,11 +5,13 @@
  */
 package com.xumpy.thuisadmin.services;
 
+import com.xumpy.security.model.InvoiceType;
 import com.xumpy.thuisadmin.controllers.model.BeheerBedragenInp;
 import com.xumpy.thuisadmin.controllers.model.BeheerBedragenReport;
 import com.xumpy.thuisadmin.controllers.model.BeheerBedragenReportLst;
 import com.xumpy.thuisadmin.controllers.model.FinanceOverzichtGroep;
 import com.xumpy.thuisadmin.controllers.model.NieuwBedrag;
+import com.xumpy.thuisadmin.domain.Rekeningen;
 import com.xumpy.thuisadmin.services.implementations.BedragenSrvImpl;
 import com.xumpy.thuisadmin.dao.implementations.BedragenDaoImpl;
 import com.xumpy.thuisadmin.controllers.model.OverzichtGroepBedragen;
@@ -18,6 +20,7 @@ import com.xumpy.thuisadmin.controllers.model.RekeningOverzicht;
 import com.xumpy.thuisadmin.dao.implementations.GroepenDaoImpl;
 import com.xumpy.thuisadmin.dao.implementations.RekeningenDaoImpl;
 import com.xumpy.thuisadmin.domain.Bedragen;
+import com.xumpy.thuisadmin.services.implementations.RekeningenSrvImpl;
 import com.xumpy.thuisadmin.services.model.BedragenSrvPojo;
 import com.xumpy.thuisadmin.services.model.GroepenSrvPojo;
 import com.xumpy.thuisadmin.services.model.RekeningenSrvPojo;
@@ -37,12 +40,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.internal.matchers.Any;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.when;
 import org.mockito.Spy;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import static org.mockito.ArgumentMatchers.*;
 
 /**
  *
@@ -76,7 +81,8 @@ public class BedragenSrvTest{
 
     @Mock PersonenDaoPojo persoon;
     @Mock UserInfo userInfo;
-    
+
+    @Mock RekeningenSrvImpl rekeningenSrv;
     @InjectMocks BedragenSrvImpl bedragenSrv;
     
     @Before
@@ -108,6 +114,11 @@ public class BedragenSrvTest{
         when(bedrag4.getGroep()).thenReturn(groepNegatief);
 
         when(bedrag5.getDatum()).thenReturn(dt.parse("2015-02-20"));
+
+
+        when(bedrag4.getRekening()).thenReturn(rekening2);
+        when(bedrag5.getRekening()).thenReturn(rekening2);
+
         when(bedrag3.getRekening()).thenReturn(rekening2);
         when(bedrag5.getGroep()).thenReturn(groepPositief);
 
@@ -117,6 +128,9 @@ public class BedragenSrvTest{
         when(groepPositief.getNegatief()).thenReturn(0);
         
         when(userInfo.getPersoon()).thenReturn(persoon);
+        when(userInfo.getInvoiceType()).thenReturn(InvoiceType.BOTH);
+
+        when(rekeningenSrv.isRekeningValid(any(Rekeningen.class))).thenReturn(true);
     }
     
     @Test
@@ -504,7 +518,7 @@ public class BedragenSrvTest{
         
         Pageable topTen = new PageRequest(1, 10); 
         
-        when(bedragenDao.reportBedragen(rekening1.getPk_id(), null, userInfo.getPersoon().getPk_id(), topTen)).thenReturn(lstBedragen);
+        when(bedragenDao.reportBedragen(rekening1.getPk_id(), null, userInfo.getPersoon().getPk_id(), null, topTen)).thenReturn(lstBedragen);
         
         beheerBedragen = bedragenSrv.reportBedragen(beheerBedragen, 1, rekening1, null);
         
