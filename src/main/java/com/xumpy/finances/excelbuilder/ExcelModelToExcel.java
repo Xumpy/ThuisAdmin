@@ -13,13 +13,13 @@ import java.util.Date;
 import java.util.List;
 
 public class ExcelModelToExcel {
-    private static Integer rowCount = 0;
-    private static Workbook workbook = new XSSFWorkbook();
-    private static CreationHelper createHelper = workbook.getCreationHelper();
+    private static Integer rowCount;
+    private static Workbook workbook;
+    private static CreationHelper createHelper;
 
-    private static CellStyle stringCellStyle = workbook.createCellStyle();
-    private static CellStyle dateCellStyle = workbook.createCellStyle();
-    private static CellStyle doubleCellStyle = workbook.createCellStyle();
+    private static CellStyle stringCellStyle;
+    private static CellStyle dateCellStyle;
+    private static CellStyle doubleCellStyle;
 
     private static void autoSizeAllColumns(Sheet sheet){
         for (int i=0; i<6; i++) sheet.autoSizeColumn(i);
@@ -122,9 +122,18 @@ public class ExcelModelToExcel {
         }
     }
 
-    public static ByteArrayOutputStream excelFile(ExcelModel excelModel) throws IOException {
+    private static void init(){
+        rowCount = 0;
+        workbook = new XSSFWorkbook();
+        createHelper = workbook.getCreationHelper();
+        stringCellStyle = workbook.createCellStyle();
+        dateCellStyle = workbook.createCellStyle();
+        doubleCellStyle = workbook.createCellStyle();
         dateCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd-MM-yyyy"));
+    }
 
+    public static ByteArrayOutputStream excelFile(ExcelModel excelModel) throws IOException {
+        init();
         Sheet sheet = workbook.createSheet("Accountancy");
         createHeaderRow(sheet, "Invoices", "Date", "Invoice Id", "Amount", "Document Location");
         createInvoiceRows(sheet, excelModel.getInvoices());

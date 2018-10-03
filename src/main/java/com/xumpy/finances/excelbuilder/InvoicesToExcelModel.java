@@ -10,20 +10,14 @@ import com.xumpy.thuisadmin.dao.implementations.InvoiceJobsDaoImpl;
 import com.xumpy.thuisadmin.dao.implementations.RekeningenDaoImpl;
 import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
 import com.xumpy.thuisadmin.dao.model.DocumentenDaoPojo;
-import com.xumpy.thuisadmin.dao.model.InvoicesDaoPojo;
 import com.xumpy.thuisadmin.dao.model.RekeningenDaoPojo;
-import com.xumpy.thuisadmin.domain.Bedragen;
 import com.xumpy.thuisadmin.domain.Documenten;
 import com.xumpy.thuisadmin.services.implementations.DocumentenSrvImpl;
 import com.xumpy.thuisadmin.services.implementations.InvoicesSrvImpl;
 import com.xumpy.thuisadmin.services.model.BedragenSrvPojo;
-import com.xumpy.thuisadmin.services.model.DocumentenSrvPojo;
 import com.xumpy.thuisadmin.services.model.InvoicesSrvPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
@@ -63,7 +57,7 @@ public class InvoicesToExcelModel {
         invoice.setDate(bedragen.getInvoice().getInvoiceDate());
         invoice.setInvoiceId(bedragen.getInvoice().getInvoiceId());
 
-        List<Document> documents = new ArrayList<>();
+        List<Document> documents = new LinkedList<>();
         for(Documenten document: documenten){
             documents.add(generateDocument(document));
         }
@@ -90,7 +84,7 @@ public class InvoicesToExcelModel {
         cost.setDescription(document.getBedrag().getOmschrijving());
         cost.setExpectedWeight(document.getBedrag().getWeightAccountancy().doubleValue());
 
-        List<Document> documents = new ArrayList<>();
+        List<Document> documents = new LinkedList<>();
         documents.add(generateDocument(document));
 
         cost.setDocuments(documents);
@@ -99,7 +93,7 @@ public class InvoicesToExcelModel {
     }
 
     private List<Costs> createExcelCosts(List<DocumentenDaoPojo> documents){
-        List<Costs> excelCosts = new ArrayList<>();
+        List<Costs> excelCosts = new LinkedList<>();
         for(DocumentenDaoPojo document: documents){
             Costs cost = getCostPerBedragId(excelCosts, document.getBedrag().getPk_id());
             if (cost.getBedragId() == null){
@@ -113,7 +107,7 @@ public class InvoicesToExcelModel {
     }
 
     private List<BedragenSrvPojo> findBedragenForInvoices(LocalDate startDate, LocalDate endDate){
-        List<BedragenSrvPojo> invoicedBedragen = new ArrayList<>();
+        List<BedragenSrvPojo> invoicedBedragen = new LinkedList<>();
 
         for(InvoicesSrvPojo invoice: invoicesSrv.findAllInvoicesBetween(java.sql.Date.valueOf(startDate), java.sql.Date.valueOf(endDate))){
             for(BedragenDaoPojo bedragenDaoPojo: bedragenDao.getBedragenFromInvoice(invoice.getPkId())){
@@ -125,7 +119,9 @@ public class InvoicesToExcelModel {
     }
 
     private Boolean isDocumentValidCost(DocumentenDaoPojo document){
-        if (document.getBedrag().getWeightAccountancy() != null && document.getBedrag().getWeightAccountancy().compareTo(new BigDecimal(0)) > 0){
+        if (document.getBedrag().getGroep().getNegatief() == 1 &&
+                document.getBedrag().getWeightAccountancy() != null &&
+                document.getBedrag().getWeightAccountancy().compareTo(new BigDecimal(0)) > 0){
             return true;
         } else {
             return false;
@@ -133,16 +129,18 @@ public class InvoicesToExcelModel {
     }
 
     private List<DocumentenDaoPojo> findCostDocuments(LocalDate startDate, LocalDate endDate){
-        List<DocumentenDaoPojo>  validCostDocuments = new ArrayList<>();
+        List<DocumentenDaoPojo>  validCostDocuments = new LinkedList<>();
 
-        for(RekeningenDaoPojo rekening: rekeningenDao.findAll()){
-            if (rekening.getProfessional() != null && rekening.getProfessional()){
-                for(DocumentenDaoPojo document: documentenDao.fetchDocumentsForBedragenInPeriodeOnRekening(java.sql.Date.valueOf(startDate),
-                        java.sql.Date.valueOf(endDate), rekening.getPk_id())){
-                    if (isDocumentValidCost(document)){
-                        validCostDocuments.add(document);
-                    }
-                }
+        List<Integer> rekeningIds = new LinkedList<>();
+        for(RekeningenDaoPojo rekening: rekeningenDao.findAll()) {
+            if (rekening.getProfessional() != null && rekening.getProfessional()) {
+                rekeningIds.add(rekening.getPk_id());
+            }
+        }
+        for(DocumentenDaoPojo document: documentenDao.fetchDocumentsForBedragenInPeriodeOnRekening(java.sql.Date.valueOf(startDate),
+                                                                            java.sql.Date.valueOf(endDate), rekeningIds)){
+            if (isDocumentValidCost(document)){
+                validCostDocuments.add(document);
             }
         }
 
@@ -153,7 +151,7 @@ public class InvoicesToExcelModel {
         ExcelModel excelModel = new ExcelModel();
         List<BedragenSrvPojo> invoiceBedragen = findBedragenForInvoices(startDate, endDate);
 
-        List<Invoices> invoices = new ArrayList<>();
+        List<Invoices> invoices = new LinkedList<>();
         for(BedragenSrvPojo invoiceBedrag: invoiceBedragen){
             invoices.add(createExcelInvoice(invoiceBedrag));
         }

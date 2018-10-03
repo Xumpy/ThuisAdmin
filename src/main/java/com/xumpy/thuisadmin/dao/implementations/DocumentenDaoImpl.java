@@ -34,11 +34,10 @@ public interface DocumentenDaoImpl extends CrudRepository<DocumentenDaoPojo, Int
     public List<DocumentenDaoPojo> fetchDocumentByInvoice(@Param("invoiceId") Integer invoiceId);
 
     @Query("from DocumentenDaoPojo where (bedrag.datum >= :startDate and bedrag.datum <= :endDate)"
-            + " and (bedrag.rekening.pk_id = :rekeningId)"
+            + " and (bedrag.rekening.pk_id in :rekeningIds)"
             + " and bedrag.groep.pk_id not in (2,3,4)"
-            + " and coalesce(bedrag.processed, 0) = 1"
-            + " order by bedrag.datum asc, bedrag.bedrag asc")
+            + " order by bedrag.datum asc")
     public List<DocumentenDaoPojo> fetchDocumentsForBedragenInPeriodeOnRekening(@Param("startDate") Date startDate,
                                                                                 @Param("endDate") Date endDate,
-                                                                                @Param("rekeningId") Integer rekeningId);
+                                                                                @Param("rekeningIds") List<Integer> rekeningId);
 }
