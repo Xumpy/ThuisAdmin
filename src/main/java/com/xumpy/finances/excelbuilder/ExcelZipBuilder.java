@@ -41,7 +41,7 @@ public class ExcelZipBuilder {
         ExcelModel excelModel = invoicesToExcelModel.buildExcelInvoices(startDate, endDate);
 
         Map<String, byte[]> zipFiles = new HashMap<>();
-        zipFiles.put("Accounting.xls", ExcelModelToExcel.excelFile(excelModel).toByteArray());
+        zipFiles.put("Accounting.xlsx", ExcelModelToExcel.excelFile(excelModel).toByteArray());
 
         for(Invoices invoice: excelModel.getInvoices()){
             for(Document document: invoice.getDocuments()){
