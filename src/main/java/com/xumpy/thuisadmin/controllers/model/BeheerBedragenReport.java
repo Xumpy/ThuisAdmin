@@ -34,6 +34,8 @@ public class BeheerBedragenReport implements Serializable{
     private BigDecimal bedrag;
     private String datum;
     private String omschrijving;
+    private Boolean validForAccountancy;
+    private Boolean processed;
 
     public Integer getPk_id() {
         return pk_id;
@@ -95,8 +97,24 @@ public class BeheerBedragenReport implements Serializable{
     public BeheerBedragenReport(){
         
     }
-    
-    public BeheerBedragenReport(Bedragen bedrag){
+
+    public Boolean getValidForAccountancy() {
+        return validForAccountancy;
+    }
+
+    public void setValidForAccountancy(Boolean validForAccountancy) {
+        this.validForAccountancy = validForAccountancy;
+    }
+
+    public Boolean getProcessed() {
+        return processed;
+    }
+
+    public void setProcessed(Boolean processed) {
+        this.processed = processed;
+    }
+
+    public BeheerBedragenReport(Bedragen bedrag, Boolean validForAccountancy){
         this.pk_id = bedrag.getPk_id();
         this.type_groep = bedrag.getGroep().getNaam();
         this.rekening = bedrag.getRekening().getNaam();
@@ -104,6 +122,8 @@ public class BeheerBedragenReport implements Serializable{
         this.bedrag = bedrag.getBedrag();
         this.datum = simpleDateFormat.format(bedrag.getDatum());
         this.omschrijving = bedrag.getOmschrijving();
+        this.validForAccountancy = validForAccountancy;
+        this.processed = bedrag.getProcessed();
     }
 
     @Override

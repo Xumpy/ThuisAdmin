@@ -16,4 +16,5 @@ public interface Invoices {
     public String getVatNumber();
     public BigDecimal getVatAmount();
     public String getDescription();
+    public Boolean getClosed();
 }

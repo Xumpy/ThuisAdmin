@@ -32,7 +32,7 @@ public class BedragenDaoPojo implements Serializable, Bedragen{
     @Id
     @Column(name="PK_ID")
     private Integer pk_id;
-    
+
     @ManyToOne
     @JoinColumn(name="FK_TYPE_GROEP_ID")
     @NotNull
@@ -47,7 +47,11 @@ public class BedragenDaoPojo implements Serializable, Bedragen{
     @JoinColumn(name="FK_REKENING_ID")
     @NotNull
     private RekeningenDaoPojo rekening;
-    
+
+    @ManyToOne
+    @JoinColumn(name="FK_INVOICE_ID")
+    private InvoicesDaoPojo invoice;
+
     @Column(name="BEDRAG")
     @NotNull
     private BigDecimal bedrag;
@@ -59,6 +63,15 @@ public class BedragenDaoPojo implements Serializable, Bedragen{
     
     @Column(name="OMSCHRIJVING")
     private String omschrijving;
+
+    @Column(name="TAX_PERC_PAID")
+    private BigDecimal taxPercentagePaid;
+
+    @Column(name="WEIGHT_ACC")
+    private BigDecimal weightAccountancy;
+
+    @Column(name="PROCESSED")
+    private Boolean processed;
 
     @Override
     public Integer getPk_id() {
@@ -127,6 +140,42 @@ public class BedragenDaoPojo implements Serializable, Bedragen{
         
     }
 
+    @Override
+    public BigDecimal getTaxPercentagePaid() {
+        return taxPercentagePaid;
+    }
+
+    public void setTaxPercentagePaid(BigDecimal taxPercentagePaid) {
+        this.taxPercentagePaid = taxPercentagePaid;
+    }
+
+    @Override
+    public InvoicesDaoPojo getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(InvoicesDaoPojo invoice) {
+        this.invoice = invoice;
+    }
+
+    @Override
+    public BigDecimal getWeightAccountancy() {
+        return weightAccountancy;
+    }
+
+    public void setWeightAccountancy(BigDecimal weightAccountancy) {
+        this.weightAccountancy = weightAccountancy;
+    }
+
+    @Override
+    public Boolean getProcessed() {
+        return processed;
+    }
+
+    public void setProcessed(Boolean processed) {
+        this.processed = processed;
+    }
+
     public BedragenDaoPojo(Bedragen bedragen){
         this.bedrag = bedragen.getBedrag();
         this.datum = bedragen.getDatum();
@@ -135,5 +184,9 @@ public class BedragenDaoPojo implements Serializable, Bedragen{
         this.persoon = bedragen.getPersoon()!=null ? new PersonenDaoPojo(bedragen.getPersoon()) : null;
         this.pk_id = bedragen.getPk_id();
         this.rekening = bedragen.getRekening()!=null ? new RekeningenDaoPojo(bedragen.getRekening()) : null;
+        this.taxPercentagePaid = bedragen.getTaxPercentagePaid();
+        this.invoice = bedragen.getInvoice() != null ? new InvoicesDaoPojo(bedragen.getInvoice()) : null;
+        this.weightAccountancy = bedragen.getWeightAccountancy();
+        this.processed = bedragen.getProcessed();
     }
 }

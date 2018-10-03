@@ -9,6 +9,7 @@ import com.xumpy.thuisadmin.services.model.GroepenSrvPojo;
 import com.xumpy.thuisadmin.services.model.PersonenSrvPojo;
 import com.xumpy.thuisadmin.services.model.RekeningenSrvPojo;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 /**
  *
@@ -23,7 +24,12 @@ public class NieuwBedrag implements Serializable {
     private String bedrag;
     private Date datum;
     private String omschrijving;
-    
+    private Boolean excludeAccountancy;
+    private BigDecimal taxPercentagePaid;
+    private InvoicesCtrlPojo invoice;
+    private BigDecimal weightAccountancy;
+    private Boolean processed;
+
     public Integer getPk_id() {
         return pk_id;
     }
@@ -78,5 +84,45 @@ public class NieuwBedrag implements Serializable {
 
     public void setOmschrijving(String omschrijving) {
         this.omschrijving = omschrijving;
+    }
+
+    public Boolean getExcludeAccountancy() {
+        return excludeAccountancy;
+    }
+
+    public void setExcludeAccountancy(Boolean excludeAccountancy) {
+        this.excludeAccountancy = excludeAccountancy;
+    }
+
+    public BigDecimal getTaxPercentagePaid() {
+        return taxPercentagePaid;
+    }
+
+    public void setTaxPercentagePaid(BigDecimal taxPercentagePaid) {
+        this.taxPercentagePaid = taxPercentagePaid;
+    }
+
+    public InvoicesCtrlPojo getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(InvoicesCtrlPojo invoice) {
+        this.invoice = invoice;
+    }
+
+    public BigDecimal getWeightAccountancy() {
+        return weightAccountancy;
+    }
+
+    public void setWeightAccountancy(BigDecimal weightAccountancy) {
+        this.weightAccountancy = weightAccountancy;
+    }
+
+    public Boolean getProcessed() {
+        return processed;
+    }
+
+    public void setProcessed(Boolean processed) {
+        this.processed = processed;
     }
 }

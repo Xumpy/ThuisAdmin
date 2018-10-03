@@ -1,0 +1,60 @@
+<html layout:decorator="views/layout" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+    <body>
+        <div layout:fragment="content">
+            <div class="col-lg-12">
+                <form class="col-lg-2" ng-submit="saveBusinessForm()">
+                    <input class="col-lg-12 btn btn-primary" type="submit" value="Save"/>
+                </form>
+                <form ng-show="businessGroup.pk_id !== ''" class="col-lg-2" ng-submit="deleteBusinessForm()">
+                    <input class="col-lg-12 btn btn-primary" type="submit" value="Delete"/>
+                </form>
+            </div>
+            <div class="col-lg-12 well">
+                <div class="form-group col-lg-12">
+                  <label for="inputNaam" class="col-lg-2 control-label">Business Form</label>
+                  <div class="col-lg-4">
+                    <input class="form-control" id="inputNaam" ng-model="businessForm.businessForm" placeholder="Business Form" type="text"/>
+                  </div>
+                </div>
+            </div>
+            <script th:inline="javascript">
+                /*<![CDATA[*/
+                app.controller("fController", function($scope, $http) {
+                    var pk_id = /*[[${pk_id}]]*/;
+                    if (pk_id !== null) {
+                        var url = /*[[@{/json/businessForm/}]]*/;
+                        $http.get(url + pk_id).success(function (data) {
+                            $scope.businessForm = data;
+                        });
+                    } else {
+                        $scope.businessForm = {
+                            pk_id: "",
+                            businessForm: ""
+                        };
+                    }
+
+                    $scope.saveBusinessForm = (function () {
+                        $http.post(/*[[@{/json/saveBusinessForm}]]*/, $scope.businessForm).success(function () {
+                            $(location).attr('href',/*[[@{/government/businessForm}]]*/);
+                        }).error(function () {
+                            bootbox.alert("Error occured during save");
+                        });
+                    });
+
+                    $scope.deleteBusinessForm = (function () {
+                        bootbox.confirm("Are you sure you want to delete this Business Form?", function (result) {
+                            if (result === true) {
+                                $http.post(/*[[@{/json/deleteBusinessForm}]]*/, $scope.businessForm).success(function () {
+                                    $(location).attr('href', /*[[@{/government/businessForm}]]*/);
+                                }).error(function () {
+                                    bootbox.alert("Error occured during delete");
+                                });
+                            }
+                        });
+                    });
+                });
+                /*]]>*/
+            </script>
+        </div>
+    </body>
+</html>

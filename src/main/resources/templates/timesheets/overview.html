@@ -100,6 +100,7 @@
                             buttons: { "OK": function() {
                                 $http.post(/*[[@{/json/invoice_builder}]]*/, $scope.invoiceBuilder).success(function(data){
                                     $( "#dialogInvoiceBuilder" ).dialog("close");
+                                    if (data.status == 500) bootbox.alert(data.message);
                                 });
                             }}
                         }).prev(".ui-dialog-titlebar").css("background","#bf3e11");

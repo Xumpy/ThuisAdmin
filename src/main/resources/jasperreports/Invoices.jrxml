@@ -129,7 +129,7 @@ WHERE TA_INVOICES.PK_ID = $P{INVOICE_ID}]]>
 					<textElement>
 						<font size="10"/>
 					</textElement>
-					<text><![CDATA[NM Consultancy]]></text>
+					<text><![CDATA[Nico Martens]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="107" y="47" width="147" height="12" uuid="91a3411a-32ac-4877-ae64-1e05d429b1d9"/>

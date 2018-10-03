@@ -48,7 +48,7 @@ public class UserService implements UserDetailsService {
         PersonenDaoPojo internalPersoon = (PersonenDaoPojo)query.list().get(0);
         
         userInfo.setPersoon(internalPersoon);
-        userInfo.setInvoiceType(InvoiceType.BOTH);
+        userInfo.setInvoiceType(InvoiceType.PERSONAL);
 
         User user = new User(userInfo.getPersoon().getUsername(), userInfo.getPersoon().getMd5_password(), authorities);
         

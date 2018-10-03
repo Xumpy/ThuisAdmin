@@ -31,6 +31,8 @@ public class InvoicesDaoPojo implements Invoices{
     private BigDecimal vatAmount;
     @Column(name="DESCRIPTION")
     private String description;
+    @Column(name="CLOSED")
+    private Boolean closed;
 
     public Integer getPkId() {
         return pkId;
@@ -104,6 +106,15 @@ public class InvoicesDaoPojo implements Invoices{
         this.description = description;
     }
 
+    @Override
+    public Boolean getClosed() {
+        return closed;
+    }
+
+    public void setClosed(Boolean closed) {
+        this.closed = closed;
+    }
+
     public InvoicesDaoPojo(){ }
     public InvoicesDaoPojo(Invoices invoices){
         this.pkId = invoices.getPkId();
@@ -115,5 +126,6 @@ public class InvoicesDaoPojo implements Invoices{
         this.invoiceDate = invoices.getInvoiceDate();
         this.invoiceId = invoices.getInvoiceId();
         this.rekening = invoices.getRekening() != null ? new RekeningenDaoPojo(invoices.getRekening()) : null;
+        this.closed = invoices.getClosed();
     }
 }

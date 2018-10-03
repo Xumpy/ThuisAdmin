@@ -15,10 +15,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-/**
- *
- * @author Nico
- */
 @Repository
 public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer>{
 
@@ -31,19 +27,27 @@ public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer
                 "  or lower(persoon.voornaam) like :searchText " +
                 "  or cast(bedrag as string) like :searchText " +
                 "  or cast(datum as string) like :searchText " +
-                "  or lower(omschrijving) like :searchText)" + 
+                "  or lower(omschrijving) like :searchText)" +
                 "  order by datum desc")
     public List<BedragenDaoPojo> reportBedragen(@Param("rekeningId") Integer rekeningId, @Param("searchText") String searchText, @Param("persoonId") Integer persoonId, @Param("professional") Boolean professional, Pageable pageable);
-    
+
+    @Query("from BedragenDaoPojo where (datum >= :startDate and datum <= :endDate) and groep.pk_id in (select groep.pk_id from GovernmentCostTypeDaoPojo where type = :levelType)")
+    public List<BedragenDaoPojo> allBedragenInCostType(@Param("startDate") Date startDate,
+                                                       @Param("endDate") Date endDate,
+                                                       @Param("levelType") String type);
+
+    @Query("from BedragenDaoPojo where invoice.pkId = :invoiceId")
+    public List<BedragenDaoPojo> getBedragenFromInvoice(@Param("invoiceId") Integer invoiceId);
+
     @Query("select coalesce(max(pk_id),0) + 1 as pk_id from BedragenDaoPojo")
     public Integer getNewPkId();
     
-    @Query("select sum( case b.groep.negatief when 1 then (b.bedrag * -1) else b.bedrag end) from BedragenDaoPojo b where datum >= :datum and b.rekening.pk_id = :rekeningId")
+    @Query("select sum( case b.groep.negatief when 1 then (b.bedrag * -1) else b.bedrag end) from BedragenDaoPojo b where datum >= :datum and b.rekening.pk_id = :rekeningId and coalesce(processed, 0) = 1")
     public BigDecimal somBedragDatum(@Param("rekeningId") Integer rekeningId, @Param("datum") Date datum);
     
     @Query("from BedragenDaoPojo where (datum >= :startDate and datum <= :endDate)"
             + " and (:rekeningId is null or rekening.pk_id = :rekeningId) and "
-            + " ((:showPublicGroepen = 0 and (persoon.pk_id = :persoonId)) or (groep.publicGroep = :showPublicGroepen)) order by datum asc, bedrag asc")
+            + " ((:showPublicGroepen = 0 and (persoon.pk_id = :persoonId)) or (groep.publicGroep = :showPublicGroepen)) and coalesce(processed, 0) = 1 order by datum asc, bedrag asc")
     public List<BedragenDaoPojo> BedragInPeriode(@Param("startDate") Date startDate,
                                                     @Param("endDate") Date endDate, 
                                                     @Param("rekeningId") Integer rekeningId, 
@@ -51,6 +55,7 @@ public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer
                                                     @Param("persoonId") Integer persoonId);
 
     @Query("from BedragenDaoPojo where (datum >= :startDate and datum <= :endDate)"
+            + " and coalesce(processed, 0) = 1"
             + " and (persoon.pk_id = :persoonId)"
             + " and groep.pk_id not in (2,3,4)"
             + " order by datum asc, bedrag asc")
@@ -58,7 +63,18 @@ public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer
                                                  @Param("endDate") Date endDate,
                                                  @Param("persoonId") Integer persoonId);
 
+    @Query("from BedragenDaoPojo where (datum >= :startDate and datum <= :endDate)"
+            + " and (rekening.pk_id = :rekeningId)"
+            + " and groep.pk_id not in (2,3,4)"
+            + " and coalesce(processed, 0) = 1"
+            + " order by datum asc, bedrag asc")
+    public List<BedragenDaoPojo> BedragInPeriodeOpRekening(@Param("startDate") Date startDate,
+                                                           @Param("endDate") Date endDate,
+                                                           @Param("rekeningId") Integer rekeningId);
 
     @Query("from BedragenDaoPojo where (:rekeningId is null or rekening.pk_id = :rekeningId) and persoon.pk_id = :persoonId and datum > :datum order by datum asc, bedrag asc")
     public List<BedragenDaoPojo> getBedragenUntilDate(@Param("datum") Date date, @Param("rekeningId") Integer rekeningId, @Param("persoonId") Integer persoonId);
+
+    @Query("from BedragenDaoPojo where (invoice.pkId = :invoiceId)")
+    public List<BedragenDaoPojo> getBedragOfInvoice(@Param("invoiceId") Integer invoiceId);
 }

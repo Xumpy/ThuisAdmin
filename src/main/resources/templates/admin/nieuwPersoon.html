@@ -37,12 +37,25 @@
                         <input class="form-control" id="inputVatNumber" ng-model="persoon.vatNumber" placeholder="Vat Number" type="text"/>
                     </div>
                 </div>
+                <div th:if="${@userInfo.invoiceType.type} != ${personal}" class="col-lg-12">
+                    <label for="businessForm" class="col-lg-2 control-label">Business Form</label>
+                    <div class="col-lg-4">
+                        <select id="businessForm" class="form-control" ng-model="persoon.businessForm"
+                                ng-options="businessForm.businessForm for businessForm in businessForms track by businessForm.pkId">
+                            <option value="">--Choose Business Form--</option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <script th:inline="javascript">
                 app.controller("fController", function($scope, $http) {
                     $http.get(/*[[@{/json/whoami}]]*/).success( function(data){
                         data.md5_password = "";
                         $scope.persoon = data;
+                    });
+
+                    $http.get(/*[[@{/json/businessForms}]]*/).success( function(data){
+                        $scope.businessForms = data;
                     });
 
                     $scope.savePersoon = (function(){

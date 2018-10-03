@@ -24,6 +24,11 @@ public class BedragenSrvPojo implements Comparable<BedragenSrvPojo>, Bedragen {
     private BigDecimal bedrag;
     private Date datum;
     private String omschrijving;
+    private BigDecimal taxPercentagePaid;
+    private Boolean excludeAccountancy;
+    private InvoicesSrvPojo invoice;
+    private BigDecimal weightAccountancy;
+    private Boolean processed;
 
     @Override
     public Integer getPk_id() {
@@ -87,7 +92,34 @@ public class BedragenSrvPojo implements Comparable<BedragenSrvPojo>, Bedragen {
     public void setOmschrijving(String omschrijving) {
         this.omschrijving = omschrijving;
     }
-    
+
+    @Override
+    public InvoicesSrvPojo getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(InvoicesSrvPojo invoice) {
+        this.invoice = invoice;
+    }
+
+    @Override
+    public BigDecimal getWeightAccountancy() {
+        return weightAccountancy;
+    }
+
+    public void setWeightAccountancy(BigDecimal weightAccountancy) {
+        this.weightAccountancy = weightAccountancy;
+    }
+
+    @Override
+    public Boolean getProcessed() {
+        return processed;
+    }
+
+    public void setProcessed(Boolean processed) {
+        this.processed = processed;
+    }
+
     @Override
     public boolean equals(Object object) {
         try{
@@ -131,7 +163,16 @@ public class BedragenSrvPojo implements Comparable<BedragenSrvPojo>, Bedragen {
     public BedragenSrvPojo(){
         
     }
-    
+
+    @Override
+    public BigDecimal getTaxPercentagePaid() {
+        return taxPercentagePaid;
+    }
+
+    public void setTaxPercentagePaid(BigDecimal taxPercentagePaid) {
+        this.taxPercentagePaid = taxPercentagePaid;
+    }
+
     public BedragenSrvPojo(Bedragen bedragen){
         this.bedrag = bedragen.getBedrag();
         this.datum = bedragen.getDatum();
@@ -140,5 +181,9 @@ public class BedragenSrvPojo implements Comparable<BedragenSrvPojo>, Bedragen {
         this.persoon = bedragen.getPersoon()!=null ? new PersonenSrvPojo(bedragen.getPersoon()): null;
         this.pk_id = bedragen.getPk_id();
         this.rekening = bedragen.getRekening()!=null ? new RekeningenSrvPojo(bedragen.getRekening()): null;
+        this.taxPercentagePaid = bedragen.getTaxPercentagePaid();
+        this.invoice = bedragen.getInvoice() != null ? new InvoicesSrvPojo(bedragen.getInvoice()) : null;
+        this.weightAccountancy = bedragen.getWeightAccountancy();
+        this.processed = bedragen.getProcessed();
     }
 }

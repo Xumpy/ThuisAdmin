@@ -1,0 +1,49 @@
+<html layout:decorator="views/layout" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+    <body>
+        <div layout:fragment="content">
+            <div class="col-lg-12">
+                <form class="form-horizontal" action="editGovernmentCost">
+                    <div class="col-lg-1">
+                        <input class="btn btn-primary" type="submit" value="New Government Cost"/>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-12">
+                <table st-safe-src="costs" st-table="tableCosts" class="table table-striped table-hover ">
+                <thead>
+                  <tr>
+                      <td></td>
+                      <th st-sort="StartAmount">Start Amount</th>
+                      <th st-sort="TaxPercentage">Tax Percentage</th>
+                      <th st-sort="CostType">Cost Type</th>
+                      <th st-sort="BusinessForm">Business Form</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="cost in tableCosts">
+                            <td><a href="editGovernmentCost/{{cost.pkId}}">Edit</a></td>
+                            <td>{{cost.startAmount}}</td>
+                            <td>{{cost.taxPercentage}}</td>
+                            <td>{{cost.governmentCostType.type}}</td>
+                            <td>{{cost.businessForm.businessForm}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" class="text-center">
+                                <div st-pagination="" st-items-by-page="100" st-displayed-pages="100"></div>
+                        </td>
+                    </tr>
+                </tfoot>
+                </table>
+            </div>
+            <script th:inline="javascript">
+                app.controller("fController", function($scope, $http) {
+                    $http.get(/*[[@{/json/governmentCost}]]*/).success( function(data){
+                        $scope.costs = data;
+                    });
+                });
+            </script>
+        </div>
+    </body>
+</html>

@@ -20,4 +20,8 @@ public interface Bedragen {
     Personen getPersoon();
     Integer getPk_id();
     Rekeningen getRekening();
+    Invoices getInvoice();
+    BigDecimal getTaxPercentagePaid();
+    BigDecimal getWeightAccountancy();
+    Boolean getProcessed();
 }

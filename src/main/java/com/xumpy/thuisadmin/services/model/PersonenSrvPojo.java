@@ -5,6 +5,7 @@
  */
 package com.xumpy.thuisadmin.services.model;
 
+import com.xumpy.government.services.model.BusinessFormSrvPojo;
 import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
 import com.xumpy.thuisadmin.domain.Personen;
 import java.security.MessageDigest;
@@ -24,6 +25,7 @@ public class PersonenSrvPojo implements Personen{
     private String username;
     private String md5_password;
     private String vatNumber;
+    private BusinessFormSrvPojo businessForm;
 
     @Override
     public Integer getPk_id() {
@@ -100,7 +102,16 @@ public class PersonenSrvPojo implements Personen{
         }
         return true;
     }
-    
+
+    @Override
+    public BusinessFormSrvPojo getBusinessForm() {
+        return businessForm;
+    }
+
+    public void setBusinessForm(BusinessFormSrvPojo businessForm) {
+        this.businessForm = businessForm;
+    }
+
     public PersonenSrvPojo(){
         
     }
@@ -112,6 +123,7 @@ public class PersonenSrvPojo implements Personen{
         this.username = personen.getUsername();
         this.voornaam = personen.getVoornaam();
         this.vatNumber = personen.getVatNumber();
+        this.businessForm = personen.getBusinessForm() != null ? new BusinessFormSrvPojo(personen.getBusinessForm()) : null;
     }
     
     public void set_password(String password){

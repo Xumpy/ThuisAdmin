@@ -5,6 +5,8 @@
  */
 package com.xumpy.thuisadmin.domain;
 
+import com.xumpy.government.domain.BusinessForm;
+
 /**
  *
  * @author nicom
@@ -16,4 +18,5 @@ public interface Personen {
     String getUsername();
     String getVoornaam();
     String getVatNumber();
+    BusinessForm getBusinessForm();
 }

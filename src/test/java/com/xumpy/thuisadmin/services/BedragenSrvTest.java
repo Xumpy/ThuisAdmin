@@ -95,32 +95,34 @@ public class BedragenSrvTest{
         when(bedrag1.getBedrag()).thenReturn(new BigDecimal(100));
         when(bedrag1.getGroep()).thenReturn(groepNegatief);
         when(bedrag1.getPersoon()).thenReturn(persoon);
-        
+        when(bedrag1.getProcessed()).thenReturn(true);
+
         when(bedrag2.getDatum()).thenReturn(dt.parse("2015-02-19"));
         when(bedrag2.getRekening()).thenReturn(rekening1);
         when(bedrag2.getBedrag()).thenReturn(new BigDecimal(150));
         when(bedrag2.getGroep()).thenReturn(groepNegatief);
         when(bedrag2.getPersoon()).thenReturn(persoon);
-        
+        when(bedrag2.getProcessed()).thenReturn(true);
+
         when(bedrag3.getDatum()).thenReturn(dt.parse("2015-02-20"));
         when(bedrag3.getRekening()).thenReturn(rekening1);
         when(bedrag3.getBedrag()).thenReturn(new BigDecimal(2000));
         when(bedrag3.getGroep()).thenReturn(groepPositief);
         when(bedrag3.getPersoon()).thenReturn(persoon);
-        
+        when(bedrag3.getProcessed()).thenReturn(true);
+
+        //when(bedrag3.getRekening()).thenReturn(rekening2);
+
         when(bedrag4.getDatum()).thenReturn(dt.parse("2015-02-19"));
-        when(bedrag3.getRekening()).thenReturn(rekening2);
         when(bedrag4.getBedrag()).thenReturn(new BigDecimal(150));
         when(bedrag4.getGroep()).thenReturn(groepNegatief);
+        when(bedrag4.getRekening()).thenReturn(rekening2);
+        when(bedrag4.getProcessed()).thenReturn(true);
 
         when(bedrag5.getDatum()).thenReturn(dt.parse("2015-02-20"));
-
-
-        when(bedrag4.getRekening()).thenReturn(rekening2);
         when(bedrag5.getRekening()).thenReturn(rekening2);
-
-        when(bedrag3.getRekening()).thenReturn(rekening2);
         when(bedrag5.getGroep()).thenReturn(groepPositief);
+        when(bedrag5.getProcessed()).thenReturn(true);
 
         when(groepNegatief.getNaam()).thenReturn("Groep A");
         when(groepNegatief.getNegatief()).thenReturn(1);
@@ -145,6 +147,8 @@ public class BedragenSrvTest{
         when(nieuwBedrag.getRekening()).thenReturn(rekeningSrvPojo);
         when(nieuwBedrag.getBedrag()).thenReturn("200");
         when(nieuwBedrag.getGroep()).thenReturn(groepPositiefSrvPojo);
+        when(nieuwBedrag.getProcessed()).thenReturn(true);
+
         when(bedragenDao.getNewPkId()).thenReturn(1);
         
         Bedragen bedragTest = bedragenSrv.save(nieuwBedrag);
@@ -183,7 +187,9 @@ public class BedragenSrvTest{
         when(nieuwBedrag.getRekening()).thenReturn(rekeningSrvPojo);
         when(nieuwBedrag.getBedrag()).thenReturn("200");
         when(nieuwBedrag.getGroep()).thenReturn(groepPositiefSrvPojo);
-        
+        when(nieuwBedrag.getProcessed()).thenReturn(true);
+
+        when(bedragenDao.findById(1)).thenReturn(Optional.of(bedrag1));
         Bedragen bedragTest = bedragenSrv.delete(nieuwBedrag);
         
         assertEquals(bedragTest.getPk_id(), bedragenSrv.convertNieuwBedrag(nieuwBedrag).getPk_id());
@@ -198,7 +204,7 @@ public class BedragenSrvTest{
         when(rekening1.getWaarde()).thenReturn(new BigDecimal(300));
         when(rekening2.getWaarde()).thenReturn(new BigDecimal(300));
         when(bedrag3.getRekening()).thenReturn(rekening2);
-        
+
         BigDecimal totalRekeningBedragen = bedragenSrv.getTotalRekeningBedragen(bedragen);
         
         assertEquals(totalRekeningBedragen, new BigDecimal(600));
@@ -489,7 +495,7 @@ public class BedragenSrvTest{
         overviewRekeningTestData.put(dt.parse("2015-02-19"), new BigDecimal(300));
         overviewRekeningTestData.put(dt.parse("2015-02-20"), new BigDecimal(2300));
         
-        when(bedragenSrv.getBedragAtDate(bedrag1.getDatum(), null)).thenReturn(new BigDecimal(450));
+        when(bedragenSrv.getBedragAtDate(bedrag1.getDatum(), rekening1)).thenReturn(new BigDecimal(450));
         
         Map overviewRekeningData = bedragenSrv.OverviewRekeningData(bedragen);
         
@@ -656,10 +662,12 @@ public class BedragenSrvTest{
 
     @Test
     public void testProcessRekeningBedragDelete(){
+        when(bedrag1.getPk_id()).thenReturn(1);
         when(bedrag1.getBedrag()).thenReturn(new BigDecimal("500"));
         when(bedrag1.getGroep()).thenReturn(groepPositief);
         when(rekening1.getWaarde()).thenReturn(new BigDecimal("2000"));
-        
+        when(bedragenDao.findById(1)).thenReturn(Optional.of(bedrag1));
+
         Bedragen bedrag = bedragenSrv.processRekeningBedrag(bedrag1, bedragenSrv.DELETE);
         assertEquals(new BigDecimal("1500"), bedrag.getRekening().getWaarde());
     }

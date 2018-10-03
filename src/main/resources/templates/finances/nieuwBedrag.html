@@ -29,7 +29,7 @@
                     </div>
                     <div class="form-group col-lg-12">
                       <div class="col-lg-3">
-                        <input class="form-control" id="inputNegatief" placeholder="bedrag" ng-model="bedrag.bedrag" type="text"/>
+                        <input class="form-control" id="inputBedrag" placeholder="bedrag" ng-model="bedrag.bedrag" type="text"/>
                       </div>
                     </div>
                     <div class="form-group col-lg-12">
@@ -39,8 +39,26 @@
                     </div>
                     <div class="form-group col-lg-12">
                       <div class="col-lg-8">
-                        <input class="form-control" id="inputNegatief" placeholder="Omschrijving" ng-model="bedrag.omschrijving" type="text"/>
+                        <input class="form-control" id="inputOmschrijving" placeholder="Omschrijving" ng-model="bedrag.omschrijving" type="text"/>
                       </div>
+                    </div>
+                    <div th:if="${@userInfo.invoiceType.type} != ${personal}" class="form-group col-lg-12">
+                        <div class="col-lg-8">
+                            <input class="form-control" id="inputTaxPercentagePaid" placeholder="Tax Percentage Paid" ng-model="bedrag.taxPercentagePaid" type="text"/>
+                        </div>
+                    </div>
+                    <div th:if="${@userInfo.invoiceType.type} != ${personal}" class="form-group col-lg-12">
+                        <div class="col-lg-8">
+                            <input class="form-control" id="inputWeightAccountancy" placeholder="Weight For Accountancy" ng-model="bedrag.weightAccountancy" type="text"/>
+                        </div>
+                    </div>
+                    <div th:if="${@userInfo.invoiceType.type} != ${personal}" class="form-group col-lg-12">
+                        <div class="col-lg-3">
+                            <select id="invoice" class="form-control" ng-model="bedrag.invoice"
+                                    ng-options="invoice.invoiceId for invoice in invoices track by invoice.pkId">
+                                <option value="">--Choose Invoice--</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -106,7 +124,8 @@
                                 persoon: null,
                                 bedrag: null,
                                 datum: null,
-                                omschrijving: null
+                                omschrijving: null,
+                                invoice: null
                         }
                         $http.get(/*[[@{/json/groepTree}]]*/).success( function(data){
                               $scope.groepTreeData = data;
@@ -117,8 +136,22 @@
                        $scope.personen = data;
                     });
 
+                    $http.get(/*[[@{/json/invoices}]]*/).success( function(data){
+                        $scope.invoices = data;
+                    });
+
                     $http.get(/*[[@{/json/openRekeningen}]]*/).success( function(data){
                        $scope.rekeningen = data.rekeningen;
+                    });
+
+                    $scope.$watch( 'bedrag.datum', function (newObj, oldObj) {
+                        var varDate = new Date(newObj);
+                        var today = new Date();
+                        if(varDate > today) {
+                            $scope.bedrag.processed = false;
+                        } else {
+                            $scope.bedrag.processed = true;
+                        }
                     });
 
                     $scope.$watch( 'groepTree.currentNode', function( newObj, oldObj ) {
@@ -130,15 +163,32 @@
                     }, false);
 
                     $scope.saveBedrag = (function(){
-                        $http.post(/*[[@{/json/save_bedrag}]]*/, $scope.bedrag).success( function(data) {
-                            if (data==="1"){
-                                $(location).attr('href',/*[[@{/finances/beheerBedragen}]]*/);
-                            } else {
+                        if ($scope.bedrag.processed != true){
+                            bootbox.confirm("Date is higher then today false, press ok to still process the amount!", function(result) {
+                                if (result === true){
+                                    $scope.bedrag.processed = true;
+                                }
+                                $http.post(/*[[@{/json/save_bedrag}]]*/, $scope.bedrag).success( function(data) {
+                                    if (data==="1"){
+                                        $(location).attr('href',/*[[@{/finances/beheerBedragen}]]*/);
+                                    } else {
+                                        bootbox.alert("Error occured during save");
+                                    }
+                                }).error( function() {
+                                    bootbox.alert("Error occured during save");
+                                });
+                            });
+                        } else {
+                            $http.post(/*[[@{/json/save_bedrag}]]*/, $scope.bedrag).success( function(data) {
+                                if (data==="1"){
+                                    $(location).attr('href',/*[[@{/finances/beheerBedragen}]]*/);
+                                } else {
+                                    bootbox.alert("Error occured during save");
+                                }
+                            }).error( function() {
                                 bootbox.alert("Error occured during save");
-                            }
-                        }).error( function() {
-                            bootbox.alert("Error occured during save");
-                        });
+                            });
+                        }
                     });
 
                     $scope.deleteBedrag = (function(){

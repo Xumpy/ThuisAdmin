@@ -31,7 +31,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="bedrag in emptyBedragen">
+                                <tr ng-repeat="bedrag in emptyBedragen" ng-class="{'text-danger': bedrag.validForAccountancy == false, 'text-warning': bedrag.processed != true}">
                                     <td><a href="nieuwBedrag/{{bedrag.pk_id}}">Edit</a></td>
                                     <td>{{bedrag.rekening}}</td>
                                     <td>{{bedrag.type_groep}}</td>

@@ -90,6 +90,7 @@ public class InvoiceBuilderSrvImpl {
         List<InvoicesDaoPojo> invoices = invoicesDao.findAllInvoicesByInvoice(invoiceBuilder.getInvoiceId());
         if (invoices.size() == 1){
             invoicesDaoPojo = invoices.get(0);
+            if (invoicesDaoPojo.getClosed() != null && invoicesDaoPojo.getClosed()) throw new RuntimeException("Can not add to closed invoice: " + invoicesDaoPojo.getInvoiceId());
         } else {
             invoicesDaoPojo = buildNewInvoice(invoiceBuilder.getInvoiceId(), jobsGroup.getCompany().getVatNumber());
         }

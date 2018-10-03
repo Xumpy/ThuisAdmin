@@ -17,6 +17,7 @@ public class InvoicesCtrlPojo implements Invoices{
     private BigDecimal vatAmount;
     private String description;
     private BigDecimal totalAmount;
+    private Boolean closed;
 
     @Override
     public Integer getPkId() {
@@ -103,13 +104,22 @@ public class InvoicesCtrlPojo implements Invoices{
         return totalAmount;
     }
 
+    @Override
+    public Boolean getClosed() {
+        return closed;
+    }
+
+    public void setClosed(Boolean closed) {
+        this.closed = closed;
+    }
+
     public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
 
     public InvoicesCtrlPojo() { }
 
-    public InvoicesCtrlPojo(Invoices invoices){
+    private void setInvoicesProperties(Invoices invoices){
         this.pkId = invoices.getPkId();
         this.description = invoices.getDescription();
         this.vatAmount = invoices.getVatAmount();
@@ -119,18 +129,15 @@ public class InvoicesCtrlPojo implements Invoices{
         this.invoiceDate = invoices.getInvoiceDate();
         this.invoiceId = invoices.getInvoiceId();
         this.rekening = invoices.getRekening() != null ? new RekeningenCtrlPojo(invoices.getRekening()) : null;
+        this.closed = invoices.getClosed();
+    }
+
+    public InvoicesCtrlPojo(Invoices invoices){
+        setInvoicesProperties(invoices);
     }
 
     public InvoicesCtrlPojo(Invoices invoices, BigDecimal totalAmount){
-        this.pkId = invoices.getPkId();
-        this.description = invoices.getDescription();
-        this.vatAmount = invoices.getVatAmount();
-        this.vatNumber = invoices.getVatNumber();
-        this.invoiceRef = invoices.getInvoiceRef();
-        this.invoiceDueDate = invoices.getInvoiceDueDate();
-        this.invoiceDate = invoices.getInvoiceDate();
-        this.invoiceId = invoices.getInvoiceId();
-        this.rekening = invoices.getRekening() != null ? new RekeningenCtrlPojo(invoices.getRekening()) : null;
+        setInvoicesProperties(invoices);
         this.totalAmount = totalAmount;
     }
 }

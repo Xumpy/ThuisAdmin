@@ -80,4 +80,10 @@ public class DocumentenSrvImpl implements DocumentenSrv, Serializable{
     public List<? extends Documenten> fetchDocumentByBedrag(Integer bedragId){
         return documentenDao.fetchDocumentByBedrag(bedragId);
     }
+
+    @Override
+    @Transactional(value="transactionManager")
+    public List<? extends Documenten> fetchDocumentByInvoice(Integer invoiceId){
+        return documentenDao.fetchDocumentByInvoice(invoiceId);
+    }
 }

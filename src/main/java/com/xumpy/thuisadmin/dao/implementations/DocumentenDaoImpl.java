@@ -6,6 +6,8 @@
 package com.xumpy.thuisadmin.dao.implementations;
 
 import com.xumpy.thuisadmin.dao.model.DocumentenDaoPojo;
+
+import java.util.Date;
 import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -27,4 +29,16 @@ public interface DocumentenDaoImpl extends CrudRepository<DocumentenDaoPojo, Int
 
     @Query("from DocumentenDaoPojo where bedrag.pk_id = :bedragId")
     public List<DocumentenDaoPojo> fetchDocumentByBedrag(@Param("bedragId") Integer bedragId);
+
+    @Query("from DocumentenDaoPojo where bedrag.invoice.pkId = :invoiceId")
+    public List<DocumentenDaoPojo> fetchDocumentByInvoice(@Param("invoiceId") Integer invoiceId);
+
+    @Query("from DocumentenDaoPojo where (bedrag.datum >= :startDate and bedrag.datum <= :endDate)"
+            + " and (bedrag.rekening.pk_id = :rekeningId)"
+            + " and bedrag.groep.pk_id not in (2,3,4)"
+            + " and coalesce(bedrag.processed, 0) = 1"
+            + " order by bedrag.datum asc, bedrag.bedrag asc")
+    public List<DocumentenDaoPojo> fetchDocumentsForBedragenInPeriodeOnRekening(@Param("startDate") Date startDate,
+                                                                                @Param("endDate") Date endDate,
+                                                                                @Param("rekeningId") Integer rekeningId);
 }
