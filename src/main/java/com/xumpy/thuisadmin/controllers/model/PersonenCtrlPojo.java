@@ -13,6 +13,7 @@ public class PersonenCtrlPojo implements Personen{
     private String username;
     private String md5_password;
     private String vatNumber;
+    private String businessName;
     private BusinessFormCtrlPojo businessForm;
 
     @Override
@@ -78,6 +79,15 @@ public class PersonenCtrlPojo implements Personen{
         this.businessForm = businessForm;
     }
 
+    @Override
+    public String getBusinessName() {
+        return businessName;
+    }
+
+    public void setBusinessName(String businessName) {
+        this.businessName = businessName;
+    }
+
     public PersonenCtrlPojo() {}
     public PersonenCtrlPojo(Personen personen) {
         this.md5_password = personen.getMd5_password();
@@ -87,5 +97,6 @@ public class PersonenCtrlPojo implements Personen{
         this.voornaam = personen.getVoornaam();
         this.vatNumber = personen.getVatNumber();
         this.businessForm = personen.getBusinessForm() != null ? new BusinessFormCtrlPojo(personen.getBusinessForm()) : null;
+        this.businessName = personen.getBusinessName();
     }
 }

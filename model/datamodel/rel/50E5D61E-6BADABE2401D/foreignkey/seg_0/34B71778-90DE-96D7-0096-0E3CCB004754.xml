@@ -1,0 +1,16 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="34B71778-90DE-96D7-0096-0E3CCB004754" containerWithKeyObject="EC42D444-F012-A1DD-549E-F1887BEC6D13" localFKIndex="C84699D7-AA65-47B7-F306-301762543389" name="TA_JOB_VAT_COMPS_TA_VAT_COMPENSATIONS_FK">
+<createdBy>nico</createdBy>
+<createdTime>2019-01-02 12:16:24 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<referredTableLongName>TA_VAT_COMPENSATIONS</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>84562C11-E105-DCCD-4CCA-CB02435CD7BA</referredTableID>
+<keyObject>771D8B09-6A9A-3A43-35AD-C89DA23040FB</keyObject>
+<referredKeyID>771D8B09-6A9A-3A43-35AD-C89DA23040FB</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>PK_ID</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

@@ -6,12 +6,15 @@
 package com.xumpy.timesheets.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.xumpy.timesheets.controller.model.JobVatCompensationCtrlPojo;
 import com.xumpy.timesheets.controller.model.TickedJobsCtrlPojo;
+import com.xumpy.timesheets.dao.implementations.JobVatCompensationDaoImpl;
 import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
 import com.xumpy.timesheets.dao.implementations.TickedJobsDaoImpl;
 import com.xumpy.timesheets.dao.model.JobsDaoPojo;
 import com.xumpy.timesheets.dao.model.JobsGroupDaoPojo;
 import com.xumpy.timesheets.dao.model.TickedJobsDaoPojo;
+import com.xumpy.timesheets.domain.JobVatCompensation;
 import com.xumpy.timesheets.domain.TickedJobs;
 import com.xumpy.timesheets.services.model.TickedJobsDetail;
 import com.xumpy.utilities.CustomDateUtils;
@@ -42,6 +45,7 @@ public class TickedJobsDetailSrvTest {
     
     @Mock private TickedJobsDaoImpl tickedJobsDao;
     @Mock private JobsDaoImpl jobsDao;
+    @Mock private JobVatCompensationDaoImpl jobVatCompensationDao;
     @InjectMocks private TickedJobsDetailSrv tickedJobsDetailSrv;
     
     @Test
@@ -135,8 +139,10 @@ public class TickedJobsDetailSrvTest {
         tickedJobs.add(tickedJobs2);
         tickedJobs.add(tickedJobs3);
         tickedJobs.add(tickedJobs4);
-        
-        TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, new BigDecimal(30));
+
+        List<JobVatCompensationCtrlPojo> jobVatCompensationCtrlPojos = new ArrayList<>();
+
+        TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, jobVatCompensationCtrlPojos, new BigDecimal(30));
         
         Assert.assertEquals(new BigDecimal(30), tickedJobsDetail.getActualPause());
         Assert.assertEquals(new BigDecimal(475), tickedJobsDetail.getActualWorked());
@@ -165,8 +171,10 @@ public class TickedJobsDetailSrvTest {
         tickedJobs.add(tickedJobs2);
         tickedJobs.add(tickedJobs3);
         tickedJobs.add(tickedJobs4);
-        
-        TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, new BigDecimal(30));
+
+        List<JobVatCompensationCtrlPojo> jobVatCompensationCtrlPojos = new ArrayList<>();
+
+        TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, jobVatCompensationCtrlPojos, new BigDecimal(30));
         
         Assert.assertEquals(new BigDecimal(30), tickedJobsDetail.getActualPause());
         Assert.assertEquals(new BigDecimal(475), tickedJobsDetail.getActualWorked());
@@ -211,8 +219,10 @@ public class TickedJobsDetailSrvTest {
         tickedJobs.add(tickedJobs6);
         tickedJobs.add(tickedJobs7);
         tickedJobs.add(tickedJobs8);
-        
-        TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, new BigDecimal(30));
+
+        List<JobVatCompensationCtrlPojo> jobVatCompensationCtrlPojos = new ArrayList<>();
+
+        TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, jobVatCompensationCtrlPojos, new BigDecimal(30));
         
         Assert.assertEquals(new BigDecimal(950), tickedJobsDetail.getActualWorked());
     }
@@ -232,8 +242,10 @@ public class TickedJobsDetailSrvTest {
         List<TickedJobsCtrlPojo> tickedJobs = new ArrayList<TickedJobsCtrlPojo>();
         tickedJobs.add(tickedJobs1);
         tickedJobs.add(tickedJobs2);
-        
-        TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, new BigDecimal(30));
+
+        List<JobVatCompensationCtrlPojo> jobVatCompensationCtrlPojos = new ArrayList<>();
+
+        TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, jobVatCompensationCtrlPojos, new BigDecimal(30));
         
         Assert.assertEquals(new BigDecimal(30), tickedJobsDetail.getActualPause());
         Assert.assertEquals(new BigDecimal(601), tickedJobsDetail.getActualWorked());
@@ -254,8 +266,10 @@ public class TickedJobsDetailSrvTest {
         List<TickedJobsCtrlPojo> tickedJobs = new ArrayList<TickedJobsCtrlPojo>();
         tickedJobs.add(tickedJobs1);
         tickedJobs.add(tickedJobs2);
-        
-        TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, new BigDecimal(30));
+
+        List<JobVatCompensationCtrlPojo> jobVatCompensationCtrlPojos = new ArrayList<>();
+
+        TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, jobVatCompensationCtrlPojos, new BigDecimal(30));
         
         Assert.assertEquals(new BigDecimal(0), tickedJobsDetail.getActualPause());
         Assert.assertEquals(new BigDecimal(331), tickedJobsDetail.getActualWorked());

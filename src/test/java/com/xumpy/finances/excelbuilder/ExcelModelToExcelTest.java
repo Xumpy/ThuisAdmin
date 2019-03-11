@@ -41,11 +41,11 @@ public class ExcelModelToExcelTest {
 
     private List<Costs> costMock() throws ParseException {
         List<Costs> costs = new ArrayList<>();
-        costs.add(new Costs(1, createDate("25/01/2018"), "Mangeren", 100, 1000, createLocationList("document1.pdf", "document_shizzle.pdf")));
-        costs.add(new Costs(2, createDate("26/01/2018"), "Materioal", 20, 1000.45, createLocationList("document2.pdf")));
-        costs.add(new Costs(3, createDate("25/02/2018"), "Mangeren", 12.5, 1000, createLocationList("document3.pdf")));
-        costs.add(new Costs(4, createDate("26/02/2018"), "Materioal", 100, 1000, createLocationList("document4.pdf")));
-        costs.add(new Costs(5, createDate("26/03/2018"), "Mangeren", 100, 1000, createLocationList("document5.pdf")));
+        costs.add(new Costs(1, createDate("25/01/2018"), "Mangeren", 100, 1000, createLocationList("document1.pdf", "document_shizzle.pdf"), "Nico Martens"));
+        costs.add(new Costs(2, createDate("26/01/2018"), "Materioal", 20, 1000.45, createLocationList("document2.pdf"), "Nico Martens"));
+        costs.add(new Costs(3, createDate("25/02/2018"), "Mangeren", 12.5, 1000, createLocationList("document3.pdf"), "Nico Martens"));
+        costs.add(new Costs(4, createDate("26/02/2018"), "Materioal", 100, 1000, createLocationList("document4.pdf"), "Nico Martens"));
+        costs.add(new Costs(5, createDate("26/03/2018"), "Mangeren", 100, 1000, createLocationList("document5.pdf"), "Nico Martens"));
         return costs;
     }
 

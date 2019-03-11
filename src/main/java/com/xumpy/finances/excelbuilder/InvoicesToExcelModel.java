@@ -83,6 +83,7 @@ public class InvoicesToExcelModel {
         cost.setBedragId(document.getBedrag().getPk_id());
         cost.setDescription(document.getBedrag().getOmschrijving());
         cost.setExpectedWeight(document.getBedrag().getWeightAccountancy().doubleValue());
+        cost.setAccountName(document.getBedrag().getRekening().getNaam());
 
         List<Document> documents = new LinkedList<>();
         documents.add(generateDocument(document));

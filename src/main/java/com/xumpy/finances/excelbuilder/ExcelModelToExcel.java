@@ -115,7 +115,7 @@ public class ExcelModelToExcel {
             Row row = sheet.createRow(rowCount);
             createCell(row.createCell(0), cost.getDate());
             createCell(row.createCell(1), cost.getDescription());
-            createCell(row.createCell(2), cost.getExpectedWeight());
+            createCell(row.createCell(2), cost.getAccountName());
             createCell(row.createCell(3), cost.getAmount());
             createHyperlinkCell(row.createCell(4), cost.getDocuments());
             rowCount++;
@@ -138,7 +138,7 @@ public class ExcelModelToExcel {
         createHeaderRow(sheet, "Invoices", "Date", "Invoice Id", "Amount", "Document Location");
         createInvoiceRows(sheet, excelModel.getInvoices());
         rowCount++;
-        createHeaderRow(sheet, "Costs", "Date", "Description", "Expected Weight Accountancy", "Amount", "Document Location");
+        createHeaderRow(sheet, "Costs", "Date", "Description", "Account Name", "Amount", "Document Location");
         createCostRows(sheet, excelModel.getCosts());
 
         autoSizeAllColumns(sheet);

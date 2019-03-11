@@ -18,6 +18,20 @@
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
+<Column name="FK_BUSINESS_FORM_ID" id="ADFDD539-EDBF-C2C5-9317-CD9A0B525F66">
+<createdBy>nico</createdBy>
+<createdTime>2018-09-06 13:57:39 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="39D478B4-BD06-FFA6-4F49-1F1D74CE1157" referredColumn="080AB572-595F-EEB6-F0DF-A2DA4303BCCA"/>
+</associations>
+</Column>
 <Column name="NAAM" id="A5D33098-87F8-CEF7-E6A7-298B9ED990A2">
 <createdBy>nicom</createdBy>
 <createdTime>2015-07-14 09:51:23 UTC</createdTime>
@@ -78,19 +92,17 @@
 <ownDataTypeParameters>255,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
-<Column name="FK_BUSINESS_FORM_ID" id="ADFDD539-EDBF-C2C5-9317-CD9A0B525F66">
+<Column name="BUSINESS_NAME" id="14F4A880-55CC-C2B9-3C52-1237CEFB5D91">
 <createdBy>nico</createdBy>
-<createdTime>2018-09-06 13:57:39 UTC</createdTime>
+<createdTime>2019-01-02 10:13:00 UTC</createdTime>
 <ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
 <use>1</use>
-<logicalDatatype>LOGDT011</logicalDatatype>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-<previousColumn>false</previousColumn>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>255</dataTypeSize>
+<ownDataTypeParameters>255,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
-<associations>
-<colAssociation fkAssociation="39D478B4-BD06-FFA6-4F49-1F1D74CE1157" referredColumn="080AB572-595F-EEB6-F0DF-A2DA4303BCCA"/>
-</associations>
 </Column>
 </columns>
 <indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">

@@ -5,7 +5,11 @@
  */
 package com.xumpy.timesheets.controller.rest;
 
+import com.xumpy.government.controllers.model.VatCompensationCtrlPojo;
+import com.xumpy.government.dao.VatCompensationDao;
 import com.xumpy.timesheets.controller.model.*;
+import com.xumpy.timesheets.dao.implementations.JobVatCompensationDaoImpl;
+import com.xumpy.timesheets.domain.JobVatCompensation;
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.domain.JobsGroupPrices;
 import com.xumpy.timesheets.domain.OverviewWork.OverviewWork;
@@ -45,7 +49,8 @@ public class JobsGroupRestCtrl {
     @Autowired JobsSrv jobsSrv;
     @Autowired CompanySrv companySrv;
     @Autowired TickedJobsSrv tickedJobsSrv;
-    
+    @Autowired JobVatCompensationDaoImpl jobVatCompensationDao;
+
     @RequestMapping("/json/fetch_all_jobs_group")
     public @ResponseBody List<JobsGroupCtrl> fetchAllJobsGroup(){
         return JobsGroupCtrl.allJobsGroupCtrl(jobsGroupSrv.selectAllJobGroups());
@@ -128,6 +133,7 @@ public class JobsGroupRestCtrl {
     
     @RequestMapping("/json/fetch_overview")
     public @ResponseBody Overview fetchOverview() throws ParseException{
+        fetchOverviewMonth(overview.getMonth());
         return overview;
     }
     
@@ -140,11 +146,14 @@ public class JobsGroupRestCtrl {
             for(JobsCtrlPojo job: jobsInJobsGroup.getJobs()){
                 if (job.getPk_id() != null){
                     List<TickedJobsCtrlPojo> tickedJobsCtrlPojo = new ArrayList<TickedJobsCtrlPojo>();
-                
+                    List<JobVatCompensationCtrlPojo> jobVatCompensationCtrlPojos = new ArrayList<>();
                     for (TickedJobs tickedJobs: tickedJobsSrv.selectTickedJobsByJob(job)){
                         tickedJobsCtrlPojo.add(new TickedJobsCtrlPojo(tickedJobs));
                     }
-                    job.setTickedJobsDetail(TickedJobsDetailSrv.calculate(tickedJobsCtrlPojo, new BigDecimal(30)));
+                    for (JobVatCompensation jobVatCompensation: jobVatCompensationDao.selectJobVatCompensations(job.getPk_id())){
+                        jobVatCompensationCtrlPojos.add(new JobVatCompensationCtrlPojo(jobVatCompensation));
+                    }
+                    job.setTickedJobsDetail(TickedJobsDetailSrv.calculate(tickedJobsCtrlPojo, jobVatCompensationCtrlPojos, new BigDecimal(30)));
                 }
             }
         }

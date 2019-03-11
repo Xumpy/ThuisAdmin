@@ -5,8 +5,10 @@
  */
 package com.xumpy.timesheets.services;
 
+import com.xumpy.timesheets.dao.implementations.JobVatCompensationDaoImpl;
 import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
 import com.xumpy.timesheets.dao.implementations.TickedJobsDaoImpl;
+import com.xumpy.timesheets.domain.JobVatCompensation;
 import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.JobsGroup;
 import com.xumpy.timesheets.domain.TickedJobs;
@@ -37,7 +39,8 @@ public class TickedJobsDetailSrv {
     
     @Autowired private TickedJobsDaoImpl tickedJobsDao;
     @Autowired private JobsDaoImpl jobsDao;
-    
+    @Autowired private JobVatCompensationDaoImpl jobVatCompensationDao;
+
     public static TickedJobsDetail calculate(List<? extends TickedJobs> tickedJobs){
         TickedJobsDetail tickedJobsDetail = new TickedJobsDetail();
         tickedJobsDetail.setTickedJobs(tickedJobs);
@@ -100,9 +103,9 @@ public class TickedJobsDetailSrv {
         return tickedJobs;
     }
     
-    public static TickedJobsDetail calculate(List<? extends TickedJobs> tickedJobs, BigDecimal minimumPause){
+    public static TickedJobsDetail calculate(List<? extends TickedJobs> tickedJobs, List<? extends JobVatCompensation> jobVatCompensations, BigDecimal minimumPause){
         TickedJobsDetail tickedJobsDetail = calculate(tickedJobs);
-
+        tickedJobsDetail.setJobVatCompensations(jobVatCompensations);
         if (!tickedJobsDetail.getActualPause().equals(new BigDecimal(0)) || tickedJobsDetail.getActualWorked().compareTo(new BigDecimal(360)) > 0){
             if (tickedJobsDetail.getActualPause() != null){
                 BigDecimal pauseDifference = tickedJobsDetail.getActualPause().subtract(minimumPause);
@@ -139,8 +142,9 @@ public class TickedJobsDetailSrv {
             for(Jobs job: jobs){
                 if (jobsGroup.getPk_id().equals(job.getJobsGroup().getPk_id())){
                     List<? extends TickedJobs> tickedJobs = tickedJobsDao.selectTickedJobsByJob(job.getPk_id());
+                    List<? extends JobVatCompensation> jobVatCompensations = jobVatCompensationDao.selectJobVatCompensations(job.getPk_id());
 
-                    TickedJobsDetail jobsDetail = calculate(tickedJobs, new BigDecimal(30));
+                    TickedJobsDetail jobsDetail = calculate(tickedJobs, jobVatCompensations, new BigDecimal(30));
 
                     timesheetWorked = timesheetWorked.add(job.getWorkedHours());
                     actualWorked = actualWorked.add(jobsDetail.getActualWorked());

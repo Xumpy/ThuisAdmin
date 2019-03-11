@@ -9,6 +9,7 @@ public class Costs {
     private String description;
     private double expectedWeight;
     private double amount;
+    private String accountName;
     private List<Document> documents;
 
     public Integer getBedragId() {
@@ -59,13 +60,22 @@ public class Costs {
         this.documents = documents;
     }
 
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
     public Costs(){}
-    public Costs(Integer bedragId, Date date, String description, double expectedWeight, double amount, List<Document> documents){
+    public Costs(Integer bedragId, Date date, String description, double expectedWeight, double amount, List<Document> documents, String accountName){
         this.bedragId = bedragId;
         this.date = date;
         this.description = description;
         this.expectedWeight = expectedWeight;
         this.amount = amount;
         this.documents = documents;
+        this.accountName = accountName;
     }
 }

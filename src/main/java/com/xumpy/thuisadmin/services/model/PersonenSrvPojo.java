@@ -25,7 +25,17 @@ public class PersonenSrvPojo implements Personen{
     private String username;
     private String md5_password;
     private String vatNumber;
+    private String businessName;
     private BusinessFormSrvPojo businessForm;
+
+    @Override
+    public String getBusinessName() {
+        return businessName;
+    }
+
+    public void setBusinessName(String businessName) {
+        this.businessName = businessName;
+    }
 
     @Override
     public Integer getPk_id() {
@@ -124,6 +134,7 @@ public class PersonenSrvPojo implements Personen{
         this.voornaam = personen.getVoornaam();
         this.vatNumber = personen.getVatNumber();
         this.businessForm = personen.getBusinessForm() != null ? new BusinessFormSrvPojo(personen.getBusinessForm()) : null;
+        this.businessName = personen.getBusinessName();
     }
     
     public void set_password(String password){

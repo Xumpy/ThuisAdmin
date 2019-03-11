@@ -29,7 +29,8 @@
        CONCAT(TA_COMPANY.POSTAL_CODE, ' ', TA_COMPANY.CITY) AS company_postal_code_city,
        TA_INVOICES.VAT_NUMBER AS company_vat_number,
        CONCAT(TA_REKENINGEN.BANK, ' ', TA_REKENINGEN.REKENING_NR) AS rekening_number,
-       TA_PERSONEN.VAT_NUMBER AS own_vat_number
+       TA_PERSONEN.VAT_NUMBER AS own_vat_number,
+       TA_PERSONEN.BUSINESS_NAME as business_name
 FROM TA_INVOICES
 LEFT JOIN TA_REKENINGEN
   ON (TA_REKENINGEN.PK_ID = TA_INVOICES.FK_REKENING_ID)
@@ -76,6 +77,9 @@ WHERE TA_INVOICES.PK_ID = $P{INVOICE_ID}]]>
 	<field name="company_vat_number" class="java.lang.String"/>
 	<field name="rekening_number" class="java.lang.String"/>
 	<field name="own_vat_number" class="java.lang.String"/>
+	<field name="business_name" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<variable name="amount_incl_vat" class="java.math.BigDecimal">
 		<variableExpression><![CDATA[$F{total_amount}.divide(100).multiply($F{vat_amount}).add($F{total_amount})]]></variableExpression>
 	</variable>
@@ -125,13 +129,6 @@ WHERE TA_INVOICES.PK_ID = $P{INVOICE_ID}]]>
 					<text><![CDATA[Gegevens:]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="107" y="35" width="147" height="12" uuid="29f5c545-def5-45de-9386-6374b4c012a0"/>
-					<textElement>
-						<font size="10"/>
-					</textElement>
-					<text><![CDATA[Nico Martens]]></text>
-				</staticText>
-				<staticText>
 					<reportElement x="107" y="47" width="147" height="12" uuid="91a3411a-32ac-4877-ae64-1e05d429b1d9"/>
 					<textElement>
 						<font size="10"/>
@@ -159,6 +156,10 @@ WHERE TA_INVOICES.PK_ID = $P{INVOICE_ID}]]>
 				<textField>
 					<reportElement x="107" y="83" width="147" height="12" uuid="26d9e6ae-25e1-4da6-9147-0f049b026510"/>
 					<textFieldExpression><![CDATA[$F{own_vat_number}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="108" y="34" width="146" height="12" uuid="a9502401-bde2-4e43-9039-b5661bc6baac"/>
+					<textFieldExpression><![CDATA[$F{business_name}]]></textFieldExpression>
 				</textField>
 			</frame>
 			<frame>

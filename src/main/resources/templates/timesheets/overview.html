@@ -42,6 +42,41 @@
                         <td>Ticked {{tickedJob.started == true ? "In" : "Out"}}</td><td>{{tickedJob.ticked}}</td>
                     </tr>
                     <tr><td>Total hours worked: </td><td>{{jobInfo.tickedJobsDetail.actualWorked}}</td></tr>
+
+                    <tr><td colspan="2"><b>Vat Compensations</b></td></tr>
+                    <tr ng-repeat="vatCompensation in jobInfo.tickedJobsDetail.jobVatCompensations">
+                        <td colspan="2">
+                            <div class="col-lg-5">
+                                {{vatCompensation.vatCompensation.name}}
+                            </div>
+                            <div class="col-lg-3">
+                                {{vatCompensation.amount}}
+                            </div>
+                            <div class="col-lg-2">
+                                <a th:href="@{/json/fetch_vat_compensation_document/{{vatCompensation.pkId}}}">download</a>
+                            </div>
+                            <div class="col-lg-2">
+                                <a ng-click="deleteVatCompensation(vatCompensation)">delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2">
+                        <div class="col-lg-4">
+                            <select class="form-control" ng-model="jobInfo.vatcompensation.jobVatCompensation"
+                                    ng-options="vatCompensation.name for vatCompensation in vatCompensations track by vatCompensation.pkId">
+                                <option value="">-- No Vat Compensation --</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-2">
+                            <input class="form-control" id="amount" placeholder="Amount" type="text" ng-model="jobInfo.vatcompensation.amount" />
+                        </div>
+                        <div class="col-lg-4">
+                            <input class="col-lg-4" name="file" id="file" type="file" ng-model="jobInfo.vatcompensation.image" accept="image/*" app-filereader />
+                        </div>
+                        <div class="col-lg-2">
+                            <input id="VatCompensationFile" class="btn btn-primary" type="button" ng-click="saveJobInfo(jobInfo.vatcompensation)" value="Add"/>
+                        </div>
+                    </td></tr>
                 </table>
             </div>
 
@@ -81,6 +116,9 @@
                     $scope.invoiceBuilder = {
                         invoiceId: ""
                     }
+
+                    var url = /*[[@{/json/vatCompensation}]]*/
+                    $http.get(url).success( function(data){ $scope.vatCompensations = data; });
 
                     $http.post(/*[[@{/json/fetch_overview}]]*/).success(function(data){
                         $scope.Overview = data;
@@ -129,15 +167,20 @@
 
                     $scope.jobsDetails = function(jobs){
                         $scope.jobInfo = jobs;
+                        $scope.jobInfo.vatcompensation = {};
+                        $scope.jobInfo.vatcompensation.jobId = jobs.pk_id;
+                        $scope.jobInfo.vatcompensation.jobVatCompensation = null;
+                        $scope.jobInfo.vatcompensation.amount = 0;
+
                         $('#dialog').dialog({
                             title: "Job Details",
-                            width: 500,
+                            width: 1000,
                             buttons: { "OK": function() { $(this).dialog("close"); } }
                         }).prev(".ui-dialog-titlebar").css("background","#bf3e11");
                     }
 
                     $scope.jobsColor = function(jobs){
-                        if (!(jobs.remarks === '' || jobs.remarks === null)){
+                        if (!(jobs.remarks === '' || jobs.remarks === null) || (jobs.tickedJobsDetail && jobs.tickedJobsDetail.jobVatCompensations && jobs.tickedJobsDetail.jobVatCompensations.length > 0)){
                             return { 'background-color': '#bf3e11' }
                         }
 
@@ -148,6 +191,41 @@
 
                     $scope.printPDF = function(jobsGroup){
                         $http.get(/*[[@{/timesheets/printTimesheet}]]*/, jobsGroup, $scope.Overview.month);
+                    }
+
+                    $scope.saveJobInfo = function(vatCompensation){
+                        $http.post(/*[[@{/json/job_vat_compensation}]]*/, vatCompensation).success(function(data) {
+                            $scope.Overview = data;
+                            angular.forEach($scope.Overview.allJobsInJobsGroup, function(jobInJobsGroup){
+                                angular.forEach(jobInJobsGroup.jobs, function(jobs){
+                                    if (jobs.pk_id == vatCompensation.jobId){
+                                        $scope.jobInfo = jobs;
+                                        $scope.jobInfo.vatcompensation = {};
+                                        $scope.jobInfo.vatcompensation.jobId = jobs.pk_id;
+                                        $scope.jobInfo.vatcompensation.jobVatCompensation = null;
+                                        $scope.jobInfo.vatcompensation.amount = 0;
+                                        $scope.jobInfo.vatcompensation.image = vatCompensation.image; // file can not be reset with js keep the model in sync!
+                                    }
+                                });
+                            })
+                        });
+                    }
+                    $scope.deleteVatCompensation = function(vatCompensation){
+                        $http.post(/*[[@{/json/delete_job_vat_compensation}]]*/, vatCompensation).success(function(data) {
+                            $scope.Overview = data;
+                            angular.forEach($scope.Overview.allJobsInJobsGroup, function(jobInJobsGroup){
+                                angular.forEach(jobInJobsGroup.jobs, function(jobs){
+                                    if (jobs.pk_id == vatCompensation.job.pk_id){
+                                        $scope.jobInfo = jobs;
+                                        $scope.jobInfo.vatcompensation = {};
+                                        $scope.jobInfo.vatcompensation.jobId = jobs.pk_id;
+                                        $scope.jobInfo.vatcompensation.jobVatCompensation = null;
+                                        $scope.jobInfo.vatcompensation.amount = 0;
+                                        $scope.jobInfo.vatcompensation.image = vatCompensation.image; // file can not be reset with js keep the model in sync!
+                                    }
+                                });
+                            })
+                        });
                     }
                 });
                 /*]]>*/

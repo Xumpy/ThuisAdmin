@@ -1,0 +1,131 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="EC42D444-F012-A1DD-549E-F1887BEC6D13" name="TA_JOB_VAT_COMPS">
+<createdBy>nico</createdBy>
+<createdTime>2019-01-02 12:13:29 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<ordsAlias>table_22</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="PK_ID" id="C560082E-90BB-2484-C8B1-2B36C07522D2">
+<createdBy>nico</createdBy>
+<createdTime>2019-01-02 12:13:46 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>9</dataTypePrecision>
+<ownDataTypeParameters>,9,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FK_JOB_ID" id="A9F0A6F3-CD10-B0BC-A52C-D54C4D9AF138">
+<createdBy>nico</createdBy>
+<createdTime>2019-01-02 12:15:51 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="2091B936-1567-BF80-6F02-90F448FE56E4" referredColumn="922FF5ED-130B-DFF0-76AA-92F6058AA235"/>
+</associations>
+</Column>
+<Column name="FK_VAT_COMPENSATION_ID" id="772E0A18-8147-732D-92B5-E2F6DF43FCFA">
+<createdBy>nico</createdBy>
+<createdTime>2019-01-02 12:16:24 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="34B71778-90DE-96D7-0096-0E3CCB004754" referredColumn="038AC8DE-0006-5049-5F79-FD316634C7C3"/>
+</associations>
+</Column>
+<Column name="AMOUNT" id="7F1C2976-036D-6671-6309-BEAC0C0291CE">
+<createdBy>nico</createdBy>
+<createdTime>2019-01-02 12:14:52 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>9</dataTypePrecision>
+<ownDataTypeParameters>,9,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="DOCUMENT" id="2DD9BFCF-9544-6AE4-C0B2-147CEDA0ABAC">
+<createdBy>nico</createdBy>
+<createdTime>2019-01-02 12:14:09 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT029</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="DOCUMENT_NAME" id="163200F8-771C-9DD9-423B-A24FA2F8A125">
+<createdBy>nico</createdBy>
+<createdTime>2019-01-02 12:14:20 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>255</dataTypeSize>
+<ownDataTypeParameters>255,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="DOCUMENT_MIME" id="BEC8D037-68E4-5542-531C-B2EF871F143E">
+<createdBy>nico</createdBy>
+<createdTime>2019-01-02 12:14:38 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50</dataTypeSize>
+<ownDataTypeParameters>50,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="4ACC7991-FE20-E921-BD26-C02D5F66AE7D" name="TA_JOB_VAT_COMPS_PK">
+<createdBy>nico</createdBy>
+<createdTime>2019-01-02 12:13:51 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="C560082E-90BB-2484-C8B1-2B36C07522D2"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="80CCB403-CB31-DCEF-7515-3261155B84D2" name="TA_JOB_VAT_COMPS_TA_JOBS_FK">
+<createdBy>nico</createdBy>
+<createdTime>2019-01-02 12:15:51 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="A9F0A6F3-CD10-B0BC-A52C-D54C4D9AF138"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="C84699D7-AA65-47B7-F306-301762543389" name="TA_JOB_VAT_COMPS_TA_VAT_COMPENSATIONS_FK">
+<createdBy>nico</createdBy>
+<createdTime>2019-01-02 12:16:24 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="772E0A18-8147-732D-92B5-E2F6DF43FCFA"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

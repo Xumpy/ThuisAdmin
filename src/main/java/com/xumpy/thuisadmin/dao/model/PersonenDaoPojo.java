@@ -38,9 +38,21 @@ public class PersonenDaoPojo implements Serializable, Personen{
     @Column(name="VAT_NUMBER")
     private String vatNumber;
 
+    @Column(name="BUSINESS_NAME")
+    private String businessName;
+
     @ManyToOne
     @JoinColumn(name="FK_BUSINESS_FORM_ID")
     private BusinessFormDaoPojo businessForm;
+
+    @Override
+    public String getBusinessName() {
+        return businessName;
+    }
+
+    public void setBusinessName(String businessName) {
+        this.businessName = businessName;
+    }
 
     @Override
     public Integer getPk_id() {
@@ -117,5 +129,6 @@ public class PersonenDaoPojo implements Serializable, Personen{
         this.voornaam = personen.getVoornaam();
         this.vatNumber = personen.getVatNumber();
         this.businessForm = personen.getBusinessForm() != null ? new BusinessFormDaoPojo(personen.getBusinessForm()) : null;
+        this.businessName = personen.getBusinessName();
     }
 }
