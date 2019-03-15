@@ -6,6 +6,7 @@
 package com.xumpy.timesheets.services.model;
 
 import com.xumpy.government.domain.VatCompensation;
+import com.xumpy.timesheets.controller.model.JobVatCompensationCtrlPojo;
 import com.xumpy.timesheets.domain.JobVatCompensation;
 import com.xumpy.timesheets.domain.TickedJobs;
 import java.io.Serializable;
@@ -18,7 +19,7 @@ import java.util.List;
  */
 public class TickedJobsDetail implements Serializable {
     private List<? extends TickedJobs> tickedJobs;
-    private List<? extends JobVatCompensation> jobVatCompensations;
+    private List<JobVatCompensationCtrlPojo> jobVatCompensations;
     private BigDecimal actualPause;
     private BigDecimal actualWorked;
 
@@ -50,7 +51,7 @@ public class TickedJobsDetail implements Serializable {
         return jobVatCompensations;
     }
 
-    public void setJobVatCompensations(List<? extends JobVatCompensation> jobVatCompensations) {
+    public void setJobVatCompensations(List<JobVatCompensationCtrlPojo> jobVatCompensations) {
         this.jobVatCompensations = jobVatCompensations;
     }
 }

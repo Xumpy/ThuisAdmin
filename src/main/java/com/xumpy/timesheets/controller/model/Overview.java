@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  * @author nicom
  */
 @Component
-@Scope(value="singleton")
+@Scope(value="session")
 public class Overview implements Serializable{
     private String month;
     private List<JobsInJobsGroup> allJobsInJobsGroup;

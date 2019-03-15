@@ -5,6 +5,7 @@
  */
 package com.xumpy.timesheets.services;
 
+import com.xumpy.timesheets.controller.model.JobVatCompensationCtrlPojo;
 import com.xumpy.timesheets.dao.implementations.JobVatCompensationDaoImpl;
 import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
 import com.xumpy.timesheets.dao.implementations.TickedJobsDaoImpl;
@@ -105,7 +106,11 @@ public class TickedJobsDetailSrv {
     
     public static TickedJobsDetail calculate(List<? extends TickedJobs> tickedJobs, List<? extends JobVatCompensation> jobVatCompensations, BigDecimal minimumPause){
         TickedJobsDetail tickedJobsDetail = calculate(tickedJobs);
-        tickedJobsDetail.setJobVatCompensations(jobVatCompensations);
+        List<JobVatCompensationCtrlPojo> jobVatCompensationCtrlPojos = new ArrayList<>();
+        for(JobVatCompensation jobVatCompensation: jobVatCompensations){
+            jobVatCompensationCtrlPojos.add(new JobVatCompensationCtrlPojo(jobVatCompensation));
+        }
+        tickedJobsDetail.setJobVatCompensations(jobVatCompensationCtrlPojos);
         if (!tickedJobsDetail.getActualPause().equals(new BigDecimal(0)) || tickedJobsDetail.getActualWorked().compareTo(new BigDecimal(360)) > 0){
             if (tickedJobsDetail.getActualPause() != null){
                 BigDecimal pauseDifference = tickedJobsDetail.getActualPause().subtract(minimumPause);

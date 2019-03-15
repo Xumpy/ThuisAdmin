@@ -13,7 +13,7 @@
                     </div>
                 </form>
                 <div class="col-lg-2">
-                    <input data-provide="datepicker" data-date-format="mm/yyyy" class="datepicker form-control" id="beginDatum" placeholder="Select Month"
+                    <input data-provide="datepicker" autocomplete="off" data-date-format="mm/yyyy" class="datepicker form-control" id="beginDatum" placeholder="Select Month"
                            type="text" ng-model="Overview.month" />
                 </div>
             </div>
@@ -121,12 +121,12 @@
                     $http.get(url).success( function(data){ $scope.vatCompensations = data; });
 
                     $http.post(/*[[@{/json/fetch_overview}]]*/).success(function(data){
-                        $scope.Overview = data;
-                        $scope.tempSelectMonth = data.month;
+                          $scope.Overview = data;
+                          $scope.tempSelectMonth = data.month;
 
-                        $http.post(/*[[@{/json/ticket_overview_month}]]*/, $scope.Overview.month).success(function(data, status){
-                            if (status == 200) $scope.tickedOverviewDetails = data;
-                        });
+                          $http.post(/*[[@{/json/ticket_overview_month}]]*/, $scope.Overview.month).success(function(data, status){
+                                if (status == 200) $scope.tickedOverviewDetails = data;
+                            });
                     });
 
                     $scope.startInvoiceBuilder = function(groupId){
@@ -155,6 +155,7 @@
 
                     $scope.$watchCollection('Overview.month', function(newValue, oldValue){
                         if (newValue !== undefined && newValue !== $scope.tempSelectMonth){
+                            $http.post(/*[[@{/json/set_month}]]*/, $scope.Overview.month);
                             $http.post(/*[[@{/json/fetch_month}]]*/, $scope.Overview.month).success(function(data){
                                 $scope.Overview = data;
                             });

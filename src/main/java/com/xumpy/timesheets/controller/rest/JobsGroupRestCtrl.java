@@ -29,11 +29,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  *
@@ -50,6 +46,12 @@ public class JobsGroupRestCtrl {
     @Autowired CompanySrv companySrv;
     @Autowired TickedJobsSrv tickedJobsSrv;
     @Autowired JobVatCompensationDaoImpl jobVatCompensationDao;
+
+    @RequestMapping("/json/set_month")
+    public @ResponseBody String setMonth(@RequestBody String month){
+        overview.setMonth(month);
+        return "201";
+    }
 
     @RequestMapping("/json/fetch_all_jobs_group")
     public @ResponseBody List<JobsGroupCtrl> fetchAllJobsGroup(){
@@ -133,7 +135,6 @@ public class JobsGroupRestCtrl {
     
     @RequestMapping("/json/fetch_overview")
     public @ResponseBody Overview fetchOverview() throws ParseException{
-        fetchOverviewMonth(overview.getMonth());
         return overview;
     }
     
@@ -141,7 +142,7 @@ public class JobsGroupRestCtrl {
     public @ResponseBody Overview fetchOverviewMonth(@RequestBody String month) throws ParseException{
         overview.setMonth(month);
         overview.setAllJobsInJobsGroup(jobsSrv.selectMonthJobsInJobGroup(month, overview));
-        
+
         for (JobsInJobsGroup jobsInJobsGroup: overview.getAllJobsInJobsGroup()){
             for(JobsCtrlPojo job: jobsInJobsGroup.getJobs()){
                 if (job.getPk_id() != null){
@@ -157,7 +158,7 @@ public class JobsGroupRestCtrl {
                 }
             }
         }
-        
+
         return overview;
     }
     
