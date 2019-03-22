@@ -1,15 +1,15 @@
 package com.xumpy.timesheets.controller.rest;
 
 import com.itextpdf.text.DocumentException;
+import com.xumpy.government.controllers.model.VatCompensationCtrlPojo;
 import com.xumpy.government.dao.VatCompensationDao;
-import com.xumpy.timesheets.controller.model.JobJobVatCompensationRestPojo;
-import com.xumpy.timesheets.controller.model.JobVatCompensationCtrlPojo;
-import com.xumpy.timesheets.controller.model.JobVatCompensationRestPojo;
-import com.xumpy.timesheets.controller.model.Overview;
+import com.xumpy.government.domain.VatCompensation;
+import com.xumpy.timesheets.controller.model.*;
 import com.xumpy.timesheets.dao.implementations.JobVatCompensationDaoImpl;
 import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
 import com.xumpy.timesheets.dao.model.JobVatCompensationDaoPojo;
 import com.xumpy.timesheets.domain.JobVatCompensation;
+import com.xumpy.timesheets.services.vatcompensation.VatCompensationOverview;
 import com.xumpy.timesheets.services.vatcompensation.VatCompensationPdfBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -22,8 +22,10 @@ import java.io.OutputStream;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @Scope(value="session")
@@ -33,6 +35,7 @@ public class JobVatCompensationRestCtrl {
     @Autowired VatCompensationDao vatCompensationDao;
     @Autowired VatCompensationPdfBuilder vatCompensationPdfBuilder;
     @Autowired JobsGroupRestCtrl jobsGroupRestCtrl;
+    @Autowired VatCompensationOverview vatCompensationOverview;
 
     private byte[] convertBase64ImageToByte(String base64image){
         String base64;
@@ -43,6 +46,26 @@ public class JobVatCompensationRestCtrl {
 
     private static Date parseDate(String date) throws ParseException {
         return new SimpleDateFormat("yyyy-MM-dd").parse(date);
+    }
+
+    @RequestMapping(value = "/json/fetchVatCompensations", method = RequestMethod.GET)
+    public @ResponseBody List<VatCompensationCtrlPojo> fetchVatCompensations(){
+        List<VatCompensationCtrlPojo> vatCompensationCtrlPojos = new ArrayList<>();
+        for(VatCompensation vatCompensation: vatCompensationDao.findAll()){
+            vatCompensationCtrlPojos.add(new VatCompensationCtrlPojo(vatCompensation));
+        }
+
+        return vatCompensationCtrlPojos;
+    }
+
+    @RequestMapping(value = "/json/fetchVatCompensationRequestHeader", method = RequestMethod.GET)
+    public @ResponseBody VatCompOverviewRequestCtrlPojo fetchVatCompensationRequestHeader() {
+        return new VatCompOverviewRequestCtrlPojo();
+    }
+
+    @RequestMapping(value = "/json/fetchVatCompensationsMonth", method = RequestMethod.POST)
+    public @ResponseBody VatCompOverviewResponseCtrlPojo fetchVatCompensationsMonth(@RequestBody VatCompOverviewRequestCtrlPojo vatCompOverviewRequestCtrlPojo) throws ParseException {
+        return vatCompensationOverview.fetchVatCompensationsMonth(vatCompOverviewRequestCtrlPojo);
     }
 
     @RequestMapping(value = "/json/job_vat_compensation", method = RequestMethod.POST)

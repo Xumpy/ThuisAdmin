@@ -1,0 +1,85 @@
+<html layout:decorator="views/layout" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<body>
+    <div layout:fragment="content">
+        <div class="col-lg-12">
+            <label for="beginDatum" class="col-lg-1 control-label">Begin Date</label>
+            <div class="col-lg-2">
+                <input autocomplete="off" data-provide="datepicker" data-date-format="mm/yyyy" class="datepicker form-control" id="beginDatum" placeholder="Begin Datum"
+                       type="text" ng-model="VatCompensationRequestHeader.beginDate" />
+            </div>
+            <label for="eindDatum" class="col-lg-1 control-label">End Date</label>
+            <div class="col-lg-2">
+                <input autocomplete="off" data-provide="datepicker" data-date-format="mm/yyyy" class="datepicker form-control" id="eindDatum" placeholder="Eind Datum"
+                       type="text" ng-model="VatCompensationRequestHeader.endDate" />
+            </div>
+            <div class="col-lg-2">
+                <select id="vatCompensation" class="form-control" ng-model="VatCompensationRequestHeader.vatCompensation"
+                        ng-options="allVatCompensation.name for allVatCompensation in AllVatCompensations track by allVatCompensation.pkId">
+                    <option value="">--Vat Compensation--</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="col-lg-7">
+                <div id="columnchart_material" style="height: 600px;"></div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <br/><br/><label ng-show="vatCompensation.total">Total: {{vatCompensation.total}}</label><br/>
+                    <label ng-show="vatCompensation.vatCompensation">Vat Compensation: {{vatCompensation.vatCompensation}} doekoe</label>
+                </div>
+            </div>
+        </div>
+        <script th:inline="javascript">
+            function drawChart(jsonData) {
+                if (jsonData !== null){
+                    var data = google.visualization.arrayToDataTable(jsonData);
+
+                    var options = {
+                        chart: {
+                            title: 'Monthly vat compensations',
+                            subtitle: '',
+                        }
+                    };
+
+                    var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+
+                    chart.draw(data, google.charts.Bar.convertOptions(options));
+                }
+            }
+
+            function fetchChartData(scope, http){
+                var url = /*[[@{/json/fetchVatCompensationsMonth}]]*/;
+                http.post(url, scope.VatCompensationRequestHeader).success(function(data) {
+                    scope.vatCompensation = data;
+                    drawChart(data.values);
+                });
+            }
+
+            $(".datepicker").datepicker( {
+                format: "mm/yyyy",
+                viewMode: "months",
+                minViewMode: "months"
+            });
+
+            app.controller("fController", function($scope, $http) {
+                $scope.$watchCollection('VatCompensationRequestHeader', function(){
+                    if ($scope.VatCompensationRequestHeader !== undefined){
+                        fetchChartData($scope, $http);
+                    }
+                });
+
+                var urlAllVat = /*[[@{/json/fetchVatCompensations}]]*/;
+                $http.get(urlAllVat).success(function(data){
+                    $scope.AllVatCompensations = data;
+                });
+
+                var url =/*[[@{/json/fetchVatCompensationRequestHeader}]]*/;
+                $http.get(url).success(function(data){
+                    $scope.VatCompensationRequestHeader = data;
+                });
+            });
+        </script>
+    </div>
+</body>
+</html>

@@ -39,6 +39,7 @@
                   <li><a th:href="@{/finances/beheerBedragen}">Beheer Bedragen</a></li>
                   <li th:if="${@userInfo.invoiceType.type} != ${personal}"><a th:href="@{/finances/invoices}">Facturen</a></li>
                   <li th:if="${@userInfo.invoiceType.type} != ${personal}"><a th:href="@{/accounting/accountingModel}">Accounting Model</a></li>
+                  <li th:if="${@userInfo.invoiceType.type} != ${personal}"><a th:href="@{/finances/VatCompensationsMonth}">Vat Compensations per Month</a></li>
                   <li><a th:href="@{/finances/documenten}">Documenten</a></li>
                 </ul>
               </li>

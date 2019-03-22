@@ -15,6 +15,6 @@ public interface JobVatCompensationDaoImpl extends CrudRepository<JobVatCompensa
     @Query("from JobVatCompensationDaoPojo where job.id = :jobId")
     public List<JobVatCompensationDaoPojo> selectJobVatCompensations(@Param("jobId") Integer jobId);
 
-    @Query("from JobVatCompensationDaoPojo where job.jobDate >= :startDate and job.jobDate <= :endDate")
+    @Query("from JobVatCompensationDaoPojo where job.jobDate >= :startDate and job.jobDate <= :endDate order by job.jobDate")
     public List<JobVatCompensationDaoPojo> selectJobVatCompensations(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }

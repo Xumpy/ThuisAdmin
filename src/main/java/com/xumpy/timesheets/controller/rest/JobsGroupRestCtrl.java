@@ -172,7 +172,6 @@ public class JobsGroupRestCtrl {
 
         return fetchOverviewMonth(overview.getMonth());
     }
-
     @RequestMapping("/json/save_job_group_price")
     public @ResponseBody String saveJobGroupPrice(@RequestBody JobsGroupPricesCtrlPojo jobsGroupPrices){
         jobsGroupPricesSrv.save(jobsGroupPrices);

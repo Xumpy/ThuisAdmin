@@ -140,8 +140,12 @@ public class Finances implements Serializable{
         
         return "finances/nieuwDocument";
     }
-    
-    
+
+    @RequestMapping(value = "finances/VatCompensationsMonth")
+    public String VatCompensationsMonth(){
+        return "finances/VatCompensationsMonth";
+    }
+
     @PostMapping("/finances/nieuwBedragDocument/saveDocument")
     public String saveBedragDocument(@ModelAttribute("document") NieuwDocument document, @RequestParam("file") MultipartFile file) throws IOException{
         System.out.println("document.getBedragId(): " + document.getBedragId());
