@@ -28,6 +28,7 @@ public class JobVatCompensationDaoPojo implements JobVatCompensation{
     @Column(name="AMOUNT")
     private BigDecimal amount;
 
+    @Basic(fetch=FetchType.LAZY)
     @Column(name="DOCUMENT")
     @Lob
     private byte[] document;

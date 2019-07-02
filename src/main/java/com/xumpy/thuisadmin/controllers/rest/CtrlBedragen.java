@@ -47,7 +47,7 @@ public class CtrlBedragen implements Serializable{
         if (this.beheerBedragenInp.getOffset().equals(beheerBedragenInp.getOffset())) beheerBedragenInp.setOffset(0);
         this.beheerBedragenInp = beheerBedragenInp;
 
-        beheerBedragenReportLst = bedragenSrv.reportBedragen(beheerBedragenReportLst, beheerBedragenInp.getOffset(), beheerBedragenInp.getRekening(), beheerBedragenInp.getZoekOpdracht());
+        beheerBedragenReportLst = bedragenSrv.reportBedragen(beheerBedragenReportLst, beheerBedragenInp.getOffset(), beheerBedragenInp.getRekening(), beheerBedragenInp.getZoekOpdracht(), beheerBedragenInp.getMinimumDocuments());
         beheerBedragenReportLst = BedragenSrvImpl.setButtons(beheerBedragenReportLst, beheerBedragenInp);
         
         return beheerBedragenReportLst;

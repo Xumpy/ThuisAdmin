@@ -276,7 +276,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
 
     @Override
     @Transactional
-    public BeheerBedragenReportLst reportBedragen(BeheerBedragenReportLst beheerBedragenReportLst, Integer offset, Rekeningen rekening, String searchText) {
+    public BeheerBedragenReportLst reportBedragen(BeheerBedragenReportLst beheerBedragenReportLst, Integer offset, Rekeningen rekening, String searchText, Integer minimumDocuments) {
         
         searchText = StringUtils.isEmpty(searchText) ? null : "%" + searchText + "%";
         
@@ -293,7 +293,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         
         for (Bedragen bedrag: bedragenDao.reportBedragen(rekeningId, searchText, userInfo.getPersoon().getPk_id(),
                 userInfo.getInvoiceType().equals(InvoiceType.PROFESSIONAL) ? Boolean.TRUE :
-                        userInfo.getInvoiceType().equals(InvoiceType.PERSONAL) ? Boolean.FALSE : null, topTen)){
+                        userInfo.getInvoiceType().equals(InvoiceType.PERSONAL) ? Boolean.FALSE : null, new Long(minimumDocuments), topTen).getContent()){
             beheerBedragenReport.add(new BeheerBedragenReport(bedrag, isAccountancyBedragValid(bedrag)));
         }
         

@@ -43,7 +43,7 @@ public class InvoicesToExcelModel {
 
     private Document generateDocument(Documenten document){
         Document doc = new Document();
-        doc.setDocumentLocations(document.getPk_id() + "_" + document.getOmschrijving() + "." + returnExtension(document.getDocument_mime()));
+        doc.setDocumentLocations(document.getPk_id() + "_" + document.getOmschrijving().replaceAll(" ", "_") + "." + returnExtension(document.getDocument_mime()));
         doc.setDocument(document.getDocument());
 
         return doc;

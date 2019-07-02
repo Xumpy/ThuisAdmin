@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.joda.time.DateTime;
-import org.joda.time.Minutes;
+import org.joda.time.Seconds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +42,8 @@ public class TickedJobsDetailSrv {
     @Autowired private JobsDaoImpl jobsDao;
     @Autowired private JobVatCompensationDaoImpl jobVatCompensationDao;
 
+    private static final Integer HOURS6 = 360 * 60;
+
     public static TickedJobsDetail calculate(List<? extends TickedJobs> tickedJobs){
         TickedJobsDetail tickedJobsDetail = new TickedJobsDetail();
         tickedJobsDetail.setTickedJobs(tickedJobs);
@@ -52,8 +54,8 @@ public class TickedJobsDetailSrv {
             Date startCounterWork = null;
             Date startCounterPause = null;
 
-            BigDecimal workedMinutes = new BigDecimal(0);
-            BigDecimal pausedMinutes = new BigDecimal(0);
+            BigDecimal workedSeconds = new BigDecimal(0);
+            BigDecimal pausedSeconds = new BigDecimal(0);
 
             for(int i = 0; i < tickedJobs.size(); i++){
                 if (i%2 == 0){
@@ -63,9 +65,9 @@ public class TickedJobsDetailSrv {
                         break;
                     } else {
                         if (startCounterPause != null){
-                            Minutes minutes = Minutes.minutesBetween(new DateTime(startCounterPause), new DateTime(tickedJobs.get(i).getTicked())); 
+                            Seconds seconds = Seconds.secondsBetween(new DateTime(startCounterPause), new DateTime(tickedJobs.get(i).getTicked()));
 
-                            pausedMinutes = pausedMinutes.add(new BigDecimal(minutes.getMinutes()));
+                            pausedSeconds = pausedSeconds.add(new BigDecimal(seconds.getSeconds()));
                         }
                         startCounterWork = tickedJobs.get(i).getTicked();
                     }
@@ -75,14 +77,14 @@ public class TickedJobsDetailSrv {
                         tickedJobsDetail.setActualWorked(new BigDecimal(-1));
                         break;
                     } else {
-                        Minutes minutes = Minutes.minutesBetween(new DateTime(startCounterWork), new DateTime(tickedJobs.get(i).getTicked()));
-                        workedMinutes = workedMinutes.add(new BigDecimal(minutes.getMinutes()));
+                        Seconds seconds = Seconds.secondsBetween(new DateTime(startCounterWork), new DateTime(tickedJobs.get(i).getTicked()));
+                        workedSeconds = workedSeconds.add(new BigDecimal(seconds.getSeconds()));
                         startCounterPause = tickedJobs.get(i).getTicked();
                     }
                 }
 
-                tickedJobsDetail.setActualPause(pausedMinutes);
-                tickedJobsDetail.setActualWorked(workedMinutes);
+                tickedJobsDetail.setActualPause(pausedSeconds);
+                tickedJobsDetail.setActualWorked(workedSeconds);
             }
         } else {
             tickedJobsDetail.setTickedJobs(tickedJobs);
@@ -111,7 +113,7 @@ public class TickedJobsDetailSrv {
             jobVatCompensationCtrlPojos.add(new JobVatCompensationCtrlPojo(jobVatCompensation));
         }
         tickedJobsDetail.setJobVatCompensations(jobVatCompensationCtrlPojos);
-        if (!tickedJobsDetail.getActualPause().equals(new BigDecimal(0)) || tickedJobsDetail.getActualWorked().compareTo(new BigDecimal(360)) > 0){
+        if (!tickedJobsDetail.getActualPause().equals(new BigDecimal(0)) || tickedJobsDetail.getActualWorked().compareTo(new BigDecimal(HOURS6)) > 0){
             if (tickedJobsDetail.getActualPause() != null){
                 BigDecimal pauseDifference = tickedJobsDetail.getActualPause().subtract(minimumPause);
 
@@ -149,14 +151,14 @@ public class TickedJobsDetailSrv {
                     List<? extends TickedJobs> tickedJobs = tickedJobsDao.selectTickedJobsByJob(job.getPk_id());
                     List<? extends JobVatCompensation> jobVatCompensations = jobVatCompensationDao.selectJobVatCompensations(job.getPk_id());
 
-                    TickedJobsDetail jobsDetail = calculate(tickedJobs, jobVatCompensations, new BigDecimal(30));
+                    TickedJobsDetail jobsDetail = calculate(tickedJobs, jobVatCompensations, new BigDecimal(30 * 60));
 
                     timesheetWorked = timesheetWorked.add(job.getWorkedHours());
                     actualWorked = actualWorked.add(jobsDetail.getActualWorked());
                 }
             }
             worked.put("actualWorked", actualWorked.toString());
-            worked.put("timesheetWorked", timesheetWorked.multiply(new BigDecimal(60)).toString());
+            worked.put("timesheetWorked", timesheetWorked.multiply(new BigDecimal(60 * 60)).toString());
             
             returnMap.put(new JobsGroupSrvPojo(jobsGroup), worked);
         }

@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -18,9 +19,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer>{
 
-    @Query("from BedragenDaoPojo where persoon.pk_id = :persoonId "
+    @Query("from BedragenDaoPojo bedragen where persoon.pk_id = :persoonId "
             + "  and (:rekeningId is null or rekening.pk_id = :rekeningId)"
             + "  and coalesce(coalesce(:professional, rekening.professional), 0) = coalesce(rekening.professional, 0)"
+            + "  and (select count(1) from DocumentenDaoPojo documenten where documenten.bedrag.pk_id = bedragen.pk_id) <= :documentCount"
             + "  and (:searchText is null or lower(groep.naam) like :searchText " +
                 "  or lower(rekening.naam) like :searchText " +
                 "  or lower(persoon.naam) like :searchText " +
@@ -29,7 +31,7 @@ public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer
                 "  or cast(datum as string) like :searchText " +
                 "  or lower(omschrijving) like :searchText)" +
                 "  order by datum desc")
-    public List<BedragenDaoPojo> reportBedragen(@Param("rekeningId") Integer rekeningId, @Param("searchText") String searchText, @Param("persoonId") Integer persoonId, @Param("professional") Boolean professional, Pageable pageable);
+    public Slice<BedragenDaoPojo> reportBedragen(@Param("rekeningId") Integer rekeningId, @Param("searchText") String searchText, @Param("persoonId") Integer persoonId, @Param("professional") Boolean professional, @Param("documentCount") Long documentCount, Pageable pageable);
 
     @Query("from BedragenDaoPojo where (datum >= :startDate and datum <= :endDate) and groep.pk_id in (select groep.pk_id from GovernmentCostTypeDaoPojo where type = :levelType)")
     public List<BedragenDaoPojo> allBedragenInCostType(@Param("startDate") Date startDate,

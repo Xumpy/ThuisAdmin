@@ -20,7 +20,8 @@ public class BeheerBedragenInp implements Serializable{
     private Integer offset;
     private RekeningenDaoPojo rekening;
     private String zoekOpdracht;
-    
+    private Integer minimumDocuments;
+
     public RekeningenDaoPojo getRekening() {
         return rekening;
     }
@@ -47,5 +48,14 @@ public class BeheerBedragenInp implements Serializable{
     
     public BeheerBedragenInp(){
         this.offset = 0;
+        this.minimumDocuments = 999;
+    }
+
+    public Integer getMinimumDocuments() {
+        return minimumDocuments;
+    }
+
+    public void setMinimumDocuments(Integer minimumDocuments) {
+        this.minimumDocuments = minimumDocuments;
     }
 }

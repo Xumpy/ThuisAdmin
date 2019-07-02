@@ -82,8 +82,8 @@ public class TickedJobsDetailSrvTest {
         
         TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs);
         
-        Assert.assertEquals(new BigDecimal(30), tickedJobsDetail.getActualPause());
-        Assert.assertEquals(new BigDecimal(690), tickedJobsDetail.getActualWorked());
+        Assert.assertEquals(new BigDecimal(1800), tickedJobsDetail.getActualPause());
+        Assert.assertEquals(new BigDecimal(41400), tickedJobsDetail.getActualWorked());
     }
     
     @Test
@@ -112,8 +112,8 @@ public class TickedJobsDetailSrvTest {
         
         TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs);
         
-        Assert.assertEquals(new BigDecimal(23), tickedJobsDetail.getActualPause());
-        Assert.assertEquals(new BigDecimal(482), tickedJobsDetail.getActualWorked());
+        Assert.assertEquals(new BigDecimal(1380), tickedJobsDetail.getActualPause());
+        Assert.assertEquals(new BigDecimal(28920), tickedJobsDetail.getActualWorked());
     }
     
     @Test
@@ -144,8 +144,8 @@ public class TickedJobsDetailSrvTest {
 
         TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, jobVatCompensationCtrlPojos, new BigDecimal(30));
         
-        Assert.assertEquals(new BigDecimal(30), tickedJobsDetail.getActualPause());
-        Assert.assertEquals(new BigDecimal(475), tickedJobsDetail.getActualWorked());
+        Assert.assertEquals(new BigDecimal(1380), tickedJobsDetail.getActualPause());
+        Assert.assertEquals(new BigDecimal(28920), tickedJobsDetail.getActualWorked());
     }
     
     @Test
@@ -176,8 +176,8 @@ public class TickedJobsDetailSrvTest {
 
         TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, jobVatCompensationCtrlPojos, new BigDecimal(30));
         
-        Assert.assertEquals(new BigDecimal(30), tickedJobsDetail.getActualPause());
-        Assert.assertEquals(new BigDecimal(475), tickedJobsDetail.getActualWorked());
+        Assert.assertEquals(new BigDecimal(1800), tickedJobsDetail.getActualPause());
+        Assert.assertEquals(new BigDecimal(28500), tickedJobsDetail.getActualWorked());
     }
     
     @Test
@@ -224,7 +224,7 @@ public class TickedJobsDetailSrvTest {
 
         TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, jobVatCompensationCtrlPojos, new BigDecimal(30));
         
-        Assert.assertEquals(new BigDecimal(950), tickedJobsDetail.getActualWorked());
+        Assert.assertEquals(new BigDecimal(57000), tickedJobsDetail.getActualWorked());
     }
     
     @Test
@@ -248,7 +248,7 @@ public class TickedJobsDetailSrvTest {
         TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, jobVatCompensationCtrlPojos, new BigDecimal(30));
         
         Assert.assertEquals(new BigDecimal(30), tickedJobsDetail.getActualPause());
-        Assert.assertEquals(new BigDecimal(601), tickedJobsDetail.getActualWorked());
+        Assert.assertEquals(new BigDecimal(37830), tickedJobsDetail.getActualWorked());
     }
 
     @Test
@@ -272,7 +272,7 @@ public class TickedJobsDetailSrvTest {
         TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, jobVatCompensationCtrlPojos, new BigDecimal(30));
         
         Assert.assertEquals(new BigDecimal(0), tickedJobsDetail.getActualPause());
-        Assert.assertEquals(new BigDecimal(331), tickedJobsDetail.getActualWorked());
+        Assert.assertEquals(new BigDecimal(19860), tickedJobsDetail.getActualWorked());
     }
     
     @Test
@@ -334,8 +334,8 @@ public class TickedJobsDetailSrvTest {
         
         
         Map<String, String> result = new HashMap<String, String>();
-        result.put("actualWorked", "942");
-        result.put("timesheetWorked", "960");
+        result.put("actualWorked", "56520");
+        result.put("timesheetWorked", "57600");
         
         for(Entry entry: tickedJobsDetailSrv.tickedOverviewMonth("07/2015").entrySet()){
             assertEquals(result, entry.getValue());

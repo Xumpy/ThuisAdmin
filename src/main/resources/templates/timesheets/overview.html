@@ -41,7 +41,7 @@
                     <tr ng-repeat="tickedJob in jobInfo.tickedJobsDetail.tickedJobs">
                         <td>Ticked {{tickedJob.started == true ? "In" : "Out"}}</td><td>{{tickedJob.ticked}}</td>
                     </tr>
-                    <tr><td>Total hours worked: </td><td>{{jobInfo.tickedJobsDetail.actualWorked}}</td></tr>
+                    <tr><td>Total hours worked: </td><td>{{convertDate(jobInfo.tickedJobsDetail.actualWorked + (30 * 60))}}</td></tr>
 
                     <tr><td colspan="2"><b>Vat Compensations</b></td></tr>
                     <tr ng-repeat="vatCompensation in jobInfo.tickedJobsDetail.jobVatCompensations">
@@ -93,7 +93,7 @@
                 <table st-safe-src="overtimeHours" st-table="emptyOvertimeHours" class="table table-hover">
                     <tr ng-repeat="tickedOverview in tickedOverviewDetails">
                         <td>Project: </td><td>{{tickedOverview.key.name}}</td>
-                        <td>Overtime in minutes: </td><td>{{(tickedOverview.value.actualWorked - tickedOverview.value.timesheetWorked)}}</td>
+                        <td>Overtime in minutes: </td><td>{{convertDate(tickedOverview.value.actualWorked - tickedOverview.value.timesheetWorked)}}</td>
                         <td><a th:href="@{/timesheets/printTimesheet?jobsGroupId={{tickedOverview.key.pk_id}}&amp;month={{tempSelectMonth}}}">Print PDF</a></td>
                         <td><a ng-click="startInvoiceBuilder(tickedOverview.key.pk_id)">Invoice Builder</a></td>
                     </tr>
@@ -111,8 +111,11 @@
                     viewMode: "months",
                     minViewMode: "months"
                 });
-
                 app.controller("fController", function($scope, $http) {
+                    $scope.convertDate = function(seconds){
+                        return new Date().clearTime().addSeconds(seconds).toString('H:mm:ss');
+                    }
+
                     $scope.invoiceBuilder = {
                         invoiceId: ""
                     }
@@ -125,7 +128,9 @@
                           $scope.tempSelectMonth = data.month;
 
                           $http.post(/*[[@{/json/ticket_overview_month}]]*/, $scope.Overview.month).success(function(data, status){
-                                if (status == 200) $scope.tickedOverviewDetails = data;
+                                if (status == 200) {
+                                    $scope.tickedOverviewDetails = data;
+                                }
                             });
                     });
 

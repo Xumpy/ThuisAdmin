@@ -13,6 +13,12 @@
                         <form class="form-horizontal col-lg-2" action="nieuwBedrag">
                             <input class="btn btn-primary" type="submit" value="Nieuw Bedrag"/>
                         </form>
+                        <form class="form-horizontal col-lg-4" >
+                            <label th:if="${@userInfo.invoiceType.type} != ${personal}" class="control-label">Show Only No Documents</label>
+                            <input th:if="${@userInfo.invoiceType.type} != ${personal}"
+                                   ng-model="showNoDocuments" type="checkbox" name="noDocuments"
+                                   ng-change="showNoDocumentsChange(showNoDocuments)">
+                        </form>
                     </div>
                     <div class="col-lg-12">
                         <div class="row col-lg-12" style="margin-top:20px;">
@@ -100,6 +106,14 @@
 
                     $scope.previousBedrag = function(){
                         $scope.beheerBedragen.offset--;
+                    }
+
+                    $scope.showNoDocumentsChange = function(showNoDocuments){
+                        if (showNoDocuments){
+                            $scope.beheerBedragen.minimumDocuments = 0;
+                        } else {
+                            $scope.beheerBedragen.minimumDocuments = 999;
+                        }
                     }
 
                     $scope.$watchCollection('beheerBedragen', function(newValue, oldValue){

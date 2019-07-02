@@ -47,6 +47,8 @@ import static org.mockito.Mockito.when;
 import org.mockito.Spy;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+
 import static org.mockito.ArgumentMatchers.*;
 
 /**
@@ -516,17 +518,20 @@ public class BedragenSrvTest{
         when(bedrag1.getPk_id()).thenReturn(1);
         when(bedrag2.getPk_id()).thenReturn(2);
         when(bedrag3.getPk_id()).thenReturn(3);
-        
-        List<BedragenDaoPojo> lstBedragen = new ArrayList<BedragenDaoPojo>();
+
+        List<BedragenDaoPojo> lstBedragen = new ArrayList<>();
         lstBedragen.add(new BedragenDaoPojo(bedrag1));
         lstBedragen.add(new BedragenDaoPojo(bedrag2));
         lstBedragen.add(new BedragenDaoPojo(bedrag3));
+
+        Slice<BedragenDaoPojo> slcBedragen = Mockito.mock(Slice.class);
+        when(slcBedragen.getContent()).thenReturn(lstBedragen);
         
         Pageable topTen = new PageRequest(1, 10); 
         
-        when(bedragenDao.reportBedragen(rekening1.getPk_id(), null, userInfo.getPersoon().getPk_id(), null, topTen)).thenReturn(lstBedragen);
+        when(bedragenDao.reportBedragen(rekening1.getPk_id(), null, userInfo.getPersoon().getPk_id(), null, new Long(999), topTen)).thenReturn(slcBedragen);
         
-        beheerBedragen = bedragenSrv.reportBedragen(beheerBedragen, 1, rekening1, null);
+        beheerBedragen = bedragenSrv.reportBedragen(beheerBedragen, 1, rekening1, null, 999);
         
         assertEquals(lstBedragen.get(0).getPk_id(), beheerBedragen.getBeheerBedragenReport().get(0).getPk_id());
         assertEquals(lstBedragen.get(1).getPk_id(), beheerBedragen.getBeheerBedragenReport().get(1).getPk_id());
