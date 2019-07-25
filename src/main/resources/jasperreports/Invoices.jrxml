@@ -3,13 +3,15 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["/Users/nico/Projects/Personal/ThuisAdmin/src/main/resources/jasperreports/Invoices_detail.jasper"]]></defaultValueExpression>
-	</parameter>
 	<parameter name="INVOICE_ID" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
-	<parameter name="SUBREPORT" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="LOGO" class="Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/Users/nico/Projects/Personal/ThuisAdmin/src/main/resources/jasperreports/NMConsultancyLogo.png"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT" class="Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/Users/nico/Projects/Personal/ThuisAdmin/src/main/resources/jasperreports/Invoices_detail.jasper"]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT DISTINCT TA_INVOICES.INVOICE_ID AS invoice_id,
        DATE_FORMAT(TA_INVOICES.INVOICE_DATE, "%d-%m-%Y") AS invoice_date,
@@ -90,9 +92,12 @@ WHERE TA_INVOICES.PK_ID = $P{INVOICE_ID}]]>
 		<band/>
 	</background>
 	<title>
-		<band height="141">
+		<band height="179">
+			<rectangle radius="10">
+				<reportElement x="0" y="0" width="555" height="105" forecolor="#E6E6E6" backcolor="#E6E6E6" uuid="0044a399-2e83-4d66-b9cf-86a0d3b69558"/>
+			</rectangle>
 			<frame>
-				<reportElement mode="Opaque" x="290" y="12" width="265" height="125" forecolor="#000000" backcolor="#FFFFFF" uuid="cfb56097-74e2-4576-9191-109cfc891f41"/>
+				<reportElement mode="Opaque" x="290" y="0" width="254" height="95" forecolor="#E6E6E6" backcolor="#E6E6E6" uuid="cfb56097-74e2-4576-9191-109cfc891f41"/>
 				<textField>
 					<reportElement x="107" y="11" width="147" height="12" forecolor="#000000" uuid="b16b2510-55be-45c1-954d-0837f8d43c2b"/>
 					<textElement>
@@ -108,62 +113,62 @@ WHERE TA_INVOICES.PK_ID = $P{INVOICE_ID}]]>
 					<text><![CDATA[Datum:]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="107" y="22" width="147" height="12" uuid="25b58342-9ddc-4fd4-be4c-0c6f5ee9c031"/>
+					<reportElement x="107" y="22" width="147" height="12" forecolor="#000000" uuid="25b58342-9ddc-4fd4-be4c-0c6f5ee9c031"/>
 					<textElement>
 						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{invoice_id}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="11" y="22" width="96" height="12" uuid="166f235a-94f7-4d49-9c90-37c54d90e9e2"/>
+					<reportElement x="11" y="22" width="96" height="12" forecolor="#000000" uuid="166f235a-94f7-4d49-9c90-37c54d90e9e2"/>
 					<textElement>
 						<font size="10" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Factuurnummer:]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="11" y="34" width="96" height="12" uuid="25d15e26-8203-4400-82ef-ba0bef4638a3"/>
+					<reportElement x="11" y="34" width="96" height="12" forecolor="#000000" uuid="25d15e26-8203-4400-82ef-ba0bef4638a3"/>
 					<textElement>
 						<font size="10" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Gegevens:]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="107" y="47" width="147" height="12" uuid="91a3411a-32ac-4877-ae64-1e05d429b1d9"/>
+					<reportElement x="107" y="47" width="147" height="12" forecolor="#000000" uuid="91a3411a-32ac-4877-ae64-1e05d429b1d9"/>
 					<textElement>
 						<font size="10"/>
 					</textElement>
 					<text><![CDATA[Walstraat 17]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="107" y="59" width="147" height="12" uuid="a301687d-6298-4ca6-bbfa-0017b83f75a9"/>
+					<reportElement x="107" y="59" width="147" height="12" forecolor="#000000" uuid="a301687d-6298-4ca6-bbfa-0017b83f75a9"/>
 					<textElement>
 						<font size="10"/>
 					</textElement>
 					<text><![CDATA[3900 Overpelt]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="107" y="71" width="147" height="12" uuid="1a17d304-09f8-4259-8b14-9bb17c959391"/>
+					<reportElement x="107" y="71" width="147" height="12" forecolor="#000000" uuid="1a17d304-09f8-4259-8b14-9bb17c959391"/>
 					<textFieldExpression><![CDATA[$F{rekening_number}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="11" y="83" width="96" height="12" uuid="38c3b717-9aa7-437d-9247-694986fc1060"/>
+					<reportElement x="11" y="83" width="96" height="12" forecolor="#000000" uuid="38c3b717-9aa7-437d-9247-694986fc1060"/>
 					<textElement>
 						<font size="10" isBold="true"/>
 					</textElement>
 					<text><![CDATA[BTW-nummer:]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="107" y="83" width="147" height="12" uuid="26d9e6ae-25e1-4da6-9147-0f049b026510"/>
+					<reportElement x="107" y="83" width="147" height="12" forecolor="#000000" uuid="26d9e6ae-25e1-4da6-9147-0f049b026510"/>
 					<textFieldExpression><![CDATA[$F{own_vat_number}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="108" y="34" width="146" height="12" uuid="a9502401-bde2-4e43-9039-b5661bc6baac"/>
+					<reportElement x="108" y="34" width="146" height="12" forecolor="#000000" uuid="a9502401-bde2-4e43-9039-b5661bc6baac"/>
 					<textFieldExpression><![CDATA[$F{business_name}]]></textFieldExpression>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="12" y="22" width="188" height="96" uuid="de21c13b-79e4-497c-8b88-f920f6a5f239"/>
+				<reportElement x="23" y="121" width="188" height="48" uuid="de21c13b-79e4-497c-8b88-f920f6a5f239"/>
 				<textField isStretchWithOverflow="true">
 					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="188" height="12" uuid="d838ad69-411d-4b17-9f49-90dbfc464b13"/>
 					<textElement>
@@ -193,6 +198,10 @@ WHERE TA_INVOICES.PK_ID = $P{INVOICE_ID}]]>
 					<textFieldExpression><![CDATA[$F{company_vat_number}]]></textFieldExpression>
 				</textField>
 			</frame>
+			<image hAlign="Left">
+				<reportElement x="13" y="0" width="214" height="105" uuid="9cde5f42-6e33-4855-a13d-d33366cd64dc"/>
+				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>

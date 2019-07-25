@@ -53,35 +53,35 @@ GROUP BY TA_JOB_GROUPS.PK_ID, COALESCE(TA_JOBS_INVOICES.DESCRIPTION, ""), TRUNCA
 	<columnHeader>
 		<band height="13">
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="196" height="12" forecolor="#006699" backcolor="#E6E6E6" uuid="0f9c1a3c-1fa9-4dc0-ab25-6179296aff70"/>
+				<reportElement mode="Opaque" x="0" y="0" width="196" height="12" forecolor="#FF7F27" backcolor="#E6E6E6" uuid="0f9c1a3c-1fa9-4dc0-ab25-6179296aff70"/>
 				<textElement>
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Omschrijving]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="196" y="1" width="63" height="12" forecolor="#006699" backcolor="#E6E6E6" uuid="165addc6-28db-4d25-b49f-7d5899ac2e3b"/>
+				<reportElement mode="Opaque" x="196" y="1" width="63" height="12" forecolor="#FF7F27" backcolor="#E6E6E6" uuid="165addc6-28db-4d25-b49f-7d5899ac2e3b"/>
 				<textElement>
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Aantal]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="259" y="1" width="86" height="12" forecolor="#006699" backcolor="#E6E6E6" uuid="cbdbda4e-a4f1-479c-8491-6d1fc91ebe7d"/>
+				<reportElement mode="Opaque" x="259" y="1" width="86" height="12" forecolor="#FF7F27" backcolor="#E6E6E6" uuid="cbdbda4e-a4f1-479c-8491-6d1fc91ebe7d"/>
 				<textElement>
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Eenheid]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="345" y="1" width="89" height="12" forecolor="#006699" backcolor="#E6E6E6" uuid="0cc84edb-a8b3-440c-bb12-937c3d0f654d"/>
+				<reportElement mode="Opaque" x="345" y="1" width="89" height="12" forecolor="#FF7F27" backcolor="#E6E6E6" uuid="0cc84edb-a8b3-440c-bb12-937c3d0f654d"/>
 				<textElement>
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Prijs]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="434" y="1" width="121" height="12" forecolor="#006699" backcolor="#E6E6E6" uuid="1f77dc15-c4df-485c-8543-f7e5507433ee"/>
+				<reportElement mode="Opaque" x="434" y="1" width="121" height="12" forecolor="#FF7F27" backcolor="#E6E6E6" uuid="1f77dc15-c4df-485c-8543-f7e5507433ee"/>
 				<textElement>
 					<font size="10" isBold="true"/>
 				</textElement>

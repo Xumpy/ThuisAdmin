@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,7 +39,9 @@ public class JasperReportsCtrl {
 
     private void generateReport(HttpServletResponse response, Map<String, Object> params, String filename) throws JRException, IOException, SQLException {
         JasperReport jasperSubReport = (JasperReport) JRLoader.loadObject(ResourceUtils.getURL("classpath:jasperreports/Invoices_detail.jasper").openStream());
+        BufferedImage nmconsultancyLogo = ImageIO.read(ResourceUtils.getURL("classpath:jasperreports/NMConsultancyLogo.png"));
         params.put("SUBREPORT", jasperSubReport);
+        params.put("LOGO", nmconsultancyLogo);
         params.put(JRParameter.REPORT_LOCALE, Locale.GERMANY);
         JasperReport jasperReport = (JasperReport) JRLoader.loadObject(ResourceUtils.getURL("classpath:jasperreports/Invoices.jasper").openStream());
 

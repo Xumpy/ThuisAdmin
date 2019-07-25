@@ -113,7 +113,11 @@
                 });
                 app.controller("fController", function($scope, $http) {
                     $scope.convertDate = function(seconds){
-                        return new Date().clearTime().addSeconds(seconds).toString('H:mm:ss');
+                        if (seconds < 0){
+                            return "-" + new Date().clearTime().addSeconds(seconds * -1).toString('H:mm:ss');
+                        } else {
+                            return new Date().clearTime().addSeconds(seconds).toString('H:mm:ss');
+                        }
                     }
 
                     $scope.invoiceBuilder = {
