@@ -39,6 +39,18 @@ public class JobsGroupDaoPojo implements JobsGroup, Serializable {
     @Column(name="CLOSED")
     private Boolean closed;
 
+    @Column(name="EXTRA_TIME")
+    private Integer extraTime;
+
+    @Override
+    public Integer getExtraTime() {
+        return extraTime;
+    }
+
+    public void setExtraTime(Integer extraTime) {
+        this.extraTime = extraTime;
+    }
+
     public void setCompany(CompanyDaoPojo company) {
         this.company = company;
     }
@@ -87,6 +99,7 @@ public class JobsGroupDaoPojo implements JobsGroup, Serializable {
         this.pk_id = jobsGroup.getPk_id();
         this.company = jobsGroup.getCompany() == null ? null : new CompanyDaoPojo(jobsGroup.getCompany());
         this.closed = jobsGroup.getClosed();
+        this.extraTime = jobsGroup.getExtraTime();
     }
 
     @Override

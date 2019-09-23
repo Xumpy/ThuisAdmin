@@ -7,6 +7,8 @@ package com.xumpy.timesheets.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.xumpy.timesheets.controller.model.JobVatCompensationCtrlPojo;
+import com.xumpy.timesheets.controller.model.JobsCtrlPojo;
+import com.xumpy.timesheets.controller.model.JobsGroupCtrl;
 import com.xumpy.timesheets.controller.model.TickedJobsCtrlPojo;
 import com.xumpy.timesheets.dao.implementations.JobVatCompensationDaoImpl;
 import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
@@ -33,6 +35,8 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -51,14 +55,15 @@ public class TickedJobsDetailSrvTest {
     @Test
     public void testCalculate() throws ParseException{
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        
+
+
         TickedJobsCtrlPojo tickedJobs1 = Mockito.mock(TickedJobsCtrlPojo.class);
         TickedJobsCtrlPojo tickedJobs2 = Mockito.mock(TickedJobsCtrlPojo.class);
         TickedJobsCtrlPojo tickedJobs3 = Mockito.mock(TickedJobsCtrlPojo.class);
         TickedJobsCtrlPojo tickedJobs4 = Mockito.mock(TickedJobsCtrlPojo.class);
         TickedJobsCtrlPojo tickedJobs5 = Mockito.mock(TickedJobsCtrlPojo.class);
         TickedJobsCtrlPojo tickedJobs6 = Mockito.mock(TickedJobsCtrlPojo.class);
-        
+
         Mockito.when(tickedJobs1.getTicked()).thenReturn(format.parse("2015-07-16 08:00:00"));
         Mockito.when(tickedJobs1.isStarted()).thenReturn(true);
         Mockito.when(tickedJobs2.getTicked()).thenReturn(format.parse("2015-07-16 12:00:00"));
@@ -79,7 +84,7 @@ public class TickedJobsDetailSrvTest {
         tickedJobs.add(tickedJobs4);
         tickedJobs.add(tickedJobs5);
         tickedJobs.add(tickedJobs6);
-        
+
         TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs);
         
         Assert.assertEquals(new BigDecimal(1800), tickedJobsDetail.getActualPause());
@@ -119,12 +124,12 @@ public class TickedJobsDetailSrvTest {
     @Test
     public void testCalculate3() throws ParseException{
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        
+
         TickedJobsCtrlPojo tickedJobs1 = Mockito.mock(TickedJobsCtrlPojo.class);
         TickedJobsCtrlPojo tickedJobs2 = Mockito.mock(TickedJobsCtrlPojo.class);
         TickedJobsCtrlPojo tickedJobs3 = Mockito.mock(TickedJobsCtrlPojo.class);
         TickedJobsCtrlPojo tickedJobs4 = Mockito.mock(TickedJobsCtrlPojo.class);
-        
+
         Mockito.when(tickedJobs1.getTicked()).thenReturn(format.parse("2015-07-16 07:44:00"));
         Mockito.when(tickedJobs1.isStarted()).thenReturn(true);
         Mockito.when(tickedJobs2.getTicked()).thenReturn(format.parse("2015-07-16 12:06:00"));
@@ -133,7 +138,7 @@ public class TickedJobsDetailSrvTest {
         Mockito.when(tickedJobs3.isStarted()).thenReturn(true);
         Mockito.when(tickedJobs4.getTicked()).thenReturn(format.parse("2015-07-16 16:09:00"));
         Mockito.when(tickedJobs4.isStarted()).thenReturn(false);
-        
+
         List<TickedJobsCtrlPojo> tickedJobs = new ArrayList<TickedJobsCtrlPojo>();
         tickedJobs.add(tickedJobs1);
         tickedJobs.add(tickedJobs2);
@@ -142,7 +147,7 @@ public class TickedJobsDetailSrvTest {
 
         List<JobVatCompensationCtrlPojo> jobVatCompensationCtrlPojos = new ArrayList<>();
 
-        TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, jobVatCompensationCtrlPojos, new BigDecimal(30));
+        TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, jobVatCompensationCtrlPojos, 30);
         
         Assert.assertEquals(new BigDecimal(1380), tickedJobsDetail.getActualPause());
         Assert.assertEquals(new BigDecimal(28920), tickedJobsDetail.getActualWorked());
@@ -151,7 +156,7 @@ public class TickedJobsDetailSrvTest {
     @Test
     public void testCalculate4() throws ParseException{
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        
+
         TickedJobsCtrlPojo tickedJobs1 = Mockito.mock(TickedJobsCtrlPojo.class);
         TickedJobsCtrlPojo tickedJobs2 = Mockito.mock(TickedJobsCtrlPojo.class);
         TickedJobsCtrlPojo tickedJobs3 = Mockito.mock(TickedJobsCtrlPojo.class);
@@ -165,7 +170,7 @@ public class TickedJobsDetailSrvTest {
         Mockito.when(tickedJobs3.isStarted()).thenReturn(true);
         Mockito.when(tickedJobs4.getTicked()).thenReturn(format.parse("2015-07-16 16:09:00"));
         Mockito.when(tickedJobs4.isStarted()).thenReturn(false);
-        
+
         List<TickedJobsCtrlPojo> tickedJobs = new ArrayList<TickedJobsCtrlPojo>();
         tickedJobs.add(tickedJobs1);
         tickedJobs.add(tickedJobs2);
@@ -174,7 +179,7 @@ public class TickedJobsDetailSrvTest {
 
         List<JobVatCompensationCtrlPojo> jobVatCompensationCtrlPojos = new ArrayList<>();
 
-        TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, jobVatCompensationCtrlPojos, new BigDecimal(30));
+        TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, jobVatCompensationCtrlPojos, 30);
         
         Assert.assertEquals(new BigDecimal(1800), tickedJobsDetail.getActualPause());
         Assert.assertEquals(new BigDecimal(28500), tickedJobsDetail.getActualWorked());
@@ -183,7 +188,7 @@ public class TickedJobsDetailSrvTest {
     @Test
     public void testCalculate5() throws ParseException{
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        
+
         TickedJobsCtrlPojo tickedJobs1 = Mockito.mock(TickedJobsCtrlPojo.class);
         TickedJobsCtrlPojo tickedJobs2 = Mockito.mock(TickedJobsCtrlPojo.class);
         TickedJobsCtrlPojo tickedJobs3 = Mockito.mock(TickedJobsCtrlPojo.class);
@@ -209,7 +214,7 @@ public class TickedJobsDetailSrvTest {
         Mockito.when(tickedJobs7.isStarted()).thenReturn(true);
         Mockito.when(tickedJobs8.getTicked()).thenReturn(format.parse("2015-07-17 16:09:00"));
         Mockito.when(tickedJobs8.isStarted()).thenReturn(false);
-        
+
         List<TickedJobsCtrlPojo> tickedJobs = new ArrayList<TickedJobsCtrlPojo>();
         tickedJobs.add(tickedJobs1);
         tickedJobs.add(tickedJobs2);
@@ -222,7 +227,7 @@ public class TickedJobsDetailSrvTest {
 
         List<JobVatCompensationCtrlPojo> jobVatCompensationCtrlPojos = new ArrayList<>();
 
-        TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, jobVatCompensationCtrlPojos, new BigDecimal(30));
+        TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, jobVatCompensationCtrlPojos, 30);
         
         Assert.assertEquals(new BigDecimal(57000), tickedJobsDetail.getActualWorked());
     }
@@ -230,7 +235,7 @@ public class TickedJobsDetailSrvTest {
     @Test
     public void testCalculate6() throws ParseException{
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        
+
         TickedJobsCtrlPojo tickedJobs1 = Mockito.mock(TickedJobsCtrlPojo.class);
         TickedJobsCtrlPojo tickedJobs2 = Mockito.mock(TickedJobsCtrlPojo.class);
         
@@ -238,14 +243,14 @@ public class TickedJobsDetailSrvTest {
         Mockito.when(tickedJobs1.isStarted()).thenReturn(true);
         Mockito.when(tickedJobs2.getTicked()).thenReturn(format.parse("2015-07-16 18:04:00"));
         Mockito.when(tickedJobs2.isStarted()).thenReturn(false);
-        
+
         List<TickedJobsCtrlPojo> tickedJobs = new ArrayList<TickedJobsCtrlPojo>();
         tickedJobs.add(tickedJobs1);
         tickedJobs.add(tickedJobs2);
 
         List<JobVatCompensationCtrlPojo> jobVatCompensationCtrlPojos = new ArrayList<>();
 
-        TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, jobVatCompensationCtrlPojos, new BigDecimal(30));
+        TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, jobVatCompensationCtrlPojos, 30);
         
         Assert.assertEquals(new BigDecimal(30), tickedJobsDetail.getActualPause());
         Assert.assertEquals(new BigDecimal(37830), tickedJobsDetail.getActualWorked());
@@ -269,7 +274,7 @@ public class TickedJobsDetailSrvTest {
 
         List<JobVatCompensationCtrlPojo> jobVatCompensationCtrlPojos = new ArrayList<>();
 
-        TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, jobVatCompensationCtrlPojos, new BigDecimal(30));
+        TickedJobsDetail tickedJobsDetail = TickedJobsDetailSrv.calculate(tickedJobs, jobVatCompensationCtrlPojos, 30);
         
         Assert.assertEquals(new BigDecimal(0), tickedJobsDetail.getActualPause());
         Assert.assertEquals(new BigDecimal(19860), tickedJobsDetail.getActualWorked());
@@ -278,11 +283,15 @@ public class TickedJobsDetailSrvTest {
     @Test
     public void tickedOverviewMonthTest() throws ParseException, JsonProcessingException{
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        
-        JobsGroupDaoPojo jobsGroup = Mockito.mock(JobsGroupDaoPojo.class);
+
+        JobsGroupDaoPojo jobsGroup1 = Mockito.mock(JobsGroupDaoPojo.class);
+        Mockito.when(jobsGroup1.getExtraTime()).thenReturn(30);
+        JobsGroupDaoPojo jobsGroup2 = Mockito.mock(JobsGroupDaoPojo.class);
+        Mockito.when(jobsGroup2.getExtraTime()).thenReturn(30);
+
         JobsDaoPojo job1 = Mockito.mock(JobsDaoPojo.class);
         JobsDaoPojo job2 = Mockito.mock(JobsDaoPojo.class);
-        
+
         List<TickedJobsDaoPojo> tickedJobs1 = new ArrayList<TickedJobsDaoPojo>();
         TickedJobsDaoPojo tickedJob1 = Mockito.mock(TickedJobsDaoPojo.class);
         TickedJobsDaoPojo tickedJob2 = Mockito.mock(TickedJobsDaoPojo.class);
@@ -294,10 +303,12 @@ public class TickedJobsDetailSrvTest {
         TickedJobsDaoPojo tickedJob6 = Mockito.mock(TickedJobsDaoPojo.class);
         TickedJobsDaoPojo tickedJob7 = Mockito.mock(TickedJobsDaoPojo.class);
         TickedJobsDaoPojo tickedJob8 = Mockito.mock(TickedJobsDaoPojo.class);
-        
+
         when(job1.getWorkedHours()).thenReturn(new BigDecimal(8));
+        when(job1.getJobsGroup()).thenReturn(jobsGroup1);
         when(job2.getWorkedHours()).thenReturn(new BigDecimal(8));
-        
+        when(job2.getJobsGroup()).thenReturn(jobsGroup2);
+
         when(tickedJob5.getTicked()).thenReturn(format.parse("2015-06-15 07:42:00"));
         when(tickedJob5.isStarted()).thenReturn(true);
         
@@ -309,9 +320,6 @@ public class TickedJobsDetailSrvTest {
         
         when(tickedJob8.getTicked()).thenReturn(format.parse("2015-06-15 16:03:00"));
         when(tickedJob8.isStarted()).thenReturn(false);
-        
-        when(job1.getJobsGroup()).thenReturn(jobsGroup);
-        when(job2.getJobsGroup()).thenReturn(jobsGroup);
         
         // TickedJobs2 => 471
         

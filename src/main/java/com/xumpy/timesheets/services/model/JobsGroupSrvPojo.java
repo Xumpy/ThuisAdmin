@@ -19,6 +19,16 @@ public class JobsGroupSrvPojo implements JobsGroup, Serializable{
     private String description;
     private CompanySrvPojo company;
     private Boolean closed;
+    private Integer extraTime;
+
+    @Override
+    public Integer getExtraTime() {
+        return extraTime;
+    }
+
+    public void setExtraTime(Integer extraTime) {
+        this.extraTime = extraTime;
+    }
 
     public void setCompany(CompanySrvPojo company) {
         this.company = company;
@@ -68,6 +78,7 @@ public class JobsGroupSrvPojo implements JobsGroup, Serializable{
         this.pk_id = jobsGroup.getPk_id();
         this.company = jobsGroup.getCompany() == null ? null : new CompanySrvPojo(jobsGroup.getCompany());
         this.closed = jobsGroup.getClosed();
+        this.extraTime = jobsGroup.getExtraTime();
     }
 
     @Override

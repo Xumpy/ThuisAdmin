@@ -11,14 +11,9 @@ import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
 import com.xumpy.thuisadmin.controllers.model.RegisterUserPage;
 import com.xumpy.thuisadmin.domain.Personen;
 import com.xumpy.thuisadmin.services.PersonenSrv;
-import com.xumpy.thuisadmin.services.model.PersonenSrvPojo;
 import java.io.Serializable;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -100,13 +95,6 @@ public class PersonenSrvImpl implements PersonenSrv, Serializable{
 
     @Override
     public String getMD5Password(String password) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            return (new HexBinaryAdapter()).marshal(md.digest(password.getBytes())).toLowerCase();
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(PersonenDaoPojo.class.getName()).log(Level.SEVERE, null, ex);
-            
-            return null;
-        }
+        return DigestUtils.md5Hex(password).toLowerCase();
     }
 }

@@ -73,6 +73,30 @@ public class BedragenDaoPojo implements Serializable, Bedragen{
     @Column(name="PROCESSED")
     private Boolean processed;
 
+    @Column(name="MANAGED_BY_ACC")
+    private Boolean managedByAccountant;
+
+    @Column(name="COURRANT")
+    private Boolean courrant;
+
+    @Override
+    public Boolean getManagedByAccountant() {
+        return managedByAccountant;
+    }
+
+    public void setManagedByAccountant(Boolean managedByAccountant) {
+        this.managedByAccountant = managedByAccountant;
+    }
+
+    @Override
+    public Boolean getCourrant() {
+        return courrant;
+    }
+
+    public void setCourrant(Boolean courrant) {
+        this.courrant = courrant;
+    }
+
     @Override
     public Integer getPk_id() {
         return pk_id;
@@ -188,5 +212,7 @@ public class BedragenDaoPojo implements Serializable, Bedragen{
         this.invoice = bedragen.getInvoice() != null ? new InvoicesDaoPojo(bedragen.getInvoice()) : null;
         this.weightAccountancy = bedragen.getWeightAccountancy();
         this.processed = bedragen.getProcessed();
+        this.managedByAccountant = bedragen.getManagedByAccountant();
+        this.courrant = bedragen.getCourrant();
     }
 }

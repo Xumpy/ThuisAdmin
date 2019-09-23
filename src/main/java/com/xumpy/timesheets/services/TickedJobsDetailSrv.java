@@ -105,8 +105,8 @@ public class TickedJobsDetailSrv {
         
         return tickedJobs;
     }
-    
-    public static TickedJobsDetail calculate(List<? extends TickedJobs> tickedJobs, List<? extends JobVatCompensation> jobVatCompensations, BigDecimal minimumPause){
+
+    public static TickedJobsDetail calculate(List<? extends TickedJobs> tickedJobs, List<? extends JobVatCompensation> jobVatCompensations, Integer extraTime){
         TickedJobsDetail tickedJobsDetail = calculate(tickedJobs);
         List<JobVatCompensationCtrlPojo> jobVatCompensationCtrlPojos = new ArrayList<>();
         for(JobVatCompensation jobVatCompensation: jobVatCompensations){
@@ -115,10 +115,10 @@ public class TickedJobsDetailSrv {
         tickedJobsDetail.setJobVatCompensations(jobVatCompensationCtrlPojos);
         if (!tickedJobsDetail.getActualPause().equals(new BigDecimal(0)) || tickedJobsDetail.getActualWorked().compareTo(new BigDecimal(HOURS6)) > 0){
             if (tickedJobsDetail.getActualPause() != null){
-                BigDecimal pauseDifference = tickedJobsDetail.getActualPause().subtract(minimumPause);
+                BigDecimal pauseDifference = tickedJobsDetail.getActualPause().subtract(new BigDecimal(extraTime == null ? 0 : extraTime));
 
                 if (pauseDifference.compareTo(new BigDecimal(0)) < 0){
-                    tickedJobsDetail.setActualPause(minimumPause);
+                    tickedJobsDetail.setActualPause(new BigDecimal(extraTime));
                     tickedJobsDetail.setActualWorked(tickedJobsDetail.getActualWorked().add(pauseDifference));
                 }
             }
@@ -151,7 +151,7 @@ public class TickedJobsDetailSrv {
                     List<? extends TickedJobs> tickedJobs = tickedJobsDao.selectTickedJobsByJob(job.getPk_id());
                     List<? extends JobVatCompensation> jobVatCompensations = jobVatCompensationDao.selectJobVatCompensations(job.getPk_id());
 
-                    TickedJobsDetail jobsDetail = calculate(tickedJobs, jobVatCompensations, new BigDecimal(30 * 60));
+                    TickedJobsDetail jobsDetail = calculate(tickedJobs, jobVatCompensations, (jobsGroup.getExtraTime() == null ? 0 : jobsGroup.getExtraTime()) * 60);
 
                     timesheetWorked = timesheetWorked.add(job.getWorkedHours());
                     actualWorked = actualWorked.add(jobsDetail.getActualWorked());

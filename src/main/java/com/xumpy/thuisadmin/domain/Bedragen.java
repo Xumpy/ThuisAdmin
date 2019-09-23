@@ -24,4 +24,6 @@ public interface Bedragen {
     BigDecimal getTaxPercentagePaid();
     BigDecimal getWeightAccountancy();
     Boolean getProcessed();
+    Boolean getManagedByAccountant();
+    Boolean getCourrant();
 }

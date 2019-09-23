@@ -68,6 +68,18 @@
 <ownDataTypeParameters>1,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
+<Column name="EXTRA_TIME" id="226C199E-EC53-A036-CBBD-23388B7C13C6">
+<createdBy>nico</createdBy>
+<createdTime>2019-09-23 08:01:39 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>9</dataTypePrecision>
+<ownDataTypeParameters>,9,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
 </columns>
 <indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
 <ind_PK_UK id="A6A91C46-63AB-3FB7-59F9-D03EC8B4B0B7" name="TA_JOB_GROUPS_PK">

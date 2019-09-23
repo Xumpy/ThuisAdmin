@@ -29,6 +29,24 @@ public class NieuwBedrag implements Serializable {
     private InvoicesCtrlPojo invoice;
     private BigDecimal weightAccountancy;
     private Boolean processed;
+    private Boolean managedByAccountant;
+    private Boolean courrant;
+
+    public Boolean getManagedByAccountant() {
+        return managedByAccountant;
+    }
+
+    public void setManagedByAccountant(Boolean managedByAccountant) {
+        this.managedByAccountant = managedByAccountant;
+    }
+
+    public Boolean getCourrant() {
+        return courrant;
+    }
+
+    public void setCourrant(Boolean courrant) {
+        this.courrant = courrant;
+    }
 
     public Integer getPk_id() {
         return pk_id;

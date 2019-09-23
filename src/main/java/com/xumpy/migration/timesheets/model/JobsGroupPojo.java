@@ -18,6 +18,16 @@ public class JobsGroupPojo implements JobsGroup{
     private String description;
     private Company company;
     private Boolean closed;
+    private Integer extraTime;
+
+    @Override
+    public Integer getExtraTime() {
+        return extraTime;
+    }
+
+    public void setExtraTime(Integer extraTime) {
+        this.extraTime = extraTime;
+    }
 
     public void setCompany(Company company) {
         this.company = company;

@@ -41,7 +41,7 @@
                     <tr ng-repeat="tickedJob in jobInfo.tickedJobsDetail.tickedJobs">
                         <td>Ticked {{tickedJob.started == true ? "In" : "Out"}}</td><td>{{tickedJob.ticked}}</td>
                     </tr>
-                    <tr><td>Total hours worked: </td><td>{{convertDate(jobInfo.tickedJobsDetail.actualWorked + (30 * 60))}}</td></tr>
+                    <tr><td>Total hours worked: </td><td>{{convertDate(jobInfo.tickedJobsDetail.actualWorked)}}</td></tr>
 
                     <tr><td colspan="2"><b>Vat Compensations</b></td></tr>
                     <tr ng-repeat="vatCompensation in jobInfo.tickedJobsDetail.jobVatCompensations">

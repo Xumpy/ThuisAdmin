@@ -20,4 +20,6 @@ public interface JobsGroup {
     Company getCompany();
 
     Boolean getClosed();
+
+    Integer getExtraTime();
 }

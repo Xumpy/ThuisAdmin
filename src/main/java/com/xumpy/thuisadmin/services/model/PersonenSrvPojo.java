@@ -6,13 +6,8 @@
 package com.xumpy.thuisadmin.services.model;
 
 import com.xumpy.government.services.model.BusinessFormSrvPojo;
-import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
 import com.xumpy.thuisadmin.domain.Personen;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  *
@@ -138,12 +133,7 @@ public class PersonenSrvPojo implements Personen{
     }
     
     public void set_password(String password){
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            this.md5_password = (new HexBinaryAdapter()).marshal(md.digest(md5_password.getBytes())).toLowerCase();
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(PersonenDaoPojo.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.md5_password = DigestUtils.md5Hex(password).toLowerCase();
     }
     
 }

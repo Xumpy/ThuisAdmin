@@ -516,6 +516,8 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         bedragen.setBedrag(bigDecimalBedrag);
         bedragen.setInvoice(nieuwBedrag.getInvoice() != null ? new InvoicesSrvPojo(nieuwBedrag.getInvoice()) : null);
         bedragen.setProcessed(nieuwBedrag.getProcessed());
+        bedragen.setManagedByAccountant(nieuwBedrag.getManagedByAccountant());
+        bedragen.setCourrant(nieuwBedrag.getCourrant());
 
         return bedragen;
     }

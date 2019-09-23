@@ -47,8 +47,6 @@ public class JobsGroupRestCtrl {
     @Autowired TickedJobsSrv tickedJobsSrv;
     @Autowired JobVatCompensationDaoImpl jobVatCompensationDao;
 
-    private static final Integer PAUSE = 30 * 60;
-
     @RequestMapping("/json/set_month")
     public @ResponseBody String setMonth(@RequestBody String month){
         overview.setMonth(month);
@@ -156,7 +154,7 @@ public class JobsGroupRestCtrl {
                     for (JobVatCompensation jobVatCompensation: jobVatCompensationDao.selectJobVatCompensations(job.getPk_id())){
                         jobVatCompensationCtrlPojos.add(new JobVatCompensationCtrlPojo(jobVatCompensation));
                     }
-                    job.setTickedJobsDetail(TickedJobsDetailSrv.calculate(tickedJobsCtrlPojo, jobVatCompensationCtrlPojos, new BigDecimal(PAUSE)));
+                    job.setTickedJobsDetail(TickedJobsDetailSrv.calculate(tickedJobsCtrlPojo, jobVatCompensationCtrlPojos, (job.getJobsGroup().getExtraTime() == null ? 0 : job.getJobsGroup().getExtraTime())  * 60));
                 }
             }
         }

@@ -22,6 +22,16 @@ public class JobsGroupCtrl implements JobsGroup, Serializable{
     private Integer checked;
     private CompanyCtrlPojo company;
     private Boolean closed;
+    private Integer extraTime;
+
+    @Override
+    public Integer getExtraTime() {
+        return extraTime;
+    }
+
+    public void setExtraTime(Integer extraTime) {
+        this.extraTime = extraTime;
+    }
 
     public void setCompany(CompanyCtrlPojo company) {
         this.company = company;
@@ -80,6 +90,7 @@ public class JobsGroupCtrl implements JobsGroup, Serializable{
         this.checked = 0;
         this.company = jobsGroup.getCompany() == null ? null : new CompanyCtrlPojo(jobsGroup.getCompany());
         this.closed = jobsGroup.getClosed();
+        this.extraTime = jobsGroup.getExtraTime();
     }
     
     public static List<JobsGroupCtrl> allJobsGroupCtrl(List<? extends JobsGroup> allJobsGroup){
