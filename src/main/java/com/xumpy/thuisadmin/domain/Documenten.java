@@ -15,5 +15,6 @@ public interface Documenten {
     String getDocument_mime();
     String getDocument_naam();
     String getOmschrijving();
+    String getYukiDocumentId();
     Integer getPk_id();
 }

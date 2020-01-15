@@ -18,6 +18,7 @@ public class Groepen {
     private Integer fk_persoon_id;
     private String code_id;
     private Integer publicGroep;
+    private Integer yukiCategory;
     
     public Integer getPk_id() {
         return pk_id;
@@ -81,5 +82,13 @@ public class Groepen {
 
     public void setPublicGroep(Integer publicGroep) {
         this.publicGroep = publicGroep;
+    }
+
+    public Integer getYukiCategory() {
+        return yukiCategory;
+    }
+
+    public void setYukiCategory(Integer yukiCategory) {
+        this.yukiCategory = yukiCategory;
     }
 }

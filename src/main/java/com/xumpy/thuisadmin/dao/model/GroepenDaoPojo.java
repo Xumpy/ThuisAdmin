@@ -55,6 +55,9 @@ public class GroepenDaoPojo implements Serializable, Groepen {
     @Column(name="CLOSED")
     private Boolean closed;
 
+    @Column(name="YUKI_CATEGORY")
+    private Integer yukiCategory;
+
     @Override
     public String getCodeId() {
         return codeId;
@@ -132,6 +135,15 @@ public class GroepenDaoPojo implements Serializable, Groepen {
     }
 
     @Override
+    public Integer getYukiCategory() {
+        return yukiCategory;
+    }
+
+    public void setYukiCategory(Integer yukiCategory) {
+        this.yukiCategory = yukiCategory;
+    }
+
+    @Override
     public Boolean getClosed() {
         return closed;
     }
@@ -150,5 +162,6 @@ public class GroepenDaoPojo implements Serializable, Groepen {
         this.pk_id = groepen.getPk_id();
         this.publicGroep = groepen.getPublicGroep();
         this.closed = groepen.getClosed();
+        this.yukiCategory = groepen.getYukiCategory();
     }
 }

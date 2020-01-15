@@ -97,6 +97,7 @@
                             <td>{{document.datum}}</td>
                             <td>{{document.omschrijving}}</td>
                             <td><a th:href="@{/json/fetch_document/{{document.pkId}}}">Download</a></td>
+                            <td><a th:href="@{/json/sendToYuki?documentId={{document.pkId}}}">Send To Yuki</a>
                     </tr>
                 </tbody>
                 <tfoot>

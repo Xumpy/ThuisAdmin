@@ -1,6 +1,5 @@
 package com.xumpy.finances.services;
 
-import com.mortennobel.imagescaling.ResampleFilters;
 import com.mortennobel.imagescaling.ResampleOp;
 
 import javax.imageio.ImageIO;

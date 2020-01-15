@@ -22,6 +22,7 @@ public class NieuwDocument implements Serializable {
     private Integer bedragId;
     private String omschrijving;
     private Date datum;
+    private String yukiDocumentId;
             
     public Integer getPkId() {
         return pkId;
@@ -53,5 +54,13 @@ public class NieuwDocument implements Serializable {
 
     public void setDatum(Date datum) {
         this.datum = datum;
+    }
+
+    public String getYukiDocumentId() {
+        return yukiDocumentId;
+    }
+
+    public void setYukiDocumentId(String yukiDocumentId) {
+        this.yukiDocumentId = yukiDocumentId;
     }
 }
