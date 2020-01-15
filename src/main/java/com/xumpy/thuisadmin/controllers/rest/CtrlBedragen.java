@@ -39,6 +39,8 @@ public class CtrlBedragen implements Serializable{
     
     @RequestMapping("/json/fetch_beheer_bedragen")
     public @ResponseBody BeheerBedragenInp fetchBeheerBedragen() throws ParseException{
+        this.beheerBedragenInp.setCourantValue(bedragenSrv.getCourantValue());
+
         return this.beheerBedragenInp;
     }
     
@@ -47,7 +49,7 @@ public class CtrlBedragen implements Serializable{
         if (this.beheerBedragenInp.getOffset().equals(beheerBedragenInp.getOffset())) beheerBedragenInp.setOffset(0);
         this.beheerBedragenInp = beheerBedragenInp;
 
-        beheerBedragenReportLst = bedragenSrv.reportBedragen(beheerBedragenReportLst, beheerBedragenInp.getOffset(), beheerBedragenInp.getRekening(), beheerBedragenInp.getZoekOpdracht(), beheerBedragenInp.getMinimumDocuments());
+        beheerBedragenReportLst = bedragenSrv.reportBedragen(beheerBedragenReportLst, beheerBedragenInp.getOffset(), beheerBedragenInp.getRekening(), beheerBedragenInp.getZoekOpdracht(), beheerBedragenInp.getValidAccountyBedrag());
         beheerBedragenReportLst = BedragenSrvImpl.setButtons(beheerBedragenReportLst, beheerBedragenInp);
         
         return beheerBedragenReportLst;

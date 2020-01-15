@@ -529,9 +529,9 @@ public class BedragenSrvTest{
         
         Pageable topTen = new PageRequest(1, 10); 
         
-        when(bedragenDao.reportBedragen(rekening1.getPk_id(), null, userInfo.getPersoon().getPk_id(), null, new Long(999), topTen)).thenReturn(slcBedragen);
+        when(bedragenDao.reportBedragen(rekening1.getPk_id(), null, userInfo.getPersoon().getPk_id(), null, topTen)).thenReturn(slcBedragen);
         
-        beheerBedragen = bedragenSrv.reportBedragen(beheerBedragen, 1, rekening1, null, 999);
+        beheerBedragen = bedragenSrv.reportBedragen(beheerBedragen, 1, rekening1, null, false);
         
         assertEquals(lstBedragen.get(0).getPk_id(), beheerBedragen.getBeheerBedragenReport().get(0).getPk_id());
         assertEquals(lstBedragen.get(1).getPk_id(), beheerBedragen.getBeheerBedragenReport().get(1).getPk_id());

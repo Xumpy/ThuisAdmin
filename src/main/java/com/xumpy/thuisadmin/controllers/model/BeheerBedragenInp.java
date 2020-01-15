@@ -7,6 +7,8 @@ package com.xumpy.thuisadmin.controllers.model;
 
 import com.xumpy.thuisadmin.dao.model.RekeningenDaoPojo;
 import java.io.Serializable;
+import java.math.BigDecimal;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +22,16 @@ public class BeheerBedragenInp implements Serializable{
     private Integer offset;
     private RekeningenDaoPojo rekening;
     private String zoekOpdracht;
-    private Integer minimumDocuments;
+    private Boolean validAccountyBedrag;
+    private BigDecimal courantValue;
+
+    public BigDecimal getCourantValue() {
+        return courantValue;
+    }
+
+    public void setCourantValue(BigDecimal courantValue) {
+        this.courantValue = courantValue;
+    }
 
     public RekeningenDaoPojo getRekening() {
         return rekening;
@@ -48,14 +59,14 @@ public class BeheerBedragenInp implements Serializable{
     
     public BeheerBedragenInp(){
         this.offset = 0;
-        this.minimumDocuments = 999;
+        this.validAccountyBedrag = false;
     }
 
-    public Integer getMinimumDocuments() {
-        return minimumDocuments;
+    public Boolean getValidAccountyBedrag() {
+        return validAccountyBedrag;
     }
 
-    public void setMinimumDocuments(Integer minimumDocuments) {
-        this.minimumDocuments = minimumDocuments;
+    public void setValidAccountyBedrag(Boolean validAccountyBedrag) {
+        this.validAccountyBedrag = validAccountyBedrag;
     }
 }

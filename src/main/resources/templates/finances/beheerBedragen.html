@@ -14,11 +14,14 @@
                             <input class="btn btn-primary" type="submit" value="Nieuw Bedrag"/>
                         </form>
                         <form class="form-horizontal col-lg-4" >
-                            <label th:if="${@userInfo.invoiceType.type} != ${personal}" class="control-label">Show Only No Documents</label>
+                            <label th:if="${@userInfo.invoiceType.type} != ${personal}" class="control-label">Show Not Valid For Accountancy</label>
                             <input th:if="${@userInfo.invoiceType.type} != ${personal}"
-                                   ng-model="showNoDocuments" type="checkbox" name="noDocuments"
-                                   ng-change="showNoDocumentsChange(showNoDocuments)">
+                                   ng-model="beheerBedragen.validAccountyBedrag" type="checkbox" name="noDocuments"
+                                   ng-change="showNoDocumentsChange(beheerBedragen.validAccountyBedrag)">
                         </form>
+                        <div th:if="${@userInfo.invoiceType.type} != ${personal}" class="col-lg-2 form-group">
+                            <b>Total Courant: {{beheerBedragen.courantValue}}</b>
+                        </div>
                     </div>
                     <div class="col-lg-12">
                         <div class="row col-lg-12" style="margin-top:20px;">
@@ -109,11 +112,7 @@
                     }
 
                     $scope.showNoDocumentsChange = function(showNoDocuments){
-                        if (showNoDocuments){
-                            $scope.beheerBedragen.minimumDocuments = 0;
-                        } else {
-                            $scope.beheerBedragen.minimumDocuments = 999;
-                        }
+                        $scope.beheerBedragen.validAccountyBedrag = showNoDocuments;
                     }
 
                     $scope.$watchCollection('beheerBedragen', function(newValue, oldValue){

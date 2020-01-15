@@ -91,6 +91,15 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         return lstBedragenDaoPojo;
     }
 
+    @Transactional
+    @Override
+    public BigDecimal getCourantValue(){
+        BigDecimal allNagitveAmounts = bedragenDao.allCourantNagitveAmounts().stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal allPositiveAmounts = bedragenDao.allCourantPositiveAmounts().stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return allPositiveAmounts.subtract(allNagitveAmounts);
+    }
+
     @Override
     @Transactional
     public Bedragen save(NieuwBedrag nieuwBedrag) {
@@ -276,7 +285,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
 
     @Override
     @Transactional
-    public BeheerBedragenReportLst reportBedragen(BeheerBedragenReportLst beheerBedragenReportLst, Integer offset, Rekeningen rekening, String searchText, Integer minimumDocuments) {
+    public BeheerBedragenReportLst reportBedragen(BeheerBedragenReportLst beheerBedragenReportLst, Integer offset, Rekeningen rekening, String searchText, Boolean validAccountyBedrag) {
         
         searchText = StringUtils.isEmpty(searchText) ? null : "%" + searchText + "%";
         
@@ -290,13 +299,22 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         } else {
             rekeningId = rekening.getPk_id();
         }
-        
-        for (Bedragen bedrag: bedragenDao.reportBedragen(rekeningId, searchText, userInfo.getPersoon().getPk_id(),
-                userInfo.getInvoiceType().equals(InvoiceType.PROFESSIONAL) ? Boolean.TRUE :
-                        userInfo.getInvoiceType().equals(InvoiceType.PERSONAL) ? Boolean.FALSE : null, new Long(minimumDocuments), topTen).getContent()){
-            beheerBedragenReport.add(new BeheerBedragenReport(bedrag, isAccountancyBedragValid(bedrag)));
+
+        if (!validAccountyBedrag){
+            for (Bedragen bedrag: bedragenDao.reportBedragen(rekeningId, searchText, userInfo.getPersoon().getPk_id(),
+                    userInfo.getInvoiceType().equals(InvoiceType.PROFESSIONAL) ? Boolean.TRUE :
+                            userInfo.getInvoiceType().equals(InvoiceType.PERSONAL) ? Boolean.FALSE : null, topTen).getContent()){
+                beheerBedragenReport.add(new BeheerBedragenReport(bedrag, isAccountancyBedragValid(bedrag)));
+            }
+
+        } else {
+            for (Bedragen bedrag: bedragenDao.reportValidAccountantBedragen(rekeningId, searchText, userInfo.getPersoon().getPk_id(),
+                    userInfo.getInvoiceType().equals(InvoiceType.PROFESSIONAL) ? Boolean.TRUE :
+                            userInfo.getInvoiceType().equals(InvoiceType.PERSONAL) ? Boolean.FALSE : null, topTen).getContent()){
+                beheerBedragenReport.add(new BeheerBedragenReport(bedrag, isAccountancyBedragValid(bedrag)));
+            }
         }
-        
+
         beheerBedragenReportLst.setBeheerBedragenReport(beheerBedragenReport);
         
         return beheerBedragenReportLst;
@@ -517,7 +535,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         bedragen.setInvoice(nieuwBedrag.getInvoice() != null ? new InvoicesSrvPojo(nieuwBedrag.getInvoice()) : null);
         bedragen.setProcessed(nieuwBedrag.getProcessed());
         bedragen.setManagedByAccountant(nieuwBedrag.getManagedByAccountant());
-        bedragen.setCourrant(nieuwBedrag.getCourrant());
+        bedragen.setCourant(nieuwBedrag.getCourant());
 
         return bedragen;
     }
@@ -819,6 +837,18 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     }
 
     public Boolean isAccountancyBedragValid(Bedragen bedrag){
-        return bedrag.getRekening().getProfessional() == null || !bedrag.getRekening().getProfessional() ? true : hasBedragDocuments(bedrag);
+        if (bedrag.getRekening().getProfessional() != null && bedrag.getRekening().getProfessional()){
+            if (bedrag.getCourant() != null && bedrag.getCourant()){
+                return true;
+            }
+            if (bedrag.getManagedByAccountant() != null && bedrag.getManagedByAccountant()){
+                return true;
+            }
+            if (hasBedragDocuments(bedrag)){
+                return true;
+            }
+            return false;
+        }
+        return true;
     }
 }

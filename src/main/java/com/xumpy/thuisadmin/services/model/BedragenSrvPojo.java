@@ -30,7 +30,7 @@ public class BedragenSrvPojo implements Comparable<BedragenSrvPojo>, Bedragen {
     private BigDecimal weightAccountancy;
     private Boolean processed;
     private Boolean managedByAccountant;
-    private Boolean courrant;
+    private Boolean courant;
 
     @Override
     public Boolean getManagedByAccountant() {
@@ -42,12 +42,12 @@ public class BedragenSrvPojo implements Comparable<BedragenSrvPojo>, Bedragen {
     }
 
     @Override
-    public Boolean getCourrant() {
-        return courrant;
+    public Boolean getCourant() {
+        return courant;
     }
 
-    public void setCourrant(Boolean courrant) {
-        this.courrant = courrant;
+    public void setCourant(Boolean courant) {
+        this.courant = courant;
     }
 
     @Override
@@ -206,6 +206,6 @@ public class BedragenSrvPojo implements Comparable<BedragenSrvPojo>, Bedragen {
         this.weightAccountancy = bedragen.getWeightAccountancy();
         this.processed = bedragen.getProcessed();
         this.managedByAccountant = bedragen.getManagedByAccountant();
-        this.courrant = bedragen.getCourrant();
+        this.courant = bedragen.getCourant();
     }
 }

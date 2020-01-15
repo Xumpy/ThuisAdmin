@@ -19,10 +19,15 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer>{
 
+    @Query("select bedrag from BedragenDaoPojo where courant = 1 and groep.negatief = 1")
+    public List<BigDecimal> allCourantNagitveAmounts();
+
+    @Query("select bedrag from BedragenDaoPojo where courant = 1 and groep.negatief = 0")
+    public List<BigDecimal> allCourantPositiveAmounts();
+
     @Query("from BedragenDaoPojo bedragen where persoon.pk_id = :persoonId "
             + "  and (:rekeningId is null or rekening.pk_id = :rekeningId)"
             + "  and coalesce(coalesce(:professional, rekening.professional), 0) = coalesce(rekening.professional, 0)"
-            + "  and (select count(1) from DocumentenDaoPojo documenten where documenten.bedrag.pk_id = bedragen.pk_id) <= :documentCount"
             + "  and (:searchText is null or lower(groep.naam) like :searchText " +
                 "  or lower(rekening.naam) like :searchText " +
                 "  or lower(persoon.naam) like :searchText " +
@@ -31,7 +36,32 @@ public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer
                 "  or cast(datum as string) like :searchText " +
                 "  or lower(omschrijving) like :searchText)" +
                 "  order by datum desc")
-    public Slice<BedragenDaoPojo> reportBedragen(@Param("rekeningId") Integer rekeningId, @Param("searchText") String searchText, @Param("persoonId") Integer persoonId, @Param("professional") Boolean professional, @Param("documentCount") Long documentCount, Pageable pageable);
+    public Slice<BedragenDaoPojo> reportBedragen(@Param("rekeningId") Integer rekeningId,
+                                                 @Param("searchText") String searchText,
+                                                 @Param("persoonId") Integer persoonId,
+                                                 @Param("professional") Boolean professional,
+                                                 Pageable pageable);
+
+    @Query("from BedragenDaoPojo bedragen where persoon.pk_id = :persoonId "
+            + "  and (:rekeningId is null or rekening.pk_id = :rekeningId)"
+            + "  and coalesce(coalesce(:professional, rekening.professional), 0) = coalesce(rekening.professional, 0)"
+            + "  and coalesce(groep.codeId, '') != 'INTER_REKENING' "
+            + "  and coalesce(managedByAccountant, 0) = 0 "
+            + "  and coalesce(courant, 0) = 0 "
+            + "  and (select count(1) from DocumentenDaoPojo documenten where documenten.bedrag.pk_id = bedragen.pk_id) <= 0"
+            + "  and (:searchText is null or lower(groep.naam) like :searchText " +
+            "  or lower(rekening.naam) like :searchText " +
+            "  or lower(persoon.naam) like :searchText " +
+            "  or lower(persoon.voornaam) like :searchText " +
+            "  or cast(bedrag as string) like :searchText " +
+            "  or cast(datum as string) like :searchText " +
+            "  or lower(omschrijving) like :searchText)" +
+            "  order by datum desc")
+    public Slice<BedragenDaoPojo> reportValidAccountantBedragen(@Param("rekeningId") Integer rekeningId,
+                                                 @Param("searchText") String searchText,
+                                                 @Param("persoonId") Integer persoonId,
+                                                 @Param("professional") Boolean professional,
+                                                 Pageable pageable);
 
     @Query("from BedragenDaoPojo where (datum >= :startDate and datum <= :endDate) and groep.pk_id in (select groep.pk_id from GovernmentCostTypeDaoPojo where type = :levelType)")
     public List<BedragenDaoPojo> allBedragenInCostType(@Param("startDate") Date startDate,

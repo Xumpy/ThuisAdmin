@@ -25,5 +25,5 @@ public interface Bedragen {
     BigDecimal getWeightAccountancy();
     Boolean getProcessed();
     Boolean getManagedByAccountant();
-    Boolean getCourrant();
+    Boolean getCourant();
 }

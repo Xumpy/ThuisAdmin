@@ -30,7 +30,7 @@ public class NieuwBedrag implements Serializable {
     private BigDecimal weightAccountancy;
     private Boolean processed;
     private Boolean managedByAccountant;
-    private Boolean courrant;
+    private Boolean courant;
 
     public Boolean getManagedByAccountant() {
         return managedByAccountant;
@@ -40,12 +40,12 @@ public class NieuwBedrag implements Serializable {
         this.managedByAccountant = managedByAccountant;
     }
 
-    public Boolean getCourrant() {
-        return courrant;
+    public Boolean getCourant() {
+        return courant;
     }
 
-    public void setCourrant(Boolean courrant) {
-        this.courrant = courrant;
+    public void setCourant(Boolean courant) {
+        this.courant = courant;
     }
 
     public Integer getPk_id() {

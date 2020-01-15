@@ -26,11 +26,13 @@ import java.util.Map;
  * @author Nico
  */
 public interface BedragenSrv {
+    public BigDecimal getCourantValue();
+
     public Bedragen save(NieuwBedrag bedragen);
 
     public Bedragen delete(NieuwBedrag bedragen);
 
-    public BeheerBedragenReportLst reportBedragen(BeheerBedragenReportLst beheerBedragenReportLst, Integer offset, Rekeningen rekening, String searchText, Integer minimumDocuments);
+    public BeheerBedragenReportLst reportBedragen(BeheerBedragenReportLst beheerBedragenReportLst, Integer offset, Rekeningen rekening, String searchText, Boolean validAccountyBedrag);
 
     public List<RekeningOverzicht> graphiekBedrag(Rekeningen rekening,
                                                   Date beginDate,

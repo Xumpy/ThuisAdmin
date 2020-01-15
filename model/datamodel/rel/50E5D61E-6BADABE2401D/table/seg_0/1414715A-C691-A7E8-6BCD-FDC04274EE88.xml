@@ -145,7 +145,7 @@
 <ownDataTypeParameters>1,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
-<Column name="COURRANT" id="F4568391-F0F3-47E2-BE39-D2611426F0C2">
+<Column name="COURANT" id="F4568391-F0F3-47E2-BE39-D2611426F0C2">
 <createdBy>nico</createdBy>
 <createdTime>2019-09-23 08:07:11 UTC</createdTime>
 <ownerDesignName>datamodel</ownerDesignName>
