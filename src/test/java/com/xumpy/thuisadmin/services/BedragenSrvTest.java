@@ -527,7 +527,7 @@ public class BedragenSrvTest{
         Slice<BedragenDaoPojo> slcBedragen = Mockito.mock(Slice.class);
         when(slcBedragen.getContent()).thenReturn(lstBedragen);
         
-        Pageable topTen = new PageRequest(1, 10); 
+        Pageable topTen = PageRequest.of(1, 10); 
         
         when(bedragenDao.reportBedragen(rekening1.getPk_id(), null, userInfo.getPersoon().getPk_id(), null, topTen)).thenReturn(slcBedragen);
         

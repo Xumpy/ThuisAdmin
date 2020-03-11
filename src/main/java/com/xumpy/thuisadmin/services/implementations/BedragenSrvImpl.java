@@ -291,7 +291,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         
         List<BeheerBedragenReport> beheerBedragenReport = new ArrayList<BeheerBedragenReport>();
         
-        Pageable topTen = new PageRequest(offset, 10);
+        Pageable topTen = PageRequest.of(offset, 10);
         
         Integer rekeningId;
         if (rekening == null){
