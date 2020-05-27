@@ -3,24 +3,25 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<style name="Base" isDefault="true" isBlankWhenNull="true" fontName="DejaVu Sans"/>
 	<parameter name="INVOICE_ID" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT COALESCE(TA_JOBS_INVOICES.DESCRIPTION, "") AS description,
-       SUM(TA_JOBS.WORKED_HOURS) AS total_worked_hours,
-       TRUNCATE(TA_JOBS_INVOICES.AMOUNT, 4) AS amount,
-       TA_JOBS_INVOICES.TIME_UNIT_DAYS AS time_unit_days,
-       TA_COMPANY.DAILY_PAYED_HOURS AS daily_payed_hours
-FROM TA_JOBS_INVOICES
-JOIN TA_JOBS
-  ON (TA_JOBS.PK_ID = TA_JOBS_INVOICES.FK_JOB_ID)
-JOIN TA_JOB_GROUPS
-  ON (TA_JOB_GROUPS.PK_ID = TA_JOBS.FK_JOB_GROUP_ID)
-JOIN TA_COMPANY
-  ON (TA_COMPANY.PK_ID = TA_JOB_GROUPS.FK_COMPANY_ID)
-WHERE TA_JOBS_INVOICES.FK_INVOICE_ID = $P{INVOICE_ID}
-GROUP BY TA_JOB_GROUPS.PK_ID, COALESCE(TA_JOBS_INVOICES.DESCRIPTION, ""), TRUNCATE(TA_JOBS_INVOICES.AMOUNT, 4), TA_JOBS_INVOICES.TIME_UNIT_DAYS, TA_COMPANY.DAILY_PAYED_HOURS]]>
+		<![CDATA[select coalesce(ta_jobs_invoices.description, "") as description,
+       sum(ta_jobs.worked_hours) as total_worked_hours,
+       truncate(ta_jobs_invoices.amount, 4) as amount,
+       ta_jobs_invoices.time_unit_days as time_unit_days,
+       ta_company.daily_payed_hours as daily_payed_hours
+from ta_jobs_invoices
+join ta_jobs
+  on (ta_jobs.pk_id = ta_jobs_invoices.fk_job_id)
+join ta_job_groups
+  on (ta_job_groups.pk_id = ta_jobs.fk_job_group_id)
+join ta_company
+  on (ta_company.pk_id = ta_job_groups.fk_company_id)
+where ta_jobs_invoices.fk_invoice_id = $P{INVOICE_ID}
+group by ta_job_groups.pk_id, coalesce(ta_jobs_invoices.description, ""), truncate(ta_jobs_invoices.amount, 4), ta_jobs_invoices.time_unit_days, ta_company.daily_payed_hours]]>
 	</queryString>
 	<field name="description" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -42,7 +43,7 @@ GROUP BY TA_JOB_GROUPS.PK_ID, COALESCE(TA_JOBS_INVOICES.DESCRIPTION, ""), TRUNCA
 		<variableExpression><![CDATA[$F{time_unit_days} ? $F{total_worked_hours}.divide( $F{daily_payed_hours}) : $F{total_worked_hours}]]></variableExpression>
 	</variable>
 	<variable name="EENHEID" class="java.lang.String">
-		<variableExpression><![CDATA[$F{time_unit_days} ? "Dagen" : "Uren"]]></variableExpression>
+		<variableExpression><![CDATA[$F{time_unit_days} ? "Days" : "Hours"]]></variableExpression>
 	</variable>
 	<variable name="PRIJS" class="java.math.BigDecimal">
 		<variableExpression><![CDATA[$F{time_unit_days} ? $F{amount}.multiply( $F{daily_payed_hours}) : $F{amount}]]></variableExpression>
@@ -57,35 +58,35 @@ GROUP BY TA_JOB_GROUPS.PK_ID, COALESCE(TA_JOBS_INVOICES.DESCRIPTION, ""), TRUNCA
 				<textElement>
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Omschrijving]]></text>
+				<text><![CDATA[Description]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="196" y="1" width="63" height="12" forecolor="#FF7F27" backcolor="#E6E6E6" uuid="165addc6-28db-4d25-b49f-7d5899ac2e3b"/>
 				<textElement>
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Aantal]]></text>
+				<text><![CDATA[Quantity]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="259" y="1" width="86" height="12" forecolor="#FF7F27" backcolor="#E6E6E6" uuid="cbdbda4e-a4f1-479c-8491-6d1fc91ebe7d"/>
 				<textElement>
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Eenheid]]></text>
+				<text><![CDATA[Unit]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="345" y="1" width="89" height="12" forecolor="#FF7F27" backcolor="#E6E6E6" uuid="0cc84edb-a8b3-440c-bb12-937c3d0f654d"/>
 				<textElement>
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Prijs]]></text>
+				<text><![CDATA[Unit Price]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="434" y="1" width="121" height="12" forecolor="#FF7F27" backcolor="#E6E6E6" uuid="1f77dc15-c4df-485c-8543-f7e5507433ee"/>
 				<textElement>
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Totaal]]></text>
+				<text><![CDATA[Price]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
