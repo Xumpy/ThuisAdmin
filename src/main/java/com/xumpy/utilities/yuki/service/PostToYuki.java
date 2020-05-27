@@ -52,6 +52,10 @@ public class PostToYuki {
         HttpResponse response = httpclient.execute(httppost);
         HttpEntity entity = response.getEntity();
 
-        return convertToUploadResponse(entity.getContent());
+        UploadReponse uploadReponse = convertToUploadResponse(entity.getContent());
+
+        System.out.println(uploadReponse.getMessage());
+
+        return uploadReponse;
     }
 }
