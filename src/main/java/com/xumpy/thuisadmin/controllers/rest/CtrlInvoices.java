@@ -6,6 +6,7 @@ import com.xumpy.thuisadmin.dao.implementations.InvoiceJobsDaoImpl;
 import com.xumpy.thuisadmin.dao.implementations.InvoicesDaoImpl;
 import com.xumpy.thuisadmin.dao.model.InvoiceJobsDaoPojo;
 import com.xumpy.thuisadmin.dao.model.InvoicesDaoPojo;
+import com.xumpy.thuisadmin.domain.Invoices;
 import com.xumpy.timesheets.controller.model.JobsCtrlPojo;
 import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
 import com.xumpy.timesheets.dao.model.JobsDaoPojo;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +34,12 @@ public class CtrlInvoices {
 
     @RequestMapping("/json/invoice/{invoiceId}")
     public @ResponseBody InvoicesCtrlPojo getInvoice(@PathVariable Integer invoiceId){
-        return new InvoicesCtrlPojo(invoicesDao.findById(invoiceId).get(), invoiceJobsDao.sumAmount(invoiceId));
+        InvoicesCtrlPojo invoice = new InvoicesCtrlPojo(invoicesDao.findById(invoiceId).get());
+        List<InvoiceJobsDaoPojo> invoiceJobs = invoiceJobsDao.findAllJobsByInvoice(invoice.getPkId());
+        invoice.setTotalAmount(getTotalAmount(invoiceJobs));
+        invoice.setTotalWorkedDays(getAmountWorkedDays(invoiceJobs));
+
+        return invoice;
     }
 
     @RequestMapping("/json/invoice/saveInvoice")
@@ -97,11 +104,36 @@ public class CtrlInvoices {
         return invoiceJobsCtrlPojos;
     }
 
+    private BigDecimal getAmountWorkedDays(List<InvoiceJobsDaoPojo> invoiceJobs){
+        BigDecimal totalWorkedDays = new BigDecimal(0);
+
+        for (InvoiceJobsDaoPojo invoiceJob: invoiceJobs) {
+            totalWorkedDays = totalWorkedDays.add(invoiceJob.getJob().getWorkedHours().divide(invoiceJob.getJob().getJobsGroup().getCompany().getDailyPayedHours()));
+        }
+
+        return totalWorkedDays;
+    }
+
+    private BigDecimal getTotalAmount(List<InvoiceJobsDaoPojo> invoiceJobs){
+        BigDecimal totalAmount= new BigDecimal(0);
+
+        for (InvoiceJobsDaoPojo invoiceJob: invoiceJobs){
+            totalAmount = totalAmount.add(invoiceJob.getAmount().multiply(invoiceJob.getJob().getWorkedHours()));
+        }
+        return totalAmount;
+    }
+
     private List<InvoicesCtrlPojo> convertIterableInvoices(Iterable<InvoicesDaoPojo> iTinvoices){
         List<InvoicesCtrlPojo> lstInvoices = new ArrayList<InvoicesCtrlPojo>();
 
         for(InvoicesDaoPojo invoiceDaoPojo: iTinvoices){
-            lstInvoices.add(new InvoicesCtrlPojo(invoiceDaoPojo, invoiceJobsDao.sumAmount(invoiceDaoPojo.getPkId())));
+            InvoicesCtrlPojo invoice = new InvoicesCtrlPojo(invoiceDaoPojo);
+            List<InvoiceJobsDaoPojo> invoiceJobs = invoiceJobsDao.findAllJobsByInvoice(invoice.getPkId());
+
+            invoice.setTotalWorkedDays(getAmountWorkedDays(invoiceJobs));
+            invoice.setTotalAmount(getTotalAmount(invoiceJobs));
+
+            lstInvoices.add(invoice);
         }
 
         return lstInvoices;

@@ -17,6 +17,7 @@ public class InvoicesCtrlPojo implements Invoices{
     private BigDecimal vatAmount;
     private String description;
     private BigDecimal totalAmount;
+    private BigDecimal totalWorkedDays;
     private Boolean closed;
 
     @Override
@@ -136,8 +137,11 @@ public class InvoicesCtrlPojo implements Invoices{
         setInvoicesProperties(invoices);
     }
 
-    public InvoicesCtrlPojo(Invoices invoices, BigDecimal totalAmount){
-        setInvoicesProperties(invoices);
-        this.totalAmount = totalAmount;
+    public BigDecimal getTotalWorkedDays() {
+        return totalWorkedDays;
+    }
+
+    public void setTotalWorkedDays(BigDecimal totalWorkedDays) {
+        this.totalWorkedDays = totalWorkedDays;
     }
 }
