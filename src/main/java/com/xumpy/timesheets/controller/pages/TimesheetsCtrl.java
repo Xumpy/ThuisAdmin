@@ -13,9 +13,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.SQLException;
+import java.text.ParseException;
 import javax.servlet.http.HttpServletResponse;
 
 import com.xumpy.timesheets.services.session.SessionTimesheet;
+import net.sf.jasperreports.engine.JRException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -126,18 +128,8 @@ public class TimesheetsCtrl {
     }
 
     @RequestMapping(value="timesheets/printTimesheet", method = RequestMethod.GET)
-    public @ResponseBody ResponseEntity<byte[]> fetchDocumentBlob(@RequestParam Integer jobsGroupId, @RequestParam String month, HttpServletResponse response) throws IOException{
-        OutputStream out = response.getOutputStream();
-        
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "inline;filename=\"timesheet.pdf\"");
-       
-        out = timesheetSrv.getTimesheet(jobsGroupId, month, out);
-        
-        out.flush();
-        out.close();
-        
-        return null;
+    public @ResponseBody void fetchDocumentBlob(@RequestParam Integer jobsGroupId, @RequestParam String month, HttpServletResponse response) throws IOException, SQLException, JRException, ParseException {
+        timesheetSrv.generateReport(jobsGroupId, month, response);
     }
 
     @RequestMapping(value="timesheets/newGroupPrice/{groupId}")

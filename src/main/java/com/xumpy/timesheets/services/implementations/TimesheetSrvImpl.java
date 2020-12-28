@@ -10,26 +10,45 @@ import com.xumpy.itext.services.TimeSheet;
 import com.xumpy.thuisadmin.dao.sqlite.model.TimeRecording;
 import com.xumpy.timesheets.dao.implementations.JobsDaoImpl;
 import com.xumpy.timesheets.dao.implementations.JobsGroupDaoImpl;
+import com.xumpy.timesheets.dao.model.JobsGroupDaoPojo;
 import com.xumpy.timesheets.domain.Jobs;
 import com.xumpy.timesheets.domain.JobsGroup;
+import com.xumpy.timesheets.services.TickedJobsDetailSrv;
 import com.xumpy.timesheets.services.TimesheetSrv;
+import com.xumpy.timesheets.services.model.JobsGroupSrvPojo;
 import com.xumpy.timesheets.services.rest.RestTimesheet;
 import com.xumpy.timesheets.services.rest.RestTimesheetDetail;
 import com.xumpy.timesheets.services.rest.RestTimesheetHour;
 import com.xumpy.timesheets.services.rest.TimesheetWebService;
 import com.xumpy.utilities.CustomDateUtils;
+
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.net.URISyntaxException;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ResourceUtils;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 /**
  *
@@ -42,45 +61,62 @@ public class TimesheetSrvImpl implements TimesheetSrv{
     private DateFormat format = new SimpleDateFormat("ddMMyyyy", Locale.ENGLISH);
     private static final int MONTHS_TO_GET_FROM_WEBSERVICE = 2;
 
+    @Autowired DataSource dataSource;
     @Autowired JobsDaoImpl jobsDao;
     @Autowired JobsGroupDaoImpl jobsGroupDao;
     @Autowired TimesheetWebService timesheetWebService;
+    @Autowired TickedJobsDetailSrv tickedJobsDetailSrv;
+
+    private Map<String, Object> addCompanyParams(Map<String, Object> params, Integer jobsGroupId){
+        JobsGroupDaoPojo jobsGroupDaoPojo = jobsGroupDao.findById(jobsGroupId).get();
+
+        params.put("COMPANY_NAME", jobsGroupDaoPojo.getCompany().getName());
+        params.put("COMPANY_STREET_NAME_NUMBER", jobsGroupDaoPojo.getCompany().getStreet() + " " + jobsGroupDaoPojo.getCompany().getNumber());
+        params.put("COMPANY_POSTAL_CITY_CODE", jobsGroupDaoPojo.getCompany().getPostalCode() + " " + jobsGroupDaoPojo.getCompany().getCity());
+        params.put("COMPANY_VAT_NUMBER", jobsGroupDaoPojo.getCompany().getVatNumber());
+        params.put("JOB_DESCRIPTION", jobsGroupDaoPojo.getName() + ": " + jobsGroupDaoPojo.getDescription());
+
+        return params;
+    }
+
+    private Map<String, Object> addActualTimes(Map<String, Object> params, Integer jobsGroupId, String month) throws ParseException {
+        for (Map.Entry<JobsGroupSrvPojo, Map<String, String>> entry: tickedJobsDetailSrv.tickedOverviewMonth(month).entrySet()){
+            if (entry.getKey().getPk_id().equals(jobsGroupId)){
+                entry.getValue().get("actualWorked");
+                params.put("EXPECTED_WORK_HOURS", new BigDecimal(
+                                                    entry.getValue().get("timesheetWorked"))
+                                                        .divide(new BigDecimal(60))
+                                                        .divide(new BigDecimal(60))
+                                                        .toString());
+            }
+        }
+
+        return params;
+    }
+
     @Override
     @Transactional
-    public OutputStream getTimesheet(Integer jobsGroupId, String month, OutputStream outputStream){
-        try {
-            log.info("JobsGroupId: " + jobsGroupId);
-            log.info("Month: " + month);
-            
-            List<? extends Jobs> jobs = jobsDao.selectPeriode(CustomDateUtils.getFirstDayOfMonth(month), CustomDateUtils.getLastDayOfMonth(month));
-            List<Jobs> jobsInGroup = new ArrayList<Jobs>();
-            
-            log.info("Get Jobs total: " + jobs.size());
-            
-            JobsGroup jobsGroup = jobsGroupDao.findById(jobsGroupId).get();
-            
-            for (Jobs job: jobs){
-                if (job.getJobsGroup().getPk_id().equals(jobsGroup.getPk_id())){
-                    jobsInGroup.add(job);
-                }
-            }
-            
-            log.info("Get jobsInGroup total: " + jobsInGroup.size());
-            
-            TimeSheet timeSheet = new TimeSheet();
-            
-            return timeSheet.pdf(jobsInGroup, outputStream);
-        } catch (ParseException ex) {
-            Logger.getLogger(TimesheetSrvImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DocumentException ex) {
-            Logger.getLogger(TimesheetSrvImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(TimesheetSrvImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(TimesheetSrvImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return null;
+    public void generateReport(Integer jobsGroupId, String month, HttpServletResponse response) throws IOException, JRException, SQLException, ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd"); // This String format has to match string formatter mysql +  jasperreports
+
+        Map<String,Object> params = new HashMap<String, Object>();
+        params.put("FIRST_DAY_MONTH", formatter.format(CustomDateUtils.getFirstDayOfMonth(month)));
+        params.put("LAST_DAY_MONTH", formatter.format(CustomDateUtils.getLastDayOfMonth(month)));
+        params.put("JOBS_GROUP_ID", jobsGroupId);
+        params.put("LOGO", "classpath:jasperreports/NMConsultancyLogo.png");
+
+        params = addCompanyParams(params, jobsGroupId);
+        params = addActualTimes(params, jobsGroupId, month);
+
+        params.put(JRParameter.REPORT_LOCALE, Locale.GERMANY);
+        JasperReport jasperReport = (JasperReport) JRLoader.loadObject(ResourceUtils.getURL("classpath:jasperreports/Timesheet.jasper").openStream());
+
+        response.setContentType("application/x-pdf");
+        response.setHeader("Content-disposition", "inline; filename=timesheet-" + month + ".pdf");
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, dataSource.getConnection());
+
+        final OutputStream outStream = response.getOutputStream();
+        JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
     }
 
     private String getStartDate(){

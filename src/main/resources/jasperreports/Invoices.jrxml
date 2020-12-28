@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 7.9.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Invoices" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="692e7455-bcc9-43d2-a07c-bb11e172be36">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="13"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Mysql Thuisadmin"/>
 	<style name="Base" isDefault="true" isBlankWhenNull="true" fontName="DejaVu Sans"/>
 	<parameter name="INVOICE_ID" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
-	<parameter name="LOGO" class="Object" isForPrompting="false">
-		<defaultValueExpression><![CDATA["/Users/nico/Projects/Personal/ThuisAdmin/src/main/resources/jasperreports/NMConsultancyLogo.png"]]></defaultValueExpression>
+	<parameter name="LOGO" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:/Users/nmartens/Projects/Personal/ThuisAdmin/src/main/resources/jasperreports/NMConsultancyLogo.png"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="SUBREPORT" class="Object" isForPrompting="false">
-		<defaultValueExpression><![CDATA["/Users/nico/Projects/Personal/ThuisAdmin/src/main/resources/jasperreports/Invoices_detail.jasper"]]></defaultValueExpression>
+	<parameter name="SUBREPORT" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:/Users/nmartens/Projects/Personal/ThuisAdmin/src/main/resources/jasperreports/Invoices_detail.jasper"
+]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[select distinct ta_invoices.invoice_id as invoice_id,
@@ -177,7 +180,7 @@ where ta_invoices.pk_id = $P{INVOICE_ID}]]>
 			</frame>
 			<frame>
 				<reportElement x="13" y="133" width="188" height="48" uuid="de21c13b-79e4-497c-8b88-f920f6a5f239"/>
-				<textField isStretchWithOverflow="true">
+				<textField textAdjust="StretchHeight">
 					<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="188" height="12" uuid="d838ad69-411d-4b17-9f49-90dbfc464b13"/>
 					<textElement>
 						<font size="10"/>
@@ -211,7 +214,9 @@ where ta_invoices.pk_id = $P{INVOICE_ID}]]>
 				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="358" y="133" width="57" height="12" uuid="6017d37f-ac47-4636-9c71-c9a2310ba368"/>
+				<reportElement x="358" y="133" width="57" height="12" uuid="6017d37f-ac47-4636-9c71-c9a2310ba368">
+					<printWhenExpression><![CDATA[$F{invoice_ref} != null]]></printWhenExpression>
+				</reportElement>
 				<text><![CDATA[Reference:]]></text>
 			</staticText>
 			<textField>
@@ -221,6 +226,12 @@ where ta_invoices.pk_id = $P{INVOICE_ID}]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{invoice_ref}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="358" y="145" width="90" height="12" uuid="852aed72-7d92-4d1f-a5f8-f39eee0ab5e9">
+					<printWhenExpression><![CDATA[$F{vat_amount} == 0]]></printWhenExpression>
+				</reportElement>
+				<text><![CDATA[VAT shifted]]></text>
+			</staticText>
 		</band>
 	</title>
 	<pageHeader>

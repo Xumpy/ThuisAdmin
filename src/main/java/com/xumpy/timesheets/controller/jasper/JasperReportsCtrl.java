@@ -2,6 +2,7 @@ package com.xumpy.timesheets.controller.jasper;
 
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,10 +39,8 @@ public class JasperReportsCtrl {
     }
 
     private void generateReport(HttpServletResponse response, Map<String, Object> params, String filename) throws JRException, IOException, SQLException {
-        JasperReport jasperSubReport = (JasperReport) JRLoader.loadObject(ResourceUtils.getURL("classpath:jasperreports/Invoices_detail.jasper").openStream());
-        BufferedImage nmconsultancyLogo = ImageIO.read(ResourceUtils.getURL("classpath:jasperreports/NMConsultancyLogo.png"));
-        params.put("SUBREPORT", jasperSubReport);
-        params.put("LOGO", nmconsultancyLogo);
+        params.put("SUBREPORT", "classpath:jasperreports/Invoices_detail.jasper");
+        params.put("LOGO", "classpath:jasperreports/NMConsultancyLogo.png");
         params.put(JRParameter.REPORT_LOCALE, Locale.GERMANY);
         JasperReport jasperReport = (JasperReport) JRLoader.loadObject(ResourceUtils.getURL("classpath:jasperreports/Invoices.jasper").openStream());
 

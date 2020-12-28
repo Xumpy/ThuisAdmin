@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 7.9.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Timesheet" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9a732b88-c094-4da7-ab16-55b00b3cd7cd">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Mysql Thuisadmin"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="FIRST_DAY_MONTH" class="java.lang.String"/>
+	<parameter name="LAST_DAY_MONTH" class="java.lang.String"/>
+	<parameter name="JOBS_GROUP_ID" class="java.lang.Integer"/>
+	<parameter name="LOGO" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:/Users/nmartens/Projects/Personal/ThuisAdmin/src/main/resources/jasperreports/NMConsultancyLogo.png"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COMPANY_NAME" class="java.lang.String"/>
+	<parameter name="COMPANY_STREET_NAME_NUMBER" class="java.lang.String"/>
+	<parameter name="COMPANY_POSTAL_CITY_CODE" class="java.lang.String"/>
+	<parameter name="COMPANY_VAT_NUMBER" class="java.lang.String"/>
+	<parameter name="JOB_DESCRIPTION" class="java.lang.String"/>
+	<parameter name="EXPECTED_WORK_HOURS" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select job_date, 
+           ticked, 
+           started 
+from ta_ticked_jobs ttj
+join ta_jobs tj
+on (ttj.fk_job_id = tj.pk_id)
+where job_date >=  $P{FIRST_DAY_MONTH} and job_date <=  $P{LAST_DAY_MONTH}
+    and fk_job_group_id = $P{JOBS_GROUP_ID}]]>
+	</queryString>
+	<field name="job_date" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="JOB_DATE"/>
+		<property name="com.jaspersoft.studio.field.label" value="job_date"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="ta_jobs"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ticked" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="TICKED"/>
+		<property name="com.jaspersoft.studio.field.label" value="ticked"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="ta_ticked_jobs"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="started" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="STARTED"/>
+		<property name="com.jaspersoft.studio.field.label" value="started"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="ta_ticked_jobs"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="PREVIOUS_DATE" class="java.sql.Timestamp">
+		<variableExpression><![CDATA[$F{started} ? 0 : $V{CURRENT_DATE}]]></variableExpression>
+	</variable>
+	<variable name="CURRENT_DATE" class="java.sql.Timestamp">
+		<variableExpression><![CDATA[$F{ticked}]]></variableExpression>
+	</variable>
+	<variable name="DIFFERENCE_DATE" class="java.lang.Long">
+		<variableExpression><![CDATA[$F{started} ? 0 : ($V{CURRENT_DATE}.getTime() - $V{PREVIOUS_DATE}.getTime()) / 1000 / 60]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_WORKED" class="java.lang.Double">
+		<variableExpression><![CDATA[$V{TOTAL_WORKED} + $V{DIFFERENCE_DATE}]]></variableExpression>
+		<initialValueExpression><![CDATA[new java.lang.Double(0)]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="131" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="0" y="0" width="555" height="118" forecolor="#E6E6E6" backcolor="#E6E6E6" uuid="b4964b05-17ff-44a0-9673-8e350d62b832"/>
+			</rectangle>
+			<image hAlign="Left">
+				<reportElement x="13" y="7" width="214" height="105" uuid="4b775235-0ff6-43fa-8e61-235e242e7dd0"/>
+				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="350" y="20" width="201" height="15" isRemoveLineWhenBlank="true" uuid="e08ba4a6-1424-4cff-ab0b-3e9f904268cb"/>
+				<textFieldExpression><![CDATA[$P{COMPANY_NAME} == null ? "" : $P{COMPANY_NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="350" y="35" width="201" height="15" isRemoveLineWhenBlank="true" uuid="a11e31cd-84e8-45d1-9ce7-97637e3cca6c"/>
+				<textFieldExpression><![CDATA[$P{COMPANY_STREET_NAME_NUMBER} == null ? "" : $P{COMPANY_STREET_NAME_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="350" y="50" width="201" height="15" isRemoveLineWhenBlank="true" uuid="d4aecca3-4fda-43b7-bf99-01f8aba98a86">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{COMPANY_POSTAL_CITY_CODE} == null ? "" : $P{COMPANY_POSTAL_CITY_CODE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="350" y="65" width="201" height="15" isRemoveLineWhenBlank="true" uuid="4b481a26-a096-4433-a858-ddd01eb5bd84"/>
+				<textFieldExpression><![CDATA[$P{COMPANY_VAT_NUMBER} == null ? "" : $P{COMPANY_VAT_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="350" y="80" width="201" height="15" isRemoveLineWhenBlank="true" uuid="0d3d2b0f-dde6-44f0-bda1-04d02855058e">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{JOB_DESCRIPTION} == null ? "" : $P{JOB_DESCRIPTION}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="18" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="15" uuid="f975d5c0-3b1b-48ef-ae75-d549da28140d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="30cf17fa-c4f6-4a21-b282-dec44f4b344a"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ticked Hour]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="100" height="15" uuid="2c50eac8-c411-4343-aadc-dbea665f04a1">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f0657f89-c0ae-4c96-b38d-55c060ec0392"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Batch]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="100" height="15" uuid="56edc50e-ef17-41cd-92de-18d5f5d0da38">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f0657f89-c0ae-4c96-b38d-55c060ec0392"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Worked Minutes]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="15" uuid="afe52ccc-dcee-4ff0-954d-3a4d1081696d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="30cf17fa-c4f6-4a21-b282-dec44f4b344a"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{ticked}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="100" height="14" uuid="ba8693fa-9e08-449f-87fc-4b5ff0435681">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f0657f89-c0ae-4c96-b38d-55c060ec0392"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{started} ? "In" : "Out"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="134" height="13" uuid="26ab660b-f936-4bef-a67b-0d8bf35ed6d8"/>
+				<textFieldExpression><![CDATA[$V{DIFFERENCE_DATE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="41">
+			<staticText>
+				<reportElement x="0" y="20" width="180" height="20" uuid="1765b5c4-89d0-47e4-8091-9013bcfb2e14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Expected Hours Worked]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="180" height="20" uuid="474223f0-f21b-4acd-8bc0-474097e3b23b"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Hours Worked]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="200" y="0" width="160" height="20" uuid="e6821812-9f55-47a2-8500-719ab08eeee1"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_WORKED} / 60]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="20" width="160" height="20" uuid="3434cda1-51d8-4f1b-8525-9bed718a818e"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{EXPECTED_WORK_HOURS}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+</jasperReport>
