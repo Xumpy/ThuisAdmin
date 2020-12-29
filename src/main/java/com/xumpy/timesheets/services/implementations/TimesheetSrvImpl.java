@@ -81,7 +81,11 @@ public class TimesheetSrvImpl implements TimesheetSrv{
     }
 
     private String convertWorkHours(String workHours){
-        return new BigDecimal(workHours).divide(new BigDecimal(60), RoundingMode.DOWN).divide(new BigDecimal(60), RoundingMode.DOWN).toString();
+        return new BigDecimal(workHours)
+                .setScale(0,BigDecimal.ROUND_DOWN)
+                .divide(new BigDecimal(60), RoundingMode.DOWN)
+                .divide(new BigDecimal(60), RoundingMode.DOWN)
+                .toString();
     }
 
     private Map<String, Object> addActualTimes(Map<String, Object> params, Integer jobsGroupId, String month) throws ParseException {
