@@ -15,6 +15,7 @@
 	<parameter name="COMPANY_VAT_NUMBER" class="java.lang.String"/>
 	<parameter name="JOB_DESCRIPTION" class="java.lang.String"/>
 	<parameter name="EXPECTED_WORK_HOURS" class="java.lang.String"/>
+	<parameter name="ACTUAL_WORK_HOURS" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select job_date, 
            ticked, 
@@ -166,18 +167,18 @@ where job_date >=  $P{FIRST_DAY_MONTH} and job_date <=  $P{LAST_DAY_MONTH}
 				<text><![CDATA[Total Hours Worked]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="200" y="0" width="160" height="20" uuid="e6821812-9f55-47a2-8500-719ab08eeee1"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTAL_WORKED} / 60]]></textFieldExpression>
-			</textField>
-			<textField>
 				<reportElement x="200" y="20" width="160" height="20" uuid="3434cda1-51d8-4f1b-8525-9bed718a818e"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{EXPECTED_WORK_HOURS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="160" height="20" uuid="048a9644-0ad4-44b7-9856-0c3a5c1076e8"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ACTUAL_WORK_HOURS}]]></textFieldExpression>
 			</textField>
 		</band>
 	</lastPageFooter>

@@ -26,6 +26,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -79,15 +80,15 @@ public class TimesheetSrvImpl implements TimesheetSrv{
         return params;
     }
 
+    private String convertWorkHours(String workHours){
+        return new BigDecimal(workHours).divide(new BigDecimal(60), RoundingMode.DOWN).divide(new BigDecimal(60), RoundingMode.DOWN).toString();
+    }
+
     private Map<String, Object> addActualTimes(Map<String, Object> params, Integer jobsGroupId, String month) throws ParseException {
         for (Map.Entry<JobsGroupSrvPojo, Map<String, String>> entry: tickedJobsDetailSrv.tickedOverviewMonth(month).entrySet()){
             if (entry.getKey().getPk_id().equals(jobsGroupId)){
-                entry.getValue().get("actualWorked");
-                params.put("EXPECTED_WORK_HOURS", new BigDecimal(
-                                                    entry.getValue().get("timesheetWorked"))
-                                                        .divide(new BigDecimal(60))
-                                                        .divide(new BigDecimal(60))
-                                                        .toString());
+                params.put("ACTUAL_WORK_HOURS", convertWorkHours(entry.getValue().get("actualWorked")));
+                params.put("EXPECTED_WORK_HOURS", convertWorkHours(entry.getValue().get("timesheetWorked")));
             }
         }
 
