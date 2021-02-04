@@ -169,7 +169,7 @@ public class AbsenceCalenderSrvImpl {
 
         BigDecimal totalPossibleWorkDays = new BigDecimal(0);
 
-        for (LocalDate currentDate = startDate; currentDate.isBefore(endDate); currentDate = currentDate.plusDays(1)) {
+        for (LocalDate currentDate = startDate; currentDate.isBefore(endDate.plusDays(1)); currentDate = currentDate.plusDays(1)) {
             Integer workingHours = getTotalWorkingHours(jobsGroupPrices, currentDate);
 
             Event currentEvent = getEvent(events, currentDate);
