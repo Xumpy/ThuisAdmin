@@ -6,13 +6,11 @@
 package com.xumpy.timesheets.dao.implementations;
 
 import com.xumpy.timesheets.dao.model.JobsGroupPricesDaoPojo;
-import com.xumpy.timesheets.domain.JobsGroup;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -36,4 +34,7 @@ public interface JobsGroupPricesDaoImpl extends CrudRepository<JobsGroupPricesDa
 
     @Query("select pricePerHour from JobsGroupPricesDaoPojo where jobsGroup.pk_id = :jobsGroupId and :currentDate between startDate and endDate")
     public BigDecimal selectPriceBetweenDate(@Param("jobsGroupId") Integer jobsGroupId, @Param("currentDate") Date currentDate);
+
+    @Query("from JobsGroupPricesDaoPojo where startDate >= :startDate and endDate <= :endDate")
+    List<JobsGroupPricesDaoPojo> selectPeriode(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }

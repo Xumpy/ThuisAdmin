@@ -145,4 +145,9 @@ public class TimesheetsCtrl {
 
         return "timesheets/editGroupPrice";
     }
+
+    @RequestMapping(value="timesheets/absence")
+    public String absence(){
+        return "timesheets/absence";
+    }
 }

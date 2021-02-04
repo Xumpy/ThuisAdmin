@@ -1,0 +1,157 @@
+<html layout:decorator="views/layout" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<body>
+    <div layout:fragment="content">
+        <div class="col-lg-12">
+            <div class="form-horizontal" id="calendar"/>
+        </div>
+        <div id="dialogEvent" class="modal-dialog" title="Events">
+            <div class="col-lg-12">
+                <div class="col-lg-8">
+                    <input class="form-control" id="inputPkId" ng-model="event.pkId" placeholder="Invoice Id" type="hidden"/>
+                    <input class="form-control" id="inputPublicHoliday" ng-model="event.publicHoliday" placeholder="Public Holiday" type="checkbox"/>
+                    <input class="form-control" id="inputAbsenceHours" ng-model="event.absenceHours" placeholder="Absence Hours" type="text"/>
+                    <input class="form-control" id="inputDescription" ng-model="event.description" placeholder="Description" type="text"/>
+                    <input class="datepicker form-control" id="date" ng-model="event.eventDate" data-provide="datepicker" data-date-format="dd/mm/yyyy" placeholder="Date" type="text"/>
+                </div>
+            </div>
+        </div>
+        <div>
+            <table  class="table table-hover">
+                <tr>
+                    <td>Possible Work Days: {{summary.totalPossibleWorkDays}}</td>
+                </tr>
+                <tr>
+                    <td>Absence Days: {{summary.totalAbsenceDays}}</td>
+                </tr>
+                <tr>
+                    <td>Days To Invoice: {{summary.totalPossibleWorkDays - summary.totalAbsenceDays}}</td>
+                </tr>
+            </table>
+        </div>
+        <script th:inline="javascript">
+            $(function() {
+                $( "#dialogEvent" ).hide();
+            });
+
+            function formatDate(date) {
+                var d = new Date(date),
+                    month = '' + (d.getMonth() + 1),
+                    day = '' + d.getDate(),
+                    year = d.getFullYear();
+
+                if (month.length < 2)
+                    month = '0' + month;
+                if (day.length < 2)
+                    day = '0' + day;
+
+                return [day, month, year].join('/');
+            }
+
+            function convertResult(data){
+                var result = [];
+                for (var i = 0; i < data.length; i++) {
+                    result.push({
+                        id: data[i].id,
+                        eventPkId: data[i].pkId,
+                        absenceHours: data[i].absenceHours,
+                        description: data[i].description,
+                        color: data[i].color,
+                        startDate: new Date(data[i].startDate),
+                        endDate: new Date(data[i].endDate),
+                        publicHoliday: data[i].publicHoliday
+                    });
+                }
+                return result;
+            }
+
+            app.controller("fController", function($scope, $http) {
+                $scope.summary = {
+                    totalAbsenceDays: 0,
+                    totalPossibleWorkDays: 0
+                }
+
+                $scope.event = {
+                    pkId: null,
+                    publicHoliday: false,
+                    absenceHours: null,
+                    description: null,
+                    eventDate: null
+                }
+
+                let url_absence_calender = /*[[@{/json/absence_calender/}]]*/;
+                let start_year = new Date().getFullYear();
+                let calender = new Calendar('#calendar', {
+                    clickDay: function(event){
+                        if (event.events.length == 1){
+                            if (event.events[0].color === "red"){
+                                $scope.$apply(function () {
+                                    $scope.event.pkId = event.events[0].eventPkId;
+                                    $scope.event.publicHoliday = false;
+                                    $scope.event.absenceHours = 0;
+                                    $scope.event.description = "";
+                                    $scope.event.eventDate = formatDate(event.date);
+                                });
+                            } else {
+                                $scope.$apply(function () {
+                                    $scope.event.pkId = event.events[0].eventPkId;
+                                    $scope.event.publicHoliday = event.events[0].publicHoliday;
+                                    $scope.event.absenceHours = event.events[0].absenceHours;
+                                    $scope.event.description = event.events[0].description;
+                                    $scope.event.eventDate = formatDate(event.date);
+                                });
+                            }
+                        } else {
+                            $scope.$apply(function () {
+                                $scope.event.pkId = null;
+                                $scope.event.publicHoliday = false;
+                                $scope.event.absenceHours = 0;
+                                $scope.event.description = "";
+                                $scope.event.eventDate = formatDate(event.date);
+                            });
+                        }
+
+                        $('#dialogEvent').dialog({
+                            title: "Create Event",
+                            width: 500,
+                            buttons: { "OK": function() {
+                                $http.post(url_absence_calender + "save_event", $scope.event).success( function(data){
+                                    calender.setDataSource(convertResult(data.calenderInfo));
+                                    $scope.summary.totalAbsenceDays=data.totalAbsenceDays;
+                                    $scope.summary.totalPossibleWorkDays=data.totalPossibleWorkDays;
+                                }).error( function(){
+                                    bootbox.alert("Error occured during save event");
+                                });
+
+                                $( "#dialogEvent" ).dialog("close");
+                            }, "Delete": function(){
+                                $http.post(url_absence_calender + "delete_event", $scope.event).success( function(data){
+                                    calender.setDataSource(convertResult(data.calenderInfo));
+                                    $scope.summary.totalAbsenceDays=data.totalAbsenceDays;
+                                    $scope.summary.totalPossibleWorkDays=data.totalPossibleWorkDays;
+                                }).error( function(){
+                                    bootbox.alert("Error occured during save event");
+                                });
+                                $( "#dialogEvent" ).dialog("close");
+                            }}
+                        }).prev(".ui-dialog-titlebar").css("background","#bf3e11");
+                    }
+                });
+
+                $http.get(url_absence_calender + start_year).success( function(data){
+                        calender.setDataSource(convertResult(data.calenderInfo));
+                        $scope.summary.totalAbsenceDays=data.totalAbsenceDays;
+                        $scope.summary.totalPossibleWorkDays=data.totalPossibleWorkDays;
+                });
+
+                document.querySelector('#calendar').addEventListener('yearChanged', function(e) {
+                    $http.get(url_absence_calender + e.currentYear).success( function(data){
+                        calender.setDataSource(convertResult(data.calenderInfo));
+                        $scope.summary.totalAbsenceDays=data.totalAbsenceDays;
+                        $scope.summary.totalPossibleWorkDays=data.totalPossibleWorkDays;
+                    });
+                });
+            });
+        </script>
+    </div>
+</body>
+</html>

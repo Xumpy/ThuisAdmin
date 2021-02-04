@@ -26,38 +26,47 @@
 <foType>Title</foType>
 <fontStyle>1</fontStyle>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>1</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Column</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>2</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Datatype</foType>
 <colorRGB>-16744448</colorRGB>
+<foTypeID>5</foTypeID>
 </FontObject>
 <FontObject>
 <foType>PK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>7</foTypeID>
 </FontObject>
 <FontObject>
 <foType>FK Element</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>8</foTypeID>
 </FontObject>
 <FontObject>
 <foType>UK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>9</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Not Null</foType>
 <colorRGB>-65536</colorRGB>
+<foTypeID>10</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Key</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>6</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Comments</foType>
 <colorRGB>-12566464</colorRGB>
+<foTypeID>28</foTypeID>
 </FontObject>
 </fonts>
 </OView>
@@ -77,38 +86,47 @@
 <foType>Title</foType>
 <fontStyle>1</fontStyle>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>1</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Column</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>2</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Datatype</foType>
 <colorRGB>-16744448</colorRGB>
+<foTypeID>5</foTypeID>
 </FontObject>
 <FontObject>
 <foType>PK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>7</foTypeID>
 </FontObject>
 <FontObject>
 <foType>FK Element</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>8</foTypeID>
 </FontObject>
 <FontObject>
 <foType>UK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>9</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Not Null</foType>
 <colorRGB>-65536</colorRGB>
+<foTypeID>10</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Key</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>6</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Comments</foType>
 <colorRGB>-12566464</colorRGB>
+<foTypeID>28</foTypeID>
 </FontObject>
 </fonts>
 </OView>
@@ -124,38 +142,47 @@
 <foType>Title</foType>
 <fontStyle>1</fontStyle>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>1</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Column</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>2</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Datatype</foType>
 <colorRGB>-16744448</colorRGB>
+<foTypeID>5</foTypeID>
 </FontObject>
 <FontObject>
 <foType>PK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>7</foTypeID>
 </FontObject>
 <FontObject>
 <foType>FK Element</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>8</foTypeID>
 </FontObject>
 <FontObject>
 <foType>UK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>9</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Not Null</foType>
 <colorRGB>-65536</colorRGB>
+<foTypeID>10</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Key</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>6</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Comments</foType>
 <colorRGB>-12566464</colorRGB>
+<foTypeID>28</foTypeID>
 </FontObject>
 </fonts>
 </OView>
@@ -171,44 +198,53 @@
 <foType>Title</foType>
 <fontStyle>1</fontStyle>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>1</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Column</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>2</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Datatype</foType>
 <colorRGB>-16744448</colorRGB>
+<foTypeID>5</foTypeID>
 </FontObject>
 <FontObject>
 <foType>PK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>7</foTypeID>
 </FontObject>
 <FontObject>
 <foType>FK Element</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>8</foTypeID>
 </FontObject>
 <FontObject>
 <foType>UK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>9</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Not Null</foType>
 <colorRGB>-65536</colorRGB>
+<foTypeID>10</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Key</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>6</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Comments</foType>
 <colorRGB>-12566464</colorRGB>
+<foTypeID>28</foTypeID>
 </FontObject>
 </fonts>
 </OView>
 <OView class="oracle.dbtools.crest.swingui.relational.TVTable" oid="49F6892A-CF3E-2F82-DD9F-9A0BC54A70AB" otype="Table" vid="5846B14D-21B7-1E08-FB3E-134871172235">
 <hideElementsInCurrentOnly>false</hideElementsInCurrentOnly>
-<bounds x="767" y="6" width="258" height="127"/>
+<bounds x="633" y="6" width="258" height="127"/>
 <useCustomFormat>true</useCustomFormat>
 <useDefaultColor>false</useDefaultColor>
 <backgroundColor>-3342388</backgroundColor>
@@ -218,38 +254,47 @@
 <foType>Title</foType>
 <fontStyle>1</fontStyle>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>1</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Column</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>2</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Datatype</foType>
 <colorRGB>-16744448</colorRGB>
+<foTypeID>5</foTypeID>
 </FontObject>
 <FontObject>
 <foType>PK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>7</foTypeID>
 </FontObject>
 <FontObject>
 <foType>FK Element</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>8</foTypeID>
 </FontObject>
 <FontObject>
 <foType>UK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>9</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Not Null</foType>
 <colorRGB>-65536</colorRGB>
+<foTypeID>10</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Key</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>6</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Comments</foType>
 <colorRGB>-12566464</colorRGB>
+<foTypeID>28</foTypeID>
 </FontObject>
 </fonts>
 </OView>
@@ -273,38 +318,47 @@
 <foType>Title</foType>
 <fontStyle>1</fontStyle>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>1</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Column</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>2</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Datatype</foType>
 <colorRGB>-16744448</colorRGB>
+<foTypeID>5</foTypeID>
 </FontObject>
 <FontObject>
 <foType>PK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>7</foTypeID>
 </FontObject>
 <FontObject>
 <foType>FK Element</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>8</foTypeID>
 </FontObject>
 <FontObject>
 <foType>UK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>9</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Not Null</foType>
 <colorRGB>-65536</colorRGB>
+<foTypeID>10</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Key</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>6</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Comments</foType>
 <colorRGB>-12566464</colorRGB>
+<foTypeID>28</foTypeID>
 </FontObject>
 </fonts>
 </OView>
@@ -320,38 +374,47 @@
 <foType>Title</foType>
 <fontStyle>1</fontStyle>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>1</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Column</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>2</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Datatype</foType>
 <colorRGB>-16744448</colorRGB>
+<foTypeID>5</foTypeID>
 </FontObject>
 <FontObject>
 <foType>PK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>7</foTypeID>
 </FontObject>
 <FontObject>
 <foType>FK Element</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>8</foTypeID>
 </FontObject>
 <FontObject>
 <foType>UK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>9</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Not Null</foType>
 <colorRGB>-65536</colorRGB>
+<foTypeID>10</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Key</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>6</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Comments</foType>
 <colorRGB>-12566464</colorRGB>
+<foTypeID>28</foTypeID>
 </FontObject>
 </fonts>
 </OView>
@@ -367,44 +430,60 @@
 <foType>Title</foType>
 <fontStyle>1</fontStyle>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>1</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Column</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>2</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Datatype</foType>
 <colorRGB>-16744448</colorRGB>
+<foTypeID>5</foTypeID>
 </FontObject>
 <FontObject>
 <foType>PK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>7</foTypeID>
 </FontObject>
 <FontObject>
 <foType>FK Element</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>8</foTypeID>
 </FontObject>
 <FontObject>
 <foType>UK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>9</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Not Null</foType>
 <colorRGB>-65536</colorRGB>
+<foTypeID>10</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Key</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>6</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Comments</foType>
 <colorRGB>-12566464</colorRGB>
+<foTypeID>28</foTypeID>
 </FontObject>
 </fonts>
 </OView>
+<OView class="oracle.dbtools.crest.swingui.relational.TVTable" oid="8A5E4AF8-6937-840F-47E3-C9BDE6866268" otype="Table" vid="AB904F5C-0B9A-603C-7F7B-D3F1631B1919">
+<hideElementsInCurrentOnly>false</hideElementsInCurrentOnly>
+<bounds x="905" y="11" width="228" height="114"/>
+<useDefaultColor>false</useDefaultColor>
+<backgroundColor>-13057</backgroundColor>
+<foregroundColor>-16776961</foregroundColor>
+</OView>
 <OView class="oracle.dbtools.crest.swingui.relational.TVTable" oid="92A1E3B6-0DC0-C6F7-2948-3542AD1A35B1" otype="Table" vid="8E26EE75-FB9E-6B9B-EB63-5E0C02538F74">
 <hideElementsInCurrentOnly>false</hideElementsInCurrentOnly>
-<bounds x="396" y="8" width="223" height="120"/>
+<bounds x="385" y="10" width="223" height="120"/>
 <useCustomFormat>true</useCustomFormat>
 <useDefaultColor>false</useDefaultColor>
 <backgroundColor>-3342388</backgroundColor>
@@ -414,38 +493,47 @@
 <foType>Title</foType>
 <fontStyle>1</fontStyle>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>1</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Column</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>2</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Datatype</foType>
 <colorRGB>-16744448</colorRGB>
+<foTypeID>5</foTypeID>
 </FontObject>
 <FontObject>
 <foType>PK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>7</foTypeID>
 </FontObject>
 <FontObject>
 <foType>FK Element</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>8</foTypeID>
 </FontObject>
 <FontObject>
 <foType>UK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>9</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Not Null</foType>
 <colorRGB>-65536</colorRGB>
+<foTypeID>10</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Key</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>6</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Comments</foType>
 <colorRGB>-12566464</colorRGB>
+<foTypeID>28</foTypeID>
 </FontObject>
 </fonts>
 </OView>
@@ -469,38 +557,47 @@
 <foType>Title</foType>
 <fontStyle>1</fontStyle>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>1</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Column</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>2</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Datatype</foType>
 <colorRGB>-16744448</colorRGB>
+<foTypeID>5</foTypeID>
 </FontObject>
 <FontObject>
 <foType>PK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>7</foTypeID>
 </FontObject>
 <FontObject>
 <foType>FK Element</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>8</foTypeID>
 </FontObject>
 <FontObject>
 <foType>UK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>9</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Not Null</foType>
 <colorRGB>-65536</colorRGB>
+<foTypeID>10</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Key</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>6</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Comments</foType>
 <colorRGB>-12566464</colorRGB>
+<foTypeID>28</foTypeID>
 </FontObject>
 </fonts>
 </OView>
@@ -520,38 +617,47 @@
 <foType>Title</foType>
 <fontStyle>1</fontStyle>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>1</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Column</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>2</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Datatype</foType>
 <colorRGB>-16744448</colorRGB>
+<foTypeID>5</foTypeID>
 </FontObject>
 <FontObject>
 <foType>PK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>7</foTypeID>
 </FontObject>
 <FontObject>
 <foType>FK Element</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>8</foTypeID>
 </FontObject>
 <FontObject>
 <foType>UK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>9</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Not Null</foType>
 <colorRGB>-65536</colorRGB>
+<foTypeID>10</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Key</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>6</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Comments</foType>
 <colorRGB>-12566464</colorRGB>
+<foTypeID>28</foTypeID>
 </FontObject>
 </fonts>
 </OView>
@@ -567,38 +673,47 @@
 <foType>Title</foType>
 <fontStyle>1</fontStyle>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>1</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Column</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>2</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Datatype</foType>
 <colorRGB>-16744448</colorRGB>
+<foTypeID>5</foTypeID>
 </FontObject>
 <FontObject>
 <foType>PK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>7</foTypeID>
 </FontObject>
 <FontObject>
 <foType>FK Element</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>8</foTypeID>
 </FontObject>
 <FontObject>
 <foType>UK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>9</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Not Null</foType>
 <colorRGB>-65536</colorRGB>
+<foTypeID>10</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Key</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>6</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Comments</foType>
 <colorRGB>-12566464</colorRGB>
+<foTypeID>28</foTypeID>
 </FontObject>
 </fonts>
 </OView>
@@ -614,38 +729,47 @@
 <foType>Title</foType>
 <fontStyle>1</fontStyle>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>1</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Column</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>2</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Datatype</foType>
 <colorRGB>-16744448</colorRGB>
+<foTypeID>5</foTypeID>
 </FontObject>
 <FontObject>
 <foType>PK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>7</foTypeID>
 </FontObject>
 <FontObject>
 <foType>FK Element</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>8</foTypeID>
 </FontObject>
 <FontObject>
 <foType>UK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>9</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Not Null</foType>
 <colorRGB>-65536</colorRGB>
+<foTypeID>10</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Key</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>6</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Comments</foType>
 <colorRGB>-12566464</colorRGB>
+<foTypeID>28</foTypeID>
 </FontObject>
 </fonts>
 </OView>
@@ -661,38 +785,47 @@
 <foType>Title</foType>
 <fontStyle>1</fontStyle>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>1</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Column</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>2</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Datatype</foType>
 <colorRGB>-16744448</colorRGB>
+<foTypeID>5</foTypeID>
 </FontObject>
 <FontObject>
 <foType>PK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>7</foTypeID>
 </FontObject>
 <FontObject>
 <foType>FK Element</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>8</foTypeID>
 </FontObject>
 <FontObject>
 <foType>UK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>9</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Not Null</foType>
 <colorRGB>-65536</colorRGB>
+<foTypeID>10</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Key</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>6</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Comments</foType>
 <colorRGB>-12566464</colorRGB>
+<foTypeID>28</foTypeID>
 </FontObject>
 </fonts>
 </OView>
@@ -708,38 +841,47 @@
 <foType>Title</foType>
 <fontStyle>1</fontStyle>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>1</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Column</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>2</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Datatype</foType>
 <colorRGB>-16744448</colorRGB>
+<foTypeID>5</foTypeID>
 </FontObject>
 <FontObject>
 <foType>PK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>7</foTypeID>
 </FontObject>
 <FontObject>
 <foType>FK Element</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>8</foTypeID>
 </FontObject>
 <FontObject>
 <foType>UK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>9</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Not Null</foType>
 <colorRGB>-65536</colorRGB>
+<foTypeID>10</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Key</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>6</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Comments</foType>
 <colorRGB>-12566464</colorRGB>
+<foTypeID>28</foTypeID>
 </FontObject>
 </fonts>
 </OView>
@@ -755,38 +897,47 @@
 <foType>Title</foType>
 <fontStyle>1</fontStyle>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>1</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Column</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>2</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Datatype</foType>
 <colorRGB>-16744448</colorRGB>
+<foTypeID>5</foTypeID>
 </FontObject>
 <FontObject>
 <foType>PK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>7</foTypeID>
 </FontObject>
 <FontObject>
 <foType>FK Element</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>8</foTypeID>
 </FontObject>
 <FontObject>
 <foType>UK Element</foType>
 <colorRGB>-16776961</colorRGB>
+<foTypeID>9</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Not Null</foType>
 <colorRGB>-65536</colorRGB>
+<foTypeID>10</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Key</foType>
 <colorRGB>-16777216</colorRGB>
+<foTypeID>6</foTypeID>
 </FontObject>
 <FontObject>
 <foType>Comments</foType>
 <colorRGB>-12566464</colorRGB>
+<foTypeID>28</foTypeID>
 </FontObject>
 </fonts>
 </OView>
@@ -824,8 +975,8 @@
 <backgroundColor>-16777216</backgroundColor>
 <lineWidth>1</lineWidth>
 <points>
-<point x="619" y="68"/>
-<point x="767" y="68"/>
+<point x="608" y="70"/>
+<point x="633" y="70"/>
 </points>
 </Connector>
 <Connector class="oracle.dbtools.crest.swingui.relational.TVFKRelation" oid="34B71778-90DE-96D7-0096-0E3CCB004754" otype="FKIndexAssociation" vid_source="2296D2F0-415E-B6BB-098D-D96587EF4352" vid_target="E29E9D84-FC48-F64A-A707-2B5ED53C09FC">
@@ -856,7 +1007,7 @@
 <points>
 <point x="308" y="89"/>
 <point x="341" y="89"/>
-<point x="396" y="89"/>
+<point x="385" y="89"/>
 </points>
 </Connector>
 <Connector class="oracle.dbtools.crest.swingui.relational.TVFKRelation" oid="39D35DBF-FE88-A309-E9B7-3B86282C93A2" otype="FKIndexAssociation" vid_source="39D94E26-78C5-46B2-68B5-CB0D3D4217BD" vid_target="ECD85D30-2D98-BD86-F8C2-F6DFA1A76ACA">
@@ -908,8 +1059,8 @@
 <backgroundColor>-16777216</backgroundColor>
 <lineWidth>1</lineWidth>
 <points>
-<point x="607" y="128"/>
-<point x="607" y="167"/>
+<point x="601" y="130"/>
+<point x="601" y="167"/>
 </points>
 </Connector>
 <Connector class="oracle.dbtools.crest.swingui.relational.TVFKRelation" oid="7775AC86-8A17-A79B-31F6-F5CA3218ACF9" otype="FKIndexAssociation" vid_source="BD32C644-2C73-7AE8-3CAA-73C252397C78" vid_target="D681A204-66A8-FA3C-FBE2-CBD08CC6ADA1">
@@ -987,7 +1138,7 @@
 <backgroundColor>-16777216</backgroundColor>
 <lineWidth>1</lineWidth>
 <points>
-<point x="396" y="108"/>
+<point x="385" y="108"/>
 <point x="317" y="108"/>
 <point x="317" y="213"/>
 <point x="286" y="213"/>
