@@ -19,5 +19,4 @@ public interface Personen {
     String getVoornaam();
     String getVatNumber();
     String getBusinessName();
-    BusinessForm getBusinessForm();
 }

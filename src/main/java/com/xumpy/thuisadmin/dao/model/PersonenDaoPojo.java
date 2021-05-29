@@ -5,7 +5,6 @@
  */
 package com.xumpy.thuisadmin.dao.model;
 
-import com.xumpy.government.dao.model.BusinessFormDaoPojo;
 import com.xumpy.thuisadmin.domain.Personen;
 import java.io.Serializable;;
 import javax.persistence.*;
@@ -40,10 +39,6 @@ public class PersonenDaoPojo implements Serializable, Personen{
 
     @Column(name="BUSINESS_NAME")
     private String businessName;
-
-    @ManyToOne
-    @JoinColumn(name="FK_BUSINESS_FORM_ID")
-    private BusinessFormDaoPojo businessForm;
 
     @Override
     public String getBusinessName() {
@@ -112,15 +107,6 @@ public class PersonenDaoPojo implements Serializable, Personen{
         
     }
 
-    @Override
-    public BusinessFormDaoPojo getBusinessForm() {
-        return businessForm;
-    }
-
-    public void setBusinessForm(BusinessFormDaoPojo businessForm) {
-        this.businessForm = businessForm;
-    }
-
     public PersonenDaoPojo(Personen personen){
         this.md5_password = personen.getMd5_password();
         this.naam = personen.getNaam();
@@ -128,7 +114,6 @@ public class PersonenDaoPojo implements Serializable, Personen{
         this.username = personen.getUsername();
         this.voornaam = personen.getVoornaam();
         this.vatNumber = personen.getVatNumber();
-        this.businessForm = personen.getBusinessForm() != null ? new BusinessFormDaoPojo(personen.getBusinessForm()) : null;
         this.businessName = personen.getBusinessName();
     }
 }

@@ -83,31 +83,4 @@ public class BedragWeightCalculatorTest {
         Assert.assertEquals(new BigDecimal(115.56).setScale(4, RoundingMode.HALF_UP), bedragWeightCalculator.getBedragLeftOverExclusiveTax());
         Assert.assertEquals(new BigDecimal(0).setScale(4, RoundingMode.HALF_UP), bedragWeightCalculator.getBedragLeftOverTax());
     }
-
-    @Test
-    public void testCalculateGovernmentCostsBTW(){
-        List<GovernmentCost> governmentCosts = GovernmentCostMock.createGovernmentCostMock();
-        AccountingModel accountingModel = AccountingModelMock.createAccountingModelMock();
-        Map<String, BigDecimal> governmentCostMap = AmountTaxAndWeightCalculator.calculateGovernmentCosts(accountingModel, governmentCosts);
-
-        Assert.assertEquals(new BigDecimal(3714.8634).setScale(8, RoundingMode.HALF_UP), governmentCostMap.get("BTW").setScale(8, RoundingMode.HALF_UP));
-    }
-
-    @Test
-    public void testCalculateGovernmentCostsBelastingen(){
-        List<GovernmentCost> governmentCosts = GovernmentCostMock.createGovernmentCostMock();
-        AccountingModel accountingModel = AccountingModelMock.createAccountingModelMock();
-        Map<String, BigDecimal> governmentCostMap = AmountTaxAndWeightCalculator.calculateGovernmentCosts(accountingModel, governmentCosts);
-
-        Assert.assertEquals(new BigDecimal(4713.74970520).setScale(8, RoundingMode.HALF_UP), governmentCostMap.get("Belastingen").setScale(8, RoundingMode.HALF_UP));
-    }
-
-    @Test
-    public void testCalculateGovernmentCostsRSZ(){
-        List<GovernmentCost> governmentCosts = GovernmentCostMock.createGovernmentCostMock();
-        AccountingModel accountingModel = AccountingModelMock.createAccountingModelMock();
-        Map<String, BigDecimal> governmentCostMap = AmountTaxAndWeightCalculator.calculateGovernmentCosts(accountingModel, governmentCosts);
-
-        Assert.assertEquals(new BigDecimal(800.693387).setScale(8, RoundingMode.HALF_UP), governmentCostMap.get("RSZ").setScale(8, RoundingMode.HALF_UP));
-    }
 }

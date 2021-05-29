@@ -43,15 +43,6 @@
                         <input class="form-control" id="inputVatNumber" ng-model="persoon.businessName" placeholder="Business Name" type="text"/>
                     </div>
                 </div>
-                <div th:if="${@userInfo.invoiceType.type} != ${personal}" class="col-lg-12">
-                    <label for="businessForm" class="col-lg-2 control-label">Business Form</label>
-                    <div class="col-lg-4">
-                        <select id="businessForm" class="form-control" ng-model="persoon.businessForm"
-                                ng-options="businessForm.businessForm for businessForm in businessForms track by businessForm.pkId">
-                            <option value="">--Choose Business Form--</option>
-                        </select>
-                    </div>
-                </div>
             </div>
             <script th:inline="javascript">
                 app.controller("fController", function($scope, $http) {

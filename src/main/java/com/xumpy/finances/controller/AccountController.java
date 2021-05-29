@@ -1,11 +1,6 @@
 package com.xumpy.finances.controller;
 
 import com.xumpy.finances.excelbuilder.ExcelZipBuilder;
-import com.xumpy.finances.excelbuilder.InvoicesToExcelModel;
-import com.xumpy.finances.model.AccountingModel;
-import com.xumpy.finances.model.AccountingModelTotal;
-import com.xumpy.finances.model.BusinessCost;
-import com.xumpy.finances.services.AccountingCalculationsSrv;
 import com.xumpy.finances.services.SendDocumentToYuki;
 import com.xumpy.thuisadmin.domain.Documenten;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,27 +16,12 @@ import java.time.LocalDate;
 
 @Controller
 public class AccountController {
-    @Autowired AccountingCalculationsSrv accountingCalculationsSrv;
     @Autowired ExcelZipBuilder excelZipBuilder;
     @Autowired SendDocumentToYuki sendDocumentToYuki;
-
-    @RequestMapping("/json/generateAccountingModel")
-    public @ResponseBody AccountingModel generateAccountingModel(@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                                                                 @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-                                                                 @RequestBody BusinessCost simulatedBusinessCost){
-        return accountingCalculationsSrv.generateAccountingModel(startDate, endDate, simulatedBusinessCost);
-    }
 
     @RequestMapping(value = "/accounting/accountingModel")
     public String viewAccountingModel(){
         return "finances/accountingModel";
-    }
-
-    @RequestMapping(value = "/json/generateAccountingModelTotal")
-    public @ResponseBody AccountingModelTotal getAccountingModelTotal(@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                                                        @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-                                                        @RequestBody BusinessCost simulatedBusinessCost){
-        return accountingCalculationsSrv.getAccountingModelTotal(startDate, endDate, simulatedBusinessCost);
     }
 
     @RequestMapping(value="/json/generateAccountingZip", method = RequestMethod.GET)

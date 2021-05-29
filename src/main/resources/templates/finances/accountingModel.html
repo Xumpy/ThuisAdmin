@@ -1,12 +1,6 @@
 <html layout:decorator="views/layout" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
     <body>
         <div layout:fragment="content">
-            <form class="col-lg-3" ng-submit="fetch_accounting_model()">
-                <input class="col-lg-12 btn btn-primary" type="submit" value="Fetch Accounting Model"/>
-            </form>
-            <form class="col-lg-3" ng-submit="startSimulateBusinessCost()">
-                <input class="col-lg-12 btn btn-primary" type="submit" value="Simulate Business Cost"/>
-            </form>
             <div class="col-lg-3">
                 <a ng-href="/json/generateAccountingZip?startDate={{model.startDate}}&endDate={{model.endDate}}">
                     <input class="col-lg-12 btn btn-primary" type="button" value="Genereate Accounting Zip"/>
@@ -29,154 +23,11 @@
                            type="text" ng-model="model.endDate" />
                 </div>
             </div>
-            <div class="col-lg-12"><h3>Revenue</h3></div>
-            <div class="col-lg-12">
-                <table class="table table-striped table-hover ">
-                    <thead>
-                    <th>Exclusive Tax</th>
-                    <th>Tax</th>
-                    <th>Weight Exclusive Tax</th>
-                    <th>Weight Tax</th>
-                    <th>Left Over Excl Tax</th>
-                    <th>Left Over Tax</th>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>{{accountingModel.revenue.bedragExclusiveTax}}</td>
-                        <td>{{accountingModel.revenue.bedragTax}}</td>
-                        <td>{{accountingModel.revenue.bedragWeightExclusiveTax}}</td>
-                        <td>{{accountingModel.revenue.bedragWeightTax}}</td>
-                        <td>{{accountingModel.revenue.bedragLeftOverExclusiveTax}}</td>
-                        <td>{{accountingModel.revenue.bedragLeftOverTax}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-lg-12"><h3>Costs</h3></div>
-            <div class="col-lg-12">
-                <table class="table table-striped table-hover ">
-                    <thead>
-                    <th>Exclusive Tax</th>
-                    <th>Tax</th>
-                    <th>Weight Exclusive Tax</th>
-                    <th>Weight Tax</th>
-                    <th>Left Over Excl Tax</th>
-                    <th>Left Over Tax</th>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>{{accountingModel.costs.bedragExclusiveTax}}</td>
-                        <td>{{accountingModel.costs.bedragTax}}</td>
-                        <td>{{accountingModel.costs.bedragWeightExclusiveTax}}</td>
-                        <td>{{accountingModel.costs.bedragWeightTax}}</td>
-                        <td>{{accountingModel.costs.bedragLeftOverExclusiveTax}}</td>
-                        <td>{{accountingModel.costs.bedragLeftOverTax}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-lg-4"><h3>Government Costs</h3></div>
-            <div class="col-lg-8"><h3>Totals</h3></div>
-            <div class="col-lg-4">
-                <table st-safe-src="accountingModel.governmentCosts" st-table="tableGovernmentCost" class="table table-striped table-hover ">
-                    <thead>
-                    <th>Naam</th>
-                    <th>Waarde</th>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="(key, value) in accountingModel.governmentCosts">
-                        <td>{{key}}</td>
-                        <td>{{value}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-lg-8">
-                <table class="table table-striped table-hover ">
-                    <thead>
-                    <th>Amount Now</th>
-                    <th>Unpaid Invoices</th>
-                    <th>Government Costs</th>
-                    <th>Total</th>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>{{accountingModelTotal.totalAmountNow}}</td>
-                        <td>{{accountingModelTotal.totalUnpaidInvoices}}</td>
-                        <td>{{accountingModelTotal.totalGovernmentCosts}}</td>
-                        <td>{{accountingModelTotal.totalAmountNow + accountingModelTotal.totalUnpaidInvoices - accountingModelTotal.totalGovernmentCosts}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <table class="table table-striped table-hover ">
-                    <thead>
-                    <th>Amount Now</th>
-                    <th>Unpaid Invoices</th>
-                    <th>Government Costs</th>
-                    <th>Total</th>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>{{realAccountingModelTotal.totalAmountNow}}</td>
-                        <td>{{realAccountingModelTotal.totalUnpaidInvoices}}</td>
-                        <td>{{realAccountingModelTotal.totalGovernmentCosts}}</td>
-                        <td>{{realAccountingModelTotal.totalAmountNow + realAccountingModelTotal.totalUnpaidInvoices - realAccountingModelTotal.totalGovernmentCosts}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div id="dialogSimulateBusinessCost" class="modal-dialog" title="Simulate Business Cost">
-                <div class="col-lg-12">
-                    <label for="inputAmount" class="col-lg-4 control-label">Amount</label>
-                    <div class="col-lg-8">
-                        <input class="form-control" id="inputAmount" ng-model="simulatedBusinessCost.amount" placeholder="Amount" type="text"/>
-                    </div>
-                </div>
-                <div class="col-lg-12">
-                    <label for="inputTax" class="col-lg-4 control-label">Tax</label>
-                    <div class="col-lg-8">
-                        <input class="form-control" id="inputTax" ng-model="simulatedBusinessCost.tax" placeholder="Tax" type="text"/>
-                    </div>
-                </div>
-                <div class="col-lg-12">
-                    <label for="inputWeight" class="col-lg-4 control-label">Weight</label>
-                    <div class="col-lg-8">
-                        <input class="form-control" id="inputWeight" ng-model="simulatedBusinessCost.weight" placeholder="Weight" type="text"/>
-                    </div>
-                </div>
-            </div>
             <script th:inline="javascript">
                 app.controller("fController", function($scope, $http) {
-                    $(function() {
-                        $( "#dialog" ).hide();
-                        $( "#dialogSimulateBusinessCost" ).hide();
-                    });
                     $scope.model = {
                         startDate: null,
                         endDate: null
-                    }
-                    $scope.simulatedBusinessCost = {
-                        amount: null,
-                        tax: null,
-                        weight: null
-                    }
-                    $scope.nullSimulatedBusinessCost = {
-                        amount: null,
-                        tax: null,
-                        weight: null
-                    }
-                    $scope.startSimulateBusinessCost = function(){
-                        $('#dialogSimulateBusinessCost').dialog({
-                            title: "Simulate Business Cost",
-                            width: 500,
-                            buttons: { "OK": function() {
-                                $scope.fetch_accounting_model();
-                                var url_accountingModelTotal = /*[[@{/json/generateAccountingModelTotal}]]*/;
-                                $http.post(url_accountingModelTotal + "?startDate=" + $scope.model.startDate + "&endDate=" + $scope.model.endDate, $scope.nullSimulatedBusinessCost).success( function(data){
-                                    $scope.realAccountingModelTotal = data;
-                                });
-                            }}
-                        }).prev(".ui-dialog-titlebar").css("background","#bf3e11");
                     }
                     $scope.fetch_accounting_model = (function(){
                         var url_accounting_model = /*[[@{/json/generateAccountingModel}]]*/;

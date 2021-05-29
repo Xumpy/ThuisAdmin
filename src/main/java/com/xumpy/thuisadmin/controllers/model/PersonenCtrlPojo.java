@@ -1,6 +1,5 @@
 package com.xumpy.thuisadmin.controllers.model;
 
-import com.xumpy.government.controllers.model.BusinessFormCtrlPojo;
 import com.xumpy.thuisadmin.domain.Personen;
 
 /**
@@ -14,7 +13,6 @@ public class PersonenCtrlPojo implements Personen{
     private String md5_password;
     private String vatNumber;
     private String businessName;
-    private BusinessFormCtrlPojo businessForm;
 
     @Override
     public Integer getPk_id() {
@@ -71,15 +69,6 @@ public class PersonenCtrlPojo implements Personen{
     }
 
     @Override
-    public BusinessFormCtrlPojo getBusinessForm() {
-        return businessForm;
-    }
-
-    public void setBusinessForm(BusinessFormCtrlPojo businessForm) {
-        this.businessForm = businessForm;
-    }
-
-    @Override
     public String getBusinessName() {
         return businessName;
     }
@@ -96,7 +85,6 @@ public class PersonenCtrlPojo implements Personen{
         this.username = personen.getUsername();
         this.voornaam = personen.getVoornaam();
         this.vatNumber = personen.getVatNumber();
-        this.businessForm = personen.getBusinessForm() != null ? new BusinessFormCtrlPojo(personen.getBusinessForm()) : null;
         this.businessName = personen.getBusinessName();
     }
 }

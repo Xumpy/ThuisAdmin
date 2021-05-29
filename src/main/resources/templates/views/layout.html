@@ -62,9 +62,7 @@
               <li class="dropdown" th:if="${@userInfo.invoiceType.type} != ${personal}">
                   <a aria-expanded="false" th:href="@{/admin/rekeningen}" class="dropdown-toggle" data-toggle="dropdown">Government <b class="caret"></b></a>
                   <ul class="dropdown-menu">
-                      <li><a th:href="@{/government/businessForm}">Business Forms</a></li>
                       <li><a th:href="@{/government/costType}">Cost Types</a></li>
-                      <li><a th:href="@{/government/governmentCost}">Goverment Costs</a></li>
                       <li><a th:href="@{/government/vatCompensation}">Vat Compensation</a></li>
                   </ul>
               </li>
