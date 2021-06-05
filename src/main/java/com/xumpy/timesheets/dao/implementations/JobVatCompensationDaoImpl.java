@@ -1,6 +1,5 @@
 package com.xumpy.timesheets.dao.implementations;
 
-import com.xumpy.government.dao.model.VatCompensationDaoPojo;
 import com.xumpy.timesheets.dao.model.JobVatCompensationDaoPojo;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

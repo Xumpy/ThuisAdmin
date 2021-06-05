@@ -1,0 +1,98 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="664826A4-40F9-D064-EC4C-A28533EAC13E" name="TA_FIN_YEAR_GOV_COST_TYPES">
+<createdBy>aa01241</createdBy>
+<createdTime>2021-06-01 12:20:42 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<ordsAlias>table_23</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="PK_ID" id="11B9FC35-88EB-B788-7E80-5444C0B53A81">
+<createdBy>aa01241</createdBy>
+<createdTime>2021-06-01 12:21:00 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>9</dataTypePrecision>
+<ownDataTypeParameters>,9,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FK_FINANCIAL_YEAR_ID" id="BAA8B4ED-83AD-477D-A364-A6A2BFF28A9A">
+<createdBy>aa01241</createdBy>
+<createdTime>2021-06-01 12:21:18 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>9</dataTypePrecision>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="7DB1A88A-1106-AC40-BBAE-13C3908D751F" referredColumn="1BB938EA-BF94-1AFD-5BA5-D983107FF42E"/>
+</associations>
+</Column>
+<Column name="FK_GOVERNMENT_COST_TYPE_ID" id="C05988D2-A0A3-09D6-3DAA-F9C173282B68">
+<createdBy>aa01241</createdBy>
+<createdTime>2021-06-01 12:21:25 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="7B031D19-0B87-FE49-C280-791A7EF5F5B7" referredColumn="931AD6F6-F5D7-CF7A-5B68-2251CE9C5308"/>
+</associations>
+</Column>
+<Column name="ACTUAL_COST" id="E42C3782-538F-3E4B-0782-BFE6098E977D">
+<createdBy>aa01241</createdBy>
+<createdTime>2021-06-01 12:31:45 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>9</dataTypePrecision>
+<dataTypeScale>2</dataTypeScale>
+<ownDataTypeParameters>,9,2</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="326B3A6B-DEEA-7F1C-8260-173EDF4FCAD7" name="TA_FIN_YEAR_GOV_COST_TYPES_PK">
+<createdBy>aa01241</createdBy>
+<createdTime>2021-06-01 12:21:06 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="11B9FC35-88EB-B788-7E80-5444C0B53A81"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="FA27692F-CBBB-8F55-F0B5-DD485B7F53B2" name="TA_FIN_YEAR_GOV_COST_TYPES_TA_FINANCIAL_YEAR_FK">
+<createdBy>aa01241</createdBy>
+<createdTime>2021-06-01 12:21:18 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="BAA8B4ED-83AD-477D-A364-A6A2BFF28A9A"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="B6326AF8-0D2B-8C85-BDB9-C896DF28821A" name="TA_FIN_YEAR_GOV_COST_TYPES_TA_GOVERNMENT_COST_TYPES_FK">
+<createdBy>aa01241</createdBy>
+<createdTime>2021-06-01 12:21:25 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="C05988D2-A0A3-09D6-3DAA-F9C173282B68"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

@@ -13,6 +13,7 @@ import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Controller
 public class AccountController {
@@ -24,16 +25,25 @@ public class AccountController {
         return "finances/accountingModel";
     }
 
+    private LocalDate lastDayOfMonth(LocalDate localDate){
+        return localDate.withDayOfMonth(localDate.lengthOfMonth());
+    }
+
     @RequestMapping(value="/json/generateAccountingZip", method = RequestMethod.GET)
-    public @ResponseBody String generateAccounting(@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                                                   @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+    public @ResponseBody String generateAccounting(@RequestParam("startDate") String startDate,
+                                                   @RequestParam("endDate") String endDate,
                                                    HttpServletResponse response) throws IOException{
         OutputStream out = response.getOutputStream();
 
         response.setContentType("application/zip");
         response.setHeader("Content-Disposition", "inline;filename=\"accounting.zip\"");
 
-        out.write(excelZipBuilder.buildZip(startDate, endDate).toByteArray());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+
+        LocalDate localStartDate = LocalDate.parse("01/" + startDate, formatter);
+        LocalDate localEndDate  = lastDayOfMonth(LocalDate.parse("01/" + endDate, formatter));
+
+        out.write(excelZipBuilder.buildZip(localStartDate, localEndDate).toByteArray());
 
         out.flush();
         out.close();

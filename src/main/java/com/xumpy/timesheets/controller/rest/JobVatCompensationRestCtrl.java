@@ -22,6 +22,9 @@ import java.io.OutputStream;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
@@ -37,6 +40,10 @@ public class JobVatCompensationRestCtrl {
     @Autowired JobsGroupRestCtrl jobsGroupRestCtrl;
     @Autowired VatCompensationOverview vatCompensationOverview;
 
+    private LocalDate lastDayOfMonth(LocalDate localDate){
+        return localDate.withDayOfMonth(localDate.lengthOfMonth());
+    }
+
     private byte[] convertBase64ImageToByte(String base64image){
         String base64;
         base64 = base64image.replace("data:image/jpeg;base64,","");
@@ -44,9 +51,6 @@ public class JobVatCompensationRestCtrl {
         return Base64.getMimeDecoder().decode(base64);
     }
 
-    private static Date parseDate(String date) throws ParseException {
-        return new SimpleDateFormat("yyyy-MM-dd").parse(date);
-    }
 
     @RequestMapping(value = "/json/fetchVatCompensations", method = RequestMethod.GET)
     public @ResponseBody List<VatCompensationCtrlPojo> fetchVatCompensations(){
@@ -115,10 +119,15 @@ public class JobVatCompensationRestCtrl {
     public @ResponseBody String fetchVatCompensationPdf(@RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate, HttpServletResponse response) throws IOException, SQLException, ParseException, DocumentException {
         OutputStream out = response.getOutputStream();
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+
+        Date localStartDate = Date.from(LocalDate.parse("01/" + startDate, formatter).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date localEndDate = Date.from(lastDayOfMonth(LocalDate.parse("01/" + endDate, formatter)).atStartOfDay(ZoneId.systemDefault()).toInstant());
+
         response.setHeader("Content-Type", "document/pdf");
         response.setHeader("Content-Disposition", "inline;filename=\"vatCompensationOverview.pdf\"");
 
-        out.write(vatCompensationPdfBuilder.buildPdf(parseDate(startDate), parseDate(endDate)));
+        out.write(vatCompensationPdfBuilder.buildPdf(localStartDate, localEndDate));
 
         out.flush();
         out.close();

@@ -68,6 +68,12 @@ public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer
                                                        @Param("endDate") Date endDate,
                                                        @Param("levelType") String type);
 
+    @Query("from BedragenDaoPojo where (datum >= :startDate and datum <= :endDate) and rekening.professional = true"+
+            " and coalesce(groep.codeId, '') != 'INTER_REKENING'")
+    public List<BedragenDaoPojo> allProfesionalBedragenInDate(@Param("startDate") Date startDate,
+                                                               @Param("endDate") Date endDate);
+
+
     @Query("from BedragenDaoPojo where invoice.pkId = :invoiceId")
     public List<BedragenDaoPojo> getBedragenFromInvoice(@Param("invoiceId") Integer invoiceId);
 

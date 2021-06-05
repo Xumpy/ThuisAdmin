@@ -1,44 +1,117 @@
 <html layout:decorator="views/layout" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
     <body>
         <div layout:fragment="content">
-            <div class="col-lg-3">
-                <a ng-href="/json/generateAccountingZip?startDate={{model.startDate}}&endDate={{model.endDate}}">
-                    <input class="col-lg-12 btn btn-primary" type="button" value="Genereate Accounting Zip"/>
-                </a>
-            </div>
-            <div class="col-lg-3">
-                <a ng-href="/json/fetch_vat_compensation_pdf?startDate={{model.startDate}}&endDate={{model.endDate}}">
-                    <input class="col-lg-12 btn btn-primary" type="button" value="Genereate Vat Compensation Pdf"/>
-                </a>
-            </div>
             <div class="col-lg-12">
-                <label for="beginDatum" class="col-lg-1 control-label">Start Date</label>
                 <div class="col-lg-2">
-                    <input autocomplete="off" data-provide="datepicker" data-date-format="yyyy-mm-dd" class="form-control" id="beginDatum" placeholder="Start Date"
+                    <form class="form-horizontal" ng-submit="retrieveYear()">
+                        <input class="btn btn-primary" type="submit" value="Retrieve Yaer"/>
+                    </form>
+                </div>
+                <div class="col-lg-2">
+                    <form class="form-horizontal" ng-submit="saveYear()">
+                        <input class="btn btn-primary" type="submit" value="Save Year"/>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <label for="year" class="col-lg-1 control-label">Year</label>
+                <div class="col-lg-2">
+                    <input autocomplete="off" data-provide="datepicker" data-date-format="yyyy" class="datepicker form-control" id="year" placeholder="Start Date"
                            type="text" ng-model="model.startDate" />
                 </div>
-                <label for="eindDatum" class="col-lg-1 control-label">End Date</label>
+            </div>
+            <div class="col-lg-12">
+                <label class="col-lg-1 control-label">Selected Revenue</label>
                 <div class="col-lg-2">
-                    <input autocomplete="off" data-provide="datepicker" data-date-format="yyyy-mm-dd" class="form-control" id="eindDatum" placeholder="End Date"
-                           type="text" ng-model="model.endDate" />
+                    {{financial_year.selectedRevenue}}
                 </div>
             </div>
+            <div class="col-lg-12">
+                <label for="actualRevenue" class="col-lg-1 control-label">Actual Revenue</label>
+                <div class="col-lg-2">
+                    <input autocomplete="off" class="form-control" id="actualRevenue" placeholder="Actual Revenue"
+                           type="text" ng-model="financial_year.actualRevenue" />
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <label class="col-lg-1 control-label">Selected Costs</label>
+                <div class="col-lg-2">
+                    {{financial_year.selectedCosts}}
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <table st-safe-src="bedragen" st-table="empty" class="table table-hover ">
+                    <tr ng-repeat="vatCompensation in jobInfo.tickedJobsDetail.jobVatCompensations">
+                    </tr>
+                </table>
+
+                <div class="col-lg-4">
+                    <select class="form-control" ng-model="jobInfo.vatcompensation.jobVatCompensation"
+                            ng-options="vatCompensation.name for vatCompensation in vatCompensations track by vatCompensation.pkId">
+                        <option value="">-- No Vat Compensation --</option>
+                    </select>
+                </div>
+                <div class="col-lg-2">
+                    <input class="form-control" id="amount" placeholder="Amount" type="text" ng-model="jobInfo.vatcompensation.amount" />
+                </div>
+                <div class="col-lg-4">
+                    <input class="col-lg-4" name="file" id="file" type="file" ng-model="jobInfo.vatcompensation.image" accept="image/*" app-filereader />
+                </div>
+                <div class="col-lg-2">
+                    <input id="VatCompensationFile" class="btn btn-primary" type="button" ng-click="saveJobInfo(jobInfo.vatcompensation)" value="Add"/>
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <label for="actualCosts" class="col-lg-1 control-label">Actual Costs</label>
+                <div class="col-lg-2">
+                    <input autocomplete="off" class="form-control" id="actualCosts" placeholder="Actual Costs"
+                           type="text" ng-model="financial_year.actualCosts" />
+                </div>
+            </div>
+
+
+            <div class="col-lg-12">
+                <label class="col-lg-1 control-label">Total</label>
+                <div class="col-lg-2">
+                    {{financial_year.total}}
+                </div>
+            </div>
+
             <script th:inline="javascript">
+                $(".datepicker").datepicker( {
+                    format: "yyyy",
+                    viewMode: "years",
+                    minViewMode: "years"
+                });
+
                 app.controller("fController", function($scope, $http) {
                     $scope.model = {
-                        startDate: null,
-                        endDate: null
+                        startDate: 2021
                     }
-                    $scope.fetch_accounting_model = (function(){
-                        var url_accounting_model = /*[[@{/json/generateAccountingModel}]]*/;
-                        $http.post(url_accounting_model + "?startDate=" + $scope.model.startDate + "&endDate=" + $scope.model.endDate, $scope.simulatedBusinessCost).success( function(data){
-                            $scope.accountingModel = data;
-                        });
-                        var url_accountingModelTotal = /*[[@{/json/generateAccountingModelTotal}]]*/;
-                        $http.post(url_accountingModelTotal + "?startDate=" + $scope.model.startDate + "&endDate=" + $scope.model.endDate, $scope.simulatedBusinessCost).success( function(data){
-                            $scope.accountingModelTotal = data;
-                        });
+                    var url_financial_year = /*[[@{/json/financial_year/}]]*/;
+                    $http.get(url_financial_year + $scope.model.startDate).success( function(data){
+                        $scope.financial_year = data;
                     });
+
+                    $scope.retrieveYear = function(){
+                        var url_financial_year = /*[[@{/json/financial_year/}]]*/;
+                        $http.get(url_financial_year + $scope.model.startDate).success( function(data){
+                            $scope.financial_year = data;
+                        });
+                    }
+
+                    $scope.saveYear = function(){
+                        var url_financial_year = /*[[@{/json/financial_year}]]*/;
+                        $http.post(url_financial_year, $scope.financial_year).success( function(data){
+                            var url_financial_year = /*[[@{/json/financial_year/}]]*/;
+                            $http.get(url_financial_year + $scope.model.startDate).success( function(data){
+                                $scope.financial_year = data;
+                            });
+                        });
+                    }
                 });
             </script>
         </div>

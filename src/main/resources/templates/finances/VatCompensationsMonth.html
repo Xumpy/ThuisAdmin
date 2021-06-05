@@ -19,6 +19,18 @@
                 </select>
             </div>
         </div>
+        <div>
+            <div class="col-lg-3">
+                <a ng-href="/json/generateAccountingZip?startDate={{VatCompensationRequestHeader.beginDate}}&endDate={{VatCompensationRequestHeader.endDate}}">
+                    <input class="col-lg-12 btn btn-primary" type="button" value="Genereate Accounting Zip"/>
+                </a>
+            </div>
+            <div class="col-lg-3">
+                <a ng-href="/json/fetch_vat_compensation_pdf?startDate={{VatCompensationRequestHeader.beginDate}}&endDate={{VatCompensationRequestHeader.endDate}}">
+                    <input class="col-lg-12 btn btn-primary" type="button" value="Genereate Vat Compensation Pdf"/>
+                </a>
+            </div>
+        </div>
         <div class="col-lg-12">
             <div class="col-lg-7">
                 <div id="columnchart_material" style="height: 600px;"></div>
