@@ -12,6 +12,7 @@ import com.xumpy.thuisadmin.dao.implementations.InvoicesDaoImpl;
 import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
 import com.xumpy.thuisadmin.dao.model.GroepenDaoPojo;
 import com.xumpy.thuisadmin.dao.model.InvoicesDaoPojo;
+import com.xumpy.thuisadmin.services.implementations.BedragenSrvImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -151,15 +152,15 @@ public class FinancialYearServiceTest {
         FinancialYear financialYear = financialYearService.financialYear(TEST_YEAR);
 
         Assert.assertEquals(new BigDecimal(140000).setScale(2, RoundingMode.HALF_UP), financialYear.getSelectedRevenue());
-        Assert.assertEquals(new BigDecimal(137280).setScale(2, RoundingMode.HALF_UP), financialYear.getActualRevenue());
+        Assert.assertEquals(new BigDecimal(137280).setScale(2, RoundingMode.HALF_UP), BedragenSrvImpl.convertComma(financialYear.getActualRevenue()));
         Assert.assertEquals(new BigDecimal(85000).setScale(2, RoundingMode.HALF_UP), financialYear.getSelectedCosts());
-        Assert.assertEquals(new BigDecimal(90000).setScale(2, RoundingMode.HALF_UP), financialYear.getActualCosts());
+        Assert.assertEquals(new BigDecimal(90000).setScale(2, RoundingMode.HALF_UP), BedragenSrvImpl.convertComma(financialYear.getActualCosts()));
 
         Assert.assertEquals(new BigDecimal(10000).setScale(2, RoundingMode.HALF_UP), financialYear.getFinancialYearCostTypes().get(0).getSelectedCosts());
-        Assert.assertEquals(new BigDecimal(9456).setScale(2, RoundingMode.HALF_UP), financialYear.getFinancialYearCostTypes().get(0).getActualCosts());
+        Assert.assertEquals(new BigDecimal(9456).setScale(2, RoundingMode.HALF_UP), BedragenSrvImpl.convertComma(financialYear.getFinancialYearCostTypes().get(0).getActualCosts()));
 
         Assert.assertEquals(new BigDecimal(5000).setScale(2, RoundingMode.HALF_UP), financialYear.getFinancialYearCostTypes().get(1).getSelectedCosts());
-        Assert.assertEquals(new BigDecimal(5673.60).setScale(2, RoundingMode.HALF_UP), financialYear.getFinancialYearCostTypes().get(1).getActualCosts());
+        Assert.assertEquals(new BigDecimal(5673.60).setScale(2, RoundingMode.HALF_UP), BedragenSrvImpl.convertComma(financialYear.getFinancialYearCostTypes().get(1).getActualCosts()));
 
         Assert.assertEquals(new BigDecimal(32150.4).setScale(2, RoundingMode.HALF_UP), financialYear.getTotal());
     }
@@ -169,9 +170,9 @@ public class FinancialYearServiceTest {
         FinancialYear financialYear = financialYearService.financialYear(TEST_YEAR);
 
         Assert.assertEquals(new BigDecimal(140000).setScale(2, RoundingMode.HALF_UP), financialYear.getSelectedRevenue());
-        Assert.assertEquals(new BigDecimal(0).setScale(2, RoundingMode.HALF_UP), financialYear.getActualRevenue());
+        Assert.assertEquals(new BigDecimal(0).setScale(2, RoundingMode.HALF_UP), BedragenSrvImpl.convertComma(financialYear.getActualRevenue()));
         Assert.assertEquals(new BigDecimal(100000).setScale(2, RoundingMode.HALF_UP), financialYear.getSelectedCosts());
-        Assert.assertEquals(new BigDecimal(0).setScale(2, RoundingMode.HALF_UP), financialYear.getActualCosts());
+        Assert.assertEquals(new BigDecimal(0).setScale(2, RoundingMode.HALF_UP), BedragenSrvImpl.convertComma(financialYear.getActualCosts()));
 
         Assert.assertEquals(new BigDecimal(40000).setScale(2, RoundingMode.HALF_UP), financialYear.getTotal());
     }
@@ -182,15 +183,15 @@ public class FinancialYearServiceTest {
         FinancialYear financialYear = financialYearService.financialYear(TEST_YEAR);
 
         Assert.assertEquals(new BigDecimal(140000).setScale(2, RoundingMode.HALF_UP), financialYear.getSelectedRevenue());
-        Assert.assertEquals(new BigDecimal(0).setScale(2, RoundingMode.HALF_UP), financialYear.getActualRevenue());
+        Assert.assertEquals(new BigDecimal(0).setScale(2, RoundingMode.HALF_UP), BedragenSrvImpl.convertComma(financialYear.getActualRevenue()));
         Assert.assertEquals(new BigDecimal(85000).setScale(2, RoundingMode.HALF_UP), financialYear.getSelectedCosts());
-        Assert.assertEquals(new BigDecimal(0).setScale(2, RoundingMode.HALF_UP), financialYear.getActualCosts());
+        Assert.assertEquals(new BigDecimal(0).setScale(2, RoundingMode.HALF_UP), BedragenSrvImpl.convertComma(financialYear.getActualCosts()));
 
         Assert.assertEquals(new BigDecimal(10000).setScale(2, RoundingMode.HALF_UP), financialYear.getFinancialYearCostTypes().get(0).getSelectedCosts());
-        Assert.assertEquals(new BigDecimal(0).setScale(2, RoundingMode.HALF_UP), financialYear.getFinancialYearCostTypes().get(0).getActualCosts());
+        Assert.assertEquals(new BigDecimal(0).setScale(2, RoundingMode.HALF_UP), BedragenSrvImpl.convertComma(financialYear.getFinancialYearCostTypes().get(0).getActualCosts()));
 
         Assert.assertEquals(new BigDecimal(5000).setScale(2, RoundingMode.HALF_UP), financialYear.getFinancialYearCostTypes().get(1).getSelectedCosts());
-        Assert.assertEquals(new BigDecimal(0).setScale(2, RoundingMode.HALF_UP), financialYear.getFinancialYearCostTypes().get(1).getActualCosts());
+        Assert.assertEquals(new BigDecimal(0).setScale(2, RoundingMode.HALF_UP), BedragenSrvImpl.convertComma(financialYear.getFinancialYearCostTypes().get(1).getActualCosts()));
 
         Assert.assertEquals(new BigDecimal(40000).setScale(2, RoundingMode.HALF_UP), financialYear.getTotal());
     }

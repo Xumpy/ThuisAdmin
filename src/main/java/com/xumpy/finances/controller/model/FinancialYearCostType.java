@@ -1,28 +1,20 @@
 package com.xumpy.finances.controller.model;
 
+import com.xumpy.government.controllers.model.GovernmentCostTypeCtrlPojo;
 import com.xumpy.government.domain.GovernmentCostType;
 
 import java.math.BigDecimal;
 
 public class FinancialYearCostType {
-    private Integer level;
-    private GovernmentCostType costType;
+    private GovernmentCostTypeCtrlPojo costType;
     private BigDecimal selectedCosts;
-    private BigDecimal actualCosts;
+    private String actualCosts;
 
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
-    }
-
-    public GovernmentCostType getCostType() {
+    public GovernmentCostTypeCtrlPojo getCostType() {
         return costType;
     }
 
-    public void setCostType(GovernmentCostType costType) {
+    public void setCostType(GovernmentCostTypeCtrlPojo costType) {
         this.costType = costType;
     }
 
@@ -34,11 +26,11 @@ public class FinancialYearCostType {
         this.selectedCosts = selectedCosts;
     }
 
-    public BigDecimal getActualCosts() {
+    public String getActualCosts() {
         return actualCosts;
     }
 
-    public void setActualCosts(BigDecimal actualCosts) {
+    public void setActualCosts(String actualCosts) {
         this.actualCosts = actualCosts;
     }
 }

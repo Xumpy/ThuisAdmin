@@ -6,11 +6,27 @@ import java.util.List;
 public class FinancialYear {
     private Integer year;
     private BigDecimal selectedRevenue;
-    private BigDecimal actualRevenue;
+    private String actualRevenue;
     private BigDecimal selectedCosts;
-    private BigDecimal actualCosts;
+    private String actualCosts;
     private List<FinancialYearCostType> financialYearCostTypes;
     private BigDecimal total;
+
+    public String getActualRevenue() {
+        return actualRevenue;
+    }
+
+    public void setActualRevenue(String actualRevenue) {
+        this.actualRevenue = actualRevenue;
+    }
+
+    public String getActualCosts() {
+        return actualCosts;
+    }
+
+    public void setActualCosts(String actualCosts) {
+        this.actualCosts = actualCosts;
+    }
 
     public Integer getYear() {
         return year;
@@ -28,28 +44,12 @@ public class FinancialYear {
         this.selectedRevenue = selectedRevenue;
     }
 
-    public BigDecimal getActualRevenue() {
-        return actualRevenue;
-    }
-
-    public void setActualRevenue(BigDecimal actualRevenue) {
-        this.actualRevenue = actualRevenue;
-    }
-
     public BigDecimal getSelectedCosts() {
         return selectedCosts;
     }
 
     public void setSelectedCosts(BigDecimal selectedCosts) {
         this.selectedCosts = selectedCosts;
-    }
-
-    public BigDecimal getActualCosts() {
-        return actualCosts;
-    }
-
-    public void setActualCosts(BigDecimal actualCosts) {
-        this.actualCosts = actualCosts;
     }
 
     public List<FinancialYearCostType> getFinancialYearCostTypes() {
