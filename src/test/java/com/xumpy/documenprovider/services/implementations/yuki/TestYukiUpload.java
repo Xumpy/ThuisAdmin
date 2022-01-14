@@ -1,4 +1,4 @@
-package com.xumpy.documenprovider.services.implementations.yuki.yuki;
+package com.xumpy.documenprovider.services.implementations.yuki;
 
 import com.xumpy.documenprovider.model.Folder;
 import com.xumpy.documenprovider.services.implementations.yuki.model.UploadReponse;

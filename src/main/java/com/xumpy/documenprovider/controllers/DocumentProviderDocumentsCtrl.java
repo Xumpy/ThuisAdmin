@@ -2,6 +2,7 @@ package com.xumpy.documenprovider.controllers;
 
 import com.xumpy.documenprovider.controllers.model.DocumentProviderDocumentsCtrlPojo;
 import com.xumpy.documenprovider.dao.implementations.DocumentProviderDocumentsImpl;
+import com.xumpy.documenprovider.dao.model.DocumentProviderDocumentsDaoPojo;
 import com.xumpy.documenprovider.domain.DocumentProviderDocuments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,9 +38,12 @@ public class DocumentProviderDocumentsCtrl {
     }
 
     @RequestMapping(value = "/documentprovider/deleteDocumentProviderDocument")
-    public @ResponseBody String deleteDocumentProviderDocuments(@RequestParam("documentProviderDocumentId") Integer documentProviderDocumentId){
+    public String deleteDocumentProviderDocuments(@RequestParam("documentProviderDocumentId") Integer documentProviderDocumentId){
+        DocumentProviderDocumentsDaoPojo documentProviderDocumentsDaoPojo =  DocumentProviderDocumentsImpl.findById(documentProviderDocumentId).get();
+        Integer documentId = documentProviderDocumentsDaoPojo.getDocumenten().getPk_id();
+
         DocumentProviderDocumentsImpl.deleteById(documentProviderDocumentId);
 
-        return "200";
+        return "redirect:/finances/editBedragDocument/" + documentId;
     }
 }

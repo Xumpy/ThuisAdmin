@@ -19,5 +19,5 @@ public interface Groepen {
     Integer getPk_id();
     Integer getPublicGroep();
     Boolean getClosed();
-    Integer getYukiCategory();
+    Integer getCategory();
 }

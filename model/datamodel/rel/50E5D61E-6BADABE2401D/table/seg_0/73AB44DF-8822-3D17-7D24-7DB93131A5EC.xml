@@ -79,18 +79,6 @@
 <ownDataTypeParameters>50,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
-<Column name="YUKI_DOCUMENT_ID" id="AD731066-9DF3-2D92-919F-80AE78EEFA61">
-<createdBy>aa01241</createdBy>
-<createdTime>2022-01-13 14:19:56 UTC</createdTime>
-<ownerDesignName>datamodel</ownerDesignName>
-<nullsAllowed>true</nullsAllowed>
-<useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT024</logicalDatatype>
-<dataTypeSize>255</dataTypeSize>
-<ownDataTypeParameters>255,,</ownDataTypeParameters>
-<autoIncrementCycle>false</autoIncrementCycle>
-</Column>
 </columns>
 <indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
 <ind_PK_UK id="4668E2EA-CC13-A382-ECB1-7F0BE619A247" name="TA_BEDRAG_DOCUMENTEN_PK">

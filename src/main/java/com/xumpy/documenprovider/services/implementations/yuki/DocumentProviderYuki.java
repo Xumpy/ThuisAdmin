@@ -25,8 +25,8 @@ public class DocumentProviderYuki implements DocumentProviderSrv {
     public String process(Documenten document) {
         YukiPojo yukiPojo = yukiBuilder.build();
         yukiPojo.setFolder(Folder.ZelfTeOrdenen);
-        if (document.getBedrag().getGroep().getYukiCategory() != null){
-            yukiPojo.getFolder().setOrdner(document.getBedrag().getGroep().getYukiCategory());
+        if (document.getBedrag().getGroep().getCategory() != null){
+            yukiPojo.getFolder().setOrdner(document.getBedrag().getGroep().getCategory());
         }
         yukiPojo.setFileName(document.getBedrag().getOmschrijving().replaceAll(" ", "") + ".pdf");
         yukiPojo.setFile(new ByteArrayInputStream(document.getDocument()));

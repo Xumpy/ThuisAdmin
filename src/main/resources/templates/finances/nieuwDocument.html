@@ -40,7 +40,7 @@
                     </thead>
                     <tbody>
                     <tr ng-repeat="documentProviderDocument in emptyDocumentProviderDocuments">
-                        <td><a href="/documentprovider/deleteDocumentProviderDocument?documentProviderDocumentId={{documentProviderDocument.pkId}}">Delete</a></td>
+                        <td><a th:href="@{/documentprovider/deleteDocumentProviderDocument?documentProviderDocumentId={{documentProviderDocument.pkId}}}">Delete</a></td>
                         <td>{{documentProviderDocument.documentProvider.name}}</td>
                         <td>{{documentProviderDocument.feedback}}</td>
                         <td>{{documentProviderDocument.dateSent}}</td>

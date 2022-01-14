@@ -93,11 +93,11 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="document in emptyDocumenten">
-                            <td><a th:href="@{/finances/editBedragDocument/{{document.pkId}}}">Edit</a></td>
-                            <td>{{document.datum}}</td>
-                            <td>{{document.omschrijving}}</td>
-                            <td><a th:href="@{/json/fetch_document/{{document.pkId}}}">Download</a></td>
-                            <td><a th:href="@{/json/sendToDocumentProviders?documentId={{document.pkId}}}">Send To Document Providers</a>
+                        <td><a th:href="@{/finances/editBedragDocument/{{document.pkId}}}">Edit</a></td>
+                        <td>{{document.datum}}</td>
+                        <td>{{document.omschrijving}}</td>
+                        <td><a th:href="@{/json/fetch_document/{{document.pkId}}}">Download</a></td>
+                        <td><a th:href="@{/json/sendToDocumentProviders?documentId={{document.pkId}}}">Send To Document Providers</a></td>
                     </tr>
                 </tbody>
                 <tfoot>

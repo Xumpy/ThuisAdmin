@@ -21,7 +21,7 @@ public class GroepenSrvPojo implements Groepen{
     private String codeId;
     private Integer publicGroep;
     private Boolean closed;
-    private Integer yukiCategory;
+    private Integer category;
 
     @Override
     public Integer getPk_id() {
@@ -114,12 +114,12 @@ public class GroepenSrvPojo implements Groepen{
     }
 
     @Override
-    public Integer getYukiCategory() {
-        return yukiCategory;
+    public Integer getCategory() {
+        return category;
     }
 
-    public void setYukiCategory(Integer yukiCategory) {
-        this.yukiCategory = yukiCategory;
+    public void setCategory(Integer category) {
+        this.category = category;
     }
 
     @Override
@@ -141,6 +141,6 @@ public class GroepenSrvPojo implements Groepen{
         this.pk_id = groepen.getPk_id();
         this.publicGroep = groepen.getPublicGroep();
         this.closed = groepen.getClosed();
-        this.yukiCategory = groepen.getYukiCategory();
+        this.category = groepen.getCategory();
     }
 }

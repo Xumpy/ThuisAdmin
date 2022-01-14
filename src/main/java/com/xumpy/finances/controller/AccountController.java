@@ -71,7 +71,7 @@ public class AccountController {
 
         for(DocumentProviderSrv documentProvider: documentProviders){
             for (DocumentProviderValidDaoPojo documentProviderValidDaoPojo: documentProviderValidImpl.findAllValidDocumentProviders(document.getBedrag().getDatum())){
-                if (documentProviderValidDaoPojo.getDocumentProvider().equals(documentProvider.getDocumentProviderId()) &&
+                if (documentProviderValidDaoPojo.getDocumentProvider().getPkId().equals(documentProvider.getDocumentProviderId()) &&
                         !accountService.isDocumentSentToDocumentProvider(document, documentProviderValidDaoPojo.getDocumentProvider())){
                     String feedback = documentProvider.process(document);
 
