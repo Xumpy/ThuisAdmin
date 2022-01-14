@@ -1,4 +1,6 @@
-package com.xumpy.utilities.yuki.model;
+package com.xumpy.documenprovider.services.implementations.yuki.model;
+
+import com.xumpy.documenprovider.model.Folder;
 
 import java.io.InputStream;
 

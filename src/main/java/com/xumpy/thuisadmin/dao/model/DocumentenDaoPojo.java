@@ -48,10 +48,6 @@ public class DocumentenDaoPojo implements Serializable, Documenten {
     @NotNull
     private String document_mime;
 
-    @Column(name="YUKI_DOCUMENT_ID")
-    @NotNull
-    private String yukiDocumentId;
-
     @Override
     public String getDocument_naam() {
         return document_naam;
@@ -110,15 +106,6 @@ public class DocumentenDaoPojo implements Serializable, Documenten {
         
     }
 
-    @Override
-    public String getYukiDocumentId() {
-        return yukiDocumentId;
-    }
-
-    public void setYukiDocumentId(String yukiDocumentId) {
-        this.yukiDocumentId = yukiDocumentId;
-    }
-
     public DocumentenDaoPojo(Documenten documenten){
         this.bedrag = documenten.getBedrag()!=null ? new BedragenDaoPojo(documenten.getBedrag()) : null;
         this.document = documenten.getDocument();
@@ -126,6 +113,5 @@ public class DocumentenDaoPojo implements Serializable, Documenten {
         this.document_naam = documenten.getDocument_naam();
         this.omschrijving = documenten.getOmschrijving();
         this.pk_id = documenten.getPk_id();
-        this.yukiDocumentId = documenten.getYukiDocumentId();
     }
 }

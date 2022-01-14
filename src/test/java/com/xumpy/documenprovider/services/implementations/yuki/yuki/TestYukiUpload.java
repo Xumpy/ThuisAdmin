@@ -1,10 +1,10 @@
-package com.xumpy.utilities.yuki;
+package com.xumpy.documenprovider.services.implementations.yuki.yuki;
 
-import com.xumpy.utilities.yuki.model.Folder;
-import com.xumpy.utilities.yuki.model.UploadReponse;
-import com.xumpy.utilities.yuki.model.YukiPojo;
-import com.xumpy.utilities.yuki.service.PostToYuki;
-import com.xumpy.utilities.yuki.service.YukiBuilder;
+import com.xumpy.documenprovider.model.Folder;
+import com.xumpy.documenprovider.services.implementations.yuki.model.UploadReponse;
+import com.xumpy.documenprovider.services.implementations.yuki.model.YukiPojo;
+import com.xumpy.documenprovider.services.implementations.yuki.PostToYuki;
+import com.xumpy.documenprovider.services.implementations.yuki.YukiBuilder;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,13 +13,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.inject.Inject;
 import javax.xml.bind.JAXBException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

@@ -117,6 +117,18 @@
 <ownDataTypeParameters>1,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
+<Column name="YUKI_CATEGORY" id="A99C5E00-7C6F-7215-3EF8-26293D78963E">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-01-13 14:47:51 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>9</dataTypePrecision>
+<ownDataTypeParameters>,9,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
 </columns>
 <indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
 <ind_PK_UK id="E9A38024-6BD0-C07A-3045-3A3DC8DDD154" name="TA_TYPE_GROEP_PK">

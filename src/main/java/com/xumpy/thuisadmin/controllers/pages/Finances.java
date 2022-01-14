@@ -134,7 +134,6 @@ public class Finances implements Serializable{
         NieuwDocument nieuwDocument = new NieuwDocument();
         nieuwDocument.setBedragId(document.getBedrag().getPk_id());
         nieuwDocument.setOmschrijving(document.getOmschrijving());
-        nieuwDocument.setYukiDocumentId(document.getYukiDocumentId());
         nieuwDocument.setPkId(document.getPk_id());
         
         model.addAttribute("document", nieuwDocument);
@@ -159,7 +158,6 @@ public class Finances implements Serializable{
         bedragDocument.setDocument_mime(file.getContentType());
         bedragDocument.setDocument_naam(file.getOriginalFilename());
         bedragDocument.setOmschrijving(document.getOmschrijving());
-        bedragDocument.setYukiDocumentId(document.getYukiDocumentId());
         bedragDocument.setPk_id(document.getPkId());
         
         Log.info("File bytes: " + file.getBytes().length);

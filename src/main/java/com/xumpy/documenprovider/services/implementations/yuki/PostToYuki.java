@@ -1,8 +1,7 @@
-package com.xumpy.utilities.yuki.service;
+package com.xumpy.documenprovider.services.implementations.yuki;
 
-import com.xumpy.utilities.yuki.model.UploadReponse;
-import com.xumpy.utilities.yuki.model.YukiPojo;
-import org.apache.commons.io.IOUtils;
+import com.xumpy.documenprovider.services.implementations.yuki.model.UploadReponse;
+import com.xumpy.documenprovider.services.implementations.yuki.model.YukiPojo;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -16,8 +15,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
 
 @Service
 public class PostToYuki {

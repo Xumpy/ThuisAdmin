@@ -1,4 +1,4 @@
-package com.xumpy.utilities.yuki.model;
+package com.xumpy.documenprovider.model;
 
 public enum Folder {
     Overig(0),

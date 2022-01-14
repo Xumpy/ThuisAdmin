@@ -1,6 +1,6 @@
-package com.xumpy.utilities.yuki.service;
+package com.xumpy.documenprovider.services.implementations.yuki;
 
-import com.xumpy.utilities.yuki.model.YukiPojo;
+import com.xumpy.documenprovider.services.implementations.yuki.model.YukiPojo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

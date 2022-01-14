@@ -5,6 +5,9 @@
  */
 package com.xumpy.thuisadmin.services.implementations;
 
+import com.xumpy.documenprovider.dao.implementations.DocumentProviderValidImpl;
+import com.xumpy.documenprovider.domain.DocumentProviderValid;
+import com.xumpy.finances.services.AccountService;
 import com.xumpy.security.model.InvoiceType;
 import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.controllers.model.BeheerBedragenInp;
@@ -23,6 +26,7 @@ import com.xumpy.thuisadmin.controllers.model.OverzichtGroepBedragenTotal;
 import com.xumpy.thuisadmin.controllers.model.RekeningOverzicht;
 import com.xumpy.thuisadmin.dao.model.RekeningenDaoPojo;
 import com.xumpy.thuisadmin.domain.Bedragen;
+import com.xumpy.thuisadmin.domain.Documenten;
 import com.xumpy.thuisadmin.domain.Groepen;
 import com.xumpy.thuisadmin.domain.Rekeningen;
 import com.xumpy.thuisadmin.services.BedragenSrv;
@@ -68,6 +72,9 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     private UserInfo userInfo;
 
     @Autowired DocumentenDaoImpl documentenDao;
+
+    @Autowired DocumentProviderValidImpl documentProviderValid;
+    @Autowired AccountService accountService;
 
     static final Logger Log = Logger.getLogger(BedragenSrvImpl.class.getName());
 
@@ -308,7 +315,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
             }
 
         } else {
-            for (Bedragen bedrag: bedragenDao.reportValidAccountantBedragen(rekeningId, searchText, userInfo.getPersoon().getPk_id(),
+            for (Bedragen bedrag: bedragenDao.reportInValidAccountantBedragen(rekeningId, searchText, userInfo.getPersoon().getPk_id(),
                     userInfo.getInvoiceType().equals(InvoiceType.PROFESSIONAL) ? Boolean.TRUE :
                             userInfo.getInvoiceType().equals(InvoiceType.PERSONAL) ? Boolean.FALSE : null, topTen).getContent()){
                 beheerBedragenReport.add(new BeheerBedragenReport(bedrag, isAccountancyBedragValid(bedrag)));
@@ -832,8 +839,22 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         return allMonths;
     }
 
-    private Boolean hasBedragDocuments(Bedragen bedrag){
-        return documentenDao.fetchDocumentByBedrag(bedrag.getPk_id()).size() > 0;
+    private Boolean isDocumentSentToTheValidDocumentProviders(Documenten document, List<? extends DocumentProviderValid> validDocumentProviders){
+        for(DocumentProviderValid validDocumentProvider: validDocumentProviders){
+            if(!accountService.isDocumentSentToDocumentProvider(document, validDocumentProvider.getDocumentProvider())){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private Boolean isOneDocumentSentToTheValidDocumentProviders(List<? extends Documenten> documenten, List<? extends DocumentProviderValid> validDocumentProviders){
+        for(Documenten document: documenten){
+            if (isDocumentSentToTheValidDocumentProviders(document, validDocumentProviders)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public Boolean isAccountancyBedragValid(Bedragen bedrag){
@@ -844,8 +865,11 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
             if (bedrag.getManagedByAccountant() != null && bedrag.getManagedByAccountant()){
                 return true;
             }
-            if (hasBedragDocuments(bedrag)){
-                return true;
+            List<? extends Documenten> documenten = documentenDao.fetchDocumentByBedrag(bedrag.getPk_id());
+
+            if (documenten.size() > 0){
+                List<? extends DocumentProviderValid> validDocumentProviders = documentProviderValid.findAllValidDocumentProviders(bedrag.getDatum());
+                return isOneDocumentSentToTheValidDocumentProviders(documenten, validDocumentProviders);
             }
             return false;
         }

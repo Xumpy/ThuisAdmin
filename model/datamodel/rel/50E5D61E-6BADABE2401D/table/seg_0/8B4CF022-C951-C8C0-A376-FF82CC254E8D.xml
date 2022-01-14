@@ -1,0 +1,108 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="8B4CF022-C951-C8C0-A376-FF82CC254E8D" name="TA_DOCUMENT_PROVIDER_DOCUMENTS">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-01-14 07:24:17 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<ordsAlias>table_26</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="PK_ID" id="F54EA340-7D55-A77B-036E-5D976007371C">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-01-14 07:25:12 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>9</dataTypePrecision>
+<ownDataTypeParameters>,9,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FEEDBACK" id="5580348B-9954-270F-06EF-66AF85538770">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-01-14 07:25:31 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>255</dataTypeSize>
+<ownDataTypeParameters>255,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="DATE_SENT" id="9207E943-6CD1-BFF6-A29D-42EED012B50B">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-01-14 07:25:42 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>91229484-D19C-D458-8647-333C7FFE7B60</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FK_DOCUMENT_PROVIDER_ID" id="CEBD9602-D29A-654D-FB1A-EAE90E9B93B1">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-01-14 07:25:58 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>9</dataTypePrecision>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="64507922-A0E1-68B8-9517-CEAC43CB7BB3" referredColumn="59049E27-6D07-E5E9-FC50-827BBEB30194"/>
+</associations>
+</Column>
+<Column name="FK_BEDRAG_DOCUMENTEN_ID" id="DED68B2D-E552-E1ED-8172-B3EF14DE02CB">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-01-14 07:26:47 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="6F5D12ED-5E64-E931-67CA-8C554BB60F94" referredColumn="E46797BB-D8A2-C9FA-0677-3FDA39040174"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="599694D2-6368-0641-13CA-9D84E63309BC" name="TA_DOCUMENT_PROVIDER_DOCUMENTS_PK">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-01-14 07:25:12 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="F54EA340-7D55-A77B-036E-5D976007371C"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="1D1077F3-9A3A-C7CE-C360-73AE821BA712" name="TA_DOCUMENT_PROVIDER_DOCUMENTS_TA_DOCUMENT_PROVIDER_FK">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-01-14 07:25:58 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="CEBD9602-D29A-654D-FB1A-EAE90E9B93B1"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="C6009230-54B2-22DD-9C00-4885E3975E60" name="TA_DOCUMENT_PROVIDER_DOCUMENTS_TA_BEDRAG_DOCUMENTEN_FK">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-01-14 07:26:47 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="DED68B2D-E552-E1ED-8172-B3EF14DE02CB"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

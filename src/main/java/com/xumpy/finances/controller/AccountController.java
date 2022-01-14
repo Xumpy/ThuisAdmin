@@ -1,10 +1,18 @@
 package com.xumpy.finances.controller;
 
+import com.xumpy.documenprovider.dao.implementations.DocumentProviderDocumentsImpl;
+import com.xumpy.documenprovider.dao.implementations.DocumentProviderImpl;
+import com.xumpy.documenprovider.dao.implementations.DocumentProviderValidImpl;
+import com.xumpy.documenprovider.dao.model.DocumentProviderDocumentsDaoPojo;
+import com.xumpy.documenprovider.dao.model.DocumentProviderValidDaoPojo;
+import com.xumpy.documenprovider.domain.DocumentProvider;
+import com.xumpy.documenprovider.services.DocumentProviderSrv;
 import com.xumpy.finances.excelbuilder.ExcelZipBuilder;
-import com.xumpy.finances.services.SendDocumentToYuki;
+import com.xumpy.finances.services.AccountService;
+import com.xumpy.thuisadmin.dao.model.DocumentenDaoPojo;
 import com.xumpy.thuisadmin.domain.Documenten;
+import com.xumpy.thuisadmin.services.DocumentenSrv;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,11 +22,17 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.List;
 
 @Controller
 public class AccountController {
     @Autowired ExcelZipBuilder excelZipBuilder;
-    @Autowired SendDocumentToYuki sendDocumentToYuki;
+    @Autowired List<DocumentProviderSrv> documentProviders;
+    @Autowired DocumentenSrv documentenSrv;
+    @Autowired DocumentProviderValidImpl documentProviderValidImpl;
+    @Autowired DocumentProviderDocumentsImpl documentProviderDocumentsImpl;
+    @Autowired AccountService accountService;
 
     @RequestMapping(value = "/accounting/accountingModel")
     public String viewAccountingModel(){
@@ -51,9 +65,26 @@ public class AccountController {
         return null;
     }
 
-    @RequestMapping(value="/json/sendToYuki", method = RequestMethod.GET)
-    public String sendToYuki(@RequestParam("documentId") Integer documentId) throws IOException, JAXBException {
-        Documenten document = sendDocumentToYuki.send(documentId);
+    @RequestMapping(value="/json/sendToDocumentProviders", method = RequestMethod.GET)
+    public String sendToDocumentProviders(@RequestParam("documentId") Integer documentId) throws IOException, JAXBException {
+        Documenten document = documentenSrv.fetchDocument(documentId);
+
+        for(DocumentProviderSrv documentProvider: documentProviders){
+            for (DocumentProviderValidDaoPojo documentProviderValidDaoPojo: documentProviderValidImpl.findAllValidDocumentProviders(document.getBedrag().getDatum())){
+                if (documentProviderValidDaoPojo.getDocumentProvider().equals(documentProvider.getDocumentProviderId()) &&
+                        !accountService.isDocumentSentToDocumentProvider(document, documentProviderValidDaoPojo.getDocumentProvider())){
+                    String feedback = documentProvider.process(document);
+
+                    DocumentProviderDocumentsDaoPojo documentProviderDocumentsDaoPojo = new DocumentProviderDocumentsDaoPojo();
+                    documentProviderDocumentsDaoPojo.setDocumenten(new DocumentenDaoPojo(document));
+                    documentProviderDocumentsDaoPojo.setDocumentProvider(documentProviderValidDaoPojo.getDocumentProvider());
+                    documentProviderDocumentsDaoPojo.setDateSent(new Date());
+                    documentProviderDocumentsDaoPojo.setFeedback(feedback);
+
+                    documentProviderDocumentsImpl.save(documentProviderDocumentsDaoPojo);
+                }
+            }
+        }
 
         return "redirect:/finances/nieuwBedrag/" + document.getBedrag().getPk_id();
     }

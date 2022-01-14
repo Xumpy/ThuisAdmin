@@ -18,7 +18,6 @@ public class DocumentenSrvPojo implements Documenten {
     private byte[] document;
     private String document_naam;
     private String document_mime;
-    private String yukiDocumentId;
 
     @Override
     public Integer getPk_id() {
@@ -100,15 +99,6 @@ public class DocumentenSrvPojo implements Documenten {
         
     }
 
-    @Override
-    public String getYukiDocumentId() {
-        return yukiDocumentId;
-    }
-
-    public void setYukiDocumentId(String yukiDocumentId) {
-        this.yukiDocumentId = yukiDocumentId;
-    }
-
     public DocumentenSrvPojo(Documenten documenten){
         this.bedrag = documenten.getBedrag()!=null ? new BedragenSrvPojo(documenten.getBedrag()): null;
         this.document = documenten.getDocument();
@@ -116,6 +106,5 @@ public class DocumentenSrvPojo implements Documenten {
         this.document_naam = documenten.getDocument_naam();
         this.omschrijving = documenten.getOmschrijving();
         this.pk_id = documenten.getPk_id();
-        this.yukiDocumentId = documenten.getYukiDocumentId();
     }
 }
