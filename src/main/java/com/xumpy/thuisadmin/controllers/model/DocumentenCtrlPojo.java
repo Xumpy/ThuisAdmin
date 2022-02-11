@@ -9,6 +9,7 @@ public class DocumentenCtrlPojo implements Documenten {
     private String document_naam;
     private String omschrijving;
     private Integer pk_id;
+    private Integer prio;
 
     @Override
     public BedragenCtrlPojo getBedrag() {
@@ -60,6 +61,15 @@ public class DocumentenCtrlPojo implements Documenten {
         this.pk_id = pk_id;
     }
 
+    @Override
+    public Integer getPrio() {
+        return prio;
+    }
+
+    public void setPrio(Integer prio) {
+        this.prio = prio;
+    }
+
     public DocumentenCtrlPojo() {}
 
     public DocumentenCtrlPojo(Documenten documenten){
@@ -69,5 +79,6 @@ public class DocumentenCtrlPojo implements Documenten {
         this.document_naam = documenten.getDocument_naam();
         this.omschrijving = documenten.getOmschrijving();
         this.pk_id = documenten.getPk_id();
+        this.prio = documenten.getPrio();
     }
 }

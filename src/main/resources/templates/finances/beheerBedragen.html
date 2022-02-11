@@ -48,6 +48,7 @@
                                     <td>{{bedrag.bedrag}}</td>
                                     <td>{{bedrag.datum}}</td>
                                     <td>{{bedrag.omschrijving}}</td>
+                                    <td><a ng-if="bedrag.prioDocument != null" th:href="@{/json/fetch_document/{{bedrag.prioDocument}}}">Download</a></td>
                                 </tr>
                             </tbody>
                             <tfoot>

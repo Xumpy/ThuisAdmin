@@ -11,6 +11,7 @@ import com.xumpy.thuisadmin.controllers.model.BeheerBedragenReport;
 import com.xumpy.thuisadmin.controllers.model.BeheerBedragenReportLst;
 import com.xumpy.thuisadmin.controllers.model.FinanceOverzichtGroep;
 import com.xumpy.thuisadmin.controllers.model.NieuwBedrag;
+import com.xumpy.thuisadmin.dao.implementations.DocumentenDaoImpl;
 import com.xumpy.thuisadmin.domain.Rekeningen;
 import com.xumpy.thuisadmin.services.implementations.BedragenSrvImpl;
 import com.xumpy.thuisadmin.dao.implementations.BedragenDaoImpl;
@@ -62,6 +63,7 @@ public class BedragenSrvTest{
     @Mock RekeningenDaoImpl rekeningenDao;
     @Mock BedragenDaoImpl bedragenDao;
     @Mock GroepenDaoImpl groepenDao;
+    @Mock DocumentenDaoImpl documentenDao;
 
     @Spy BeheerBedragenReportLst beheerBedragenReportLst;
     @Spy BeheerBedragenInp beheerBedragenInp;

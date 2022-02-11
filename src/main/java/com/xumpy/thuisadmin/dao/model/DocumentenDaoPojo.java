@@ -48,6 +48,9 @@ public class DocumentenDaoPojo implements Serializable, Documenten {
     @NotNull
     private String document_mime;
 
+    @Column(name="PRIO")
+    private Integer prio;
+
     @Override
     public String getDocument_naam() {
         return document_naam;
@@ -101,7 +104,16 @@ public class DocumentenDaoPojo implements Serializable, Documenten {
     public void setDocument(byte[] document) {
         this.document = document;
     }
-    
+
+    @Override
+    public Integer getPrio() {
+        return prio;
+    }
+
+    public void setPrio(Integer prio) {
+        this.prio = prio;
+    }
+
     public DocumentenDaoPojo(){
         
     }
@@ -113,5 +125,6 @@ public class DocumentenDaoPojo implements Serializable, Documenten {
         this.document_naam = documenten.getDocument_naam();
         this.omschrijving = documenten.getOmschrijving();
         this.pk_id = documenten.getPk_id();
+        this.prio = documenten.getPrio();
     }
 }

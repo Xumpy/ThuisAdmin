@@ -522,7 +522,7 @@
 </OView>
 <OView class="oracle.dbtools.crest.swingui.relational.TVTable" oid="BC582A07-D6CF-E0F5-B1D3-3AD4C82B2363" otype="Table" vid="BD32C644-2C73-7AE8-3CAA-73C252397C78">
 <hideElementsInCurrentOnly>false</hideElementsInCurrentOnly>
-<bounds x="42" y="544" width="311" height="189"/>
+<bounds x="41" y="559" width="311" height="189"/>
 </OView>
 <OView class="oracle.dbtools.crest.swingui.relational.TVTable" oid="C92665D8-842C-A4B4-98A2-D7A5AC0DF8A7" otype="Table" vid="D2AD13CC-1546-3353-4C24-A7DC46DBF0C9">
 <hideElementsInCurrentOnly>false</hideElementsInCurrentOnly>
@@ -938,11 +938,11 @@
 <backgroundColor>-16777216</backgroundColor>
 <lineWidth>1</lineWidth>
 <points>
-<point x="353" y="655"/>
-<point x="378" y="655"/>
-<point x="378" y="758"/>
-<point x="224" y="758"/>
-<point x="224" y="733"/>
+<point x="352" y="670"/>
+<point x="377" y="670"/>
+<point x="377" y="773"/>
+<point x="223" y="773"/>
+<point x="223" y="748"/>
 </points>
 </Connector>
 <Connector class="oracle.dbtools.crest.swingui.relational.TVFKRelation" oid="45B41641-11ED-F5D3-CB57-C2B9E75E6D4E" otype="FKIndexAssociation" vid_source="39D94E26-78C5-46B2-68B5-CB0D3D4217BD" vid_target="7FDE7D09-CD3D-A7CB-A375-B768E33771FB">
@@ -994,7 +994,7 @@
 <backgroundColor>-16777216</backgroundColor>
 <lineWidth>1</lineWidth>
 <points>
-<point x="56" y="733"/>
+<point x="56" y="748"/>
 <point x="56" y="1177"/>
 <point x="760" y="1176"/>
 <point x="759" y="1081"/>
@@ -1044,7 +1044,7 @@
 <backgroundColor>-16777216</backgroundColor>
 <lineWidth>1</lineWidth>
 <points>
-<point x="340" y="544"/>
+<point x="340" y="559"/>
 <point x="340" y="461"/>
 <point x="426" y="461"/>
 </points>
@@ -1078,7 +1078,7 @@
 <points>
 <point x="423" y="601"/>
 <point x="379" y="601"/>
-<point x="353" y="601"/>
+<point x="352" y="601"/>
 </points>
 </Connector>
 <Connector class="oracle.dbtools.crest.swingui.relational.TVFKRelation" oid="AD675EA0-FCFF-798F-B3FD-2CF98BD73DD2" otype="FKIndexAssociation" vid_source="8E26EE75-FB9E-6B9B-EB63-5E0C02538F74" vid_target="0FF83250-75BF-7173-BBF1-C22638FA1070">

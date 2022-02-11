@@ -18,6 +18,7 @@ public class DocumentenSrvPojo implements Documenten {
     private byte[] document;
     private String document_naam;
     private String document_mime;
+    private Integer prio;
 
     @Override
     public Integer getPk_id() {
@@ -81,6 +82,15 @@ public class DocumentenSrvPojo implements Documenten {
     }
 
     @Override
+    public Integer getPrio() {
+        return prio;
+    }
+
+    public void setPrio(Integer prio) {
+        this.prio = prio;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
@@ -106,5 +116,6 @@ public class DocumentenSrvPojo implements Documenten {
         this.document_naam = documenten.getDocument_naam();
         this.omschrijving = documenten.getOmschrijving();
         this.pk_id = documenten.getPk_id();
+        this.prio = documenten.getPrio();
     }
 }

@@ -16,4 +16,5 @@ public interface Documenten {
     String getDocument_naam();
     String getOmschrijving();
     Integer getPk_id();
+    Integer getPrio();
 }

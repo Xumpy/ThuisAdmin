@@ -24,6 +24,7 @@ import com.xumpy.thuisadmin.controllers.model.OverzichtGroep;
 import com.xumpy.thuisadmin.controllers.model.OverzichtGroepBedragen;
 import com.xumpy.thuisadmin.controllers.model.OverzichtGroepBedragenTotal;
 import com.xumpy.thuisadmin.controllers.model.RekeningOverzicht;
+import com.xumpy.thuisadmin.dao.model.DocumentenDaoPojo;
 import com.xumpy.thuisadmin.dao.model.RekeningenDaoPojo;
 import com.xumpy.thuisadmin.domain.Bedragen;
 import com.xumpy.thuisadmin.domain.Documenten;
@@ -43,13 +44,11 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.lang.StringUtils;
-import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.w3c.dom.Document;
 
 /**
  *
@@ -290,6 +289,14 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         return overzichtGroepBedragenTotal;
     }
 
+    private Integer findPrioDocumentId(Integer bedragId){
+        List<DocumentenDaoPojo> prioDocument = documentenDao.fetchPrioDocumentByBedrag(bedragId);
+        if (prioDocument.size() == 1){
+            return prioDocument.get(0).getPk_id();
+        }
+        return null;
+    }
+
     @Override
     @Transactional
     public BeheerBedragenReportLst reportBedragen(BeheerBedragenReportLst beheerBedragenReportLst, Integer offset, Rekeningen rekening, String searchText, Boolean validAccountyBedrag) {
@@ -311,14 +318,15 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
             for (Bedragen bedrag: bedragenDao.reportBedragen(rekeningId, searchText, userInfo.getPersoon().getPk_id(),
                     userInfo.getInvoiceType().equals(InvoiceType.PROFESSIONAL) ? Boolean.TRUE :
                             userInfo.getInvoiceType().equals(InvoiceType.PERSONAL) ? Boolean.FALSE : null, topTen).getContent()){
-                beheerBedragenReport.add(new BeheerBedragenReport(bedrag, isAccountancyBedragValid(bedrag)));
+
+                beheerBedragenReport.add(new BeheerBedragenReport(bedrag, isAccountancyBedragValid(bedrag), findPrioDocumentId(bedrag.getPk_id())));
             }
 
         } else {
             for (Bedragen bedrag: bedragenDao.reportInValidAccountantBedragen(rekeningId, searchText, userInfo.getPersoon().getPk_id(),
                     userInfo.getInvoiceType().equals(InvoiceType.PROFESSIONAL) ? Boolean.TRUE :
                             userInfo.getInvoiceType().equals(InvoiceType.PERSONAL) ? Boolean.FALSE : null, topTen).getContent()){
-                beheerBedragenReport.add(new BeheerBedragenReport(bedrag, isAccountancyBedragValid(bedrag)));
+                beheerBedragenReport.add(new BeheerBedragenReport(bedrag, isAccountancyBedragValid(bedrag), findPrioDocumentId(bedrag.getPk_id())));
             }
         }
 

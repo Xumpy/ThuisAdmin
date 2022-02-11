@@ -18,6 +18,10 @@
                 </div>
                 <div class="col-lg-12">
                     <div class="col-lg-12">
+                        <div class="col-lg-2">Prio</div>
+                        <input class="col-lg-4"  path="Prioriteit" th:field="*{prio}" />
+                    </div>
+                    <div class="col-lg-12">
                         <div class="col-lg-2">Omschrijving</div>
                        <textarea class="col-lg-4"  path="omschrijving" th:field="*{omschrijving}"></textarea>
                     </div>
@@ -55,6 +59,7 @@
                         pkId: /*[[${document.pkId}]]*/,
                         bedragId: /*[[${bedragId}]]*/,
                         omschrijving: /*[[${document.omschrijving}]]*/,
+                        prio: /*[[${document.prio}]]*/,
                         datum: ''
 
                     };

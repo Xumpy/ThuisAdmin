@@ -36,6 +36,7 @@ public class BeheerBedragenReport implements Serializable{
     private String omschrijving;
     private Boolean validForAccountancy;
     private Boolean processed;
+    private Integer prioDocument;
 
     public Integer getPk_id() {
         return pk_id;
@@ -114,7 +115,15 @@ public class BeheerBedragenReport implements Serializable{
         this.processed = processed;
     }
 
-    public BeheerBedragenReport(Bedragen bedrag, Boolean validForAccountancy){
+    public Integer getPrioDocument() {
+        return prioDocument;
+    }
+
+    public void setPrioDocument(Integer prioDocument) {
+        this.prioDocument = prioDocument;
+    }
+
+    public BeheerBedragenReport(Bedragen bedrag, Boolean validForAccountancy, Integer prioDocument){
         this.pk_id = bedrag.getPk_id();
         this.type_groep = bedrag.getGroep().getNaam();
         this.rekening = bedrag.getRekening().getNaam();
@@ -124,6 +133,7 @@ public class BeheerBedragenReport implements Serializable{
         this.omschrijving = bedrag.getOmschrijving();
         this.validForAccountancy = validForAccountancy;
         this.processed = bedrag.getProcessed();
+        this.prioDocument = prioDocument;
     }
 
     @Override

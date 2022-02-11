@@ -30,6 +30,9 @@ public interface DocumentenDaoImpl extends CrudRepository<DocumentenDaoPojo, Int
     @Query("from DocumentenDaoPojo where bedrag.pk_id = :bedragId")
     public List<DocumentenDaoPojo> fetchDocumentByBedrag(@Param("bedragId") Integer bedragId);
 
+    @Query("from DocumentenDaoPojo where bedrag.pk_id = :bedragId and prio = 1")
+    public List<DocumentenDaoPojo> fetchPrioDocumentByBedrag(@Param("bedragId") Integer bedragId);
+
     @Query("from DocumentenDaoPojo where bedrag.invoice.pkId = :invoiceId")
     public List<DocumentenDaoPojo> fetchDocumentByInvoice(@Param("invoiceId") Integer invoiceId);
 
