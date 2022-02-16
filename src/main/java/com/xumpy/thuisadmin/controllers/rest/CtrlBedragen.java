@@ -5,14 +5,20 @@
  */
 package com.xumpy.thuisadmin.controllers.rest;
 
+import com.xumpy.thuisadmin.controllers.model.BedragAccountingCtrlPojo;
 import com.xumpy.thuisadmin.controllers.model.BeheerBedragenInp;
 import com.xumpy.thuisadmin.controllers.model.BeheerBedragenReportLst;
 import com.xumpy.thuisadmin.controllers.model.NieuwBedrag;
+import com.xumpy.thuisadmin.dao.implementations.BedragAccountingDaoImpl;
+import com.xumpy.thuisadmin.domain.BedragAccounting;
 import com.xumpy.thuisadmin.services.BedragenSrv;
 import com.xumpy.thuisadmin.services.implementations.BedragenSrvImpl;
 import com.xumpy.thuisadmin.services.model.BedragenSrvPojo;
 import java.io.Serializable;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -36,7 +42,9 @@ public class CtrlBedragen implements Serializable{
     
     @Autowired
     private BeheerBedragenReportLst beheerBedragenReportLst;
-    
+
+    @Autowired BedragAccountingDaoImpl bedragAccountingDao;
+
     @RequestMapping("/json/fetch_beheer_bedragen")
     public @ResponseBody BeheerBedragenInp fetchBeheerBedragen() throws ParseException{
         this.beheerBedragenInp.setCourantValue(bedragenSrv.getCourantValue());
@@ -72,5 +80,16 @@ public class CtrlBedragen implements Serializable{
         bedragenSrv.delete(bedrag);
         
         return "1";
+    }
+
+    @RequestMapping("/json/find_bedrag_accounting/{bedragId}")
+    public @ResponseBody List<BedragAccountingCtrlPojo> findBedragAccounting(@PathVariable Integer bedragId) throws ParseException{
+        List<BedragAccountingCtrlPojo> bedragAccountingCtrlPojos = new ArrayList<>();
+
+        for(BedragAccounting bedragAccounting: bedragAccountingDao.getAccountantBedragenByBedrag(bedragId)){
+            bedragAccountingCtrlPojos.add(new BedragAccountingCtrlPojo(bedragAccounting));
+        }
+
+        return bedragAccountingCtrlPojos;
     }
 }
