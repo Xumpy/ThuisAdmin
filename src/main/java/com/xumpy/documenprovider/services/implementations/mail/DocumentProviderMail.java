@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class DocumentProviderMail implements DocumentProviderSrv {
     @Value( "${mail.verkoopEmail}" )
@@ -32,5 +34,15 @@ public class DocumentProviderMail implements DocumentProviderSrv {
         smtpEmailBuilder.sendSimpleMessage(email, document.getBedrag().getOmschrijving(), "", document);
 
         return "Mail Sent To: " + email;
+    }
+
+    @Override
+    public String getDumpFromDocumentProvider(Date startDate, Date endDate) {
+        throw new RuntimeException("Not Implemented To Get Dump From Document Provider");
+    }
+
+    @Override
+    public String processDumpToBedragAccounting(String dump) {
+        throw new RuntimeException("Not Implemented To Process Dump From Document Provider");
     }
 }

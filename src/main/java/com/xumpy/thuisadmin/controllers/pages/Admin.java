@@ -67,4 +67,31 @@ public class Admin implements Serializable{
         
         return "admin/nieuwGroep";
     }
+
+
+    @RequestMapping(value = "admin/documentProviders")
+    public String viewDocumentProviders(){
+        return "admin/documentProviders";
+    }
+
+    @RequestMapping(value = "admin/dataDumps/{documentProviderId}")
+    public String viewDataDumps(@PathVariable Integer documentProviderId, Model model){
+        model.addAttribute("documentProviderId", documentProviderId);
+
+        return "admin/dataDumps";
+    }
+
+    @RequestMapping(value = "admin/nieuwDataDump/{documentProviderId}")
+    public String viewNieuwDataDumps(@PathVariable Integer documentProviderId, Model model){
+        model.addAttribute("documentProviderId", documentProviderId);
+
+        return "admin/nieuwDataDump";
+    }
+
+    @RequestMapping(value = "admin/editDataDump/{pkId}")
+    public String viewEditDataDumps(@PathVariable Integer pkId, Model model){
+        model.addAttribute("pkId", pkId);
+
+        return "admin/nieuwDataDump";
+    }
 }

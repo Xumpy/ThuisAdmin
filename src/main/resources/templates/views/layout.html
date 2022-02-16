@@ -69,6 +69,7 @@
               <li class="dropdown">
                 <a aria-expanded="false" th:href="@{/admin/rekeningen}" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
                 <ul class="dropdown-menu">
+                  <li><a th:if="${@userInfo.invoiceType.type} != ${personal}" th:href="@{/admin/documentProviders}">Document Providers</a></li>
                   <li><a th:href="@{/admin/rekeningen}">Rekeningen</a></li>
                   <li><a th:href="@{/admin/groepen}">Groepen</a></li>
                   <li><a th:href="@{/admin/personen}"><div th:text="${@userInfo.getPersoon().getUsername()}"/></a></li>

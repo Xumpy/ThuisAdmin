@@ -1,0 +1,16 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="6DF223F3-DC4A-6493-42C3-7D13E508EA61" containerWithKeyObject="159A8E48-0D89-7CBB-9A8E-2188359D760E" localFKIndex="D642F1CC-CC41-859F-254C-E492D1008CA4" name="TA_DOCUMENT_PROVIDER_DUMP_TA_DOCUMENT_PROVIDER_FK">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-02-15 12:46:20 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<referredTableLongName>TA_DOCUMENT_PROVIDER</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>88A8A4CD-1811-1B45-8138-293E9B1B99FC</referredTableID>
+<keyObject>908F46FD-A46A-BCE4-6487-9F54BC6C480A</keyObject>
+<referredKeyID>908F46FD-A46A-BCE4-6487-9F54BC6C480A</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>PK_ID</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

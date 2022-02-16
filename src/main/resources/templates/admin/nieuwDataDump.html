@@ -1,0 +1,80 @@
+<html layout:decorator="views/layout" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<body>
+<div layout:fragment="content">
+    <div class="col-lg-12">
+        <form  ng-show="dataDump.pkId !== ''" class="col-lg-2" ng-submit="deleteDataDump()">
+            <input class="btn btn-primary" type="submit" value="Delete Data Dump"/>
+        </form>
+        <form class="col-lg-2" ng-submit="uploadFromWebservice()">
+            <input class="btn btn-primary" type="submit" value="Upload From Webservice"/>
+        </form>
+    </div>
+    <div class="col-lg-12">
+        <div class="col-lg-6 well">
+            <div class="form-group col-lg-12">
+                <label for="inputStartDate" class="col-lg-2 control-label">Start Datum</label>
+                <div class="col-lg-4">
+                    <input data-provide="datepicker" data-date-format="yyyy-mm-dd" placeholder="Start Datum" class="form-control" id="inputStartDate" ng-model="dataDump.startDate" type="text"/>
+                </div>
+            </div>
+            <div class="form-group col-lg-12">
+                <label for="inputEndDate" class="col-lg-2 control-label">Eind Datum</label>
+                <div class="col-lg-4">
+                    <input data-provide="datepicker" data-date-format="yyyy-mm-dd" placeholder="Eind Datum" class="form-control" id="inputEndDate" ng-model="dataDump.endDate" type="text"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:inline="javascript">
+                app.controller("fController", function($scope, $http) {
+                    var pkId = /*[[${pkId}]]*/;
+                    var documentProviderId = /*[[${documentProviderId}]]*/;
+
+                    if (pkId === null){
+                        var url = /*[[@{/json/documentProvider/}]]*/;
+                        $http.get(url + documentProviderId).success( function(data){
+                            $scope.dataDump = {
+                                pkId: null,
+                                documentProvider: data,
+                                startDate: null,
+                                endDate: null
+                            }
+                        });
+                    } else {
+                        var url = /*[[@{/json/dataDump/}]]*/;
+                        $http.get(url + pkId).success( function(data){
+                            $scope.dataDump = data;
+                        });
+                    }
+
+                    $scope.deleteDataDump = (function(){
+                        bootbox.confirm("Are you sure you want to delete this data dump?", function(result) {
+                            if (result === true){
+                                var url = /*[[@{/json/deleteDataDump/}]]*/;
+                                $http.get(url + $scope.dataDump.pkId).success( function() {
+                                    var url = /*[[@{/admin/dataDumps/}]]*/;
+                                    $(location).attr('href',url + $scope.dataDump.documentProvider.pkId);
+                                }).error( function(){
+                                    bootbox.alert("Error occured during delete");
+                                });
+                            }
+                        });
+                    });
+
+                    $scope.uploadFromWebservice = (function(){
+                        $http.post(/*[[@{/json/uploadDumpFromWebservice}]]*/, $scope.dataDump).success( function(data) {
+                            if (data==="200"){
+                                var url = /*[[@{/admin/dataDumps/}]]*/;
+                                $(location).attr('href',url + $scope.dataDump.documentProvider.pkId);
+                            } else {
+                                bootbox.alert("Error occured during save");
+                            }
+                        }).error( function() {
+                            bootbox.alert("Error occured during save");
+                        });
+                    });
+                });
+            </script>
+</div>
+</body>
+</html>

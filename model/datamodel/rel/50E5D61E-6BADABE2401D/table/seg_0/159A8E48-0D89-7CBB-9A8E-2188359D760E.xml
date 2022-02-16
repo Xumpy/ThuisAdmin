@@ -1,0 +1,94 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="159A8E48-0D89-7CBB-9A8E-2188359D760E" name="TA_DOCUMENT_PROVIDER_DUMP">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-02-15 12:45:59 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<ordsAlias>table_28</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="PK_ID" id="60A96A5D-0030-2524-0107-1CA3B3C234F3">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-02-15 12:46:16 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>9</dataTypePrecision>
+<ownDataTypeParameters>,9,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FK_DOCUMENT_PROVIDER_ID" id="4A31F1B4-25D0-1BF5-6E7A-540D1C35FEB3">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-02-15 12:46:20 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>9</dataTypePrecision>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="6DF223F3-DC4A-6493-42C3-7D13E508EA61" referredColumn="59049E27-6D07-E5E9-FC50-827BBEB30194"/>
+</associations>
+</Column>
+<Column name="START_DATE" id="D9EC641C-E015-3345-5584-52BE2EFAFC3F">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-02-15 12:46:51 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT007</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="END_DATE" id="7C3E5189-FC34-9A3F-01F6-CA6D0F303790">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-02-15 12:47:05 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT007</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="DUMP" id="3CBE35FD-6446-84E8-631F-673D706C0C5B">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-02-15 12:47:17 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT028</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="35EEC993-256A-0160-2C9B-F202207BB9C1" name="TA_DOCUMENT_PROVIDER_DUMP_PK">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-02-15 12:46:16 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="60A96A5D-0030-2524-0107-1CA3B3C234F3"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="D642F1CC-CC41-859F-254C-E492D1008CA4" name="TA_DOCUMENT_PROVIDER_DUMP_TA_DOCUMENT_PROVIDER_FK">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-02-15 12:46:20 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="4A31F1B4-25D0-1BF5-6E7A-540D1C35FEB3"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

@@ -1,0 +1,144 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="090E5260-2EE7-21EA-7D00-F68A2293CF86" name="TA_BEDRAG_ACCOUNTING">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-02-15 12:40:32 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<ordsAlias>table_27</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="PK_ID" id="F9A7D9A8-03F1-F590-AB20-72225D631AE4">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-02-15 12:41:03 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>9</dataTypePrecision>
+<ownDataTypeParameters>,9,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FK_BEDRAG_ID" id="417316DA-82B0-7052-423C-0E5D13E382D6">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-02-15 12:41:06 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="1DD3835D-1F93-9C15-46FB-447615742803" referredColumn="00825D21-F3C5-1481-BE31-EBB1A568555A"/>
+</associations>
+</Column>
+<Column name="DATUM" id="4E76D00C-8347-83B4-F3E2-CB7BE4D01E97">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-02-15 12:41:37 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT007</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="BEDRAG" id="136A453D-47B7-612B-302A-44BFB521E1D1">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-02-15 12:41:59 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>9</dataTypePrecision>
+<dataTypeScale>2</dataTypeScale>
+<ownDataTypeParameters>,9,2</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ACCOUNT_CODE" id="4C878187-DE2B-2F28-11F8-97C8A3CB0C3A">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-02-15 12:42:21 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50</dataTypeSize>
+<ownDataTypeParameters>50,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="OMSCHRIJVING" id="A4EF6120-0F61-D171-3CEC-8CD1AFDA130E">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-02-15 12:44:51 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>4000</dataTypeSize>
+<ownDataTypeParameters>4000,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="CUSTOMER_NAME" id="A64C42D6-14BF-D0FE-617C-AE0D134F4D9F">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-02-16 14:00:34 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>255</dataTypeSize>
+<ownDataTypeParameters>255,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="VAT_NUMBER" id="74D4F210-71C1-65FA-B141-5B6D29B60CCD">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-02-16 13:47:16 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>255</dataTypeSize>
+<ownDataTypeParameters>255,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="TAX_DESCRIPTION" id="C531DD96-265D-DC5B-CFBD-4974EF2FC4D5">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-02-16 14:05:09 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>255</dataTypeSize>
+<ownDataTypeParameters>255,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="3EA95649-7B01-5DFC-CDC5-C90AC35431BE" name="TA_INCOMING_INVOICES_PK">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-02-15 12:41:03 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="F9A7D9A8-03F1-F590-AB20-72225D631AE4"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="ABFF2259-9704-26C9-CFEB-C080ECA365D6" name="TA_INCOMING_INVOICES_TA_BEDRAGEN_FK">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-02-15 12:41:06 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="417316DA-82B0-7052-423C-0E5D13E382D6"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>
