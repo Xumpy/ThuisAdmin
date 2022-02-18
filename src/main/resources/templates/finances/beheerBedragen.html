@@ -13,11 +13,19 @@
                         <form class="form-horizontal col-lg-2" action="nieuwBedrag">
                             <input class="btn btn-primary" type="submit" value="Nieuw Bedrag"/>
                         </form>
-                        <form class="form-horizontal col-lg-4" >
-                            <label th:if="${@userInfo.invoiceType.type} != ${personal}" class="control-label">Show Not Valid For Accountancy</label>
+                        <form class="form-horizontal col-lg-2" >
+                            <label th:if="${@userInfo.invoiceType.type} != ${personal}" class="control-label">No Documents in DP</label>
+
                             <input th:if="${@userInfo.invoiceType.type} != ${personal}"
                                    ng-model="beheerBedragen.validAccountyBedrag" type="checkbox" name="noDocuments"
                                    ng-change="showNoDocumentsChange(beheerBedragen.validAccountyBedrag)">
+                        </form>
+                        <form class="form-horizontal col-lg-2" >
+                            <label th:if="${@userInfo.invoiceType.type} != ${personal}" class="control-label">Show Invalid Accouting</label>
+
+                            <input th:if="${@userInfo.invoiceType.type} != ${personal}"
+                                   ng-model="beheerBedragen.invalidAccouting" type="checkbox" name="invalidAccounting"
+                                   ng-change="showInvalidAccountingChange(beheerBedragen.invalidAccouting)">
                         </form>
                         <div th:if="${@userInfo.invoiceType.type} != ${personal}" class="col-lg-2 form-group">
                             <b>Total Courant: {{beheerBedragen.courantValue}}</b>
@@ -114,6 +122,10 @@
 
                     $scope.showNoDocumentsChange = function(showNoDocuments){
                         $scope.beheerBedragen.validAccountyBedrag = showNoDocuments;
+                    }
+
+                    $scope.showInvalidAccountingChange = function(showInvalidAccounting){
+                        $scope.beheerBedragen.invalidAccouting = showInvalidAccounting;
                     }
 
                     $scope.$watchCollection('beheerBedragen', function(newValue, oldValue){

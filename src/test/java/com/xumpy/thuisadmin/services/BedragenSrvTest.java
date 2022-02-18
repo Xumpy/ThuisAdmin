@@ -533,7 +533,7 @@ public class BedragenSrvTest{
         
         when(bedragenDao.reportBedragen(rekening1.getPk_id(), null, userInfo.getPersoon().getPk_id(), null, topTen)).thenReturn(slcBedragen);
         
-        beheerBedragen = bedragenSrv.reportBedragen(beheerBedragen, 1, rekening1, null, false);
+        beheerBedragen = bedragenSrv.reportBedragen(beheerBedragen, 1, rekening1, null, false, false);
         
         assertEquals(lstBedragen.get(0).getPk_id(), beheerBedragen.getBeheerBedragenReport().get(0).getPk_id());
         assertEquals(lstBedragen.get(1).getPk_id(), beheerBedragen.getBeheerBedragenReport().get(1).getPk_id());

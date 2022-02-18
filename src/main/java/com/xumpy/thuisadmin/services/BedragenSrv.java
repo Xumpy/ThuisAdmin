@@ -32,7 +32,7 @@ public interface BedragenSrv {
 
     public Bedragen delete(NieuwBedrag bedragen);
 
-    public BeheerBedragenReportLst reportBedragen(BeheerBedragenReportLst beheerBedragenReportLst, Integer offset, Rekeningen rekening, String searchText, Boolean validAccountyBedrag);
+    public BeheerBedragenReportLst reportBedragen(BeheerBedragenReportLst beheerBedragenReportLst, Integer offset, Rekeningen rekening, String searchText, Boolean validAccountyBedrag, Boolean invalidAccouting);
 
     public List<RekeningOverzicht> graphiekBedrag(Rekeningen rekening,
                                                   Date beginDate,

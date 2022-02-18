@@ -46,6 +46,26 @@ public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer
             + "  and (:rekeningId is null or rekening.pk_id = :rekeningId)"
             + "  and coalesce(coalesce(:professional, rekening.professional), 0) = coalesce(rekening.professional, 0)"
             + "  and coalesce(groep.codeId, '') != 'INTER_REKENING' "
+            + "  and (select count(1) from BedragAccountingDaoPojo bedragAccountingDaoPojo"
+            + " where bedragAccountingDaoPojo.bedrag.pk_id = bedragen.pk_id) = 0"
+            + "  and (:searchText is null or lower(groep.naam) like :searchText " +
+            "  or lower(rekening.naam) like :searchText " +
+            "  or lower(persoon.naam) like :searchText " +
+            "  or lower(persoon.voornaam) like :searchText " +
+            "  or cast(bedrag as string) like :searchText " +
+            "  or cast(datum as string) like :searchText " +
+            "  or lower(omschrijving) like :searchText)" +
+            "  order by datum desc")
+    public Slice<BedragenDaoPojo> reportBedragenNoAccounting(@Param("rekeningId") Integer rekeningId,
+                                                             @Param("searchText") String searchText,
+                                                             @Param("persoonId") Integer persoonId,
+                                                             @Param("professional") Boolean professional,
+                                                             Pageable pageable);
+
+    @Query("from BedragenDaoPojo bedragen where persoon.pk_id = :persoonId "
+            + "  and (:rekeningId is null or rekening.pk_id = :rekeningId)"
+            + "  and coalesce(coalesce(:professional, rekening.professional), 0) = coalesce(rekening.professional, 0)"
+            + "  and coalesce(groep.codeId, '') != 'INTER_REKENING' "
             + "  and coalesce(managedByAccountant, 0) = 0 "
             + "  and coalesce(courant, 0) = 0 "
             + "  and (select count(1) from DocumentProviderValidDaoPojo documentProviderValid"
@@ -123,4 +143,11 @@ public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer
 
     @Query("from BedragenDaoPojo where (invoice.pkId = :invoiceId)")
     public List<BedragenDaoPojo> getBedragOfInvoice(@Param("invoiceId") Integer invoiceId);
+
+    @Query("from BedragenDaoPojo where (datum >= :startDate and datum <= :endDate) and bedrag = :bedrag and " +
+            "coalesce(coalesce(:professional, rekening.professional), 0) = coalesce(rekening.professional, 0)")
+    public List<BedragenDaoPojo> getBedragByBedragInPeriod(@Param("bedrag") BigDecimal bedrag,
+                                                           @Param("startDate") Date startDate,
+                                                           @Param("endDate") Date endDate,
+                                                           @Param("professional") Boolean professional);
 }

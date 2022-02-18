@@ -299,7 +299,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
 
     @Override
     @Transactional
-    public BeheerBedragenReportLst reportBedragen(BeheerBedragenReportLst beheerBedragenReportLst, Integer offset, Rekeningen rekening, String searchText, Boolean validAccountyBedrag) {
+    public BeheerBedragenReportLst reportBedragen(BeheerBedragenReportLst beheerBedragenReportLst, Integer offset, Rekeningen rekening, String searchText, Boolean validAccountyBedrag, Boolean invalidAccouting) {
         
         searchText = StringUtils.isEmpty(searchText) ? null : "%" + searchText + "%";
         
@@ -314,18 +314,24 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
             rekeningId = rekening.getPk_id();
         }
 
-        if (!validAccountyBedrag){
-            for (Bedragen bedrag: bedragenDao.reportBedragen(rekeningId, searchText, userInfo.getPersoon().getPk_id(),
+        if (invalidAccouting) {
+            for (Bedragen bedrag: bedragenDao.reportBedragenNoAccounting(rekeningId, searchText, userInfo.getPersoon().getPk_id(),
                     userInfo.getInvoiceType().equals(InvoiceType.PROFESSIONAL) ? Boolean.TRUE :
                             userInfo.getInvoiceType().equals(InvoiceType.PERSONAL) ? Boolean.FALSE : null, topTen).getContent()){
 
                 beheerBedragenReport.add(new BeheerBedragenReport(bedrag, isAccountancyBedragValid(bedrag), findPrioDocumentId(bedrag.getPk_id())));
             }
-
-        } else {
+        } else if (validAccountyBedrag){
             for (Bedragen bedrag: bedragenDao.reportInValidAccountantBedragen(rekeningId, searchText, userInfo.getPersoon().getPk_id(),
                     userInfo.getInvoiceType().equals(InvoiceType.PROFESSIONAL) ? Boolean.TRUE :
                             userInfo.getInvoiceType().equals(InvoiceType.PERSONAL) ? Boolean.FALSE : null, topTen).getContent()){
+                beheerBedragenReport.add(new BeheerBedragenReport(bedrag, isAccountancyBedragValid(bedrag), findPrioDocumentId(bedrag.getPk_id())));
+            }
+        } else {
+            for (Bedragen bedrag: bedragenDao.reportBedragen(rekeningId, searchText, userInfo.getPersoon().getPk_id(),
+                    userInfo.getInvoiceType().equals(InvoiceType.PROFESSIONAL) ? Boolean.TRUE :
+                            userInfo.getInvoiceType().equals(InvoiceType.PERSONAL) ? Boolean.FALSE : null, topTen).getContent()){
+
                 beheerBedragenReport.add(new BeheerBedragenReport(bedrag, isAccountancyBedragValid(bedrag), findPrioDocumentId(bedrag.getPk_id())));
             }
         }

@@ -23,6 +23,8 @@ public class BeheerBedragenInp implements Serializable{
     private RekeningenDaoPojo rekening;
     private String zoekOpdracht;
     private Boolean validAccountyBedrag;
+    private Boolean invalidAccouting;
+
     private BigDecimal courantValue;
 
     public BigDecimal getCourantValue() {
@@ -60,6 +62,15 @@ public class BeheerBedragenInp implements Serializable{
     public BeheerBedragenInp(){
         this.offset = 0;
         this.validAccountyBedrag = false;
+        this.invalidAccouting = false;
+    }
+
+    public Boolean getInvalidAccouting() {
+        return invalidAccouting;
+    }
+
+    public void setInvalidAccouting(Boolean invalidAccouting) {
+        this.invalidAccouting = invalidAccouting;
     }
 
     public Boolean getValidAccountyBedrag() {

@@ -1,14 +1,12 @@
 package com.xumpy.documenprovider.services.implementations.yuki;
 
-import com.xumpy.documenprovider.services.implementations.yuki.model.ArrayOfTransactionInfo;
-import com.xumpy.documenprovider.services.implementations.yuki.model.SessionID;
-import com.xumpy.documenprovider.services.implementations.yuki.model.UploadReponse;
-import com.xumpy.documenprovider.services.implementations.yuki.model.YukiPojo;
+import com.xumpy.documenprovider.services.implementations.yuki.model.*;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +48,18 @@ public class GetAccountInfoFromYuki {
                 + "&" + paramFinancialMode;
     }
 
+    private String createURITransactionDocument(String sessionId, String transactionId){
+        YukiPojo yukiPojo = yukiBuilder.build();
+
+        String paramSesssionId = "sessionID=" + sessionId;
+        String paramAdministrationGUID = "administrationID=" + yukiPojo.getAdministrationGUID();
+        String paramTransactionID = "transactionID=" + transactionId;
+
+        return BASE_URL + "/GetTransactionDocument?" + paramSesssionId
+                + "&" + paramAdministrationGUID
+                + "&" + paramTransactionID;
+    }
+
 
     private Object executeWebCall(Class object, String url) throws JAXBException, IOException {
         HttpClient httpclient = HttpClients.createDefault();
@@ -77,5 +87,12 @@ public class GetAccountInfoFromYuki {
                 createURIArrayOfTransactions(sessionId, startDate, endDate));
 
         return arrayOfTransactionInfo;
+    }
+
+    public TransactionDocument getTransactionDocument(String sessionId, String transactionId) throws JAXBException, IOException {
+        TransactionDocument transactionDocument = (TransactionDocument) executeWebCall(TransactionDocument.class,
+                createURITransactionDocument(sessionId, transactionId));
+
+        return transactionDocument;
     }
 }

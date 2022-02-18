@@ -14,6 +14,6 @@ public interface DocumentProviderDocumentsImpl extends CrudRepository<DocumentPr
     @Query("from DocumentProviderDocumentsDaoPojo where documenten.pk_id = :documentId")
     public List<DocumentProviderDocumentsDaoPojo> getDocumentProviderDocumentsByDocumentId(@Param("documentId") Integer documentId);
 
-    @Query("from DocumentProviderDocumentsDaoPojo where feedback = :feedback")
+    @Query("from DocumentProviderDocumentsDaoPojo where feedback like %:feedback%")
     public List<DocumentProviderDocumentsDaoPojo> getDocumentProviderDocumentsByFeedback(@Param("feedback") String feedback);
 }
