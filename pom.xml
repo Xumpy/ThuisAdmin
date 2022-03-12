@@ -229,7 +229,7 @@
         <repository>
 	    <id>jasper-shizzle</id>
 	    <name>Jasper Foo Shizzle</name>
-	    <url>http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts</url>
+	    <url>https://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/</url>
     	</repository>
 	<repository>
             <id>spring-releases</id>
