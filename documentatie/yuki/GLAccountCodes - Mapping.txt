@@ -1,0 +1,70 @@
+Inkomsten 
+	Omzet 
+		700000 Omzet (Freelancer/Uitbetaling Factuur)
+	Overige bedrijfsopbrengsten
+		741000 Diverse bedrijfsopbrengsten
+		743000 Recuperatie van personeelskosten
+	
+Kosten
+	Huisvesting
+		610100 Huurlasten gebouwen
+		610501 Waakhond
+		610500 Onderhoud gebouwen
+		611500 Gas, water en elektriciteit	
+	Kosten auto's
+		610301 Huurlasten fiets
+		610800 Onderhoud en herstellingen bedrijfswagens 
+		610801 Onderhoud en herstellingen fiets
+		612500 Brandstoffen bedrijfswagens
+		612501 Bonnetjes tanken bedrijfswagen
+		612600 Andere autokosten bedrijfswagens
+		610300 Huurlasten bedrijfswagens 
+	Reiskostenvergoedingen
+		616700 Reis- en verblijfkosten binnenland
+	Kantoorkosten
+		611000 Bureaubenodigdheden en drukwerk
+		611200 Klein materiaal
+		616200 Telefoon- en Internetkosten
+		616650 Contributies en abonnementen
+		616651 Auteursrechten
+		616100 Portkosten
+	Verzekeringen
+		613400 Verzekering bedrijfswagens
+		613500 Verzekeringen algemeen
+		613501 IPT
+		613502 VAPZ
+	Diensten
+		612000 Erelonen sociaal secretariaat
+		612100 Informaticaprestaties
+	Marketing
+		616660 Aftrekbare giften
+	Verkoopkosten
+		616800 Niet-specifieke beroepskledij
+	Erelonen
+		615200 Erelonen boekhouders en accountants
+		615700 Erelonen notarissen en advocaten
+	Bedrijfsleiderbezoldigingen
+		618000 Bedrijfsleiderbezoldigingen
+		618014 Forfaitaire onkostenvergoeding
+		618110 Voordelen alle aard bedrijfsleider
+		618500 Sociale bijdragen bedrijfsleider
+	Algemene kosten
+		610000 Diensten en diverse goederen
+		616680 Restaurantkosten
+	Overige bedrijfskosten
+		640000 Bedrijfsbelastingen
+		640200 Verkeersbelasting en BIV
+		644000 Boetes
+		646000 Diverse bedrijfskosten
+	Financiële kosten
+		650000 Rente kaskrediet
+		650300 Rente lening van {0}
+		657100 Bankkosten
+		658000 Betalingsverschillen in uw nadeel
+	Belastingen op het resultaat
+		670000 Belastingen op het resultaat
+		670001 Voorafbetaling 1
+		670002 Voorafbetaling 2
+		670003 Voorafbetaling 3
+		670004 Voorafbetaling 4
+		670400 Roerende Voorheffing Auteursrechten

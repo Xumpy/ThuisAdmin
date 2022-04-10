@@ -36,18 +36,18 @@ public class GroepenSrvImpl implements GroepenSrv, Serializable{
     @Override
     @Transactional(readOnly=false, value="transactionManager")
     public Groepen save(Groepen groepen) {
-        GroepenDaoPojo groepenSrvPojo = new GroepenDaoPojo(groepen);
-        if (groepenSrvPojo.getPk_id() == null){
-            groepenSrvPojo.setPk_id(groepenDao.getNewPkId());
-            groepenSrvPojo.setPersoon(new PersonenDaoPojo(userInfo.getPersoon()));
-            groepenDao.save(groepenSrvPojo);
+        GroepenDaoPojo groepenDaoPojo = new GroepenDaoPojo(groepen);
+        if (groepenDaoPojo.getPk_id() == null){
+            groepenDaoPojo.setPk_id(groepenDao.getNewPkId());
+            groepenDaoPojo.setPersoon(new PersonenDaoPojo(userInfo.getPersoon()));
+            groepenDao.save(groepenDaoPojo);
         } else {
             if (groepen.getPersoon().getUsername().equals(userInfo.getPersoon().getUsername())){
-                groepenDao.save(groepenSrvPojo);
+                groepenDao.save(groepenDaoPojo);
             }
         }
         
-        return groepenSrvPojo;
+        return groepenDaoPojo;
     }
 
     @Override

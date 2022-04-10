@@ -31,15 +31,15 @@
                   </div>
                 </div>
                 <div class="form-group col-lg-12">
+                    <label for="inputCodeId" class="col-lg-2 control-label">Code Id</label>
+                    <div class="col-lg-4">
+                        <input class="form-control" id="inputCodeId" ng-model="groep.codeId" placeholder="Code Id" type="text"/>
+                    </div>
+                </div>
+                <div class="form-group col-lg-12">
                   <label for="inputNegatief" class="col-lg-2 control-label">Negatief</label>
                   <div class="col-lg-4">
                     <input id="inputNegatief" ng-model="groep.negatief" type="checkbox"/>
-                  </div>
-                </div>
-                <div class="form-group col-lg-12">
-                  <label for="inputNegatief" class="col-lg-2 control-label">Verberg Groep in Grahpiek</label>
-                  <div class="col-lg-4">
-                    <input id="inputNegatief" ng-model="hide_groep" type="checkbox"/>
                   </div>
                 </div>
                 <div class="form-group col-lg-12">
@@ -139,12 +139,6 @@
                                 $scope.groep.negatief = false;
                             }
 
-                            if ($scope.groep.codeId === "INTER_REKENING"){
-                                $scope.hide_groep = true;
-                            } else {
-                                $scope.hide_groep = false;
-                            }
-
                             if ($scope.groep.publicGroep === 1){
                                 $scope.public_groep = true;
                             } else {
@@ -202,12 +196,6 @@
                                 $scope.groep.negatief = 1;
                             } else {
                                 $scope.groep.negatief = 0;
-                            }
-
-                            if ($scope.hide_groep === true){
-                                $scope.groep.codeId = "INTER_REKENING";
-                            } else {
-                                $scope.groep.codeId = null;
                             }
 
                             if ($scope.public_groep === true){
