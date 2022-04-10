@@ -1,4 +1,17 @@
-select fk_bedrag_id from ta_bedrag_accounting where account_code = '741000';
+select distinct ta_type_groep.pk_id, ta_type_groep.naam, ta_bedragen.datum
+from ta_bedrag_accounting 
+join ta_bedragen
+  on (ta_bedragen.pk_id = ta_bedrag_accounting.fk_bedrag_id)
+join ta_type_groep
+  on (ta_bedragen.fk_type_groep_id = ta_type_groep.pk_id)
+where ta_bedrag_accounting.account_code = '612600';
+
+select ta_bedragen.omschrijving
+from ta_bedrag_accounting 
+join ta_bedragen
+  on (ta_bedragen.pk_id = ta_bedrag_accounting.fk_bedrag_id)
+where ta_bedrag_accounting.account_code = '612500';
+
 
 select * from ta_bedragen where fk_type_groep_id = 651;
 select * from ta_bedragen where pk_id = 7953;

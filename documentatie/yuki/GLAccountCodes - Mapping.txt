@@ -2,25 +2,26 @@ Inkomsten
 	Omzet 
 		700000 Omzet (Freelancer/Uitbetaling Factuur)
 	Overige bedrijfsopbrengsten
-		741000 Diverse bedrijfsopbrengsten
-		743000 Recuperatie van personeelskosten
+		741000 Diverse bedrijfsopbrengsten (Freelancer/Varia Opbrengsten)
+		743000 Recuperatie van personeelskosten (Freelancer/Loon Uitkeren)
 	
 Kosten
-	Huisvesting
-		610100 Huurlasten gebouwen
-		610501 Waakhond
-		610500 Onderhoud gebouwen
-		611500 Gas, water en elektriciteit	
-	Kosten auto's
-		610301 Huurlasten fiets
-		610800 Onderhoud en herstellingen bedrijfswagens 
-		610801 Onderhoud en herstellingen fiets
-		612500 Brandstoffen bedrijfswagens
-		612501 Bonnetjes tanken bedrijfswagen
-		612600 Andere autokosten bedrijfswagens
-		610300 Huurlasten bedrijfswagens 
-	Reiskostenvergoedingen
-		616700 Reis- en verblijfkosten binnenland
+	Huisvesting (Thuis)
+		610100 Huurlasten gebouwen (Thuis/Huur)
+		610501 Waakhond (Thuis/Hondje)
+		610500 Onderhoud gebouwen (Thuis/Onderhoud Huis)
+		611500 Gas, water en elektriciteit	(Thuis/Stroom & Thuis/Water)
+	Kosten auto's (Verkeer)
+		610300 Huurlasten bedrijfswagens (Verkeer/Huur auto)
+		610301 Huurlasten fiets (Verkeer/Huur fiets)
+		
+		610800 Onderhoud en herstellingen bedrijfswagens (Verkeer/Onderhoud auto)
+		610801 Onderhoud en herstellingen fiets (Verkeer/Onderhoud fiets)
+		
+		612500 Brandstoffen bedrijfswagens (Verkeer/Tanken)
+		612501 Bonnetjes tanken bedrijfswagen (Verkeer/Tanken/Bonnetjes Tanken)
+		612600 Andere autokosten bedrijfswagens	Reiskostenvergoedingen (Verkeer)
+		616700 Reis- en verblijfkosten binnenland (Verkeer/Trein Abonnement)
 	Kantoorkosten
 		611000 Bureaubenodigdheden en drukwerk
 		611200 Klein materiaal
