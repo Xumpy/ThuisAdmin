@@ -12,10 +12,7 @@ import com.xumpy.security.model.InvoiceType;
 import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.controllers.model.BeheerBedragenInp;
 import com.xumpy.thuisadmin.controllers.model.BeheerBedragenReport;
-import com.xumpy.thuisadmin.dao.implementations.BedragenDaoImpl;
-import com.xumpy.thuisadmin.dao.implementations.DocumentenDaoImpl;
-import com.xumpy.thuisadmin.dao.implementations.GroepenDaoImpl;
-import com.xumpy.thuisadmin.dao.implementations.RekeningenDaoImpl;
+import com.xumpy.thuisadmin.dao.implementations.*;
 import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
 import com.xumpy.thuisadmin.controllers.model.BeheerBedragenReportLst;
 import com.xumpy.thuisadmin.controllers.model.FinanceOverzichtGroep;
@@ -26,10 +23,7 @@ import com.xumpy.thuisadmin.controllers.model.OverzichtGroepBedragenTotal;
 import com.xumpy.thuisadmin.controllers.model.RekeningOverzicht;
 import com.xumpy.thuisadmin.dao.model.DocumentenDaoPojo;
 import com.xumpy.thuisadmin.dao.model.RekeningenDaoPojo;
-import com.xumpy.thuisadmin.domain.Bedragen;
-import com.xumpy.thuisadmin.domain.Documenten;
-import com.xumpy.thuisadmin.domain.Groepen;
-import com.xumpy.thuisadmin.domain.Rekeningen;
+import com.xumpy.thuisadmin.domain.*;
 import com.xumpy.thuisadmin.services.BedragenSrv;
 import com.xumpy.thuisadmin.services.model.*;
 
@@ -61,7 +55,9 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
     private BedragenDaoImpl bedragenDao;
     @Autowired
     private GroepenDaoImpl groepenDao;
-    
+    @Autowired
+    private GroepCodesSrvImpl groepenCodesSrv;
+
     @Autowired
     private RekeningenDaoImpl rekeningenDao;
 
@@ -179,12 +175,8 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         for (Entry entry: bedragenOverzicht.entrySet()){
             
             GroepenSrvPojo groep = new GroepenSrvPojo((Groepen)entry.getKey());
-            
-            if (groep.getCodeId() == null){
-                groep.setCodeId("NULL");
-            }
-            
-            if (!groep.getCodeId().equals("INTER_REKENING")){
+
+            if (!groepenCodesSrv.groepContainsInterRekening(groep)){
                 OverzichtGroep overzichtGroep = new OverzichtGroep();
                 overzichtGroep.setGroepId(groep.getPk_id());
                 overzichtGroep.setNaam(groep.getNaam());
@@ -477,7 +469,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         Map<Groepen, Map<String, BigDecimal>> overviewRekeningGroep = new LinkedHashMap<Groepen, Map<String, BigDecimal>>();
         
         for (Bedragen bedrag: bedragen){
-            if (bedrag.getGroep().getCodeId() == null || !bedrag.getGroep().getCodeId().equals("INTER_REKENING")){
+            if (!groepenCodesSrv.groepContainsInterRekening(bedrag.getGroep())){
                 Groepen hoofdGroep = GroepenSrvImpl.getHoofdGroep(bedrag.getGroep());
                 Map<String, BigDecimal> bedragInGroep = (Map<String, BigDecimal>)overviewRekeningGroep.get(hoofdGroep);
 

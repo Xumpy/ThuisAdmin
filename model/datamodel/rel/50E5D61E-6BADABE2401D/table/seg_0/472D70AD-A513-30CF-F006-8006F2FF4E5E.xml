@@ -1,0 +1,72 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="472D70AD-A513-30CF-F006-8006F2FF4E5E" name="TA_CODE_TYPE_GROEP">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-04-12 13:28:03 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<ordsAlias>table_29</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="PK_ID" id="DA16C530-626A-F42D-EDD2-D3B0B7E23F32">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-04-12 13:28:37 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>9</dataTypePrecision>
+<ownDataTypeParameters>,9,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FK_TYPE_GROEP_ID" id="6C172448-8BC7-DE5C-13E3-5D6D8283DA0C">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-04-12 13:29:12 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="29F0CBFA-3BE4-C93D-ED29-E204B2B2AA93" referredColumn="C1D01143-BE72-CC83-DD39-215BC4FCE157"/>
+</associations>
+</Column>
+<Column name="CODE_ID" id="D3970A17-3347-2093-CFA0-1D1C31E6B541">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-04-12 13:28:52 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50</dataTypeSize>
+<ownDataTypeParameters>50,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="FF23373E-6731-A487-E024-CB5FD3BA6DC6" name="TA_CODE_TYPE_GROEP_PK">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-04-12 13:28:37 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="DA16C530-626A-F42D-EDD2-D3B0B7E23F32"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="ECE567AB-E02B-0FDB-96C6-86DD78B5E9CC" name="TA_CODE_TYPE_GROEP_TA_TYPE_GROEP_FK">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-04-12 13:29:12 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="6C172448-8BC7-DE5C-13E3-5D6D8283DA0C"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

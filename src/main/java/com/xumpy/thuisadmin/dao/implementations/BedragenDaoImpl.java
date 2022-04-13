@@ -45,7 +45,7 @@ public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer
     @Query("from BedragenDaoPojo bedragen where persoon.pk_id = :persoonId "
             + "  and (:rekeningId is null or rekening.pk_id = :rekeningId)"
             + "  and coalesce(coalesce(:professional, rekening.professional), 0) = coalesce(rekening.professional, 0)"
-            + "  and coalesce(groep.codeId, '') != 'INTER_REKENING' "
+            + "  and groep.pk_id not in (select groep.pk_id from GroepCodesDaoPojo where codeId = 'INTER_REKENING') "
             + "  and (select count(1) from BedragAccountingDaoPojo bedragAccountingDaoPojo"
             + " where bedragAccountingDaoPojo.bedrag.pk_id = bedragen.pk_id) = 0"
             + "  and (:searchText is null or lower(groep.naam) like :searchText " +
@@ -65,7 +65,7 @@ public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer
     @Query("from BedragenDaoPojo bedragen where persoon.pk_id = :persoonId "
             + "  and (:rekeningId is null or rekening.pk_id = :rekeningId)"
             + "  and coalesce(coalesce(:professional, rekening.professional), 0) = coalesce(rekening.professional, 0)"
-            + "  and coalesce(groep.codeId, '') != 'INTER_REKENING' "
+            + "  and groep.pk_id not in (select groep.pk_id from GroepCodesDaoPojo where codeId = 'INTER_REKENING') "
             + "  and coalesce(managedByAccountant, 0) = 0 "
             + "  and coalesce(courant, 0) = 0 "
             + "  and (select count(1) from DocumentProviderValidDaoPojo documentProviderValid"
@@ -97,7 +97,7 @@ public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer
                                                        @Param("levelType") String type);
 
     @Query("from BedragenDaoPojo where (datum >= :startDate and datum <= :endDate) and rekening.professional = true"+
-            " and coalesce(groep.codeId, '') != 'INTER_REKENING'")
+            " and groep.pk_id not in (select groep.pk_id from GroepCodesDaoPojo where codeId = 'INTER_REKENING') ")
     public List<BedragenDaoPojo> allProfesionalBedragenInDate(@Param("startDate") Date startDate,
                                                                @Param("endDate") Date endDate);
 

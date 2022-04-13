@@ -18,7 +18,6 @@ public class GroepenSrvPojo implements Groepen{
     private String omschrijving;
     private Integer negatief;
     private PersonenSrvPojo persoon;
-    private String codeId;
     private Integer publicGroep;
     private Boolean closed;
     private Integer category;
@@ -78,15 +77,6 @@ public class GroepenSrvPojo implements Groepen{
     }
 
     @Override
-    public String getCodeId() {
-        return codeId;
-    }
-
-    public void setCodeId(String codeId) {
-        this.codeId = codeId;
-    }
-
-    @Override
     public Integer getPublicGroep() {
         return publicGroep;
     }
@@ -132,7 +122,6 @@ public class GroepenSrvPojo implements Groepen{
     }
 
     public GroepenSrvPojo(Groepen groepen){
-        this.codeId = groepen.getCodeId();
         this.hoofdGroep = groepen.getHoofdGroep()!=null ? new GroepenSrvPojo(groepen.getHoofdGroep()): null;
         this.naam = groepen.getNaam();
         this.negatief = groepen.getNegatief();

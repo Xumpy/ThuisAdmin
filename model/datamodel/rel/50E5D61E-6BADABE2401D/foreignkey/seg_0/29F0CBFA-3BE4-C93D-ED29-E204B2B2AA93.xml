@@ -1,0 +1,16 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="29F0CBFA-3BE4-C93D-ED29-E204B2B2AA93" containerWithKeyObject="472D70AD-A513-30CF-F006-8006F2FF4E5E" localFKIndex="ECE567AB-E02B-0FDB-96C6-86DD78B5E9CC" name="TA_CODE_TYPE_GROEP_TA_TYPE_GROEP_FK">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-04-12 13:29:12 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<referredTableLongName>TA_TYPE_GROEP</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>BC582A07-D6CF-E0F5-B1D3-3AD4C82B2363</referredTableID>
+<keyObject>E9A38024-6BD0-C07A-3045-3A3DC8DDD154</keyObject>
+<referredKeyID>E9A38024-6BD0-C07A-3045-3A3DC8DDD154</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>PK_ID</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

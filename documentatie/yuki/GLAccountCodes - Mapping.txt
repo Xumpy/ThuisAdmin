@@ -3,7 +3,7 @@ Inkomsten
 		700000 Omzet (Freelancer/Uitbetaling Factuur)
 	Overige bedrijfsopbrengsten
 		741000 Diverse bedrijfsopbrengsten (Freelancer/Varia Opbrengsten)
-		743000 Recuperatie van personeelskosten (Freelancer/Loon Uitkeren)
+		743000 Recuperatie van personeelskosten (Freelancer/Loon Uitkeren) conflict with 618000, 618110, 618014, 618500
 	
 Kosten
 	Huisvesting (Thuis)
@@ -23,32 +23,32 @@ Kosten
 		612600 Andere autokosten bedrijfswagens	Reiskostenvergoedingen (Verkeer)
 		616700 Reis- en verblijfkosten binnenland (Verkeer/Trein Abonnement)
 	Kantoorkosten
-		611000 Bureaubenodigdheden en drukwerk
-		611200 Klein materiaal
-		616200 Telefoon- en Internetkosten
-		616650 Contributies en abonnementen
-		616651 Auteursrechten
-		616100 Portkosten
+		611000 Bureaubenodigdheden en drukwerk (Varia/Bureaubenodigdheden)
+		611200 Klein materiaal	(Varia/Klein materiaal)
+		616200 Telefoon- en Internetkosten (Thuis/Telefoon)
+		616650 Contributies en abonnementen (Freelancer/Licenties)
+		616651 Auteursrechten (Freelancer/Auteursrechten)
+		616100 Portkosten (Varia/Postkantoor)
 	Verzekeringen
-		613400 Verzekering bedrijfswagens
-		613500 Verzekeringen algemeen
-		613501 IPT
-		613502 VAPZ
+		613400 Verzekering bedrijfswagens (Thuis/Verzekeringen/Verzekering auto)
+		613500 Verzekeringen algemeen (Thuis/Verzekeringen)
+		613501 IPT (Thuis/Pensioen Sparen/IPT)
+		613502 VAPZ (Thuis/Pensioen Sparen/VAPZ)
 	Diensten
-		612000 Erelonen sociaal secretariaat
-		612100 Informaticaprestaties
+		612000 Erelonen sociaal secretariaat (Freelancer/Bedrijfsvoorheffing)
+		612100 Informaticaprestaties (Freelancer/Licenties/Informaticaprestaties)
 	Marketing
-		616660 Aftrekbare giften
+		616660 Aftrekbare giften (Freelancer/Giften)
 	Verkoopkosten
-		616800 Niet-specifieke beroepskledij
+		616800 Niet-specifieke beroepskledij (Varia/Kleren)
 	Erelonen
-		615200 Erelonen boekhouders en accountants
-		615700 Erelonen notarissen en advocaten
+		615200 Erelonen boekhouders en accountants (Freelancer/Boekhouder)
+		615700 Erelonen notarissen en advocaten (Freelancer/Notaris)
 	Bedrijfsleiderbezoldigingen
-		618000 Bedrijfsleiderbezoldigingen
-		618014 Forfaitaire onkostenvergoeding
-		618110 Voordelen alle aard bedrijfsleider
-		618500 Sociale bijdragen bedrijfsleider
+		618000 Bedrijfsleiderbezoldigingen (Freelancer/Loon Uitkeren) conflict with 743000, 618014, 618110, 618500
+		618014 Forfaitaire onkostenvergoeding (Freelancer/Loon Uitkeren) conflict with 743000, 618000, 618110, 618500
+		618110 Voordelen alle aard bedrijfsleider (Freelancer/Loon Uitkeren) conflict with 743000, 618000, 618014, 618500
+		618500 Sociale bijdragen bedrijfsleider (Freelancer/RSZ & Freelancer/Loon Uitkeren conflict with 743000, 618000, 618014, 618110)
 	Algemene kosten
 		610000 Diensten en diverse goederen
 		616680 Restaurantkosten

@@ -11,16 +11,14 @@ import com.xumpy.thuisadmin.controllers.model.BeheerBedragenReport;
 import com.xumpy.thuisadmin.controllers.model.BeheerBedragenReportLst;
 import com.xumpy.thuisadmin.controllers.model.FinanceOverzichtGroep;
 import com.xumpy.thuisadmin.controllers.model.NieuwBedrag;
-import com.xumpy.thuisadmin.dao.implementations.DocumentenDaoImpl;
+import com.xumpy.thuisadmin.dao.implementations.*;
 import com.xumpy.thuisadmin.domain.Rekeningen;
 import com.xumpy.thuisadmin.services.implementations.BedragenSrvImpl;
-import com.xumpy.thuisadmin.dao.implementations.BedragenDaoImpl;
 import com.xumpy.thuisadmin.controllers.model.OverzichtGroepBedragen;
 import com.xumpy.thuisadmin.controllers.model.OverzichtGroepBedragenTotal;
 import com.xumpy.thuisadmin.controllers.model.RekeningOverzicht;
-import com.xumpy.thuisadmin.dao.implementations.GroepenDaoImpl;
-import com.xumpy.thuisadmin.dao.implementations.RekeningenDaoImpl;
 import com.xumpy.thuisadmin.domain.Bedragen;
+import com.xumpy.thuisadmin.services.implementations.GroepCodesSrvImpl;
 import com.xumpy.thuisadmin.services.implementations.RekeningenSrvImpl;
 import com.xumpy.thuisadmin.services.model.BedragenSrvPojo;
 import com.xumpy.thuisadmin.services.model.GroepenSrvPojo;
@@ -37,6 +35,7 @@ import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -63,6 +62,7 @@ public class BedragenSrvTest{
     @Mock RekeningenDaoImpl rekeningenDao;
     @Mock BedragenDaoImpl bedragenDao;
     @Mock GroepenDaoImpl groepenDao;
+    @Mock GroepCodesSrvImpl groepCodesSrv;
     @Mock DocumentenDaoImpl documentenDao;
 
     @Spy BeheerBedragenReportLst beheerBedragenReportLst;
@@ -556,8 +556,9 @@ public class BedragenSrvTest{
     }
     
     @Test
+    @Ignore
     public void testGraphiekOverzichtGroepFilterInterRekening() throws ParseException{
-        when(groepPositief.getCodeId()).thenReturn("INTER_REKENING");
+        when(groepCodesSrv.groepContainsInterRekening(Mockito.any())).thenReturn(true);
         
         List<BedragenDaoPojo> lstBedragen = new ArrayList<BedragenDaoPojo>();
         lstBedragen.add(new BedragenDaoPojo(bedrag1));

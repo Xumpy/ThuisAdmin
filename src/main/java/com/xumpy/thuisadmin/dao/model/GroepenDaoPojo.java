@@ -46,9 +46,6 @@ public class GroepenDaoPojo implements Serializable, Groepen {
     @NotNull
     private PersonenDaoPojo persoon;
 
-    @Column(name="CODE_ID")
-    private String codeId;
-
     @Column(name="PUBLIC_GROEP")
     private Integer publicGroep;
 
@@ -58,15 +55,6 @@ public class GroepenDaoPojo implements Serializable, Groepen {
     @Column(name="YUKI_CATEGORY")
     private Integer category;
 
-    @Override
-    public String getCodeId() {
-        return codeId;
-    }
-
-    public void setCodeId(String codeId) {
-        this.codeId = codeId;
-    }
-    
     @Override
     public Integer getPk_id() {
         return pk_id;
@@ -153,7 +141,6 @@ public class GroepenDaoPojo implements Serializable, Groepen {
     }
 
     public GroepenDaoPojo(Groepen groepen){
-        this.codeId = groepen.getCodeId();
         this.hoofdGroep = groepen.getHoofdGroep()!=null ? new GroepenDaoPojo(groepen.getHoofdGroep()) : null;
         this.naam = groepen.getNaam();
         this.negatief = groepen.getNegatief();

@@ -1,6 +1,9 @@
 package com.xumpy.thuisadmin.controllers.model;
 
 import com.xumpy.thuisadmin.domain.Groepen;
+import com.xumpy.thuisadmin.services.implementations.GroepCodesSrvImpl;
+
+import java.util.List;
 
 /**
  * Created by nico on 02/10/2018.
@@ -12,7 +15,7 @@ public class GroepenCtrlPojo implements Groepen{
     private String omschrijving;
     private Integer negatief;
     private PersonenCtrlPojo persoon;
-    private String codeId;
+    private List<String> codeId;
     private Integer publicGroep;
     private Boolean closed;
     private Integer category;
@@ -72,15 +75,6 @@ public class GroepenCtrlPojo implements Groepen{
     }
 
     @Override
-    public String getCodeId() {
-        return codeId;
-    }
-
-    public void setCodeId(String codeId) {
-        this.codeId = codeId;
-    }
-
-    @Override
     public Integer getPublicGroep() {
         return publicGroep;
     }
@@ -107,6 +101,14 @@ public class GroepenCtrlPojo implements Groepen{
         this.category = category;
     }
 
+    public List<String> getCodeId() {
+        return codeId;
+    }
+
+    public void setCodeId(List<String> codeId) {
+        this.codeId = codeId;
+    }
+
     public GroepenCtrlPojo(){}
     public GroepenCtrlPojo(Groepen groepen){
         this.pk_id = groepen.getPk_id();
@@ -115,7 +117,6 @@ public class GroepenCtrlPojo implements Groepen{
         this.omschrijving = groepen.getOmschrijving();
         this.negatief = groepen.getNegatief();
         this.persoon = groepen.getPersoon() != null ? new PersonenCtrlPojo(groepen.getPersoon()) : null;
-        this.codeId = groepen.getCodeId();
         this.publicGroep = groepen.getPublicGroep();
         this.closed = groepen.getClosed();
         this.category = groepen.getCategory();

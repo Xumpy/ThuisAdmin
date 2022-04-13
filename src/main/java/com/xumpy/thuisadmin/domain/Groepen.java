@@ -10,7 +10,6 @@ package com.xumpy.thuisadmin.domain;
  * @author nicom
  */
 public interface Groepen {
-    String getCodeId();
     Groepen getHoofdGroep();
     String getNaam();
     Integer getNegatief();

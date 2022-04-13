@@ -30,10 +30,20 @@
                     <input class="form-control" id="inputOmschrijving" ng-model="groep.omschrijving" placeholder="Omschrijving" type="text"/>
                   </div>
                 </div>
-                <div class="form-group col-lg-12">
-                    <label for="inputCodeId" class="col-lg-2 control-label">Code Id</label>
+                <div class="form-group col-xs-12">
+                    <label class="col-lg-2 control-label">Code Id</label>
+                    <div class="col-lg-6">
+                        <div ng-repeat="codeId in groep.codeId track by $index" class="col-lg-12">
+                            <div class="col-lg-8">
+                                <input class="form-control" ng-model="groep.codeId[$index]" placeholder="Code Id" type="text"/>
+                            </div>
+                            <div class="col-lg-4">
+                                <a class="btn btn-primary" ng-click="deleteCodeId(groep.codeId[$index])">Delete</a>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-lg-4">
-                        <input class="form-control" id="inputCodeId" ng-model="groep.codeId" placeholder="Code Id" type="text"/>
+                        <a class="btn btn-primary" ng-click="addCodeId()">Add</a>
                     </div>
                 </div>
                 <div class="form-group col-lg-12">
@@ -99,6 +109,16 @@
             <script th:inline="javascript">
                 /*<![CDATA[*/
                 app.controller("fController", function($scope, $http, usSpinnerService) {
+
+                    $scope.addCodeId = function(){
+                        $scope.groep.codeId.push("");
+                    }
+
+                    $scope.deleteCodeId = function(codeId){
+                        $scope.groep.codeId = $scope.groep.codeId.filter(function(item){
+                            return item !== codeId
+                        });
+                    }
 
                     $scope.yukiCategorys = [
                         {"id": 0, "name": "Overig"},
