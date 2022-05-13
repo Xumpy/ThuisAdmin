@@ -3,27 +3,19 @@ package com.xumpy.thuisadmin.controllers.rest;
 import com.xumpy.documenprovider.dao.implementations.DocumentProviderDumpImpl;
 import com.xumpy.documenprovider.dao.implementations.DocumentProviderImpl;
 import com.xumpy.documenprovider.dao.model.DocumentProviderDaoPojo;
-import com.xumpy.documenprovider.dao.model.DocumentProviderDocumentsDaoPojo;
 import com.xumpy.documenprovider.dao.model.DocumentProviderDumpDaoPojo;
 import com.xumpy.documenprovider.services.DocumentProviderSrv;
 import com.xumpy.thuisadmin.controllers.model.DocumentProviderCtrlPojo;
 import com.xumpy.thuisadmin.controllers.model.DocumentProviderDumpCtrlPojo;
-import com.xumpy.thuisadmin.controllers.model.NieuwBedrag;
-import com.xumpy.thuisadmin.domain.Documenten;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -130,8 +122,7 @@ public class DocumentProviderCtrl {
             }
         }
 
-
-
         return null;
     }
+
 }

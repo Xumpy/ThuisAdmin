@@ -2,12 +2,16 @@ package com.xumpy.documenprovider.services.implementations.mail;
 
 import com.xumpy.documenprovider.model.Folder;
 import com.xumpy.documenprovider.services.DocumentProviderSrv;
+import com.xumpy.documenprovider.services.implementations.exceptions.PinNotValidException;
+import com.xumpy.documenprovider.services.implementations.mail.odata.ExecuteCallExactOnline;
+import com.xumpy.documenprovider.model.DPDocument;
 import com.xumpy.thuisadmin.domain.Documenten;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class DocumentProviderMail implements DocumentProviderSrv {
@@ -17,6 +21,7 @@ public class DocumentProviderMail implements DocumentProviderSrv {
     private String aankoopEmail;
 
     @Autowired SmtpEmailBuilder smtpEmailBuilder;
+    @Autowired ExecuteCallExactOnline executeCallExactOnline;
 
     @Override
     public Integer getDocumentProviderId() {
@@ -44,5 +49,19 @@ public class DocumentProviderMail implements DocumentProviderSrv {
     @Override
     public String processDumpToBedragAccounting(String dump) {
         throw new RuntimeException("Not Implemented To Process Dump From Document Provider");
+    }
+
+    @Override
+    public List<DPDocument> updateFeedback(Documenten document, String pincode) throws PinNotValidException {
+        executeCallExactOnline.setAuthKey(pincode);
+
+        return executeCallExactOnline.fetchDocumentsByPrice(document.getBedrag());
+    }
+
+    @Override
+    public void updateAccountingBedragen(Documenten document, String pincode) throws PinNotValidException {
+        executeCallExactOnline.setAuthKey(pincode);
+
+        throw new RuntimeException("Not yet implemented");
     }
 }

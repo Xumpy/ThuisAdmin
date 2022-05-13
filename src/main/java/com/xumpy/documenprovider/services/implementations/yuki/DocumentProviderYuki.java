@@ -2,8 +2,10 @@ package com.xumpy.documenprovider.services.implementations.yuki;
 
 import com.xumpy.documenprovider.dao.implementations.DocumentProviderDocumentsImpl;
 import com.xumpy.documenprovider.dao.model.DocumentProviderDocumentsDaoPojo;
+import com.xumpy.documenprovider.model.DPDocument;
 import com.xumpy.documenprovider.services.DocumentProviderSrv;
 import com.xumpy.documenprovider.model.Folder;
+import com.xumpy.documenprovider.services.implementations.exceptions.PinNotValidException;
 import com.xumpy.documenprovider.services.implementations.yuki.model.*;
 import com.xumpy.thuisadmin.dao.implementations.BedragAccountingDaoImpl;
 import com.xumpy.thuisadmin.dao.implementations.BedragenDaoImpl;
@@ -279,5 +281,16 @@ public class DocumentProviderYuki implements DocumentProviderSrv {
         report = report + "------------------------------------";
 
         return report;
+    }
+
+
+    @Override
+    public List<DPDocument> updateFeedback(Documenten document, String pincode) throws PinNotValidException {
+        throw new RuntimeException("Not supported for yuki");
+    }
+
+    @Override
+    public void updateAccountingBedragen(Documenten document, String pincode) throws PinNotValidException {
+        throw new RuntimeException("Not supported for yuki");
     }
 }

@@ -40,6 +40,8 @@
                         <th st-sort="documentProvider">Document Provider</th>
                         <th st-sort="feedback">Feedback</th>
                         <th st-sort="dateSent">Date Sent</th>
+                        <th/>
+                        <th/>
                     </tr>
                     </thead>
                     <tbody>
@@ -48,13 +50,55 @@
                         <td>{{documentProviderDocument.documentProvider.name}}</td>
                         <td>{{documentProviderDocument.feedback}}</td>
                         <td>{{documentProviderDocument.dateSent}}</td>
+                        <td><a ng-click="udpateFeedback(documentProviderDocument)">Update Feedback</a></td>
+                        <td><a ng-click="">Update Accounting</a></td>
                     </tr>
                     </tbody>
                 </table>
             </div>
 
+            <div id="dialogPinCode" class="modal-dialog" title="Basic dialog">
+                <div class="col-lg-12">
+                    <label for="pinCode" class="col-lg-4 control-label">Pin Code</label>
+                    <div class="col-lg-8">
+                        <input class="form-control" id="pinCode" ng-model="pincode" placeholder="Pin Code" type="text"/>
+                    </div>
+                </div>
+            </div>
+
+            <div id="dialogChooseDPDocument" class="modal-dialog" title="Basic dialog">
+                <div class="12">
+                    <table st-safe-src="dpdocuments.data" st-table="emptyDpdocuments" class="table table-striped table-hover ">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th st-sort="description">Description</th>
+                            <th st-sort="date">Date</th>
+                            <th st-sort="amount">Amount</th>
+                            <th/>
+                            <th/>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="dpdocument in emptyDpdocuments">
+                            <td><a ng-click="udpateGuidFeedback(dpdocuments.documentProviderDocument, dpdocument.guid)">Update Feedback</a></td>
+                            <td>{{dpdocument.description}}</td>
+                            <td>{{dpdocument.date}}</td>
+                            <td>{{dpdocument.amount}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <script th:inline="javascript">
+                $(function() {
+                    $( "#dialogPinCode" ).hide();
+                    $( "#dialogChooseDPDocument" ).hide();
+                });
+
                 app.controller("fController", function($scope, $http) {
+                    $scope.pincode = "";
                     $scope.document = {
                         pkId: /*[[${document.pkId}]]*/,
                         bedragId: /*[[${bedragId}]]*/,
@@ -67,6 +111,52 @@
                     var url =/*[[@{/documentprovider/documents?documentId=}]]*/;
                     $http.get(url + $scope.document.pkId).success( function(data){
                        $scope.documentProviderDocuments = data;
+                    });
+
+                    $scope.udpateGuidFeedback = (function(documentProviderDocument, guid){
+                        var url =/*[[@{/json/documentProvider/updateFeedback/}]]*/;
+                        $http({
+                            method: 'GET',
+                            url: url + documentProviderDocument.pkId + "/" + guid
+                        }).then(function successCallback(data) {
+                            $scope.documentProviderDocuments = data.data;
+                            $( "#dialogChooseDPDocument" ).dialog("close");
+                        });
+                    });
+
+                    $scope.udpateFeedback = (function(documentProviderDocument){
+                        var url =/*[[@{/json/documentProvider/updateFeedback/}]]*/;
+                        $http({
+                            method: 'GET',
+                            url: url + documentProviderDocument.pkId
+                        }).then(function successCallback(data) {
+                            if(data.status === 500){
+                                $('#dialogPinCode').dialog({
+                                    title: "Enter Pincode",
+                                    width: 500,
+                                    buttons: { "OK": function() {
+                                            var url =/*[[@{/json/documentProvider/updatePincode/}]]*/;
+                                            $http.get(url + $scope.pincode).error( function(){
+                                                bootbox.alert("Error occured during setting pin code");
+                                            }).success( function (){
+                                                $( "#dialogPinCode" ).dialog("close");
+                                            });
+                                        }}
+                                }).prev(".ui-dialog-titlebar").css("background","#bf3e11");
+                            } else {
+                                $scope.dpdocuments = {};
+                                $scope.dpdocuments.data = data.data;
+                                $scope.dpdocuments.documentProviderDocument = documentProviderDocument;
+
+                                $('#dialogChooseDPDocument').dialog({
+                                    title: "Choose DP Document",
+                                    width: 1000,
+                                    buttons: { "Cancel": function() {
+                                        $( "#dialogChooseDPDocument" ).dialog("close");
+                                    }}
+                                }).prev(".ui-dialog-titlebar").css("background","#bf3e11");
+                            }
+                        });
                     });
 
                     $scope.deleteDocument = (function(){

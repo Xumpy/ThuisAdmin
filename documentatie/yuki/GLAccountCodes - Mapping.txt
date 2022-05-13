@@ -50,22 +50,17 @@ Kosten
 		618110 Voordelen alle aard bedrijfsleider (Freelancer/Loon Uitkeren) conflict with 743000, 618000, 618014, 618500
 		618500 Sociale bijdragen bedrijfsleider (Freelancer/RSZ & Freelancer/Loon Uitkeren conflict with 743000, 618000, 618014, 618110)
 	Algemene kosten
-		610000 Diensten en diverse goederen
-		616680 Restaurantkosten
+		616680 Restaurantkosten (Ontspanning/Uitgaan)
 	Overige bedrijfskosten
-		640000 Bedrijfsbelastingen
-		640200 Verkeersbelasting en BIV
-		644000 Boetes
-		646000 Diverse bedrijfskosten
+		640000 Bedrijfsbelastingen (Belastingen/Vennootschapsbijdrage & Belastingen/Provincie Belastingen & Belastingen/Gemeentebelastingen)
+		640200 Verkeersbelasting en BIV (Belastingen/Verkeersbelasting)
+		644000 Boetes (Verkeer/Boetes)
+		646000 Diverse bedrijfskosten (Varia)
 	Financiële kosten
-		650000 Rente kaskrediet
-		650300 Rente lening van {0}
-		657100 Bankkosten
-		658000 Betalingsverschillen in uw nadeel
+		650000 Rente kaskrediet (Bank/Rente)
+		657100 Bankkosten (Bank/Service Pack)
 	Belastingen op het resultaat
-		670000 Belastingen op het resultaat
-		670001 Voorafbetaling 1
-		670002 Voorafbetaling 2
-		670003 Voorafbetaling 3
-		670004 Voorafbetaling 4
-		670400 Roerende Voorheffing Auteursrechten
+		670001 Voorafbetaling 1 (Belastingen/Voorafbetaling)
+		670002 Voorafbetaling 2 (Belastingen/Voorafbetaling)
+		670003 Voorafbetaling 3 (Belastingen/Voorafbetaling)
+		670004 Voorafbetaling 4 (Belastingen/Voorafbetaling)

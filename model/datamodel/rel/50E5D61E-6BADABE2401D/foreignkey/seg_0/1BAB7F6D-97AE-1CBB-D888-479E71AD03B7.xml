@@ -1,0 +1,16 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="1BAB7F6D-97AE-1CBB-D888-479E71AD03B7" containerWithKeyObject="1D99A85B-2C79-44C4-78CE-541C67FE065C" localFKIndex="D40BE5A5-CE30-431A-81DB-293625B28973" name="TA_GL_ACCOUNT_CODE_TA_GL_ACCOUNT_GROUP_FK">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-04-22 11:41:22 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<referredTableLongName>TA_GL_ACCOUNT_GROUP</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>3A2E3098-152A-95A0-B815-8D423D717408</referredTableID>
+<keyObject>1F64F3F6-D7D9-5F84-FB07-3EEDC4DF22C3</keyObject>
+<referredKeyID>1F64F3F6-D7D9-5F84-FB07-3EEDC4DF22C3</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>PK_ID</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>
