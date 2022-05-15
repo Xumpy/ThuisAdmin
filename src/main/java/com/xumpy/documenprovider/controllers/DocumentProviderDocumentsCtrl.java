@@ -9,10 +9,7 @@ import com.xumpy.documenprovider.services.DocumentProviderSrv;
 import com.xumpy.documenprovider.services.implementations.exceptions.PinNotValidException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +20,7 @@ public class DocumentProviderDocumentsCtrl {
     @Autowired List<DocumentProviderSrv> documentProviderSrvs;
     @Autowired DocumentProviderDocumentsImpl documentProviderDocumentsImpl;
 
-    private String pinCode;
+    private String cookie;
 
     private List<DocumentProviderDocumentsCtrlPojo> createDocumentProviderDocumentsCtrl(List<? extends DocumentProviderDocuments> documentProviderDocuments){
         List<DocumentProviderDocumentsCtrlPojo> documentProviderDocumentsCtrlPojos = new ArrayList<>();
@@ -55,9 +52,9 @@ public class DocumentProviderDocumentsCtrl {
     }
 
 
-    @RequestMapping("/json/documentProvider/updatePincode/{pincode}")
-    public @ResponseBody String updatePinCode(@PathVariable Integer pincode) {
-        this.pinCode = pincode.toString();
+    @RequestMapping("/json/documentProvider/updateCookie")
+    public @ResponseBody String updateCookie(@RequestBody String cookie) {
+        this.cookie = cookie.toString();
 
         return "200";
     }
@@ -68,7 +65,7 @@ public class DocumentProviderDocumentsCtrl {
 
         for(DocumentProviderSrv documentProviderSrv: documentProviderSrvs){
             if (documentProviderSrv.getDocumentProviderId().equals(documentProviderDocumentsDaoPojo.getDocumentProvider().getPkId())){
-                return documentProviderSrv.updateFeedback(documentProviderDocumentsDaoPojo.getDocumenten(), pinCode);
+                return documentProviderSrv.updateFeedback(documentProviderDocumentsDaoPojo.getDocumenten(), cookie);
             }
         }
 

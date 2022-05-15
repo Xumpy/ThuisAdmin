@@ -56,13 +56,9 @@ public class ExecuteCallExactOnline {
 
         ParameterizedTypeReference<HashMap<String, Object>> responseType =
                 new ParameterizedTypeReference<HashMap<String, Object>>() {};
-        try{
-            HttpEntity<String> entity = new HttpEntity<>(null, buildHttpHeaders(false));
-            return restTemplate.exchange(url, HttpMethod.GET, entity, responseType).getBody();
-        } catch (Exception exception){
-            HttpEntity<String> entity = new HttpEntity<>(null, buildHttpHeaders(true));
-            return restTemplate.exchange(url, HttpMethod.GET, entity, responseType).getBody();
-        }
+        HttpEntity<String> entity = new HttpEntity<>(null, buildHttpHeaders(false));
+
+        return restTemplate.exchange(url, HttpMethod.GET, entity, responseType).getBody();
     }
 
     private String urlBuilder(String path, String filter, String select){

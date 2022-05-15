@@ -57,11 +57,11 @@
                 </table>
             </div>
 
-            <div id="dialogPinCode" class="modal-dialog" title="Basic dialog">
+            <div id="dialogCookie" class="modal-dialog" title="Basic dialog">
                 <div class="col-lg-12">
-                    <label for="pinCode" class="col-lg-4 control-label">Pin Code</label>
+                    <label for="cookie" class="col-lg-4 control-label">Cookie</label>
                     <div class="col-lg-8">
-                        <input class="form-control" id="pinCode" ng-model="pincode" placeholder="Pin Code" type="text"/>
+                        <input class="form-control" id="cookie" ng-model="cookie" placeholder="Cookie" type="text"/>
                     </div>
                 </div>
             </div>
@@ -93,12 +93,12 @@
 
             <script th:inline="javascript">
                 $(function() {
-                    $( "#dialogPinCode" ).hide();
+                    $( "#dialogCookie" ).hide();
                     $( "#dialogChooseDPDocument" ).hide();
                 });
 
                 app.controller("fController", function($scope, $http) {
-                    $scope.pincode = "";
+                    $scope.cookie = "";
                     $scope.document = {
                         pkId: /*[[${document.pkId}]]*/,
                         bedragId: /*[[${bedragId}]]*/,
@@ -131,15 +131,15 @@
                             url: url + documentProviderDocument.pkId
                         }).then(function successCallback(data) {
                             if(data.status === 500){
-                                $('#dialogPinCode').dialog({
-                                    title: "Enter Pincode",
+                                $('#dialogCookie').dialog({
+                                    title: "Enter Cookie",
                                     width: 500,
                                     buttons: { "OK": function() {
-                                            var url =/*[[@{/json/documentProvider/updatePincode/}]]*/;
-                                            $http.get(url + $scope.pincode).error( function(){
-                                                bootbox.alert("Error occured during setting pin code");
+                                            var url =/*[[@{/json/documentProvider/updateCookie}]]*/;
+                                            $http.post(url, $scope.cookie).error( function(){
+                                                bootbox.alert("Error occured during setting cookie");
                                             }).success( function (){
-                                                $( "#dialogPinCode" ).dialog("close");
+                                                $( "#dialogCookie" ).dialog("close");
                                             });
                                         }}
                                 }).prev(".ui-dialog-titlebar").css("background","#bf3e11");

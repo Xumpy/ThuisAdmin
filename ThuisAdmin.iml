@@ -176,5 +176,17 @@
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.13" level="project" />
     <orderEntry type="library" name="Maven: xerces:xercesImpl:2.12.0" level="project" />
     <orderEntry type="library" name="Maven: xml-apis:xml-apis:1.4.01" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-web:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-web:win:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:win:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-media:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-media:win:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-swing:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-swing:win:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:win:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:win:18.0.1" level="project" />
   </component>
 </module>

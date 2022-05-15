@@ -5,6 +5,7 @@ import com.xumpy.documenprovider.services.DocumentProviderSrv;
 import com.xumpy.documenprovider.services.implementations.exceptions.PinNotValidException;
 import com.xumpy.documenprovider.services.implementations.mail.odata.ExecuteCallExactOnline;
 import com.xumpy.documenprovider.model.DPDocument;
+import com.xumpy.documenprovider.services.implementations.mail.odata.handler.ExactCookie;
 import com.xumpy.thuisadmin.domain.Documenten;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +23,7 @@ public class DocumentProviderMail implements DocumentProviderSrv {
 
     @Autowired SmtpEmailBuilder smtpEmailBuilder;
     @Autowired ExecuteCallExactOnline executeCallExactOnline;
+    @Autowired ExactCookie exactCookie;
 
     @Override
     public Integer getDocumentProviderId() {
@@ -52,15 +54,15 @@ public class DocumentProviderMail implements DocumentProviderSrv {
     }
 
     @Override
-    public List<DPDocument> updateFeedback(Documenten document, String pincode) throws PinNotValidException {
-        executeCallExactOnline.setAuthKey(pincode);
+    public List<DPDocument> updateFeedback(Documenten document, String cookie) throws PinNotValidException {
+        exactCookie.setCookie(cookie);
 
         return executeCallExactOnline.fetchDocumentsByPrice(document.getBedrag());
     }
 
     @Override
-    public void updateAccountingBedragen(Documenten document, String pincode) throws PinNotValidException {
-        executeCallExactOnline.setAuthKey(pincode);
+    public void updateAccountingBedragen(Documenten document, String cookie) throws PinNotValidException {
+        executeCallExactOnline.setAuthKey(cookie);
 
         throw new RuntimeException("Not yet implemented");
     }

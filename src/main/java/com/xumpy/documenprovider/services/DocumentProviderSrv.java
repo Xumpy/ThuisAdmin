@@ -14,6 +14,6 @@ public interface DocumentProviderSrv {
     public String getDumpFromDocumentProvider(Date startDate, Date endDate);
     public String processDumpToBedragAccounting(String dump);
 
-    public List<DPDocument> updateFeedback(Documenten document, String pincode) throws PinNotValidException;
-    public void updateAccountingBedragen(Documenten document, String pincode) throws PinNotValidException;
+    public List<DPDocument> updateFeedback(Documenten document, String cookie) throws PinNotValidException;
+    public void updateAccountingBedragen(Documenten document, String cookie) throws PinNotValidException;
 }
