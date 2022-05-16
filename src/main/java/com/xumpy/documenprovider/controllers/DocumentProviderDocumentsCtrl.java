@@ -7,6 +7,7 @@ import com.xumpy.documenprovider.domain.DocumentProviderDocuments;
 import com.xumpy.documenprovider.model.DPDocument;
 import com.xumpy.documenprovider.services.DocumentProviderSrv;
 import com.xumpy.documenprovider.services.implementations.exceptions.PinNotValidException;
+import com.xumpy.documenprovider.services.model.DocumentProviderDocumentsSrvPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -57,6 +58,16 @@ public class DocumentProviderDocumentsCtrl {
     public @ResponseBody String updateCookie(@RequestBody Map securityKeys) {
         this.securityKeys = securityKeys;
 
+        return "200";
+    }
+
+    @RequestMapping("/json/documentProvider/updateAccounting")
+    public @ResponseBody String udpateAccounting(@RequestBody DocumentProviderDocumentsCtrlPojo documentProviderDocumentsCtrlPojo) throws PinNotValidException {
+        for(DocumentProviderSrv documentProviderSrv: documentProviderSrvs){
+            if (documentProviderSrv.getDocumentProviderId().equals(documentProviderDocumentsCtrlPojo.getDocumentProvider().getPkId())){
+                documentProviderSrv.updateAccountingBedragen(new DocumentProviderDocumentsSrvPojo(documentProviderDocumentsCtrlPojo), securityKeys);
+            }
+        }
         return "200";
     }
 

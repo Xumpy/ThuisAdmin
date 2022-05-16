@@ -98,7 +98,10 @@ public class ExecuteCallExactOnline {
     }
 
     public List<BedragAccountingSrvPojo> getBedragAccounting(String documentsGuid, BedragenSrvPojo bedragenSrvPojo) throws PinNotValidException {
-        String url = urlBuilder("financialtransaction/TransactionLines", "EntryID eq guid'" + documentsGuid + "'", "YourRef");
+        String url = urlBuilder("documents/Documents", "ID eq guid'" + documentsGuid + "'", "FinancialTransactionEntryID");
+        String entryId = ((Map) getResults(executeCall(url)).get(0)).get("FinancialTransactionEntryID").toString();
+
+        url = urlBuilder("financialtransaction/TransactionLines", "EntryID eq guid'" + entryId + "'", "YourRef");
         String yourRef = ((Map) getResults(executeCall(url)).get(0)).get("YourRef").toString();
 
         List<BedragAccountingSrvPojo> bedragAccountingSrvPojos = new ArrayList<>();

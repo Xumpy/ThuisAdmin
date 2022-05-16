@@ -50,8 +50,8 @@
                         <td>{{documentProviderDocument.documentProvider.name}}</td>
                         <td>{{documentProviderDocument.feedback}}</td>
                         <td>{{documentProviderDocument.dateSent}}</td>
-                        <td><a ng-click="udpateFeedback(documentProviderDocument)">Update Feedback</a></td>
-                        <td><a ng-click="">Update Accounting</a></td>
+                        <td><a class="btn btn-primary" ng-click="updateFeedback(documentProviderDocument)">Update Feedback</a></td>
+                        <td><a class="btn btn-primary" ng-click="updateAccounting(documentProviderDocument)">Update Accounting</a></td>
                     </tr>
                     </tbody>
                 </table>
@@ -65,9 +65,9 @@
                     </div>
                 </div>
                 <div class="col-lg-12">
-                    <label for="cookie" class="col-lg-4 control-label">Cookie</label>
+                    <label for="userAgent" class="col-lg-4 control-label">User Agent</label>
                     <div class="col-lg-8">
-                        <input class="form-control" id="cookie" ng-model="securityKeys.userAgent" placeholder="User Agent" type="text"/>
+                        <input class="form-control" id="userAgent" ng-model="securityKeys.userAgent" placeholder="User Agent" type="text"/>
                     </div>
                 </div>
             </div>
@@ -87,7 +87,7 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="dpdocument in emptyDpdocuments">
-                            <td><a ng-click="udpateGuidFeedback(dpdocuments.documentProviderDocument, dpdocument.guid)">Update Feedback</a></td>
+                            <td><a class="btn btn-primary" ng-click="updateGuidFeedback(dpdocuments.documentProviderDocument, dpdocument.guid)">Update Feedback</a></td>
                             <td>{{dpdocument.description}}</td>
                             <td>{{dpdocument.date}}</td>
                             <td>{{dpdocument.amount}}</td>
@@ -121,7 +121,7 @@
                        $scope.documentProviderDocuments = data;
                     });
 
-                    $scope.udpateGuidFeedback = (function(documentProviderDocument, guid){
+                    $scope.updateGuidFeedback = (function(documentProviderDocument, guid){
                         var url =/*[[@{/json/documentProvider/updateFeedback/}]]*/;
                         $http({
                             method: 'GET',
@@ -132,7 +132,7 @@
                         });
                     });
 
-                    $scope.udpateFeedback = (function(documentProviderDocument){
+                    $scope.updateFeedback= (function(documentProviderDocument){
                         var url =/*[[@{/json/documentProvider/updateFeedback/}]]*/;
                         $http({
                             method: 'GET',
@@ -162,6 +162,30 @@
                                     buttons: { "Cancel": function() {
                                         $( "#dialogChooseDPDocument" ).dialog("close");
                                     }}
+                                }).prev(".ui-dialog-titlebar").css("background","#bf3e11");
+                            }
+                        });
+                    });
+
+                    $scope.updateAccounting = (function(documentProviderDocument){
+                        var url =/*[[@{/json/documentProvider/updateAccounting}]]*/;
+                        $http({
+                            method: 'POST',
+                            data: documentProviderDocument,
+                            url: url
+                        }).then(function successCallback(data) {
+                            if(data.status === 500){
+                                $('#dialogSecurityKeys').dialog({
+                                    title: "Enter Security Keys",
+                                    width: 500,
+                                    buttons: { "OK": function() {
+                                            var url =/*[[@{/json/documentProvider/updateSecurityKeys}]]*/;
+                                            $http.post(url, $scope.securityKeys).error( function(){
+                                                bootbox.alert("Error occured during setting security keys");
+                                            }).success( function (){
+                                                $( "#dialogSecurityKeys" ).dialog("close");
+                                            });
+                                        }}
                                 }).prev(".ui-dialog-titlebar").css("background","#bf3e11");
                             }
                         });

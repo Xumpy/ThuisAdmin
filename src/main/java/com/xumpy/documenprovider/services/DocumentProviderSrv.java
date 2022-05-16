@@ -2,6 +2,7 @@ package com.xumpy.documenprovider.services;
 
 import com.xumpy.documenprovider.model.DPDocument;
 import com.xumpy.documenprovider.services.implementations.exceptions.PinNotValidException;
+import com.xumpy.documenprovider.services.model.DocumentProviderDocumentsSrvPojo;
 import com.xumpy.thuisadmin.domain.Documenten;
 
 import java.util.Date;
@@ -16,5 +17,5 @@ public interface DocumentProviderSrv {
     public String processDumpToBedragAccounting(String dump);
 
     public List<DPDocument> updateFeedback(Documenten document, Map securityKeys) throws PinNotValidException;
-    public void updateAccountingBedragen(Documenten document, Map securityKeys) throws PinNotValidException;
+    public void updateAccountingBedragen(DocumentProviderDocumentsSrvPojo document, Map securityKeys) throws PinNotValidException;
 }

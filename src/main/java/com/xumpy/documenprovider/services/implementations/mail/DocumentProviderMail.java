@@ -6,10 +6,15 @@ import com.xumpy.documenprovider.services.implementations.exceptions.PinNotValid
 import com.xumpy.documenprovider.services.implementations.mail.odata.ExecuteCallExactOnline;
 import com.xumpy.documenprovider.model.DPDocument;
 import com.xumpy.documenprovider.services.implementations.mail.odata.handler.ExactCookie;
+import com.xumpy.documenprovider.services.model.DocumentProviderDocumentsSrvPojo;
+import com.xumpy.thuisadmin.dao.implementations.BedragAccountingDaoImpl;
+import com.xumpy.thuisadmin.dao.model.BedragAccountingDaoPojo;
 import com.xumpy.thuisadmin.domain.Documenten;
+import com.xumpy.thuisadmin.services.model.BedragAccountingSrvPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -25,6 +30,7 @@ public class DocumentProviderMail implements DocumentProviderSrv {
     @Autowired SmtpEmailBuilder smtpEmailBuilder;
     @Autowired ExecuteCallExactOnline executeCallExactOnline;
     @Autowired ExactCookie exactCookie;
+    @Autowired BedragAccountingDaoImpl bedragAccountingDao;
 
     @Override
     public Integer getDocumentProviderId() {
@@ -63,10 +69,22 @@ public class DocumentProviderMail implements DocumentProviderSrv {
     }
 
     @Override
-    public void updateAccountingBedragen(Documenten document, Map securityKeys) throws PinNotValidException {
+    @Transactional
+    public void updateAccountingBedragen(DocumentProviderDocumentsSrvPojo documentProviderDocumentsSrvPojo, Map securityKeys) throws PinNotValidException {
         if (securityKeys.get("cookie") != null && !securityKeys.get("cookie").toString().isEmpty()) exactCookie.setCookie(securityKeys.get("cookie").toString());
         if (securityKeys.get("userAgent") != null && !securityKeys.get("userAgent").toString().isEmpty()) executeCallExactOnline.setUserAgent(securityKeys.get("userAgent").toString());
 
-        throw new RuntimeException("Not yet implemented");
+        if (documentProviderDocumentsSrvPojo.getFeedback().startsWith("Exact ID: ")){
+            String documentExactOnlineGuid = documentProviderDocumentsSrvPojo.getFeedback().substring(10);
+
+            List<BedragAccountingSrvPojo> bedragAccountingSrvPojos = executeCallExactOnline.getBedragAccounting(documentExactOnlineGuid, documentProviderDocumentsSrvPojo.getDocumenten().getBedrag());
+
+            bedragAccountingDao.deleteAccountantBedragenByBedrag(documentProviderDocumentsSrvPojo.getDocumenten().getBedrag().getPk_id());
+            for (BedragAccountingSrvPojo bedragAccountingSrvPojo: bedragAccountingSrvPojos){
+                bedragAccountingDao.save(new BedragAccountingDaoPojo(bedragAccountingSrvPojo));
+            }
+        } else {
+            throw new RuntimeException("No exact ID found!");
+        }
     }
 }
