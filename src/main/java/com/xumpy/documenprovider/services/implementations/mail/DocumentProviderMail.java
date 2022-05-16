@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class DocumentProviderMail implements DocumentProviderSrv {
@@ -54,15 +55,17 @@ public class DocumentProviderMail implements DocumentProviderSrv {
     }
 
     @Override
-    public List<DPDocument> updateFeedback(Documenten document, String cookie) throws PinNotValidException {
-        exactCookie.setCookie(cookie);
+    public List<DPDocument> updateFeedback(Documenten document, Map securityKeys) throws PinNotValidException {
+        if (securityKeys.get("cookie") != null && !securityKeys.get("cookie").toString().isEmpty()) exactCookie.setCookie(securityKeys.get("cookie").toString());
+        if (securityKeys.get("userAgent") != null && !securityKeys.get("userAgent").toString().isEmpty()) executeCallExactOnline.setUserAgent(securityKeys.get("userAgent").toString());
 
         return executeCallExactOnline.fetchDocumentsByPrice(document.getBedrag());
     }
 
     @Override
-    public void updateAccountingBedragen(Documenten document, String cookie) throws PinNotValidException {
-        executeCallExactOnline.setAuthKey(cookie);
+    public void updateAccountingBedragen(Documenten document, Map securityKeys) throws PinNotValidException {
+        if (securityKeys.get("cookie") != null && !securityKeys.get("cookie").toString().isEmpty()) exactCookie.setCookie(securityKeys.get("cookie").toString());
+        if (securityKeys.get("userAgent") != null && !securityKeys.get("userAgent").toString().isEmpty()) executeCallExactOnline.setUserAgent(securityKeys.get("userAgent").toString());
 
         throw new RuntimeException("Not yet implemented");
     }

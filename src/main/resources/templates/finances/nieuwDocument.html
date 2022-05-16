@@ -57,11 +57,17 @@
                 </table>
             </div>
 
-            <div id="dialogCookie" class="modal-dialog" title="Basic dialog">
+            <div id="dialogSecurityKeys" class="modal-dialog" title="Basic dialog">
                 <div class="col-lg-12">
                     <label for="cookie" class="col-lg-4 control-label">Cookie</label>
                     <div class="col-lg-8">
-                        <input class="form-control" id="cookie" ng-model="cookie" placeholder="Cookie" type="text"/>
+                        <input class="form-control" id="cookie" ng-model="securityKeys.cookie" placeholder="Cookie" type="text"/>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <label for="cookie" class="col-lg-4 control-label">Cookie</label>
+                    <div class="col-lg-8">
+                        <input class="form-control" id="cookie" ng-model="securityKeys.userAgent" placeholder="User Agent" type="text"/>
                     </div>
                 </div>
             </div>
@@ -93,12 +99,14 @@
 
             <script th:inline="javascript">
                 $(function() {
-                    $( "#dialogCookie" ).hide();
+                    $( "#dialogSecurityKeys" ).hide();
                     $( "#dialogChooseDPDocument" ).hide();
                 });
 
                 app.controller("fController", function($scope, $http) {
-                    $scope.cookie = "";
+                    $scope.securityKeys = {
+                        cookie: ""
+                    };
                     $scope.document = {
                         pkId: /*[[${document.pkId}]]*/,
                         bedragId: /*[[${bedragId}]]*/,
@@ -131,15 +139,15 @@
                             url: url + documentProviderDocument.pkId
                         }).then(function successCallback(data) {
                             if(data.status === 500){
-                                $('#dialogCookie').dialog({
-                                    title: "Enter Cookie",
+                                $('#dialogSecurityKeys').dialog({
+                                    title: "Enter Security Keys",
                                     width: 500,
                                     buttons: { "OK": function() {
-                                            var url =/*[[@{/json/documentProvider/updateCookie}]]*/;
-                                            $http.post(url, $scope.cookie).error( function(){
-                                                bootbox.alert("Error occured during setting cookie");
+                                            var url =/*[[@{/json/documentProvider/updateSecurityKeys}]]*/;
+                                            $http.post(url, $scope.securityKeys).error( function(){
+                                                bootbox.alert("Error occured during setting security keys");
                                             }).success( function (){
-                                                $( "#dialogCookie" ).dialog("close");
+                                                $( "#dialogSecurityKeys" ).dialog("close");
                                             });
                                         }}
                                 }).prev(".ui-dialog-titlebar").css("background","#bf3e11");

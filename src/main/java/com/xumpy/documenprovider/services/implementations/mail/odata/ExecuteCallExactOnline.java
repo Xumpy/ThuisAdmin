@@ -21,7 +21,6 @@ import java.util.*;
 
 @Service
 public class ExecuteCallExactOnline {
-    @Value( "${exact.user_agent}" )
     private String userAgent;
     @Value( "${exact.username}" )
     private String username;
@@ -40,8 +39,12 @@ public class ExecuteCallExactOnline {
         this.authKey = authKey;
     }
 
+    public void setUserAgent(String userAgent){
+        this.userAgent = userAgent;
+    }
+
     private HttpHeaders buildHttpHeaders(Boolean refreshCookie) throws PinNotValidException {
-        if (refreshCookie) exactCookie.fetchCookie(baseUrl, userAgent,username, password, authKey);
+        //if (refreshCookie) exactCookie.fetchCookie(baseUrl, userAgent,username, password, authKey);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Cookie", exactCookie.getCookie());

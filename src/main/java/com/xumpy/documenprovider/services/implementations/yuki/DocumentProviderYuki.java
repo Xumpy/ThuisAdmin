@@ -283,14 +283,13 @@ public class DocumentProviderYuki implements DocumentProviderSrv {
         return report;
     }
 
-
     @Override
-    public List<DPDocument> updateFeedback(Documenten document, String cookie) throws PinNotValidException {
+    public List<DPDocument> updateFeedback(Documenten document, Map securityKeys) throws PinNotValidException {
         throw new RuntimeException("Not supported for yuki");
     }
 
     @Override
-    public void updateAccountingBedragen(Documenten document, String cookie) throws PinNotValidException {
+    public void updateAccountingBedragen(Documenten document, Map securityKeys) throws PinNotValidException {
         throw new RuntimeException("Not supported for yuki");
     }
 }

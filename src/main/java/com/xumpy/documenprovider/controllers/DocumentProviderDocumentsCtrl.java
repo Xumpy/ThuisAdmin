@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class DocumentProviderDocumentsCtrl {
@@ -20,7 +21,7 @@ public class DocumentProviderDocumentsCtrl {
     @Autowired List<DocumentProviderSrv> documentProviderSrvs;
     @Autowired DocumentProviderDocumentsImpl documentProviderDocumentsImpl;
 
-    private String cookie;
+    private Map securityKeys;
 
     private List<DocumentProviderDocumentsCtrlPojo> createDocumentProviderDocumentsCtrl(List<? extends DocumentProviderDocuments> documentProviderDocuments){
         List<DocumentProviderDocumentsCtrlPojo> documentProviderDocumentsCtrlPojos = new ArrayList<>();
@@ -52,9 +53,9 @@ public class DocumentProviderDocumentsCtrl {
     }
 
 
-    @RequestMapping("/json/documentProvider/updateCookie")
-    public @ResponseBody String updateCookie(@RequestBody String cookie) {
-        this.cookie = cookie.toString();
+    @RequestMapping("/json/documentProvider/updateSecurityKeys")
+    public @ResponseBody String updateCookie(@RequestBody Map securityKeys) {
+        this.securityKeys = securityKeys;
 
         return "200";
     }
@@ -65,7 +66,7 @@ public class DocumentProviderDocumentsCtrl {
 
         for(DocumentProviderSrv documentProviderSrv: documentProviderSrvs){
             if (documentProviderSrv.getDocumentProviderId().equals(documentProviderDocumentsDaoPojo.getDocumentProvider().getPkId())){
-                return documentProviderSrv.updateFeedback(documentProviderDocumentsDaoPojo.getDocumenten(), cookie);
+                return documentProviderSrv.updateFeedback(documentProviderDocumentsDaoPojo.getDocumenten(), securityKeys);
             }
         }
 

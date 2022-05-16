@@ -1,24 +1,21 @@
 package com.xumpy.documenprovider.services.implementations.mail.odata.handler;
 
-import com.xumpy.documenprovider.services.implementations.exceptions.PinNotValidException;
-import javafx.application.Platform;
-import javafx.concurrent.Worker;
-import javafx.embed.swing.JFXPanel;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import org.springframework.stereotype.Service;
-
-import javax.swing.*;
-import java.net.CookieManager;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 
 @Service
 public class ExactCookie {
 
+    private String cookie;
+
+    public String getCookie(){
+        return cookie;
+    }
+
+    public void setCookie(String cookie){
+        this.cookie = cookie;
+    }
+
+    /*
     private String exactState;
 
     private static final String SUCCESS = "success";
@@ -28,23 +25,12 @@ public class ExactCookie {
         return exactState;
     }
 
-    private static WebView webview;
-    private String cookie;
-
     private Map<String, List<String>> getHashMap(String uriAsString)  {
         try {
             return CookieManager.getDefault().get(new URI(uriAsString), new HashMap<>());
         } catch (Exception exception){
             throw new RuntimeException("Error fetching cookie");
         }
-    }
-
-    public String getCookie(){
-        return cookie;
-    }
-
-    public void setCookie(String cookie){
-        this.cookie = cookie;
     }
 
     public void fetchCookie(String baseUrl, String userAgent, String username, String password, String key) throws PinNotValidException {
@@ -114,4 +100,5 @@ public class ExactCookie {
             throw new RuntimeException("Unknown Exception occured");
         }
     }
+     */
 }
