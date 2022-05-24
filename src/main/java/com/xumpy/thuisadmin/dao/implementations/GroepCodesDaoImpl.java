@@ -10,4 +10,7 @@ import java.util.List;
 public interface GroepCodesDaoImpl extends CrudRepository<GroepCodesDaoPojo, Integer> {
     @Query("from GroepCodesDaoPojo where groep.pk_id = :groepId")
     public List<GroepCodesDaoPojo> findAllByGroep(@Param("groepId") Integer groepId);
+
+    @Query("from GroepCodesDaoPojo where codeId = :codeId")
+    public List<GroepCodesDaoPojo> findAllByCode(@Param("codeId") String codeId);
 }

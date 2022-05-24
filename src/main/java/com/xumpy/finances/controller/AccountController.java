@@ -34,9 +34,21 @@ public class AccountController {
     @Autowired DocumentProviderDocumentsImpl documentProviderDocumentsImpl;
     @Autowired AccountService accountService;
 
+    private Integer year;
+
+    public Integer getYear(){
+        return this.year;
+    }
+
     @RequestMapping(value = "/accounting/accountingModel")
     public String viewAccountingModel(){
         return "finances/accountingModel";
+    }
+
+    @RequestMapping(value = "/accounting/accountingCodes/{year}")
+    public String viewAccountingCodes(@PathVariable Integer year){
+        this.year = year;
+        return "finances/accountingCodes";
     }
 
     private LocalDate lastDayOfMonth(LocalDate localDate){

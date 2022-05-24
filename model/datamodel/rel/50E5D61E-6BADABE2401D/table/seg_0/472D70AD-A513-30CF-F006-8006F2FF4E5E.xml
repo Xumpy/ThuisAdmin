@@ -33,6 +33,21 @@
 <colAssociation fkAssociation="29F0CBFA-3BE4-C93D-ED29-E204B2B2AA93" referredColumn="C1D01143-BE72-CC83-DD39-215BC4FCE157"/>
 </associations>
 </Column>
+<Column name="FK_CODE_HOOFD_GROEP_ID" id="C6B31CD3-29BC-1E08-293C-4FD9BD9C1421">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-05-20 13:12:31 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>9</dataTypePrecision>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="88940C35-2396-73F0-AB36-281A3DD32420" referredColumn="D2B2A696-655D-B2F5-1675-3966CD20EDE9"/>
+</associations>
+</Column>
 <Column name="CODE_ID" id="D3970A17-3347-2093-CFA0-1D1C31E6B541">
 <createdBy>aa01241</createdBy>
 <createdTime>2022-04-12 13:28:52 UTC</createdTime>
@@ -43,6 +58,18 @@
 <logicalDatatype>LOGDT024</logicalDatatype>
 <dataTypeSize>50</dataTypeSize>
 <ownDataTypeParameters>50,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="YEAR" id="F3FD4497-F6B9-3799-C240-798910CA2398">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-05-20 13:12:08 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>9</dataTypePrecision>
+<ownDataTypeParameters>,9,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
 </columns>
@@ -66,6 +93,16 @@
 <isSurrogateKey>false</isSurrogateKey>
 <indexColumnUsage>
 <colUsage columnID="6C172448-8BC7-DE5C-13E3-5D6D8283DA0C"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="FC0962B1-13BD-FAAF-14B5-082617702CAA" name="TA_CODE_TYPE_GROEP_TA_CODE_HOOFD_GROEP_FK">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-05-20 13:12:31 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="C6B31CD3-29BC-1E08-293C-4FD9BD9C1421"/>
 </indexColumnUsage>
 </ind_PK_UK>
 </indexes>

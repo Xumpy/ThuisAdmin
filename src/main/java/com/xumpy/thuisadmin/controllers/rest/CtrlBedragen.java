@@ -13,6 +13,7 @@ import com.xumpy.thuisadmin.dao.implementations.BedragAccountingDaoImpl;
 import com.xumpy.thuisadmin.domain.BedragAccounting;
 import com.xumpy.thuisadmin.services.BedragenSrv;
 import com.xumpy.thuisadmin.services.implementations.BedragenSrvImpl;
+import com.xumpy.thuisadmin.services.implementations.GroepenSrvImpl;
 import com.xumpy.thuisadmin.services.model.BedragenSrvPojo;
 import java.io.Serializable;
 import java.text.ParseException;
@@ -34,16 +35,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @Scope("session")
 public class CtrlBedragen implements Serializable{
-    @Autowired
-    private BedragenSrv bedragenSrv;
-    
-    @Autowired
-    private BeheerBedragenInp beheerBedragenInp;
-    
-    @Autowired
-    private BeheerBedragenReportLst beheerBedragenReportLst;
-
+    @Autowired BedragenSrv bedragenSrv;
+    @Autowired BeheerBedragenInp beheerBedragenInp;
+    @Autowired BeheerBedragenReportLst beheerBedragenReportLst;
     @Autowired BedragAccountingDaoImpl bedragAccountingDao;
+    @Autowired GroepenSrvImpl groepenSrv;
 
     @RequestMapping("/json/fetch_beheer_bedragen")
     public @ResponseBody BeheerBedragenInp fetchBeheerBedragen() throws ParseException{
@@ -87,7 +83,8 @@ public class CtrlBedragen implements Serializable{
         List<BedragAccountingCtrlPojo> bedragAccountingCtrlPojos = new ArrayList<>();
 
         for(BedragAccounting bedragAccounting: bedragAccountingDao.getAccountantBedragenByBedrag(bedragId)){
-            bedragAccountingCtrlPojos.add(new BedragAccountingCtrlPojo(bedragAccounting));
+            bedragAccountingCtrlPojos.add(new BedragAccountingCtrlPojo(bedragAccounting,
+                    groepenSrv.getGroepenByAccountCode(bedragAccounting.getAccountCode())));
         }
 
         return bedragAccountingCtrlPojos;

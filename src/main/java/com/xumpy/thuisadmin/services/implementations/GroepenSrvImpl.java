@@ -6,7 +6,9 @@
 package com.xumpy.thuisadmin.services.implementations;
 
 import com.xumpy.security.model.UserInfo;
+import com.xumpy.thuisadmin.dao.implementations.GroepCodesDaoImpl;
 import com.xumpy.thuisadmin.dao.implementations.GroepenDaoImpl;
+import com.xumpy.thuisadmin.dao.model.GroepCodesDaoPojo;
 import com.xumpy.thuisadmin.dao.model.GroepenDaoPojo;
 import com.xumpy.thuisadmin.controllers.model.GroepenTree;
 import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
@@ -16,6 +18,8 @@ import com.xumpy.thuisadmin.services.GroepenSrv;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.xumpy.thuisadmin.services.model.GroepenSrvPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,11 +31,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class GroepenSrvImpl implements GroepenSrv, Serializable{
 
-    @Autowired
-    private GroepenDaoImpl groepenDao;
-    
-    @Autowired
-    private UserInfo userInfo;
+    @Autowired private GroepenDaoImpl groepenDao;
+    @Autowired private GroepCodesDaoImpl groepCodesDao;
+    @Autowired private UserInfo userInfo;
     
     @Override
     @Transactional(readOnly=false, value="transactionManager")
@@ -214,5 +216,17 @@ public class GroepenSrvImpl implements GroepenSrv, Serializable{
                 }
             }
         }
+    }
+
+    @Transactional
+    public List<Groepen> getGroepenByAccountCode(String acountCode){
+        List<Groepen> groepen = new ArrayList<>();
+        List<GroepCodesDaoPojo> groepCodesDaoPojos = groepCodesDao.findAllByCode(acountCode);
+
+        for(GroepCodesDaoPojo groepCodesDaoPojo: groepCodesDaoPojos){
+            groepen.add(new GroepenSrvPojo(groepCodesDaoPojo.getGroep()));
+        }
+
+        return groepen;
     }
 }

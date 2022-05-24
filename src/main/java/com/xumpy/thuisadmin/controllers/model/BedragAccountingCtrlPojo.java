@@ -1,10 +1,12 @@
 package com.xumpy.thuisadmin.controllers.model;
 
-import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
 import com.xumpy.thuisadmin.domain.BedragAccounting;
+import com.xumpy.thuisadmin.domain.Groepen;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class BedragAccountingCtrlPojo implements BedragAccounting {
     private Integer pkId;
@@ -16,6 +18,9 @@ public class BedragAccountingCtrlPojo implements BedragAccounting {
     private String customerName;
     private String vatNumber;
     private String taxDescription;
+    private List<GroepenCtrlPojo> linkedGroepenByAccountCode;
+    private Boolean correctGroep;
+    private Boolean needsToMove;
 
     @Override
     public Integer getPkId() {
@@ -94,13 +99,70 @@ public class BedragAccountingCtrlPojo implements BedragAccounting {
         return taxDescription;
     }
 
+    public List<GroepenCtrlPojo> getLinkedGroepenByAccountCode() {
+        return linkedGroepenByAccountCode;
+    }
+
+    public void setLinkedGroepenByAccountCode(List<GroepenCtrlPojo> linkedGroepenByAccountCode) {
+        this.linkedGroepenByAccountCode = linkedGroepenByAccountCode;
+    }
+
     public void setTaxDescription(String taxDescription) {
         this.taxDescription = taxDescription;
     }
 
     public BedragAccountingCtrlPojo() {}
 
-    public BedragAccountingCtrlPojo(BedragAccounting bedragAccounting){
+    public Boolean getCorrectGroep() {
+        return correctGroep;
+    }
+
+    public void setCorrectGroep(Boolean correctGroep) {
+        this.correctGroep = correctGroep;
+    }
+
+    public Boolean getNeedsToMove() {
+        return needsToMove;
+    }
+
+    public void setNeedsToMove(Boolean needsToMove) {
+        this.needsToMove = needsToMove;
+    }
+
+    private List<GroepenCtrlPojo> groepenToGroepenCtrlList(List<Groepen> groepen){
+        List<GroepenCtrlPojo> groepenCtrlPojos = new ArrayList<>();
+        for(Groepen groep: groepen){
+            groepenCtrlPojos.add(new GroepenCtrlPojo(groep));
+        }
+
+        return  groepenCtrlPojos;
+    }
+
+    private Boolean needsToMove(List<GroepenCtrlPojo> linkedGroepenByAccountCode, Groepen bedragGroep){
+        if (this.linkedGroepenByAccountCode.size() > 0){
+            for(Groepen groep: linkedGroepenByAccountCode){
+                if (groep.getPk_id().equals(bedragGroep.getPk_id())){
+                    return false;
+                }
+            }
+        } else {
+            return false;
+        }
+        return true;
+    }
+
+    private Boolean correctGroep(List<GroepenCtrlPojo> linkedGroepenByAccountCode, Groepen bedragGroep){
+        if (this.linkedGroepenByAccountCode.size() > 0){
+            for(Groepen groep: linkedGroepenByAccountCode){
+                if (groep.getPk_id().equals(bedragGroep.getPk_id())){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public BedragAccountingCtrlPojo(BedragAccounting bedragAccounting, List<Groepen> groepenByAccountCode){
         this.pkId = bedragAccounting.getPkId();
         this.bedrag = new BedragenCtrlPojo(bedragAccounting.getBedrag());
         this.datum = bedragAccounting.getDatum();
@@ -110,5 +172,8 @@ public class BedragAccountingCtrlPojo implements BedragAccounting {
         this.customerName = bedragAccounting.getCustomerName();
         this.vatNumber = bedragAccounting.getVatNumber();
         this.taxDescription = bedragAccounting.getTaxDescription();
+        this.linkedGroepenByAccountCode = groepenToGroepenCtrlList(groepenByAccountCode);
+        this.needsToMove = needsToMove(this.linkedGroepenByAccountCode, this.bedrag.getGroep());
+        this.correctGroep = correctGroep(this.linkedGroepenByAccountCode, this.bedrag.getGroep());
     }
 }

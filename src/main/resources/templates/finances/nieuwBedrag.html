@@ -120,10 +120,11 @@
                         <th st-sort="datum">Customer</th>
                         <th st-sort="datum">Vat Number</th>
                         <th st-sort="datum">Tax Description</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr class="row" ng-repeat="bedragAccount in emptyBedragAccounting">
+                    <tr class="row" ng-repeat="bedragAccount in emptyBedragAccounting" ng-class="{'text-success': bedragAccount.correctGroep == true, 'text-danger': bedragAccount.needsToMove == true}">
                         <td>{{bedragAccount.datum}}</td>
                         <td>{{bedragAccount.accountBedrag}}</td>
                         <td>{{bedragAccount.accountCode}}</td>
@@ -131,6 +132,7 @@
                         <td>{{bedragAccount.customerName}}</td>
                         <td>{{bedragAccount.vatNumber}}</td>
                         <td>{{bedragAccount.taxDescription}}</td>
+                        <td><a ng-if="bedragAccount.needsToMove == true" ng-click="moveBedragAccountingPopup(bedragAccount)">Move</a></td>
                     </tr>
                     </tbody>
                     <tfoot>
@@ -142,7 +144,33 @@
                     </tfoot>
                 </table>
             </div>
+
+            <div id="dialogChooseGroep" class="modal-dialog" title="Choose Group">
+                <div class="12">
+                    <table st-safe-src="linkedGroeps" st-table="emptyLinkedGroeps" class="table table-striped table-hover ">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th st-sort="naam">Naam</th>
+                            <th st-sort="hoofdgroep">Hoofdgroep</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="linkedGroep in emptyLinkedGroeps">
+                            <td><a class="btn btn-primary" ng-click="moveBedragToGroep(linkedGroep)">Update Group</a></td>
+                            <td>{{linkedGroep.naam}}</td>
+                            <td>{{linkedGroep.hoofdGroep != null ? linkedGroep.hoofdGroep.naam : null}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <script th:inline="javascript">
+                $(function() {
+                    $( "#dialogChooseGroep" ).hide();
+                });
+
                 app.controller("fController", function($scope, $http) {
                     var pk_id = /*[[${pk_id}]]*/;
                     if (pk_id !== null){
@@ -181,6 +209,28 @@
                               $scope.groepTreeData = data;
                           });
                     }
+
+                    $scope.linkedGroeps = [];
+
+                    $scope.moveBedragAccountingPopup = (function(bedragAccount){
+                        $scope.linkedGroeps = bedragAccount.linkedGroepenByAccountCode;
+                        $('#dialogChooseGroep').dialog({
+                            title: "Choose Group",
+                            width: 1000,
+                            buttons: { "Cancel": function() {
+                                    $( "#dialogChooseGroep" ).dialog("close");
+                                }}
+                        }).prev(".ui-dialog-titlebar").css("background","#bf3e11");
+                    });
+
+                    $scope.moveBedragToGroep = (function(groep){
+                        $scope.bedrag.groep = groep;
+                        var url = /*[[@{/json/groepTree/}]]*/;
+                        $http.get(url + $scope.bedrag.groep.pk_id).success( function(dataGroepTree){
+                            $scope.groepTreeData = dataGroepTree;
+                        });
+                        $( "#dialogChooseGroep" ).dialog("close");
+                    });
 
                     $http.get(/*[[@{/json/personen}]]*/).success( function(data){
                        $scope.personen = data;

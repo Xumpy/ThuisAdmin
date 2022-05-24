@@ -47,7 +47,8 @@ public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer
             + "  and coalesce(coalesce(:professional, rekening.professional), 0) = coalesce(rekening.professional, 0)"
             + "  and groep.pk_id not in (select groep.pk_id from GroepCodesDaoPojo where codeId = 'INTER_REKENING') "
             + "  and (select count(1) from BedragAccountingDaoPojo bedragAccountingDaoPojo"
-            + " where bedragAccountingDaoPojo.bedrag.pk_id = bedragen.pk_id) = 0"
+            + " where bedragAccountingDaoPojo.bedrag.pk_id = bedragen.pk_id "
+            + "   and bedragAccountingDaoPojo.accountCode in (select codeId from GroepCodesDaoPojo where groep.pk_id = bedragen.groep.pk_id)) = 0"
             + "  and (:searchText is null or lower(groep.naam) like :searchText " +
             "  or lower(rekening.naam) like :searchText " +
             "  or lower(persoon.naam) like :searchText " +

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class FinancialYearCtrl {
     @Autowired FinancialYearService financialYearService;
+    @Autowired AccountController accountController;
 
     @RequestMapping(value="/json/financial_year/{year}", method = RequestMethod.GET)
     public @ResponseBody FinancialYear getFinancialYear(@PathVariable Integer year){

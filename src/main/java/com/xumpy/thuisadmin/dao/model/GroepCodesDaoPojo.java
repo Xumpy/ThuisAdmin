@@ -16,9 +16,15 @@ public class GroepCodesDaoPojo implements GroepCodes {
     @JoinColumn(name="FK_TYPE_GROEP_ID")
     private GroepenDaoPojo groep;
 
+    @ManyToOne
+    @JoinColumn(name="FK_CODE_HOOFD_GROEP_ID")
+    private HoofdCodesDaoPojo hoofdCode;
 
     @Column(name="CODE_ID")
     private String codeId;
+
+    @Column(name="YEAR")
+    private Integer year;
 
     @Override
     public Integer getPkId() {
@@ -47,11 +53,31 @@ public class GroepCodesDaoPojo implements GroepCodes {
         this.codeId = codeId;
     }
 
+    @Override
+    public HoofdCodesDaoPojo getHoofdCode() {
+        return hoofdCode;
+    }
+
+    public void setHoofdCode(HoofdCodesDaoPojo hoofdCode) {
+        this.hoofdCode = hoofdCode;
+    }
+
+    @Override
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
     public GroepCodesDaoPojo(){}
 
     public GroepCodesDaoPojo(GroepCodes groepCode){
         this.pkId = groepCode.getPkId();
         this.groep = new GroepenDaoPojo(groepCode.getGroep());
         this.codeId = groepCode.getCodeId();
+        this.hoofdCode = new HoofdCodesDaoPojo(groepCode.getHoofdCode());
+        this.year = groepCode.getYear();
     }
 }

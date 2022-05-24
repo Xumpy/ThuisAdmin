@@ -1,16 +1,16 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
-<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="3A2E3098-152A-95A0-B815-8D423D717408" name="TA_GL_ACCOUNT_GROUP">
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="034174AD-726C-CDA5-E7D6-9B226780F656" name="TA_CODE_HOOFD_GROEP">
 <createdBy>aa01241</createdBy>
-<createdTime>2022-04-22 11:40:15 UTC</createdTime>
+<createdTime>2022-05-20 13:11:07 UTC</createdTime>
 <ownerDesignName>datamodel</ownerDesignName>
-<ordsAlias>table_30</ordsAlias>
+<ordsAlias>table_32</ordsAlias>
 <allowColumnReorder>false</allowColumnReorder>
 <existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
 <parsed>true</parsed>
 <columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
-<Column name="PK_ID" id="3BC09C8F-E77A-0028-AE0C-978435241F6F">
+<Column name="PK_ID" id="D2B2A696-655D-B2F5-1675-3966CD20EDE9">
 <createdBy>aa01241</createdBy>
-<createdTime>2022-04-22 11:40:34 UTC</createdTime>
+<createdTime>2022-05-20 13:11:29 UTC</createdTime>
 <ownerDesignName>datamodel</ownerDesignName>
 <useDomainConstraints>false</useDomainConstraints>
 <use>1</use>
@@ -19,29 +19,26 @@
 <ownDataTypeParameters>,9,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
-<Column name="DESCRIPTION" id="1B469835-A76E-FD5B-0C2E-83B2C446A1C6">
+<Column name="NAME" id="2372B832-2BC8-3BAA-0C5C-E7D00E406013">
 <createdBy>aa01241</createdBy>
-<createdTime>2022-04-22 11:40:44 UTC</createdTime>
+<createdTime>2022-05-20 13:11:49 UTC</createdTime>
 <ownerDesignName>datamodel</ownerDesignName>
 <nullsAllowed>true</nullsAllowed>
-<useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT024</logicalDatatype>
-<dataTypeSize>4000</dataTypeSize>
-<ownDataTypeParameters>4000,,</ownDataTypeParameters>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
 </columns>
 <indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
-<ind_PK_UK id="1F64F3F6-D7D9-5F84-FB07-3EEDC4DF22C3" name="TA_GL_ACCOUNT_GROUP_PK">
+<ind_PK_UK id="C49276A6-1E84-8022-2836-60FDB59D6DED" name="TA_CODE_HOOFD_GROEP_PK">
 <createdBy>aa01241</createdBy>
-<createdTime>2022-04-22 11:40:34 UTC</createdTime>
+<createdTime>2022-05-20 13:11:54 UTC</createdTime>
 <ownerDesignName>datamodel</ownerDesignName>
 <pk>true</pk>
 <indexState>Primary Constraint</indexState>
 <isSurrogateKey>false</isSurrogateKey>
 <indexColumnUsage>
-<colUsage columnID="3BC09C8F-E77A-0028-AE0C-978435241F6F"/>
+<colUsage columnID="D2B2A696-655D-B2F5-1675-3966CD20EDE9"/>
 </indexColumnUsage>
 </ind_PK_UK>
 </indexes>
