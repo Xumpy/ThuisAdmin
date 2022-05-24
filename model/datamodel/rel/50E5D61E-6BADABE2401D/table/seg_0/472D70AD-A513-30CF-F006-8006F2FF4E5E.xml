@@ -60,6 +60,18 @@
 <ownDataTypeParameters>50,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
+<Column name="DESCRIPTION" id="11CEC592-09FB-1C18-6F93-48CC10BD065C">
+<createdBy>admin</createdBy>
+<createdTime>2022-05-24 19:00:43 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>255</dataTypeSize>
+<ownDataTypeParameters>255,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
 <Column name="YEAR" id="F3FD4497-F6B9-3799-C240-798910CA2398">
 <createdBy>aa01241</createdBy>
 <createdTime>2022-05-20 13:12:08 UTC</createdTime>

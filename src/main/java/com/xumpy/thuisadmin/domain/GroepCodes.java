@@ -5,5 +5,6 @@ public interface GroepCodes {
     Groepen getGroep();
     HoofdCodes getHoofdCode();
     String getCodeId();
+    String getDescription();
     Integer getYear();
 }

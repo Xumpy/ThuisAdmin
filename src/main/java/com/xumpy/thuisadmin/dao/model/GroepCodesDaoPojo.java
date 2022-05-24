@@ -23,6 +23,9 @@ public class GroepCodesDaoPojo implements GroepCodes {
     @Column(name="CODE_ID")
     private String codeId;
 
+    @Column(name="DESCRIPTION")
+    private String description;
+
     @Column(name="YEAR")
     private Integer year;
 
@@ -71,6 +74,15 @@ public class GroepCodesDaoPojo implements GroepCodes {
         this.year = year;
     }
 
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public GroepCodesDaoPojo(){}
 
     public GroepCodesDaoPojo(GroepCodes groepCode){
@@ -79,5 +91,6 @@ public class GroepCodesDaoPojo implements GroepCodes {
         this.codeId = groepCode.getCodeId();
         this.hoofdCode = new HoofdCodesDaoPojo(groepCode.getHoofdCode());
         this.year = groepCode.getYear();
+        this.description = groepCode.getDescription();
     }
 }
