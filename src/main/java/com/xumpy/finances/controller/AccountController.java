@@ -14,6 +14,7 @@ import com.xumpy.thuisadmin.domain.Documenten;
 import com.xumpy.thuisadmin.services.DocumentenSrv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -34,20 +35,15 @@ public class AccountController {
     @Autowired DocumentProviderDocumentsImpl documentProviderDocumentsImpl;
     @Autowired AccountService accountService;
 
-    private Integer year;
-
-    public Integer getYear(){
-        return this.year;
-    }
-
     @RequestMapping(value = "/accounting/accountingModel")
     public String viewAccountingModel(){
         return "finances/accountingModel";
     }
 
     @RequestMapping(value = "/accounting/accountingCodes/{year}")
-    public String viewAccountingCodes(@PathVariable Integer year){
-        this.year = year;
+    public String viewAccountingCodes(@PathVariable Integer year, Model model){
+        model.addAttribute("year", year);
+
         return "finances/accountingCodes";
     }
 

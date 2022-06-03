@@ -73,4 +73,8 @@ public class GroepCodesSrvImpl {
             }
         }
     }
+
+    public List<GroepCodesDaoPojo> getGroepCodesByYearAndHoofdGroepId(Integer year, Integer hoofdGroepId){
+        return groepCodesDao.findAllByYearAndHoofdCodeId(year, hoofdGroepId);
+    }
 }
