@@ -7,4 +7,5 @@ public interface GroepCodes {
     String getCodeId();
     String getDescription();
     Integer getYear();
+    Boolean isNegatief();
 }

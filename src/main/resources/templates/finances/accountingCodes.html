@@ -75,6 +75,7 @@
                     <th></th>
                     <th st-sort="Code">Code</th>
                     <th st-sort="Description">Description</th>
+                    <th st-sort="Negatief">Negatief</th>
                     <th st-sort="Groep">Groep</th>
                 </tr>
                 </thead>
@@ -82,7 +83,8 @@
                 <tr ng-repeat="accountCode in emptyAccountCodes">
                     <td><a class="btn btn-primary" ng-click="deleteAccountCode(accountCode)">Delete</a></td>
                     <td><input class="form-control" id="name" ng-model="accountCode.codeId" placeholder="Code" type="text"/></td>
-                    <td><input class="form-control" id="name" ng-model="accountCode.description" placeholder="Code" type="text"/></td>
+                    <td><input class="form-control" id="name" ng-model="accountCode.description" placeholder="Description" type="text"/></td>
+                    <td><input class="form-control" id="name" ng-model="accountCode.negatief" placeholder="Negatief" type="checkbox"/></td>
                     <td><a class="btn btn-primary" ng-click="openChangeGroep(accountCode)">{{accountCode.groep.naam}}</a></td>
                 </tr>
                 </tbody>
@@ -112,6 +114,8 @@
             $http.get(url_code_hoofd_groep).success( function(data){
                 $scope.hoofdCodes = data;
             });
+
+            var url_monthly_values = /*[[@{/json/accounting/monthlyValues/}]]*/;
 
             $scope.nieuwHoofdCode = function(){
                 $scope.hoofdCode = { name: "" };

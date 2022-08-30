@@ -8,22 +8,21 @@ import com.xumpy.government.dao.FinancialYearsDao;
 import com.xumpy.government.dao.model.FinancialYearGovernmentCostTypesDaoPojo;
 import com.xumpy.government.dao.model.FinancialYearsDaoPojo;
 import com.xumpy.government.dao.model.GovernmentCostTypeDaoPojo;
+import com.xumpy.thuisadmin.dao.implementations.BedragAccountingDaoImpl;
 import com.xumpy.thuisadmin.dao.implementations.BedragenDaoImpl;
 import com.xumpy.thuisadmin.dao.implementations.InvoiceJobsDaoImpl;
 import com.xumpy.thuisadmin.dao.implementations.InvoicesDaoImpl;
 import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
 import com.xumpy.thuisadmin.dao.model.GroepenDaoPojo;
 import com.xumpy.thuisadmin.dao.model.InvoicesDaoPojo;
+import com.xumpy.thuisadmin.dao.model.MonthlyValue;
 import com.xumpy.thuisadmin.services.implementations.BedragenSrvImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class FinancialYearService {
@@ -32,6 +31,7 @@ public class FinancialYearService {
     @Autowired BedragenDaoImpl bedragenDao;
     @Autowired InvoicesDaoImpl invoicesDao;
     @Autowired InvoiceJobsDaoImpl invoiceJobsDao;
+    @Autowired BedragAccountingDaoImpl bedragAccountingDao;
 
     private static final Integer SCALE = 2;
 
@@ -175,5 +175,198 @@ public class FinancialYearService {
 
             financialYearGovernmentCostTypesDao.save(financialYearGovernmentCostTypesDaoPojo);
         }
+    }
+
+    private BigDecimal totalByMonthy(List<MonthlyValue> monthlyValues, Integer codeId){
+        BigDecimal total = new BigDecimal(0);
+        for(MonthlyValue monthlyValue: monthlyValues){
+            if (monthlyValue.getCodeId().equals(codeId)){
+                total = total.add(monthlyValue.getBedrag());
+            }
+        }
+        return total;
+    }
+
+    private BigDecimal totalByMainGroup(List<MonthlyValue> monthlyValues, String mainGroup){
+        BigDecimal total = new BigDecimal(0);
+        for(MonthlyValue monthlyValue: monthlyValues){
+            if (monthlyValue.getMainGroup().equals(mainGroup)){
+                total = total.add(monthlyValue.getBedrag());
+            }
+        }
+        return total;
+    }
+
+    private List<String> getMainGroups(List<MonthlyValue> monthlyValues){
+        List<String> mainGroups = new ArrayList<>();
+
+        for(MonthlyValue monthlyValue: monthlyValues){
+            if (!mainGroups.contains(monthlyValue.getMainGroup())){
+                mainGroups.add(monthlyValue.getMainGroup());
+            }
+        }
+
+        return mainGroups;
+    }
+
+    private BigDecimal getMonthlyCosts(List<MonthlyValue> monthlyValues, Integer month, Integer codeId){
+        BigDecimal value = new BigDecimal(0);
+
+        for (MonthlyValue monthlyValue: monthlyValues){
+            if (monthlyValue.getMonth().equals(month)){
+                if (codeId == null || monthlyValue.getCodeId().equals(codeId)){
+                    value = value.add(monthlyValue.getBedrag());
+                }
+            }
+        }
+        return value;
+    }
+
+    private Map<Integer, BigDecimal> getMonthlyValues(List<MonthlyValue> monthlyValues, Integer codeId){
+        Map<Integer, BigDecimal> monthlyCodeIds = new HashMap<>();
+        for(int month=1; month<=12; month++){
+            monthlyCodeIds.put(month, getMonthlyCosts(monthlyValues, month, codeId));
+        }
+        return monthlyCodeIds;
+    }
+
+    private List<MonthlyValue> extractDetails(List<MonthlyValue> monthlyValues, String mainGroup){
+        List<MonthlyValue> detail = new ArrayList<>();
+        for(MonthlyValue monthlyValue: monthlyValues){
+            if (monthlyValue.getMainGroup().equals(mainGroup)){
+                Map<String, BigDecimal> value = new HashMap<>();
+                value.put(monthlyValue.getDescription(), monthlyValue.getBedrag());
+                detail.add(monthlyValue);
+            }
+        }
+        return detail;
+    }
+
+    private Map<Integer, BigDecimal> getMonthlyValues(List<MonthlyValue> monthlyValues){
+        return getMonthlyValues(monthlyValues, null);
+    }
+
+    private Map calculateOmzet(List<MonthlyValue> monthlyValues){
+        Map result = new HashMap();
+
+        List<Map<String, BigDecimal>> values = new ArrayList<>();
+        for(String mainGroup: getMainGroups(monthlyValues)){
+            Map keyValue = new HashMap();
+            keyValue.put(mainGroup, totalByMainGroup(monthlyValues, mainGroup));
+            keyValue.put("detail", extractDetails(monthlyValues, mainGroup));
+            values.add(keyValue);
+        }
+        result.put("values", values);
+        result.put("report", getMonthlyValues(monthlyValues, 700000));
+        result.put("sum", getSumValues(values));
+
+        return result;
+    }
+
+    private BigDecimal getSumValues(List<Map<String, BigDecimal>> values){
+        BigDecimal sum = new BigDecimal(0);
+        for(Map<String, BigDecimal> value: values){
+            for(Map.Entry<String, BigDecimal> val: value.entrySet()){
+                if (!val.getKey().equals("detail")){
+                    sum = sum.add(val.getValue());
+                }
+            }
+        }
+        return sum;
+    }
+
+    private Map calculateBedrijfslasten(List<MonthlyValue> monthlyValues){
+        Map result = new HashMap();
+
+        List<Map<String, BigDecimal>> values = new ArrayList<>();
+        for(String mainGroup: getMainGroups(monthlyValues)){
+            Map keyValue = new HashMap();
+            keyValue.put(mainGroup, totalByMainGroup(monthlyValues, mainGroup));
+            keyValue.put("detail", extractDetails(monthlyValues, mainGroup));
+            values.add(keyValue);
+        }
+        result.put("values", values);
+        result.put("sum", getSumValues(values));
+
+        return result;
+    }
+
+    private BigDecimal sumOfAllMonths(List<Map<Integer, BigDecimal>> monthlyValues){
+        BigDecimal sumOfAllMonths = new BigDecimal(0);
+
+        for(Map<Integer, BigDecimal> monthlyValue: monthlyValues){
+            for(Map.Entry<Integer, BigDecimal> value: monthlyValue.entrySet()){
+                sumOfAllMonths = sumOfAllMonths.add(value.getValue());
+            }
+        }
+
+        return sumOfAllMonths;
+    }
+
+    private List<Map<Integer, BigDecimal>> getMonthlyResultList(List<MonthlyValue> monthlyValuesRevenue, List<MonthlyValue> monthlyValuesCosts){
+
+        List monthlyResultList = new ArrayList();
+        Map<Integer, BigDecimal> monthlyRevenue = getMonthlyValues(monthlyValuesRevenue);
+        Map<Integer, BigDecimal> monthlyCosts = getMonthlyValues(monthlyValuesCosts);
+
+        for(int month = 1; month<=12; month++){
+            Map<Integer, BigDecimal> result = new HashMap<>();
+            BigDecimal monthlyResult = new BigDecimal(0);
+            if (monthlyRevenue.containsKey(month)){
+                monthlyResult = monthlyResult.add(monthlyRevenue.get(month));
+            }
+            if (monthlyCosts.containsKey(month)){
+                monthlyResult = monthlyResult.subtract(monthlyCosts.get(month));
+            }
+            result.put(month, monthlyResult);
+            monthlyResultList.add(result);
+        }
+
+        return monthlyResultList;
+    }
+
+    private Map<Integer, BigDecimal> getMonthlyResultMap(List<MonthlyValue> monthlyValuesRevenue, List<MonthlyValue> monthlyValuesCosts){
+        Map<Integer, BigDecimal> monthlyResultMap = new HashMap<>();
+        Map<Integer, BigDecimal> monthlyRevenue = getMonthlyValues(monthlyValuesRevenue);
+        Map<Integer, BigDecimal> monthlyCosts = getMonthlyValues(monthlyValuesCosts);
+
+        for(int month = 1; month<=12; month++){
+            Map<Integer, BigDecimal> result = new HashMap<>();
+            BigDecimal monthlyResult = new BigDecimal(0);
+            if (monthlyRevenue.containsKey(month)){
+                monthlyResult = monthlyResult.add(monthlyRevenue.get(month));
+            }
+            if (monthlyCosts.containsKey(month)){
+                monthlyResult = monthlyResult.subtract(monthlyCosts.get(month));
+            }
+            monthlyResultMap.put(month, monthlyResult);
+        }
+
+        return monthlyResultMap;
+    }
+
+
+    private Map<Integer, BigDecimal> calculateResultaten(List<MonthlyValue> monthlyValuesRevenue, List<MonthlyValue> monthlyValuesCosts){
+        Map result = new HashMap();
+
+        result.put("Bedrijfsresultaat", sumOfAllMonths(getMonthlyResultList(monthlyValuesRevenue, monthlyValuesCosts)));
+        result.put("report", getMonthlyResultMap(monthlyValuesRevenue, monthlyValuesCosts));
+        result.put("sum", sumOfAllMonths(getMonthlyResultList(monthlyValuesRevenue, monthlyValuesCosts)));
+
+        return result;
+
+    }
+
+    public Map returnedAccountingValues(Integer year){
+        List<MonthlyValue> monthlyValueRevenue = bedragAccountingDao.getMonthlyValues(year, 0);
+        List<MonthlyValue> monthlyValueCosts = bedragAccountingDao.getMonthlyValues(year, 1);
+
+        Map accountingValues = new HashMap();
+
+        accountingValues.put("Omzet", calculateOmzet(monthlyValueRevenue));
+        accountingValues.put("Bedrijfslasten", calculateBedrijfslasten(monthlyValueCosts));
+        accountingValues.put("Resultaten", calculateResultaten(monthlyValueRevenue, monthlyValueCosts));
+
+        return accountingValues;
     }
 }

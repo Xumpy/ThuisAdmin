@@ -5,10 +5,12 @@ import com.xumpy.finances.controller.model.GroepCodesCtrlPojo;
 import com.xumpy.finances.controller.model.HoofdCodesCtrlPojo;
 import com.xumpy.finances.services.FinancialYearService;
 import com.xumpy.thuisadmin.controllers.model.GroepenCtrlPojo;
+import com.xumpy.thuisadmin.dao.implementations.BedragAccountingDaoImpl;
 import com.xumpy.thuisadmin.dao.implementations.GroepCodesDaoImpl;
 import com.xumpy.thuisadmin.dao.implementations.HoofdCodesDaoImpl;
 import com.xumpy.thuisadmin.dao.model.GroepCodesDaoPojo;
 import com.xumpy.thuisadmin.dao.model.HoofdCodesDaoPojo;
+import com.xumpy.thuisadmin.dao.model.MonthlyValue;
 import com.xumpy.thuisadmin.domain.GroepCodes;
 import com.xumpy.thuisadmin.services.implementations.GroepCodesSrvImpl;
 import org.bouncycastle.ocsp.Req;
@@ -18,7 +20,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class FinancialYearCtrl {
@@ -124,5 +128,11 @@ public class FinancialYearCtrl {
         }
 
         return groepCodesCtrlPojos;
+    }
+
+
+    @RequestMapping(value = "/json/accounting/monthlyValues/{year}")
+    public @ResponseBody Map getMonthlyValues(@PathVariable Integer year){
+        return financialYearService.returnedAccountingValues(year);
     }
 }

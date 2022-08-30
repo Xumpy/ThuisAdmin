@@ -29,6 +29,9 @@ public class GroepCodesDaoPojo implements GroepCodes {
     @Column(name="YEAR")
     private Integer year;
 
+    @Column(name="NEGATIEF")
+    private Boolean negatief;
+
     @Override
     public Integer getPkId() {
         return pkId;
@@ -83,6 +86,15 @@ public class GroepCodesDaoPojo implements GroepCodes {
         this.description = description;
     }
 
+    @Override
+    public Boolean isNegatief() {
+        return negatief;
+    }
+
+    public void setNegatief(Boolean negatief) {
+        this.negatief = negatief;
+    }
+
     public GroepCodesDaoPojo(){}
 
     public GroepCodesDaoPojo(GroepCodes groepCode){
@@ -92,5 +104,6 @@ public class GroepCodesDaoPojo implements GroepCodes {
         this.hoofdCode = new HoofdCodesDaoPojo(groepCode.getHoofdCode());
         this.year = groepCode.getYear();
         this.description = groepCode.getDescription();
+        this.negatief = groepCode.isNegatief();
     }
 }

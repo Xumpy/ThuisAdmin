@@ -9,7 +9,9 @@ import com.xumpy.documenprovider.domain.DocumentProvider;
 import com.xumpy.documenprovider.services.DocumentProviderSrv;
 import com.xumpy.finances.excelbuilder.ExcelZipBuilder;
 import com.xumpy.finances.services.AccountService;
+import com.xumpy.thuisadmin.dao.implementations.BedragAccountingDaoImpl;
 import com.xumpy.thuisadmin.dao.model.DocumentenDaoPojo;
+import com.xumpy.thuisadmin.dao.model.MonthlyValue;
 import com.xumpy.thuisadmin.domain.Documenten;
 import com.xumpy.thuisadmin.services.DocumentenSrv;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,9 @@ import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class AccountController {
@@ -96,4 +100,5 @@ public class AccountController {
 
         return "redirect:/finances/nieuwBedrag/" + document.getBedrag().getPk_id();
     }
+
 }

@@ -10,6 +10,7 @@ public class GroepCodesCtrlPojo implements GroepCodes {
     private String codeId;
     private String description;
     private Integer year;
+    private Boolean negatief;
 
     @Override
     public Integer getPkId() {
@@ -65,6 +66,15 @@ public class GroepCodesCtrlPojo implements GroepCodes {
         this.year = year;
     }
 
+    @Override
+    public Boolean isNegatief() {
+        return negatief;
+    }
+
+    public void setNegatief(Boolean negatief) {
+        this.negatief = negatief;
+    }
+
     public GroepCodesCtrlPojo() {}
 
     public GroepCodesCtrlPojo(GroepCodes groepCodes){
@@ -74,5 +84,6 @@ public class GroepCodesCtrlPojo implements GroepCodes {
         this.hoofdCode = new HoofdCodesCtrlPojo(groepCodes.getHoofdCode());
         this.year = groepCodes.getYear();
         this.description = groepCodes.getDescription();
+        this.negatief = groepCodes.isNegatief();
     }
 }

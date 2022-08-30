@@ -84,6 +84,18 @@
 <ownDataTypeParameters>,9,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
+<Column name="NEGATIEF" id="0B6FF381-66C2-EA85-A528-138661AC768C">
+<createdBy>aa01241</createdBy>
+<createdTime>2022-06-14 08:43:58 UTC</createdTime>
+<ownerDesignName>datamodel</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT025</logicalDatatype>
+<dataTypeSize>1</dataTypeSize>
+<ownDataTypeParameters>1,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
 </columns>
 <indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
 <ind_PK_UK id="FF23373E-6731-A487-E024-CB5FD3BA6DC6" name="TA_CODE_TYPE_GROEP_PK">

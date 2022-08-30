@@ -2,6 +2,7 @@ package com.xumpy.thuisadmin.dao.implementations;
 
 import com.xumpy.thuisadmin.dao.model.BedragAccountingDaoPojo;
 import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
+import com.xumpy.thuisadmin.dao.model.MonthlyValue;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -18,4 +19,28 @@ public interface BedragAccountingDaoImpl extends CrudRepository<BedragAccounting
     @Modifying
     @Query("delete from BedragAccountingDaoPojo where bedrag.pk_id = :bedragId")
     public void deleteAccountantBedragenByBedrag(@Param("bedragId") Integer bedragId);
+
+    @Query(value = "select month(ta_bedrag_accounting.datum) as month," +
+            "   code_id as codeId," +
+            "   description as description," +
+            "   ta_bedrag_accounting.datum as datum," +
+            "   abs(sum(ta_bedrag_accounting.bedrag)) as bedrag," +
+            "   ta_code_hoofd_groep.name as mainGroup" +
+            " from ta_code_type_groep " +
+            "join ta_code_hoofd_groep" +
+            "  on (ta_code_type_groep.fk_code_hoofd_groep_id = ta_code_hoofd_groep.pk_id)" +
+            "join ta_bedrag_accounting " +
+            "  on (ta_bedrag_accounting.account_code = ta_code_type_groep.code_id " +
+            "and year(ta_bedrag_accounting.datum) = ta_code_type_groep.year)" +
+            "where ta_code_type_groep.year = :year " +
+            "  and ta_code_type_groep.negatief = :negatief " +
+            "group by ta_code_type_groep.code_id, " +
+            " ta_code_type_groep.description, " +
+            " ta_bedrag_accounting.datum, " +
+            " ta_code_hoofd_groep.name," +
+            " month(ta_bedrag_accounting.datum)" +
+            "order by code_id," +
+            " month(ta_bedrag_accounting.datum)",
+            nativeQuery = true)
+    public List<MonthlyValue> getMonthlyValues(@Param("year") Integer year, @Param("negatief") Integer negatief);
 }
