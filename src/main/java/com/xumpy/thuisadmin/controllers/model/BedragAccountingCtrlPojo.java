@@ -1,5 +1,6 @@
 package com.xumpy.thuisadmin.controllers.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.xumpy.thuisadmin.domain.BedragAccounting;
 import com.xumpy.thuisadmin.domain.Groepen;
 
@@ -41,6 +42,7 @@ public class BedragAccountingCtrlPojo implements BedragAccounting {
     }
 
     @Override
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     public Date getDatum() {
         return datum;
     }

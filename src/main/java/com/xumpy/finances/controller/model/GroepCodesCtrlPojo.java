@@ -81,7 +81,7 @@ public class GroepCodesCtrlPojo implements GroepCodes {
         this.pkId = groepCodes.getPkId();
         this.groep = new GroepenCtrlPojo(groepCodes.getGroep());
         this.codeId = groepCodes.getCodeId();
-        this.hoofdCode = new HoofdCodesCtrlPojo(groepCodes.getHoofdCode());
+        this.hoofdCode = this.hoofdCode != null ? new HoofdCodesCtrlPojo(groepCodes.getHoofdCode()) : null;
         this.year = groepCodes.getYear();
         this.description = groepCodes.getDescription();
         this.negatief = groepCodes.isNegatief();

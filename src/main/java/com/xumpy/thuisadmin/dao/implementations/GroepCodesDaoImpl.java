@@ -14,6 +14,9 @@ public interface GroepCodesDaoImpl extends CrudRepository<GroepCodesDaoPojo, Int
     @Query("from GroepCodesDaoPojo where codeId = :codeId")
     public List<GroepCodesDaoPojo> findAllByCode(@Param("codeId") String codeId);
 
+    @Query("from GroepCodesDaoPojo where year = :year")
+    public List<GroepCodesDaoPojo> findAllByYear(@Param("year") Integer year);
+
     @Query("from GroepCodesDaoPojo where hoofdCode.pkId = :hoofdGroepId and year = :year")
     public List<GroepCodesDaoPojo> findAllByYearAndHoofdCodeId(@Param("year") Integer year, @Param("hoofdGroepId") Integer hoofdGroepId);
 

@@ -77,16 +77,4 @@ public class CtrlBedragen implements Serializable{
         
         return "1";
     }
-
-    @RequestMapping("/json/find_bedrag_accounting/{bedragId}")
-    public @ResponseBody List<BedragAccountingCtrlPojo> findBedragAccounting(@PathVariable Integer bedragId) throws ParseException{
-        List<BedragAccountingCtrlPojo> bedragAccountingCtrlPojos = new ArrayList<>();
-
-        for(BedragAccounting bedragAccounting: bedragAccountingDao.getAccountantBedragenByBedrag(bedragId)){
-            bedragAccountingCtrlPojos.add(new BedragAccountingCtrlPojo(bedragAccounting,
-                    groepenSrv.getGroepenByAccountCode(bedragAccounting.getAccountCode())));
-        }
-
-        return bedragAccountingCtrlPojos;
-    }
 }

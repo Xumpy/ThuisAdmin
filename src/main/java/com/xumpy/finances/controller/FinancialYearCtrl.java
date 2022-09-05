@@ -4,21 +4,25 @@ import com.xumpy.finances.controller.model.FinancialYear;
 import com.xumpy.finances.controller.model.GroepCodesCtrlPojo;
 import com.xumpy.finances.controller.model.HoofdCodesCtrlPojo;
 import com.xumpy.finances.services.FinancialYearService;
+import com.xumpy.thuisadmin.controllers.model.BedragAccountingCtrlPojo;
 import com.xumpy.thuisadmin.controllers.model.GroepenCtrlPojo;
 import com.xumpy.thuisadmin.dao.implementations.BedragAccountingDaoImpl;
 import com.xumpy.thuisadmin.dao.implementations.GroepCodesDaoImpl;
 import com.xumpy.thuisadmin.dao.implementations.HoofdCodesDaoImpl;
+import com.xumpy.thuisadmin.dao.model.BedragAccountingDaoPojo;
 import com.xumpy.thuisadmin.dao.model.GroepCodesDaoPojo;
 import com.xumpy.thuisadmin.dao.model.HoofdCodesDaoPojo;
 import com.xumpy.thuisadmin.dao.model.MonthlyValue;
+import com.xumpy.thuisadmin.domain.BedragAccounting;
 import com.xumpy.thuisadmin.domain.GroepCodes;
 import com.xumpy.thuisadmin.services.implementations.GroepCodesSrvImpl;
+import com.xumpy.thuisadmin.services.implementations.GroepenSrvImpl;
 import org.bouncycastle.ocsp.Req;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import javax.transaction.Transactional;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +40,10 @@ public class FinancialYearCtrl {
     GroepCodesSrvImpl groepCodesSrv;
     @Autowired
     GroepCodesDaoImpl groepCodesDao;
+    @Autowired
+    BedragAccountingDaoImpl bedragAccountingDao;
+    @Autowired
+    GroepenSrvImpl groepenSrv;
 
     @RequestMapping(value = "/json/financial_year/{year}", method = RequestMethod.GET)
     public @ResponseBody
@@ -76,6 +84,17 @@ public class FinancialYearCtrl {
     List<HoofdCodesCtrlPojo> deleteHoofdCode(@PathVariable Integer pkId) {
         hoofdCodesDao.deleteById(pkId);
         return getHoofdCodes();
+    }
+
+    @RequestMapping(value = "/json/account_codes/{year}", method = RequestMethod.GET)
+    public @ResponseBody
+    List<GroepCodesCtrlPojo> getGroepCodesByYear(@PathVariable Integer year) {
+        List<GroepCodesCtrlPojo> groepCodesCtrlPojos = new ArrayList<>();
+
+        for (GroepCodes groepCodes : groepCodesSrv.getGroepCodesByYear(year)) {
+            groepCodesCtrlPojos.add(new GroepCodesCtrlPojo(groepCodes));
+        }
+        return groepCodesCtrlPojos;
     }
 
     @RequestMapping(value = "/json/account_codes/{year}/{hoofdCodePkId}", method = RequestMethod.GET)
@@ -130,6 +149,37 @@ public class FinancialYearCtrl {
         return groepCodesCtrlPojos;
     }
 
+    @RequestMapping("/json/find_bedrag_accounting/{bedragId}")
+    public @ResponseBody List<BedragAccountingCtrlPojo> findBedragAccounting(@PathVariable Integer bedragId) throws ParseException {
+        List<BedragAccountingCtrlPojo> bedragAccountingCtrlPojos = new ArrayList<>();
+
+        for(BedragAccounting bedragAccounting: bedragAccountingDao.getAccountantBedragenByBedrag(bedragId)){
+            bedragAccountingCtrlPojos.add(new BedragAccountingCtrlPojo(bedragAccounting,
+                    groepenSrv.getGroepenByAccountCode(bedragAccounting.getAccountCode())));
+        }
+
+        return bedragAccountingCtrlPojos;
+    }
+
+    @RequestMapping(value = "/json/accounting/save")
+    @Transactional
+    public @ResponseBody List<BedragAccountingCtrlPojo> saveBedragAccounting(@RequestBody BedragAccountingCtrlPojo bedragAccountingCtrlPojo) throws ParseException {
+
+        BedragAccountingDaoPojo bedragAccountingDaoPojo = new BedragAccountingDaoPojo(bedragAccountingCtrlPojo);
+        bedragAccountingDao.save(bedragAccountingDaoPojo);
+
+        return findBedragAccounting(bedragAccountingCtrlPojo.getBedrag().getPk_id());
+    }
+
+    @RequestMapping(value = "/json/accounting/delete")
+    @Transactional
+    public @ResponseBody List<BedragAccountingCtrlPojo> deleteBedragAccounting(@RequestBody BedragAccountingCtrlPojo bedragAccountingCtrlPojo) throws ParseException {
+
+        BedragAccountingDaoPojo bedragAccountingDaoPojo = new BedragAccountingDaoPojo(bedragAccountingCtrlPojo);
+        bedragAccountingDao.delete(bedragAccountingDaoPojo);
+
+        return findBedragAccounting(bedragAccountingCtrlPojo.getBedrag().getPk_id());
+    }
 
     @RequestMapping(value = "/json/accounting/monthlyValues/{year}")
     public @ResponseBody Map getMonthlyValues(@PathVariable Integer year){

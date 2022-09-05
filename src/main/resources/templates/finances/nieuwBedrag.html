@@ -110,9 +110,17 @@
                 </table>
             </div>
             <div th:if="${@userInfo.invoiceType.type} != ${personal}">
+                <div class="col-lg-12">
+                    <form class="form-horizontal" ng-submit="newAccounting()">
+                        <div class="col-lg-1">
+                            <input class="btn btn-primary" type="submit" value="New Accounting Code"/>
+                        </div>
+                    </form>
+                </div>
                 <table st-safe-src="bedragAccounting" st-table="emptyBedragAccounting" class="table table-striped table-hover ">
                     <thead>
                     <tr class="row">
+                        <th/>
                         <th st-sort="datum">Datum</th>
                         <th st-sort="datum">Bedrag</th>
                         <th st-sort="datum">Account Code</th>
@@ -125,6 +133,7 @@
                     </thead>
                     <tbody>
                     <tr class="row" ng-repeat="bedragAccount in emptyBedragAccounting" ng-class="{'text-success': bedragAccount.correctGroep == true, 'text-danger': bedragAccount.needsToMove == true}">
+                        <td><a ng-click="loadAccounting(bedragAccount.pkId)">Edit</a></td>
                         <td>{{bedragAccount.datum}}</td>
                         <td>{{bedragAccount.accountBedrag}}</td>
                         <td>{{bedragAccount.accountCode}}</td>
@@ -166,9 +175,60 @@
                 </div>
             </div>
 
+            <div id="dialogAccounting" class="modal-dialog" title="Accounting">
+                <div class="col-lg-12">
+                    <label for="inputAccountBedrag" class="col-lg-4 control-label">Bedrag</label>
+                    <div class="col-lg-2">
+                        <input placeholder="Bedrag" class="form-control" id="inputAccountBedrag" ng-model="accounting.accountBedrag" type="text"/>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <label for="inputDate" class="col-lg-4 control-label">Datum</label>
+                    <div class="col-lg-2">
+                        <input data-provide="datepicker" data-date-format="yyyy-mm-dd" placeholder="Datum" class="form-control" id="inputDate" ng-model="accounting.datum" type="text"/>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <label for="inputAccountCode" class="col-lg-4 control-label">Account Code</label>
+                    <div class="col-lg-6">
+                        <input list="accountCodes" placeholder="Account Code" class="form-control" id="inputAccountCode" ng-model="accounting.accountCode" type="text"/>
+                        <datalist id ="accountCodes">
+                            <option ng-repeat="value in accountCodes" value="{{value.codeId}}">{{value.description}}</option>
+                        </datalist>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <label for="inputAccountOmschrijving" class="col-lg-4 control-label">Omschrijving</label>
+                    <div class="col-lg-6">
+                        <input placeholder="Omschrijving" class="form-control" id="inputAccountOmschrijving" ng-model="accounting.omschrijving" type="text"/>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <label for="inputCustomerName" class="col-lg-4 control-label">Customer Name</label>
+                    <div class="col-lg-6">
+                        <input placeholder="Customer Name" class="form-control" id="inputCustomerName" ng-model="accounting.customerName" type="text"/>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <label for="inputVatNumber" class="col-lg-4 control-label">Vat Number</label>
+                    <div class="col-lg-6">
+                        <input placeholder="Vat Number" class="form-control" id="inputVatNumber" ng-model="accounting.vatNumber" type="text"/>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <label for="inputTaxDescription" class="col-lg-4 control-label">Tax Description</label>
+                    <div class="col-lg-6">
+                        <input placeholder="Tax Description" class="form-control" id="inputTaxDescription" ng-model="accounting.taxDescription" type="text"/>
+                    </div>
+                </div>
+            </div>
+
             <script th:inline="javascript">
                 $(function() {
                     $( "#dialogChooseGroep" ).hide();
+                });
+                $(function() {
+                    $( "#dialogAccounting" ).hide();
                 });
 
                 app.controller("fController", function($scope, $http) {
@@ -212,6 +272,16 @@
 
                     $scope.linkedGroeps = [];
 
+                    $scope.$watch( "bedrag", function( newObj, oldObj ) {
+                        if (newObj){
+                            const datum = new Date(newObj.datum);
+                            var url = /*[[@{/json/account_codes}]]*/;
+                            $http.get(url + "/" + datum.getFullYear()).success( function(data){
+                                $scope.accountCodes = data;
+                            });
+                        }
+                    }, false);
+
                     $scope.moveBedragAccountingPopup = (function(bedragAccount){
                         $scope.linkedGroeps = bedragAccount.linkedGroepenByAccountCode;
                         $('#dialogChooseGroep').dialog({
@@ -231,6 +301,67 @@
                         });
                         $( "#dialogChooseGroep" ).dialog("close");
                     });
+
+                    $scope.newAccounting = function(){
+                        $scope.accounting = {
+                            pkId: null,
+                            bedrag: $scope.bedrag,
+                            datum: null,
+                            accountCode: null,
+                            accountBedrag: null,
+                            omschrijving: null,
+                            customerName: null,
+                            vatNumber: null,
+                            taxDescription: null,
+                        }
+                        $('#dialogAccounting').dialog({
+                            title: "Accounting",
+                            width: 1000,
+                            buttons: { "Save": function() {
+                                    $scope.saveAccounting($scope.accounting);
+                                    $( "#dialogChooseGroep" ).dialog("save");
+                                }, "Cancel": function() {
+                                    $( "#dialogAccounting" ).dialog("close");
+                                }}
+                        }).prev(".ui-dialog-titlebar").css("background","#bf3e11");
+                    }
+
+                    $scope.loadAccounting = function(accountingId){
+                        $scope.bedragAccounting.forEach(function(value) {
+                            if (value.pkId === accountingId){
+                                $scope.accounting = JSON.parse(JSON.stringify(value));
+                            }
+                        });
+                        $('#dialogAccounting').dialog({
+                            title: "Accounting",
+                            width: 1000,
+                            buttons: { "Save": function() {
+                                    $scope.saveAccounting($scope.accounting);
+                                    $( "#dialogAccounting" ).dialog("close");
+                                }, "Cancel": function() {
+                                    $( "#dialogAccounting" ).dialog("close");
+                                }, "Delete": function() {
+                                    $scope.deleteAccounting($scope.accounting);
+                                    $( "#dialogAccounting" ).dialog("close");
+                                }}
+                        }).prev(".ui-dialog-titlebar").css("background","#bf3e11");
+                    }
+
+                    $scope.deleteAccounting = function(accounting) {
+                        var url = /*[[@{/json/accounting/delete}]]*/;
+                        $http.post(url, accounting).success(function (data) {
+                            $scope.bedragAccounting = data;
+                            $("#dialogAccounting").dialog("close");
+                        });
+                    }
+
+                    $scope.saveAccounting = function(accounting){
+                        var url = /*[[@{/json/accounting/save}]]*/;
+                        $http.post(url, accounting).success( function(data){
+                            $scope.bedragAccounting = data;
+                            $( "#dialogAccounting" ).dialog("close");
+                        });
+                    }
 
                     $http.get(/*[[@{/json/personen}]]*/).success( function(data){
                        $scope.personen = data;
