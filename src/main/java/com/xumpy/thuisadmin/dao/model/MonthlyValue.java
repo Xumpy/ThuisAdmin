@@ -9,4 +9,5 @@ public interface MonthlyValue {
     public String getDatum();
     public BigDecimal getBedrag();
     public String getMainGroup();
+    public Integer getBedragId();
 }

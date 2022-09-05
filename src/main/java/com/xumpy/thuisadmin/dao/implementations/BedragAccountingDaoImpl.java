@@ -25,7 +25,8 @@ public interface BedragAccountingDaoImpl extends CrudRepository<BedragAccounting
             "   description as description," +
             "   ta_bedrag_accounting.datum as datum," +
             "   abs(sum(ta_bedrag_accounting.bedrag)) as bedrag," +
-            "   ta_code_hoofd_groep.name as mainGroup" +
+            "   ta_code_hoofd_groep.name as mainGroup," +
+            "   ta_bedrag_accounting.fk_bedrag_id as bedragId" +
             " from ta_code_type_groep " +
             "join ta_code_hoofd_groep" +
             "  on (ta_code_type_groep.fk_code_hoofd_groep_id = ta_code_hoofd_groep.pk_id)" +
@@ -38,7 +39,8 @@ public interface BedragAccountingDaoImpl extends CrudRepository<BedragAccounting
             " ta_code_type_groep.description, " +
             " ta_bedrag_accounting.datum, " +
             " ta_code_hoofd_groep.name," +
-            " month(ta_bedrag_accounting.datum)" +
+            " month(ta_bedrag_accounting.datum)," +
+            " ta_bedrag_accounting.fk_bedrag_id " +
             "order by code_id," +
             " month(ta_bedrag_accounting.datum)",
             nativeQuery = true)

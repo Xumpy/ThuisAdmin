@@ -38,6 +38,7 @@
                                     <table st-safe-src="value['detail']" st-table="emptyDetailOmzet" class="table table-striped table-hover ">
                                         <thead>
                                         <tr>
+                                            <th/>
                                             <th st-sort="description">description</th>
                                             <th st-sort="datum">datum</th>
                                             <th st-sort="bedrag">bedrag</th>
@@ -45,6 +46,7 @@
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="detail in emptyDetailOmzet">
+                                                <td><a href="nieuwBedrag/{{detail.bedragId}}">Edit</a></td>
                                                 <td>{{detail.description}}</td>
                                                 <td>{{detail.datum}}</td>
                                                 <td>{{detail.bedrag}}</td>
@@ -80,6 +82,7 @@
                                     <table st-safe-src="value['detail']" st-table="emptyDetailBedrijfslasten" class="table table-striped table-hover ">
                                         <thead>
                                         <tr>
+                                            <th/>
                                             <th st-sort="description">description</th>
                                             <th st-sort="datum">datum</th>
                                             <th st-sort="bedrag">bedrag</th>
@@ -87,6 +90,7 @@
                                         </thead>
                                         <tbody>
                                         <tr ng-repeat="detail in emptyDetailBedrijfslasten">
+                                            <td><a href="/finances/nieuwBedrag/{{detail.bedragId}}">Bedrag</a></td>
                                             <td>{{detail.description}}</td>
                                             <td>{{detail.datum}}</td>
                                             <td>{{detail.bedrag}}</td>
