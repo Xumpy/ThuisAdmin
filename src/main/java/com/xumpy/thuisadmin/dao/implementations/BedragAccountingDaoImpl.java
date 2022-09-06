@@ -24,10 +24,10 @@ public interface BedragAccountingDaoImpl extends CrudRepository<BedragAccounting
             "   code_id as codeId," +
             "   description as description," +
             "   ta_bedrag_accounting.datum as datum," +
-            "   abs(sum(ta_bedrag_accounting.bedrag)) as bedrag," +
+            "   sum(if(ta_code_type_groep.negatief = 1, ta_bedrag_accounting.bedrag, ta_bedrag_accounting.bedrag * -1)) as bedrag," +
             "   ta_code_hoofd_groep.name as mainGroup," +
             "   ta_bedrag_accounting.fk_bedrag_id as bedragId" +
-            " from ta_code_type_groep " +
+            " from (select distinct code_id, description, fk_code_hoofd_groep_id, year, negatief from ta_code_type_groep) ta_code_type_groep " +
             "join ta_code_hoofd_groep" +
             "  on (ta_code_type_groep.fk_code_hoofd_groep_id = ta_code_hoofd_groep.pk_id)" +
             "join ta_bedrag_accounting " +
