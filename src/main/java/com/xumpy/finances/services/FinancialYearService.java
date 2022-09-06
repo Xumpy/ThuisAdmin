@@ -230,15 +230,37 @@ public class FinancialYearService {
         return monthlyCodeIds;
     }
 
-    private List<MonthlyValue> extractDetails(List<MonthlyValue> monthlyValues, String mainGroup){
-        List<MonthlyValue> detail = new ArrayList<>();
-        for(MonthlyValue monthlyValue: monthlyValues){
-            if (monthlyValue.getMainGroup().equals(mainGroup)){
-                Map<String, BigDecimal> value = new HashMap<>();
-                value.put(monthlyValue.getDescription(), monthlyValue.getBedrag());
-                detail.add(monthlyValue);
+    private List<Map<String, Object>> extractDetails(List<MonthlyValue> monthlyValues, String mainGroup){
+        List<Integer> distinctCodeIds = new ArrayList<>();
+        List<Map<String, Object>> detail = new ArrayList<>();
+
+        for(MonthlyValue monthlyValue: monthlyValues) {
+            if (monthlyValue.getMainGroup().equals(mainGroup)) {
+                if (!distinctCodeIds.contains(monthlyValue.getCodeId())) {
+                    distinctCodeIds.add(monthlyValue.getCodeId());
+                }
             }
         }
+
+        for(Integer codeId: distinctCodeIds){
+            Map<String, Object> codeMap = new HashMap<>();
+            List<MonthlyValue> details = new ArrayList<>();
+            codeMap.put("sum", new BigDecimal(0));
+            codeMap.put("details", details);
+
+            for(MonthlyValue monthlyValue: monthlyValues) {
+                if (monthlyValue.getCodeId().equals(codeId)){
+                    BigDecimal sum = (BigDecimal) codeMap.get("sum");
+                    sum = sum.add(monthlyValue.getBedrag());
+                    codeMap.put("sum", sum);
+                    codeMap.put("codeId", codeId);
+                    codeMap.put("description", monthlyValue.getDescription());
+                    details.add(monthlyValue);
+                }
+            }
+            detail.add(codeMap);
+        }
+
         return detail;
     }
 

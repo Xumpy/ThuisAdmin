@@ -35,21 +35,12 @@
                             </tr>
                             <tr class="collapse multi-collapse" id="{{ 'accordionOmzet' + $index }}" data-parent="#accordionOmzet">
                                 <td colspan="2">
-                                    <table st-safe-src="value['detail']" st-table="emptyDetailOmzet" class="table table-striped table-hover ">
-                                        <thead>
-                                        <tr>
-                                            <th/>
-                                            <th st-sort="description">description</th>
-                                            <th st-sort="datum">datum</th>
-                                            <th st-sort="bedrag">bedrag</th>
-                                        </tr>
-                                        </thead>
+                                    <table class="table table-striped table-hover ">
                                         <tbody>
-                                            <tr ng-repeat="detail in emptyDetailOmzet">
-                                                <td><a href="nieuwBedrag/{{detail.bedragId}}">Edit</a></td>
+                                            <tr ng-repeat="detail in value.detail">
+                                                <td><a ng-click="openAccountDetails(detail)">Open</a></td>
                                                 <td>{{detail.description}}</td>
-                                                <td>{{detail.datum}}</td>
-                                                <td>{{detail.bedrag}}</td>
+                                                <td>{{detail.sum}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -79,21 +70,12 @@
                             </tr>
                             <tr class="collapse multi-collapse" id="{{ 'accordionBedrijfslasten' + $index }}" data-parent="#accordionBedrijfslasten">
                                 <td colspan="2">
-                                    <table st-safe-src="value['detail']" st-table="emptyDetailBedrijfslasten" class="table table-striped table-hover ">
-                                        <thead>
-                                        <tr>
-                                            <th/>
-                                            <th st-sort="description">description</th>
-                                            <th st-sort="datum">datum</th>
-                                            <th st-sort="bedrag">bedrag</th>
-                                        </tr>
-                                        </thead>
+                                    <table class="table table-striped table-hover ">
                                         <tbody>
-                                        <tr ng-repeat="detail in emptyDetailBedrijfslasten">
-                                            <td><a href="/finances/nieuwBedrag/{{detail.bedragId}}">Bedrag</a></td>
+                                        <tr ng-repeat="detail in value.detail">
+                                            <td><a ng-click="openAccountDetails(detail)">Open</a></td>
                                             <td>{{detail.description}}</td>
-                                            <td>{{detail.datum}}</td>
-                                            <td>{{detail.bedrag}}</td>
+                                            <td>{{detail.sum}}</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -126,6 +108,27 @@
                 <div class="col-lg-8" id="resultaten"></div>
             </div>
 
+            <div id="dialogAccountDetails" class="modal-dialog" title="Account Details">
+                <div class="12">
+                    <h3>{{accountDetails.description}}</h3>
+                    <table class="table table-striped table-hover ">
+                        <thead>
+                        <tr>
+                            <th/>
+                            <th st-sort="datum">datum</th>
+                            <th st-sort="bedrag">bedrag</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="accountDetail in accountDetails.details">
+                            <td><a href="/finances/nieuwBedrag/{{accountDetail.bedragId}}">Open</a></td>
+                            <td>{{accountDetail.datum}}</td>
+                            <td>{{accountDetail.bedrag}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
             <script th:inline="javascript">
                 $(".datepicker").datepicker( {
@@ -178,6 +181,10 @@
                 }
 
                 app.controller("fController", function($scope, $http) {
+                    $(function() {
+                        $( "#dialogAccountDetails" ).hide();
+                    });
+
                     $scope.model = {
                         startDate: 2021
                     }
@@ -207,6 +214,17 @@
                         drawChartBedrijfslasten(data);
                         drawChartResultaten(data);
                     });
+
+                    $scope.openAccountDetails = function(details){
+                        $scope.accountDetails = details;
+                        $('#dialogAccountDetails').dialog({
+                            title: "Account Details",
+                            width: 1000,
+                            buttons: { "Ok": function() {
+                                    $( "#dialogAccountDetails" ).dialog("close");
+                                }}
+                        }).prev(".ui-dialog-titlebar").css("background","#bf3e11");
+                    }
 
                     $scope.retrieveYear = function(){
                         var url_financial_year = /*[[@{/json/accounting/monthlyValues/}]]*/;
