@@ -3,11 +3,6 @@
         <div layout:fragment="content">
             <div class="col-lg-12">
                 <div class="col-lg-2">
-                    <form class="form-horizontal" ng-submit="retrieveYear()">
-                        <input class="btn btn-primary" type="submit" value="Retrieve Yaer"/>
-                    </form>
-                </div>
-                <div class="col-lg-2">
                     <a class="btn btn-primary"  href="accountingCodes/{{model.startDate}}">Account Codes</a>
                 </div>
             </div>
@@ -186,8 +181,14 @@
                     });
 
                     $scope.model = {
-                        startDate: 2021
+                        startDate: /*[[${year}]]*/
                     }
+
+                    $scope.$watch( 'model.startDate', function( newObj, oldObj ) {
+                        if (newObj !== oldObj){
+                            $scope.retrieveYear();
+                        }
+                    }, false);
 
                     $scope.toggle = function(id){
                         if ($("#" + id).hasClass("in")){

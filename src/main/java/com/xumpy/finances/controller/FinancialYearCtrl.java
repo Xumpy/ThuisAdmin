@@ -183,6 +183,7 @@ public class FinancialYearCtrl {
 
     @RequestMapping(value = "/json/accounting/monthlyValues/{year}")
     public @ResponseBody Map getMonthlyValues(@PathVariable Integer year){
+        accountController.setYear(year);
         return financialYearService.returnedAccountingValues(year);
     }
 }

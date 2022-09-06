@@ -25,10 +25,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class AccountController {
@@ -39,13 +36,37 @@ public class AccountController {
     @Autowired DocumentProviderDocumentsImpl documentProviderDocumentsImpl;
     @Autowired AccountService accountService;
 
+    private Integer year;
+
+    public void setYear(Integer year){
+        this.year = year;
+    }
+
+    public AccountController(){
+        year = Calendar.getInstance().get(Calendar.YEAR);
+    }
+
     @RequestMapping(value = "/accounting/accountingModel")
-    public String viewAccountingModel(){
+    public String viewAccountingModel(Model model){
+        model.addAttribute("year", year);
+
         return "finances/accountingModel";
     }
 
+    @RequestMapping(value = "/accounting/setyear/{year}")
+    public String setYear(@PathVariable Integer year, Model model){
+        this.year = year;
+
+        model.addAttribute("year", year);
+
+        return "finances/accountingCodes";
+    }
+
+
     @RequestMapping(value = "/accounting/accountingCodes/{year}")
     public String viewAccountingCodes(@PathVariable Integer year, Model model){
+        this.year = year;
+
         model.addAttribute("year", year);
 
         return "finances/accountingCodes";

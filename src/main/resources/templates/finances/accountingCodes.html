@@ -162,9 +162,9 @@
             }
 
             $scope.openAcountCodes = function(hoofdCode){
+                $scope.hoofdCode = hoofdCode;
                 var url = /*[[@{/json/account_codes}]]*/;
                 $http.get(url + "/" + $scope.year + "/" + hoofdCode.pkId).success( function(data){
-                    $scope.hoofdCode = hoofdCode;
                     $scope.accountCodes = data;
                 });
 
