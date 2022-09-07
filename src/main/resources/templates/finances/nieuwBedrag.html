@@ -272,13 +272,15 @@
 
                     $scope.linkedGroeps = [];
 
-                    $scope.$watch( "bedrag", function( newObj, oldObj ) {
+                    $scope.$watch( "accounting.datum", function( newObj, oldObj ) {
                         if (newObj){
-                            const datum = new Date(newObj.datum);
-                            var url = /*[[@{/json/account_codes}]]*/;
-                            $http.get(url + "/" + datum.getFullYear()).success( function(data){
-                                $scope.accountCodes = data;
-                            });
+                            const datum = new Date(newObj);
+                            if (!oldObj || (datum.getFullYear() !== new Date(oldObj).getFullYear())){
+                                var url = /*[[@{/json/account_codes}]]*/;
+                                $http.get(url + "/" + datum.getFullYear()).success( function(data){
+                                    $scope.accountCodes = data;
+                                });
+                            }
                         }
                     }, false);
 
