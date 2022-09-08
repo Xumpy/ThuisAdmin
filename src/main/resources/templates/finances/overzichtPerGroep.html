@@ -28,9 +28,12 @@
             <div>
                 <div id="ex0" class="col-lg-6"></div>
 
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                     <input class="form-control" id="beginDatum" placeholder="Search"
                                type="text" ng-model="filterReport.searchTekst"/>
+                </div>
+                <div class="col-lg-2">
+                    <a class="btn btn-primary" ng-click="createPdfOverviewAmmounts()">Print PDF</a>
                 </div>
                 <div class="col-lg-6">
                     <table st-safe-src="reportGroepBedragenTotal.overzichtGroepBedragen" st-table="emptyGroepBedragen" class="table table-striped table-hover ">
@@ -90,6 +93,23 @@
                             $scope.submitGraphiekData();
                         }
                     });
+
+                    $scope.createPdfOverviewAmmounts = function(){
+                        var url =/*[[@{/json/pdf_overview_bedragen}]]*/;
+                        $http.post(url, $scope.reportGroepBedragenTotal.overzichtGroepBedragen).error( function(){
+                            bootbox.alert("Error occured during setting security keys");
+                        }).success(function (data) {
+                            var byteCharacters = atob(data);
+                            var byteNumbers = new Array(byteCharacters.length);
+                            for (var i = 0; i < byteCharacters.length; i++) {
+                                byteNumbers[i] = byteCharacters.charCodeAt(i);
+                            }
+                            var byteArray = new Uint8Array(byteNumbers);
+                            var file = new Blob([byteArray], { type: 'application/pdf;base64' });
+                            var fileURL = URL.createObjectURL(file);
+                            window.open(fileURL);
+                        });
+                    }
 
                     $scope.overzichtGroepBedragen = {
                         typeGroepId: "",
