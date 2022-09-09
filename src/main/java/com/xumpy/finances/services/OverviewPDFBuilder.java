@@ -53,9 +53,9 @@ public class OverviewPDFBuilder {
 
         for(OverzichtGroepBedragen overzichtGroepBedrag: overzichtGroepBedragen){
             PdfPCell datum = new PdfPCell(new Paragraph(overzichtGroepBedrag.getDatum()));
-            PdfPCell amount = new PdfPCell(new Paragraph(overzichtGroepBedrag.getBedrag().setScale(0, RoundingMode.HALF_UP).toString()));
+            PdfPCell amount = new PdfPCell(new Paragraph(overzichtGroepBedrag.getBedrag().setScale(2, RoundingMode.HALF_UP).toString()));
             PdfPCell description = new PdfPCell(new Paragraph(overzichtGroepBedrag.getOmschrijving()));
-            PdfPCell documentAvailable = new PdfPCell(new Paragraph(mappedDocuments.get(overzichtGroepBedrag.getPk_id()).isEmpty() ? "X": "/"));
+            PdfPCell documentAvailable = new PdfPCell(new Paragraph(mappedDocuments.get(overzichtGroepBedrag.getPk_id()).isEmpty() ? "No": "Yes"));
 
             table.addCell(datum);
             table.addCell(amount);
