@@ -291,7 +291,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
 
     @Override
     @Transactional
-    public BeheerBedragenReportLst reportBedragen(BeheerBedragenReportLst beheerBedragenReportLst, Integer offset, Rekeningen rekening, String searchText, Boolean validAccountyBedrag, Boolean invalidAccouting) {
+    public BeheerBedragenReportLst reportBedragen(BeheerBedragenReportLst beheerBedragenReportLst, Integer offset, Rekeningen rekening, String searchText, Boolean noDocumentsInDP, Boolean invalidAccouting) {
         
         searchText = StringUtils.isEmpty(searchText) ? null : "%" + searchText + "%";
         
@@ -307,14 +307,14 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         }
 
         if (invalidAccouting) {
-            for (Bedragen bedrag: bedragenDao.reportBedragenNoAccounting(rekeningId, searchText, userInfo.getPersoon().getPk_id(),
+            for (Bedragen bedrag: bedragenDao.reportInvalidAccounting(rekeningId, searchText, userInfo.getPersoon().getPk_id(),
                     userInfo.getInvoiceType().equals(InvoiceType.PROFESSIONAL) ? Boolean.TRUE :
                             userInfo.getInvoiceType().equals(InvoiceType.PERSONAL) ? Boolean.FALSE : null, topTen).getContent()){
 
                 beheerBedragenReport.add(new BeheerBedragenReport(bedrag, isAccountancyBedragValid(bedrag), findPrioDocumentId(bedrag.getPk_id())));
             }
-        } else if (validAccountyBedrag){
-            for (Bedragen bedrag: bedragenDao.reportInValidAccountantBedragen(rekeningId, searchText, userInfo.getPersoon().getPk_id(),
+        } else if (noDocumentsInDP){
+            for (Bedragen bedrag: bedragenDao.reportNoDocumentsInDP(rekeningId, searchText, userInfo.getPersoon().getPk_id(),
                     userInfo.getInvoiceType().equals(InvoiceType.PROFESSIONAL) ? Boolean.TRUE :
                             userInfo.getInvoiceType().equals(InvoiceType.PERSONAL) ? Boolean.FALSE : null, topTen).getContent()){
                 beheerBedragenReport.add(new BeheerBedragenReport(bedrag, isAccountancyBedragValid(bedrag), findPrioDocumentId(bedrag.getPk_id())));

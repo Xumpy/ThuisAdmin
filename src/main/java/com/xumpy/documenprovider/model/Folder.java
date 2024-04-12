@@ -1,7 +1,7 @@
 package com.xumpy.documenprovider.model;
 
 public enum Folder {
-    Overig(0),
+    Overig(1),
     Aankoop(1),
 	Verkoop(2),
 	Bank(3),
@@ -20,7 +20,7 @@ public enum Folder {
         this.ordner = ordner;
     }
 
-    public Integer getOrdner(){
+	public Integer getOrdner(){
     	return ordner;
 	}
 

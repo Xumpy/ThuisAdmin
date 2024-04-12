@@ -46,9 +46,10 @@ public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer
             + "  and (:rekeningId is null or rekening.pk_id = :rekeningId)"
             + "  and coalesce(coalesce(:professional, rekening.professional), 0) = coalesce(rekening.professional, 0)"
             + "  and groep.pk_id not in (select groep.pk_id from GroepCodesDaoPojo where codeId = 'INTER_REKENING') "
-            + "  and (select count(1) from BedragAccountingDaoPojo bedragAccountingDaoPojo"
-            + " where bedragAccountingDaoPojo.bedrag.pk_id = bedragen.pk_id "
-            + "   and bedragAccountingDaoPojo.accountCode in (select codeId from GroepCodesDaoPojo where groep.pk_id = bedragen.groep.pk_id)) = 0"
+            + "  and (select count(1) from DocumentenDaoPojo documentenDaoPojo "
+            + " where documentenDaoPojo.bedrag.pk_id = bedragen.pk_id) > 0"
+            + "  and (select count(1) from BedragAccountingDaoPojo bedragAccounting "
+            + " where bedragAccounting.bedrag.pk_id = bedragen.pk_id) = 0"
             + "  and (:searchText is null or lower(groep.naam) like :searchText " +
             "  or lower(rekening.naam) like :searchText " +
             "  or lower(persoon.naam) like :searchText " +
@@ -57,11 +58,11 @@ public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer
             "  or cast(datum as string) like :searchText " +
             "  or lower(omschrijving) like :searchText)" +
             "  order by datum desc")
-    public Slice<BedragenDaoPojo> reportBedragenNoAccounting(@Param("rekeningId") Integer rekeningId,
-                                                             @Param("searchText") String searchText,
-                                                             @Param("persoonId") Integer persoonId,
-                                                             @Param("professional") Boolean professional,
-                                                             Pageable pageable);
+    public Slice<BedragenDaoPojo> reportInvalidAccounting(@Param("rekeningId") Integer rekeningId,
+                                                          @Param("searchText") String searchText,
+                                                          @Param("persoonId") Integer persoonId,
+                                                          @Param("professional") Boolean professional,
+                                                          Pageable pageable);
 
     @Query("from BedragenDaoPojo bedragen where persoon.pk_id = :persoonId "
             + "  and (:rekeningId is null or rekening.pk_id = :rekeningId)"
@@ -86,11 +87,11 @@ public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer
             "  or cast(datum as string) like :searchText " +
             "  or lower(omschrijving) like :searchText)" +
             "  order by datum desc")
-    public Slice<BedragenDaoPojo> reportInValidAccountantBedragen(@Param("rekeningId") Integer rekeningId,
-                                                 @Param("searchText") String searchText,
-                                                 @Param("persoonId") Integer persoonId,
-                                                 @Param("professional") Boolean professional,
-                                                 Pageable pageable);
+    public Slice<BedragenDaoPojo> reportNoDocumentsInDP(@Param("rekeningId") Integer rekeningId,
+                                                        @Param("searchText") String searchText,
+                                                        @Param("persoonId") Integer persoonId,
+                                                        @Param("professional") Boolean professional,
+                                                        Pageable pageable);
 
     @Query("from BedragenDaoPojo where (datum >= :startDate and datum <= :endDate) and groep.pk_id in (select groep.pk_id from GovernmentCostTypeDaoPojo where type = :levelType)")
     public List<BedragenDaoPojo> allBedragenInCostType(@Param("startDate") Date startDate,

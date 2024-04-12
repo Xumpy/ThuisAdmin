@@ -1,5 +1,6 @@
 package com.xumpy.documenprovider.services.implementations.mail.odata;
 
+import com.xumpy.documenprovider.services.implementations.exceptions.ExactOnlineDocumentNotFound;
 import com.xumpy.documenprovider.services.implementations.mail.odata.handler.ExactCookie;
 import com.xumpy.documenprovider.services.implementations.exceptions.PinNotValidException;
 import com.xumpy.documenprovider.model.DPDocument;
@@ -43,7 +44,7 @@ public class ExecuteCallExactOnline {
         this.userAgent = userAgent;
     }
 
-    private HttpHeaders buildHttpHeaders(Boolean refreshCookie) throws PinNotValidException {
+    private HttpHeaders buildHttpHeaders(Boolean refreshCookie){
         //if (refreshCookie) exactCookie.fetchCookie(baseUrl, userAgent,username, password, authKey);
 
         HttpHeaders headers = new HttpHeaders();
@@ -54,7 +55,7 @@ public class ExecuteCallExactOnline {
         return headers;
     }
 
-    private Map executeCall(String url) throws PinNotValidException {
+    private Map executeCall(String url){
         RestTemplate restTemplate = new RestTemplate();
 
         ParameterizedTypeReference<HashMap<String, Object>> responseType =
@@ -79,9 +80,47 @@ public class ExecuteCallExactOnline {
         return new Date(Long.parseLong(dateValue));
     }
 
-    public List<DPDocument> fetchDocumentsByPrice(Bedragen bedragen) throws PinNotValidException {
+    private String findDocumentId(List<String> documentIds, List<DPDocument> dpDocuments, Integer size, BigDecimal amount) throws ExactOnlineDocumentNotFound {
+        List<String> matchedDocuments = new ArrayList<>();
+
+        for(DPDocument document: dpDocuments){
+            for(String documentId: documentIds){
+                if (document.getGuid().equals(documentId)){
+                    matchedDocuments.add(documentId);
+                }
+            }
+        }
+
+        if(matchedDocuments.size() == 1){
+            return matchedDocuments.get(0);
+        }
+        throw new ExactOnlineDocumentNotFound("No match found for document with size: " + size + " with an amount of: " + amount.setScale(2, RoundingMode.HALF_UP).toString());
+    }
+
+    public String findDocumentIdExactOnline(Integer fileSize, BigDecimal amount) throws ExactOnlineDocumentNotFound {
+        List<String> documents = fetchDocumentIdsBySize(fileSize);
+        if (documents.size() == 1){
+            return documents.get(0);
+        }
+        List<DPDocument> dpDocuments = fetchDocumentsByPrice(amount);
+
+        return findDocumentId(documents, dpDocuments, fileSize, amount);
+    }
+
+    private List<String> fetchDocumentIdsBySize(Integer size) {
+        List<String> documentIds = new ArrayList<>();
+        String url = urlBuilder("Documents/DocumentAttachments", "FileSize eq " + size, "Document");
+
+        for(Map<String, Object> result: getResults(executeCall(url))) {
+            documentIds.add(result.get("Document").toString());
+        }
+
+        return documentIds;
+    }
+
+    private List<DPDocument> fetchDocumentsByPrice(BigDecimal amount) {
         List<DPDocument> documents = new ArrayList<>();
-        String url = urlBuilder("documents/Documents", "AmountFC eq " + bedragen.getBedrag().setScale(2, RoundingMode.HALF_UP).toString(), "ID, Subject, DocumentDate, AmountFC, FinancialTransactionEntryID");
+        String url = urlBuilder("documents/Documents", "AmountFC eq " + amount.setScale(2, RoundingMode.HALF_UP).toString(), "ID, Subject, DocumentDate, AmountFC, FinancialTransactionEntryID");
         for(Map<String, Object> result: getResults(executeCall(url))){
             DPDocument document = new DPDocument();
 
@@ -97,16 +136,27 @@ public class ExecuteCallExactOnline {
         return documents;
     }
 
+    public List<DPDocument> fetchDocumentsByPrice(Bedragen bedragen) {
+        return fetchDocumentsByPrice(bedragen.getBedrag());
+    }
+
     public List<BedragAccountingSrvPojo> getBedragAccounting(String documentsGuid, BedragenSrvPojo bedragenSrvPojo) throws PinNotValidException {
         String url = urlBuilder("documents/Documents", "ID eq guid'" + documentsGuid + "'", "FinancialTransactionEntryID");
         String entryId = ((Map) getResults(executeCall(url)).get(0)).get("FinancialTransactionEntryID").toString();
 
-        url = urlBuilder("financialtransaction/TransactionLines", "EntryID eq guid'" + entryId + "'", "YourRef");
-        String yourRef = ((Map) getResults(executeCall(url)).get(0)).get("YourRef").toString();
-
+        List<Map<String, Object>> results = new ArrayList<>();
         List<BedragAccountingSrvPojo> bedragAccountingSrvPojos = new ArrayList<>();
-        url = urlBuilder("financialtransaction/TransactionLines", "YourRef eq '" + yourRef + "'", "GLAccountCode,AccountName,Created,DocumentSubject,AmountFC,EntryID,VATCode,VATCodeDescription");
-        for(Map<String, Object> result: getResults(executeCall(url))){
+        try{
+            url = urlBuilder("financialtransaction/TransactionLines", "EntryID eq guid'" + entryId + "'", "YourRef");
+            String yourRef = ((Map) getResults(executeCall(url)).get(0)).get("YourRef").toString();
+            url = urlBuilder("financialtransaction/TransactionLines", "YourRef eq '" + yourRef + "'", "GLAccountCode,AccountName,Created,DocumentSubject,AmountFC,EntryID,VATCode,VATCodeDescription");
+            results = getResults(executeCall(url));
+        } catch (Exception exception){
+            url = urlBuilder("financialtransaction/TransactionLines", "EntryID eq guid'" + entryId + "'", "GLAccountCode,AccountName,Created,DocumentSubject,AmountFC,EntryID,VATCode,VATCodeDescription");
+            results = getResults(executeCall(url));
+        }
+
+        for(Map<String, Object> result: results){
             BedragAccountingSrvPojo bedragAccounting = new BedragAccountingSrvPojo();
             bedragAccounting.setBedrag(bedragenSrvPojo);
             bedragAccounting.setAccountBedrag(new BigDecimal(result.get("AmountFC").toString()));

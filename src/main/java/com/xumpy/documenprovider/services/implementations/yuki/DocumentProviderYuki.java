@@ -52,7 +52,9 @@ public class DocumentProviderYuki implements DocumentProviderSrv {
     @Override
     public String process(Documenten document) {
         YukiPojo yukiPojo = yukiBuilder.build();
-        yukiPojo.setFolder(Folder.ZelfTeOrdenen);
+
+        yukiPojo.setFolder(Folder.UitzoekenYuki);
+
         if (document.getBedrag().getGroep().getCategory() != null){
             yukiPojo.getFolder().setOrdner(document.getBedrag().getGroep().getCategory());
         }
