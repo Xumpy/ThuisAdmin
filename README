@@ -1,0 +1,11 @@
+Installation of dependency:
+<dependency>
+    <groupId>com.jaspersoft.jasperreports</groupId>
+    <artifactId>jasperreports-pdf-lib7</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+</dependency>
+
+manually install: mvn install:install-file -Dfile=/c/dev/itext-2.1.7.js6.jar -DgroupId=com.lowagie -DartifactId=itext -Dversion=2.1.7.js8 -Dpackaging=jar -DgeneratePom=true
+git clone https://github.com/Jaspersoft/jasperreports-pdf-lib7
+change jasperreports-fonts => change version 6.21.3
+mvn clean install -Dmaven.buildNumber.doCheck=false

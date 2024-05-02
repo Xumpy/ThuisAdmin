@@ -14,6 +14,7 @@ import com.xumpy.thuisadmin.dao.model.BedragAccountingDaoPojo;
 import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
 import com.xumpy.thuisadmin.domain.Documenten;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import javax.xml.bind.JAXBException;
@@ -30,7 +31,7 @@ public class DocumentProviderYuki implements DocumentProviderSrv {
     @Autowired PostToYuki postToYuki;
     @Autowired GetAccountInfoFromYuki getAccountInfoFromYuki;
     @Autowired BedragenDaoImpl bedragenDao;
-    @Autowired UploadDocumentFromYuki uploadDocumentFromYuki;
+    @Autowired @Lazy UploadDocumentFromYuki uploadDocumentFromYuki;
 
     private static final Integer NO_BEDRAG_FOUND = 0;
     private static final Integer MULTIPLE_BEDRAGEN_FOUND = -1;

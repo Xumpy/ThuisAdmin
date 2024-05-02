@@ -1,6 +1,7 @@
 package com.xumpy.timesheets.controller.jasper;
 
 import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.apache.commons.io.FileUtils;
@@ -42,6 +43,8 @@ public class JasperReportsCtrl {
         params.put("SUBREPORT", "classpath:jasperreports/Invoices_detail.jasper");
         params.put("LOGO", "classpath:jasperreports/NMConsultancyLogo.png");
         params.put(JRParameter.REPORT_LOCALE, Locale.GERMANY);
+        DefaultJasperReportsContext.getInstance().setProperty(JRPdfExporter.PDF_PRODUCER_FACTORY_PROPERTY, "com.jaspersoft.jasperreports.export.pdf.modern.ModernPdfProducerFactory");
+
         JasperReport jasperReport = (JasperReport) JRLoader.loadObject(ResourceUtils.getURL("classpath:jasperreports/Invoices.jasper").openStream());
 
         response.setContentType("application/x-pdf");
