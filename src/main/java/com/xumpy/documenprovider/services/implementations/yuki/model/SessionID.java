@@ -1,7 +1,7 @@
 package com.xumpy.documenprovider.services.implementations.yuki.model;
 
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlValue;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlValue;
 
 @XmlRootElement(namespace = "http://www.theyukicompany.com/", name="string")
 public class SessionID {

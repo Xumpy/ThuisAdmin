@@ -2,8 +2,8 @@ package com.xumpy.documenprovider.dao.model;
 
 import com.xumpy.documenprovider.domain.DocumentProviderDump;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -21,12 +21,12 @@ public class DocumentProviderDumpDaoPojo implements DocumentProviderDump {
 
     @Column(name="START_DATE")
     @NotNull
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(jakarta.persistence.TemporalType.DATE)
     private Date startDate;
 
     @Column(name="END_DATE")
     @NotNull
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(jakarta.persistence.TemporalType.DATE)
     private Date endDate;
 
     @Column(name="DUMP")

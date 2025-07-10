@@ -24,12 +24,12 @@ public interface RekeningenDaoImpl extends CrudRepository<RekeningenDaoPojo, Int
     @Query("select coalesce(max(pk_id),0) + 1 as pk_id from RekeningenDaoPojo")
     public Integer getNewPkId();
 
-    @Query("from RekeningenDaoPojo where coalesce(closed, 0) !=  1 and persoon.pk_id = :persoonId")
+    @Query("from RekeningenDaoPojo where coalesce(closed, false) != true and persoon.pk_id = :persoonId")
     public List<Rekeningen> findAllOpenRekeningen(@Param("persoonId") Integer persoonId);
 
     @Query("from RekeningenDaoPojo where persoon.pk_id = :persoonId")
     public List<Rekeningen> findAllRekeningen(@Param("persoonId") Integer persoonId);
     
-    @Query("select sum(waarde) from RekeningenDaoPojo where persoon.pk_id = :persoonId and coalesce(coalesce(:professional, professional), 0) = coalesce(professional, 0)")
+    @Query("select sum(waarde) from RekeningenDaoPojo where persoon.pk_id = :persoonId and coalesce(coalesce(:professional, professional), false) = coalesce(professional, false)")
     public BigDecimal totalAllRekeningen(@Param("persoonId") Integer persoonId, @Param("professional") Boolean professional);
 }

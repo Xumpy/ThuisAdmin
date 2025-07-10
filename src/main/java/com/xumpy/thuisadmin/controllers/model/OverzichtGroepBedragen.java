@@ -5,14 +5,12 @@
  */
 package com.xumpy.thuisadmin.controllers.model;
 
-import com.xumpy.thuisadmin.dao.model.BedragenDaoPojo;
 import com.xumpy.thuisadmin.domain.Bedragen;
-import com.xumpy.thuisadmin.services.model.BedragenSrvPojo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
 /**
  *

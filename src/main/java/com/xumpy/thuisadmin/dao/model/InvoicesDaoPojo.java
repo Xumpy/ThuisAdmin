@@ -1,7 +1,7 @@
 package com.xumpy.thuisadmin.dao.model;
 
 import com.xumpy.thuisadmin.domain.Invoices;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -18,10 +18,10 @@ public class InvoicesDaoPojo implements Invoices{
     @Column(name="INVOICE_ID")
     private String invoiceId;
     @Column(name="INVOICE_DATE")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(jakarta.persistence.TemporalType.DATE)
     private Date invoiceDate;
     @Column(name="INVOICE_DUE_DATE")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(jakarta.persistence.TemporalType.DATE)
     private Date invoiceDueDate;
     @Column(name="INVOICE_REF")
     private String invoiceRef;

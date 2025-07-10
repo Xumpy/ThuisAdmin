@@ -1,7 +1,6 @@
 package com.xumpy.government.dao;
 
 import com.xumpy.government.dao.model.FinancialYearGovernmentCostTypesDaoPojo;
-import com.xumpy.government.dao.model.FinancialYearsDaoPojo;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

@@ -2,35 +2,28 @@ package com.xumpy.finances.controller;
 
 import com.itextpdf.text.DocumentException;
 import com.xumpy.documenprovider.dao.implementations.DocumentProviderDocumentsImpl;
-import com.xumpy.documenprovider.dao.implementations.DocumentProviderImpl;
 import com.xumpy.documenprovider.dao.implementations.DocumentProviderValidImpl;
 import com.xumpy.documenprovider.dao.model.DocumentProviderDocumentsDaoPojo;
 import com.xumpy.documenprovider.dao.model.DocumentProviderValidDaoPojo;
-import com.xumpy.documenprovider.domain.DocumentProvider;
 import com.xumpy.documenprovider.services.DocumentProviderSrv;
 import com.xumpy.finances.excelbuilder.ExcelZipBuilder;
 import com.xumpy.finances.services.AccountService;
 import com.xumpy.finances.services.OverviewPDFBuilder;
 import com.xumpy.thuisadmin.controllers.model.OverzichtGroepBedragen;
-import com.xumpy.thuisadmin.dao.implementations.BedragAccountingDaoImpl;
 import com.xumpy.thuisadmin.dao.model.DocumentenDaoPojo;
-import com.xumpy.thuisadmin.dao.model.MonthlyValue;
 import com.xumpy.thuisadmin.domain.Documenten;
 import com.xumpy.thuisadmin.services.DocumentenSrv;
-import com.xumpy.timesheets.dao.model.JobVatCompensationDaoPojo;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 

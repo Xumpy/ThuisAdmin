@@ -10,7 +10,7 @@ import com.xumpy.timesheets.domain.JobsGroupPrices;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  *
@@ -28,11 +28,11 @@ public class JobsGroupPricesDaoPojo implements JobsGroupPrices, Serializable{
     private JobsGroupDaoPojo jobsGroup;
     
     @Column(name="START_DATE")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(jakarta.persistence.TemporalType.DATE)
     private Date startDate;
     
     @Column(name="END_DATE")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(jakarta.persistence.TemporalType.DATE)
     private Date endDate;
     
     @Column(name="PRICE_PER_HOUR")

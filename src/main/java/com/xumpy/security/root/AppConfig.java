@@ -6,22 +6,23 @@
 package com.xumpy.security.root;
 
 import com.xumpy.security.model.UserInfo;
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class AppConfig extends WebSecurityConfigurerAdapter{
+public class AppConfig {
 
     @Bean
     @Scope(value="session", proxyMode=ScopedProxyMode.TARGET_CLASS)
@@ -29,39 +30,63 @@ public class AppConfig extends WebSecurityConfigurerAdapter{
         return new UserInfo();
     }
     
-    @Resource(name="userService") 
+    @Resource(name="userService")
     UserService userService;
-    
-    @Override 
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-            .authorizeRequests()
-                .antMatchers("/timesheets/**").hasAnyAuthority("USER")
-                .antMatchers("/accounting/**").hasAnyAuthority("USER")
-                .antMatchers("/finances/**").hasAnyAuthority("USER")
-                .antMatchers("/json/**").hasAnyAuthority("USER")
-                .antMatchers("/admin/**").hasAnyAuthority("USER")
-                .antMatchers("/government/**").hasAnyAuthority("USER")
-                .antMatchers("/register/**").permitAll()
-                .antMatchers("/resources/**").permitAll()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/styles/**").permitAll()
-                .anyRequest().authenticated()
-            .and()
-                .formLogin()
-                .usernameParameter("username")
-                .passwordParameter("password")
-                .loginPage("/login")
-                .defaultSuccessUrl("/finances/overview", true)
-                .failureUrl("/login?error")
-                .permitAll()
-            .and()
-                .logout()
-                .permitAll();
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/register/**",
+                                "/resources/**",
+                                "/login",
+                                "/styles/**"
+                        ).permitAll()
+                        .requestMatchers(
+                                "/timesheets/**",
+                                "/accounting/**",
+                                "/finances/**",
+                                "/json/**",
+                                "/admin/**",
+                                "/government/**"
+                        ).hasAnyAuthority("USER")
+                        .anyRequest().authenticated()
+                )
+
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
+                        .defaultSuccessUrl("/finances/overview", true)
+                        .failureUrl("/login?error")
+                        .permitAll()
+                )
+
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .clearAuthentication(true)
+                        .invalidateHttpSession(true)
+                        .logoutSuccessUrl("/login")
+                        .permitAll()
+                )
+
+                .userDetailsService(userService);
+
+        return http.build();
     }
-    
-    @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(new MessageDigestPasswordEncoder("MD5"));
+
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder encoder) throws Exception {
+        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        builder.userDetailsService(userService).passwordEncoder(encoder);
+        return builder.build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new MessageDigestPasswordEncoder("MD5");
     }
 }

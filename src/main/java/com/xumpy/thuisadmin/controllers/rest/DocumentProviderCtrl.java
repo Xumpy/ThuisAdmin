@@ -7,11 +7,11 @@ import com.xumpy.documenprovider.dao.model.DocumentProviderDumpDaoPojo;
 import com.xumpy.documenprovider.services.DocumentProviderSrv;
 import com.xumpy.thuisadmin.controllers.model.DocumentProviderCtrlPojo;
 import com.xumpy.thuisadmin.controllers.model.DocumentProviderDumpCtrlPojo;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;

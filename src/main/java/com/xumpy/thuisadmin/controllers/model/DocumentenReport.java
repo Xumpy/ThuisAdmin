@@ -9,8 +9,8 @@ import com.xumpy.thuisadmin.dao.model.DocumentenDaoPojo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import org.springframework.context.annotation.Scope;
 
 /**
@@ -26,6 +26,10 @@ public class DocumentenReport implements Serializable{
     private Date datum;
     private BigDecimal bedrag;
     private String omschrijving;
+
+    public DocumentenReport() {
+
+    }
 
     public Integer getPk_id() {
         return pk_id;

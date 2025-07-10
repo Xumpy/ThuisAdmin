@@ -3,7 +3,7 @@ package com.xumpy.thuisadmin.dao.model;
 import com.xumpy.thuisadmin.domain.InvoiceJobs;
 import com.xumpy.timesheets.dao.model.JobsDaoPojo;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Entity

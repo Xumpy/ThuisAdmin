@@ -2,7 +2,7 @@ package com.xumpy.thuisadmin.dao.model;
 
 import com.xumpy.thuisadmin.domain.HoofdCodes;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name="TA_CODE_HOOFD_GROEP")

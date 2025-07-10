@@ -14,12 +14,13 @@ import com.xumpy.thuisadmin.dao.implementations.PersonenDaoImpl;
 import com.xumpy.thuisadmin.services.BedragenSrv;
 import com.xumpy.thuisadmin.services.implementations.BedragenSrvImpl;
 import com.xumpy.utilities.LocalTestProfile;
-import org.apache.log4j.Logger;
 import static org.junit.Assert.assertEquals;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -48,7 +49,7 @@ public class CtrlBedragenTest {
     @Autowired
     private BedragenSrv bedragenSrv;
     
-    private static Logger log = Logger.getLogger(CtrlBedragenTest.class);
+    private static Logger log = LoggerFactory.getLogger(CtrlBedragenTest.class);
     
     @Test
     @Ignore

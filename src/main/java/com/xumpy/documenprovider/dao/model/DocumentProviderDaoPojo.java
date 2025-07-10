@@ -2,7 +2,7 @@ package com.xumpy.documenprovider.dao.model;
 
 import com.xumpy.documenprovider.domain.DocumentProvider;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name="TA_DOCUMENT_PROVIDER")

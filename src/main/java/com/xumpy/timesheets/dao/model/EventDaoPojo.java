@@ -2,7 +2,7 @@ package com.xumpy.timesheets.dao.model;
 
 import com.xumpy.timesheets.domain.Event;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity

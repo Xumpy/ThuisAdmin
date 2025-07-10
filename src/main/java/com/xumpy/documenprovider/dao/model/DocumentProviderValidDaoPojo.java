@@ -2,8 +2,8 @@ package com.xumpy.documenprovider.dao.model;
 
 import com.xumpy.documenprovider.domain.DocumentProviderValid;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -21,12 +21,12 @@ public class DocumentProviderValidDaoPojo implements DocumentProviderValid {
 
     @Column(name="DATE_FROM")
     @NotNull
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(jakarta.persistence.TemporalType.DATE)
     private Date dateFrom;
 
     @Column(name="DATE_UNTIL")
     @NotNull
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(jakarta.persistence.TemporalType.DATE)
     private Date dateUntil;
 
     @Override

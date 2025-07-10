@@ -4,8 +4,8 @@ import com.xumpy.documenprovider.domain.DocumentProviderDocuments;
 import com.xumpy.thuisadmin.dao.model.DocumentenDaoPojo;
 import com.xumpy.thuisadmin.domain.Documenten;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -31,7 +31,7 @@ public class DocumentProviderDocumentsDaoPojo implements DocumentProviderDocumen
 
     @Column(name="DATE_SENT")
     @NotNull
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(jakarta.persistence.TemporalType.DATE)
     private Date dateSent;
 
     @Override

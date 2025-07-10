@@ -5,7 +5,7 @@ import com.xumpy.government.domain.VatCompensation;
 import com.xumpy.timesheets.domain.JobVatCompensation;
 import com.xumpy.timesheets.domain.Jobs;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Entity

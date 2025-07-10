@@ -11,17 +11,16 @@ import com.xumpy.timesheets.dao.model.JobVatCompensationDaoPojo;
 import com.xumpy.timesheets.domain.JobVatCompensation;
 import com.xumpy.timesheets.services.vatcompensation.VatCompensationOverview;
 import com.xumpy.timesheets.services.vatcompensation.VatCompensationPdfBuilder;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;

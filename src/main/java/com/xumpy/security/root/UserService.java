@@ -10,9 +10,9 @@ import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.dao.model.PersonenDaoPojo;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.Session;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -42,8 +42,8 @@ public class UserService implements UserDetailsService {
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
         authorities.add(new SimpleGrantedAuthority("USER"));
 
-        Query query = session.createQuery("From PersonenDaoPojo where lower(username) = :username");
-        query.setString("username", username.toLowerCase());
+        Query query = session.createQuery("From PersonenDaoPojo where lower(username) = ?1");
+        query.setParameter(1, username.toLowerCase());
         
         PersonenDaoPojo internalPersoon = (PersonenDaoPojo)query.list().get(0);
         

@@ -19,10 +19,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer>{
 
-    @Query("select bedrag from BedragenDaoPojo where courant = 1 and groep.negatief = 1")
+    @Query("select bedrag from BedragenDaoPojo where courant = true and groep.negatief = 1")
     public List<BigDecimal> allCourantNagitveAmounts();
 
-    @Query("select bedrag from BedragenDaoPojo where courant = 1 and groep.negatief = 0")
+    @Query("select bedrag from BedragenDaoPojo where courant = true and groep.negatief = 0")
     public List<BigDecimal> allCourantPositiveAmounts();
 
     @Query("from BedragenDaoPojo bedragen where persoon.pk_id = :persoonId "
@@ -68,8 +68,8 @@ public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer
             + "  and (:rekeningId is null or rekening.pk_id = :rekeningId)"
             + "  and coalesce(coalesce(:professional, rekening.professional), 0) = coalesce(rekening.professional, 0)"
             + "  and groep.pk_id not in (select groep.pk_id from GroepCodesDaoPojo where codeId = 'INTER_REKENING') "
-            + "  and coalesce(managedByAccountant, 0) = 0 "
-            + "  and coalesce(courant, 0) = 0 "
+            + "  and coalesce(managedByAccountant, false) = false "
+            + "  and coalesce(courant, false) = false "
             + "  and (select count(1) from DocumentProviderValidDaoPojo documentProviderValid"
                 + " where (documentProviderValid.dateFrom <= bedragen.datum and coalesce(documentProviderValid.dateUntil, '9999-12-31') >= bedragen.datum)) "
             + "   > 0 "
@@ -110,12 +110,12 @@ public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer
     @Query("select coalesce(max(pk_id),0) + 1 as pk_id from BedragenDaoPojo")
     public Integer getNewPkId();
     
-    @Query("select sum( case b.groep.negatief when 1 then (b.bedrag * -1) else b.bedrag end) from BedragenDaoPojo b where datum >= :datum and b.rekening.pk_id = :rekeningId and coalesce(processed, 0) = 1")
+    @Query("select sum( case b.groep.negatief when 1 then (b.bedrag * -1) else b.bedrag end) from BedragenDaoPojo b where datum >= :datum and b.rekening.pk_id = :rekeningId and coalesce(processed, false) = true")
     public BigDecimal somBedragDatum(@Param("rekeningId") Integer rekeningId, @Param("datum") Date datum);
     
     @Query("from BedragenDaoPojo where (datum >= :startDate and datum <= :endDate)"
             + " and (:rekeningId is null or rekening.pk_id = :rekeningId) and "
-            + " ((:showPublicGroepen = 0 and (persoon.pk_id = :persoonId)) or (groep.publicGroep = :showPublicGroepen)) and coalesce(processed, 0) = 1 order by datum asc, bedrag asc")
+            + " ((:showPublicGroepen = 0 and (persoon.pk_id = :persoonId)) or (groep.publicGroep = :showPublicGroepen)) and coalesce(processed, false) = true order by datum asc, bedrag asc")
     public List<BedragenDaoPojo> BedragInPeriode(@Param("startDate") Date startDate,
                                                     @Param("endDate") Date endDate, 
                                                     @Param("rekeningId") Integer rekeningId, 
@@ -123,7 +123,7 @@ public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer
                                                     @Param("persoonId") Integer persoonId);
 
     @Query("from BedragenDaoPojo where (datum >= :startDate and datum <= :endDate)"
-            + " and coalesce(processed, 0) = 1"
+            + " and coalesce(processed, false) = true"
             + " and (persoon.pk_id = :persoonId)"
             + " and groep.pk_id not in (2,3,4)"
             + " order by datum asc, bedrag asc")
@@ -134,7 +134,7 @@ public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer
     @Query("from BedragenDaoPojo where (datum >= :startDate and datum <= :endDate)"
             + " and (rekening.pk_id = :rekeningId)"
             + " and groep.pk_id not in (2,3,4)"
-            + " and coalesce(processed, 0) = 1"
+            + " and coalesce(processed, false) = true"
             + " order by datum asc, bedrag asc")
     public List<BedragenDaoPojo> BedragInPeriodeOpRekening(@Param("startDate") Date startDate,
                                                            @Param("endDate") Date endDate,

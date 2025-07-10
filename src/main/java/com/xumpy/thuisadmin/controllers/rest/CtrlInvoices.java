@@ -118,7 +118,9 @@ public class CtrlInvoices {
         BigDecimal totalAmount= new BigDecimal(0);
 
         for (InvoiceJobsDaoPojo invoiceJob: invoiceJobs){
-            totalAmount = totalAmount.add(invoiceJob.getAmount().multiply(invoiceJob.getJob().getWorkedHours()));
+            if (invoiceJob.getAmount() != null) {
+                totalAmount = totalAmount.add(invoiceJob.getAmount().multiply(invoiceJob.getJob().getWorkedHours()));
+            }
         }
         return totalAmount;
     }

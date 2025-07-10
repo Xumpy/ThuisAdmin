@@ -7,7 +7,7 @@ package com.xumpy.thuisadmin.dao.model;
 
 import com.xumpy.thuisadmin.domain.Personen;
 import java.io.Serializable;;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import org.hibernate.validator.constraints.NotEmpty;
 /**
  *

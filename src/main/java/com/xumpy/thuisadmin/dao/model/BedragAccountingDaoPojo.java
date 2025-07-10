@@ -1,10 +1,9 @@
 package com.xumpy.thuisadmin.dao.model;
 
 import com.xumpy.thuisadmin.domain.BedragAccounting;
-import com.xumpy.thuisadmin.domain.Bedragen;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -23,7 +22,7 @@ public class BedragAccountingDaoPojo implements BedragAccounting {
 
     @Column(name="DATUM")
     @NotNull
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(jakarta.persistence.TemporalType.DATE)
     private Date datum;
 
     @Column(name="BEDRAG")

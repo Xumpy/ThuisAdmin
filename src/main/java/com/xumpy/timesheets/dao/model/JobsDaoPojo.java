@@ -9,7 +9,7 @@ import com.xumpy.timesheets.domain.Jobs;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  *
@@ -27,7 +27,7 @@ public class JobsDaoPojo implements Serializable, Jobs {
     private JobsGroupDaoPojo jobsGroup;
     
     @Column(name="JOB_DATE")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(jakarta.persistence.TemporalType.DATE)
     private Date jobDate;
     
     @Column(name="WORKED_HOURS")

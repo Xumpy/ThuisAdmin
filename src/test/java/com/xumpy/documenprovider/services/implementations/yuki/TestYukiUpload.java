@@ -3,8 +3,6 @@ package com.xumpy.documenprovider.services.implementations.yuki;
 import com.xumpy.documenprovider.model.Folder;
 import com.xumpy.documenprovider.services.implementations.yuki.model.UploadReponse;
 import com.xumpy.documenprovider.services.implementations.yuki.model.YukiPojo;
-import com.xumpy.documenprovider.services.implementations.yuki.PostToYuki;
-import com.xumpy.documenprovider.services.implementations.yuki.YukiBuilder;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;

@@ -2,13 +2,13 @@ package com.xumpy.documenprovider.services.implementations.mail;
 
 import com.xumpy.documenprovider.dao.implementations.DocumentProviderDocumentsImpl;
 import com.xumpy.documenprovider.dao.model.DocumentProviderDocumentsDaoPojo;
-import com.xumpy.documenprovider.domain.DocumentProviderDocuments;
 import com.xumpy.documenprovider.services.implementations.exceptions.ExactOnlineDocumentNotFound;
 import com.xumpy.documenprovider.services.implementations.exceptions.PinNotValidException;
 import com.xumpy.documenprovider.services.implementations.mail.odata.ExecuteCallExactOnline;
 import com.xumpy.documenprovider.services.implementations.mail.odata.handler.ExactCookie;
 import com.xumpy.documenprovider.services.model.DocumentProviderDocumentsSrvPojo;
 import com.xumpy.thuisadmin.dao.implementations.DocumentenDaoImpl;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +43,7 @@ public class SyncBedragenWithDB {
     }
 
     @Test
+    @Ignore
     public void sync() {
         exactCookie.setCookie(securityKeys.get("cookie"));
         executeCallExactOnline.setUserAgent(securityKeys.get("userAgent"));

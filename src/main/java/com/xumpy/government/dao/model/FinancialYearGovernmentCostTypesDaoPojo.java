@@ -2,7 +2,7 @@ package com.xumpy.government.dao.model;
 
 import com.xumpy.government.domain.FinancialYearGovernmentCostTypes;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Entity

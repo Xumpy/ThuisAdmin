@@ -3,7 +3,7 @@ package com.xumpy.government.dao.model;
 import com.xumpy.government.domain.GovernmentCostType;
 import com.xumpy.thuisadmin.dao.model.GroepenDaoPojo;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name="TA_GOVERNMENT_COST_TYPES")

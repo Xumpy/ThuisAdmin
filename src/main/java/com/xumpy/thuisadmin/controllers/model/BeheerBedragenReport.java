@@ -9,9 +9,11 @@ import com.xumpy.thuisadmin.domain.Bedragen;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import org.apache.log4j.Logger;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 
 /**
@@ -24,7 +26,7 @@ public class BeheerBedragenReport implements Serializable{
     
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     
-    private static Logger log = Logger.getLogger(BeheerBedragenReport.class);
+    private static Logger log = LoggerFactory.getLogger(BeheerBedragenReport.class);
     
     @Id
     private Integer pk_id;

@@ -24,7 +24,7 @@ public interface JobsGroupDaoImpl extends CrudRepository<JobsGroupDaoPojo, Integ
     @Query("from JobsGroupDaoPojo")
     public List<JobsGroupDaoPojo> selectAllJobGroups();
 
-    @Query("from JobsGroupDaoPojo where coalesce(closed, 0) !=  1")
+    @Query("from JobsGroupDaoPojo where coalesce(closed, false) !=  true")
     public List<JobsGroupDaoPojo> selectAllOpenJobGroups();
 
     @Query("select max(pk_id) + 1 as pk_id from JobsGroupDaoPojo")

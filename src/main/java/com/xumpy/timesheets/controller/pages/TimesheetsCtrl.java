@@ -11,16 +11,13 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.sql.SQLException;
 import java.text.ParseException;
-import javax.servlet.http.HttpServletResponse;
 
 import com.xumpy.timesheets.services.session.SessionTimesheet;
+import jakarta.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.JRException;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,8 +36,6 @@ public class TimesheetsCtrl {
     @Autowired TimesheetSrv timesheetSrv;
     @Autowired SessionTimesheet sessionTimesheet;
 
-    private Logger log = Logger.getLogger(TimesheetsCtrl.class);
-    
     @RequestMapping(value = "timesheets/overview")
     public String timesheetsOverview(){
         return "timesheets/overview";

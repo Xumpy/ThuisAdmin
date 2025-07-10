@@ -6,12 +6,10 @@
 package com.xumpy.timesheets.services;
 
 import com.xumpy.thuisadmin.dao.sqlite.model.TimeRecording;
+import jakarta.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.JRException;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
