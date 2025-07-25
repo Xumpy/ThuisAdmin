@@ -38,13 +38,13 @@ group by ta_job_groups.pk_id, coalesce(ta_jobs_invoices.description, ""), trunca
 		<expression><![CDATA[$F{total_worked_hours}.multiply($F{amount})]]></expression>
 	</variable>
 	<variable name="AANTAL" class="java.math.BigDecimal">
-		<expression><![CDATA[$F{time_unit_days} ? $F{total_worked_hours}.divide( $F{daily_payed_hours}) : $F{total_worked_hours}]]></expression>
+		<expression><![CDATA[$F{total_worked_hours}]]></expression>
 	</variable>
 	<variable name="EENHEID" class="java.lang.String">
-		<expression><![CDATA[$F{time_unit_days} ? "Days" : "Hours"]]></expression>
+		<expression><![CDATA["Hours"]]></expression>
 	</variable>
 	<variable name="PRIJS" class="java.math.BigDecimal">
-		<expression><![CDATA[$F{time_unit_days} ? $F{amount}.multiply( $F{daily_payed_hours}) : $F{amount}]]></expression>
+		<expression><![CDATA[$F{amount}]]></expression>
 	</variable>
 	<background/>
 	<columnHeader height="13">
