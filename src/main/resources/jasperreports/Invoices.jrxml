@@ -154,7 +154,7 @@ where ta_invoices.pk_id = $P{INVOICE_ID}]]></query>
 			<expression><![CDATA[$F{invoice_ref}]]></expression>
 		</element>
 		<element kind="staticText" uuid="852aed72-7d92-4d1f-a5f8-f39eee0ab5e9" x="358" y="145" width="90" height="12">
-			<printWhenExpression><![CDATA[($F{vat_amount}).compareTo(BigDecimal.ZERO)]]></printWhenExpression>
+			<printWhenExpression><![CDATA[($F{vat_amount}).compareTo(BigDecimal.ZERO) == 0]]></printWhenExpression>
 			<text><![CDATA[VAT exempt]]></text>
 		</element>
 	</title>
