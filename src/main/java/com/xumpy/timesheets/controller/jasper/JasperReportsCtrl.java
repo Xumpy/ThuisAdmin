@@ -2,7 +2,6 @@ package com.xumpy.timesheets.controller.jasper;
 
 import jakarta.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,7 +36,7 @@ public class JasperReportsCtrl {
         params.put("SUBREPORT", "classpath:jasperreports/Invoices_detail.jasper");
         params.put("LOGO", "classpath:jasperreports/NMConsultancyLogo.png");
         params.put(JRParameter.REPORT_LOCALE, Locale.GERMANY);
-        DefaultJasperReportsContext.getInstance().setProperty(JRPdfExporter.PDF_PRODUCER_FACTORY_PROPERTY, "com.jaspersoft.jasperreports.export.pdf.modern.ModernPdfProducerFactory");
+        //DefaultJasperReportsContext.getInstance().setProperty(JRPdfExporter.PDF_PRODUCER_FACTORY_PROPERTY, "com.jaspersoft.jasperreports.export.pdf.modern.ModernPdfProducerFactory");
 
         JasperReport jasperReport = (JasperReport) JRLoader.loadObject(ResourceUtils.getURL("classpath:jasperreports/Invoices.jasper").openStream());
 

@@ -35,7 +35,6 @@ import java.util.logging.Logger;
 
 import jakarta.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -107,7 +106,7 @@ public class TimesheetSrvImpl implements TimesheetSrv{
         params = addActualTimes(params, jobsGroupId, month);
 
         params.put(JRParameter.REPORT_LOCALE, Locale.GERMANY);
-        DefaultJasperReportsContext.getInstance().setProperty(JRPdfExporter.PDF_PRODUCER_FACTORY_PROPERTY, "com.jaspersoft.jasperreports.export.pdf.modern.ModernPdfProducerFactory");
+        //DefaultJasperReportsContext.getInstance().setProperty(JRPdfExporter.PDF_PRODUCER_FACTORY_PROPERTY, "com.jaspersoft.jasperreports.export.pdf.modern.ModernPdfProducerFactory");
         JasperReport jasperReport = (JasperReport) JRLoader.loadObject(ResourceUtils.getURL("classpath:jasperreports/Timesheet.jasper").openStream());
 
         response.setContentType("application/x-pdf");
