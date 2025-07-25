@@ -4,7 +4,7 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Base" default="true" blankWhenNull="true" fontName="DejaVu Sans"/>
-	<parameter name="INVOICE_ID" class="java.lang.Integer">
+	<parameter name="INVOICE_ID" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<query language="sql"><![CDATA[select coalesce(ta_jobs_invoices.description, "") as description,
