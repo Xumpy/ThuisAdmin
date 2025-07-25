@@ -1,21 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Invoices" language="java" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="692e7455-bcc9-43d2-a07c-bb11e172be36">
+<!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
+<jasperReport name="Invoices" language="java" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="692e7455-bcc9-43d2-a07c-bb11e172be36">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="13"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Mysql Thuisadmin"/>
-	<style name="Base" isDefault="true" isBlankWhenNull="true" fontName="DejaVu Sans"/>
-	<parameter name="INVOICE_ID" class="java.lang.Integer">
+	<style name="Base" default="true" blankWhenNull="true" fontName="DejaVu Sans"/>
+	<parameter name="INVOICE_ID" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
-	<parameter name="LOGO" class="java.lang.String" isForPrompting="false">
+	<parameter name="LOGO" forPrompting="false" class="java.lang.String">
 		<defaultValueExpression><![CDATA["C:/dev/Personal/ThuisAdmin/src/main/resources/jasperreports/NMConsultancyLogo.png"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="SUBREPORT" class="java.lang.String" isForPrompting="false">
+	<parameter name="SUBREPORT" forPrompting="false" class="java.lang.String">
 		<defaultValueExpression><![CDATA["C:/dev/Personal/ThuisAdmin/src/main/resources/jasperreports/Invoices_detail.jasper"]]></defaultValueExpression>
 	</parameter>
-	<queryString>
-		<![CDATA[select distinct ta_invoices.invoice_id as invoice_id,
+	<query language="sql"><![CDATA[select distinct ta_invoices.invoice_id as invoice_id,
        date_format(ta_invoices.invoice_date, "%d-%m-%y") as invoice_date,
        ta_invoices.invoice_due_date as invoice_due_date,
        ta_invoices.invoice_ref as invoice_ref,
@@ -48,31 +47,30 @@ left join ta_company
   on (ta_company.pk_id = ta_job_groups.fk_company_id)
 left join ta_personen
   on (ta_rekeningen.fk_personen_id = ta_personen.pk_id)
-where ta_invoices.pk_id = $P{INVOICE_ID}]]>
-	</queryString>
+where ta_invoices.pk_id = $P{INVOICE_ID}]]></query>
 	<field name="invoice_id" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+		<description><![CDATA[]]></description>
 	</field>
 	<field name="invoice_date" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+		<description><![CDATA[]]></description>
 	</field>
 	<field name="invoice_due_date" class="java.sql.Date">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+		<description><![CDATA[]]></description>
 	</field>
 	<field name="invoice_ref" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+		<description><![CDATA[]]></description>
 	</field>
 	<field name="vat_number" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+		<description><![CDATA[]]></description>
 	</field>
 	<field name="vat_amount" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+		<description><![CDATA[]]></description>
 	</field>
 	<field name="description" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+		<description><![CDATA[]]></description>
 	</field>
 	<field name="naam" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+		<description><![CDATA[]]></description>
 	</field>
 	<field name="total_amount" class="java.math.BigDecimal"/>
 	<field name="company_name" class="java.lang.String"/>
@@ -82,257 +80,134 @@ where ta_invoices.pk_id = $P{INVOICE_ID}]]>
 	<field name="rekening_number" class="java.lang.String"/>
 	<field name="own_vat_number" class="java.lang.String"/>
 	<field name="business_name" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+		<description><![CDATA[]]></description>
 	</field>
 	<variable name="amount_incl_vat" class="java.math.BigDecimal">
-		<variableExpression><![CDATA[$F{total_amount}.divide(100).multiply($F{vat_amount}).add($F{total_amount})]]></variableExpression>
+		<expression><![CDATA[$F{total_amount}.divide(BigDecimal.valueOf(100)).multiply($F{vat_amount}).add($F{total_amount})]]></expression>
 	</variable>
 	<variable name="amount_vat" class="java.math.BigDecimal">
-		<variableExpression><![CDATA[$F{total_amount}.divide(100).multiply($F{vat_amount})]]></variableExpression>
+		<expression><![CDATA[$F{total_amount}.divide(BigDecimal.valueOf(100)).multiply($F{vat_amount})]]></expression>
 	</variable>
-	<background>
-		<band/>
-	</background>
-	<title>
-		<band height="194">
-			<rectangle radius="10">
-				<reportElement x="0" y="0" width="555" height="118" forecolor="#E6E6E6" backcolor="#E6E6E6" uuid="0044a399-2e83-4d66-b9cf-86a0d3b69558"/>
-			</rectangle>
-			<frame>
-				<reportElement mode="Opaque" x="290" y="0" width="254" height="112" forecolor="#E6E6E6" backcolor="#E6E6E6" uuid="cfb56097-74e2-4576-9191-109cfc891f41"/>
-				<textField>
-					<reportElement x="107" y="11" width="147" height="12" forecolor="#000000" uuid="b16b2510-55be-45c1-954d-0837f8d43c2b"/>
-					<textElement>
-						<font size="10"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{invoice_date}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement x="0" y="10" width="107" height="12" forecolor="#000000" uuid="ed1af33e-570a-4380-b7ac-1a2bcf1735f9"/>
-					<textElement>
-						<font size="10" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Invoice Date:]]></text>
-				</staticText>
-				<textField>
-					<reportElement x="107" y="22" width="147" height="12" forecolor="#000000" uuid="25b58342-9ddc-4fd4-be4c-0c6f5ee9c031"/>
-					<textElement>
-						<font size="10"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{invoice_id}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement x="0" y="22" width="107" height="12" forecolor="#000000" uuid="166f235a-94f7-4d49-9c90-37c54d90e9e2"/>
-					<textElement>
-						<font size="10" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Invoice Number:]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="0" y="34" width="107" height="12" forecolor="#000000" uuid="25d15e26-8203-4400-82ef-ba0bef4638a3"/>
-					<textElement>
-						<font size="10" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Company:]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="107" y="47" width="147" height="12" forecolor="#000000" uuid="91a3411a-32ac-4877-ae64-1e05d429b1d9"/>
-					<textElement>
-						<font size="10"/>
-					</textElement>
-					<text><![CDATA[Turfstraat 9]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="107" y="59" width="147" height="12" forecolor="#000000" uuid="a301687d-6298-4ca6-bbfa-0017b83f75a9"/>
-					<textElement>
-						<font size="10"/>
-					</textElement>
-					<text><![CDATA[3900 Pelt]]></text>
-				</staticText>
-				<textField>
-					<reportElement x="107" y="84" width="147" height="12" forecolor="#000000" uuid="1a17d304-09f8-4259-8b14-9bb17c959391"/>
-					<textFieldExpression><![CDATA[$F{rekening_number}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement x="0" y="98" width="107" height="12" forecolor="#000000" uuid="38c3b717-9aa7-437d-9247-694986fc1060"/>
-					<textElement>
-						<font size="10" isBold="true"/>
-					</textElement>
-					<text><![CDATA[VAT-Number:]]></text>
-				</staticText>
-				<textField>
-					<reportElement x="107" y="98" width="147" height="12" forecolor="#000000" uuid="26d9e6ae-25e1-4da6-9147-0f049b026510"/>
-					<textFieldExpression><![CDATA[$F{own_vat_number}]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement x="107" y="34" width="146" height="12" forecolor="#000000" uuid="a9502401-bde2-4e43-9039-b5661bc6baac"/>
-					<textFieldExpression><![CDATA[$F{business_name}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement x="107" y="71" width="147" height="12" forecolor="#000000" uuid="6379af85-758d-457c-9eb9-3172c6c22f99"/>
-					<textElement>
-						<font size="10"/>
-					</textElement>
-					<text><![CDATA[Belgium]]></text>
-				</staticText>
-			</frame>
-			<frame>
-				<reportElement x="13" y="133" width="188" height="48" uuid="de21c13b-79e4-497c-8b88-f920f6a5f239"/>
-				<textField isStretchWithOverflow="true">
-					<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="188" height="12" uuid="d838ad69-411d-4b17-9f49-90dbfc464b13"/>
-					<textElement>
-						<font size="10"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{company_name}]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement positionType="Float" x="0" y="12" width="188" height="12" uuid="a501a44e-2a11-4ed3-bab1-240446a2e5fb"/>
-					<textElement>
-						<font size="10"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{company_street_number}]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement positionType="Float" x="0" y="24" width="188" height="12" uuid="b6bbc569-f2fe-46f8-8be4-2980cd6735ea"/>
-					<textElement>
-						<font size="10"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{company_postal_code_city}]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement positionType="Float" x="0" y="36" width="188" height="12" uuid="db87fd11-2b6e-45ae-90ed-097a75cfd213"/>
-					<textElement>
-						<font size="10"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{company_vat_number}]]></textFieldExpression>
-				</textField>
-			</frame>
-			<image hAlign="Left">
-				<reportElement x="13" y="7" width="214" height="105" uuid="9cde5f42-6e33-4855-a13d-d33366cd64dc"/>
-				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
-			</image>
-			<staticText>
-				<reportElement x="358" y="133" width="57" height="12" uuid="6017d37f-ac47-4636-9c71-c9a2310ba368">
-					<printWhenExpression><![CDATA[$F{invoice_ref} != null]]></printWhenExpression>
-				</reportElement>
-				<text><![CDATA[Reference:]]></text>
-			</staticText>
-			<textField>
-				<reportElement positionType="Float" x="415" y="133" width="139" height="12" uuid="87a7297e-65c1-4ab5-a5c3-0f5c65b373db"/>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{invoice_ref}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="358" y="145" width="90" height="12" uuid="852aed72-7d92-4d1f-a5f8-f39eee0ab5e9">
-					<printWhenExpression><![CDATA[$F{vat_amount} == 0]]></printWhenExpression>
-				</reportElement>
-				<text><![CDATA[VAT exempt]]></text>
-			</staticText>
-		</band>
+	<background/>
+	<title height="194">
+		<element kind="rectangle" uuid="0044a399-2e83-4d66-b9cf-86a0d3b69558" x="0" y="0" width="555" height="118" forecolor="#E6E6E6" backcolor="#E6E6E6" radius="10"/>
+		<element kind="frame" uuid="cfb56097-74e2-4576-9191-109cfc891f41" mode="Opaque" x="290" y="0" width="254" height="112" forecolor="#E6E6E6" backcolor="#E6E6E6">
+			<element kind="textField" uuid="b16b2510-55be-45c1-954d-0837f8d43c2b" x="107" y="11" width="147" height="12" forecolor="#000000" fontSize="10.0">
+				<expression><![CDATA[$F{invoice_date}]]></expression>
+			</element>
+			<element kind="staticText" uuid="ed1af33e-570a-4380-b7ac-1a2bcf1735f9" x="0" y="10" width="107" height="12" forecolor="#000000" fontSize="10.0" bold="true">
+				<text><![CDATA[Invoice Date:]]></text>
+			</element>
+			<element kind="textField" uuid="25b58342-9ddc-4fd4-be4c-0c6f5ee9c031" x="107" y="22" width="147" height="12" forecolor="#000000" fontSize="10.0">
+				<expression><![CDATA[$F{invoice_id}]]></expression>
+			</element>
+			<element kind="staticText" uuid="166f235a-94f7-4d49-9c90-37c54d90e9e2" x="0" y="22" width="107" height="12" forecolor="#000000" fontSize="10.0" bold="true">
+				<text><![CDATA[Invoice Number:]]></text>
+			</element>
+			<element kind="staticText" uuid="25d15e26-8203-4400-82ef-ba0bef4638a3" x="0" y="34" width="107" height="12" forecolor="#000000" fontSize="10.0" bold="true">
+				<text><![CDATA[Company:]]></text>
+			</element>
+			<element kind="staticText" uuid="91a3411a-32ac-4877-ae64-1e05d429b1d9" x="107" y="47" width="147" height="12" forecolor="#000000" fontSize="10.0">
+				<text><![CDATA[Turfstraat 9]]></text>
+			</element>
+			<element kind="staticText" uuid="a301687d-6298-4ca6-bbfa-0017b83f75a9" x="107" y="59" width="147" height="12" forecolor="#000000" fontSize="10.0">
+				<text><![CDATA[3900 Pelt]]></text>
+			</element>
+			<element kind="textField" uuid="1a17d304-09f8-4259-8b14-9bb17c959391" x="107" y="84" width="147" height="12" forecolor="#000000">
+				<expression><![CDATA[$F{rekening_number}]]></expression>
+			</element>
+			<element kind="staticText" uuid="38c3b717-9aa7-437d-9247-694986fc1060" x="0" y="98" width="107" height="12" forecolor="#000000" fontSize="10.0" bold="true">
+				<text><![CDATA[VAT-Number:]]></text>
+			</element>
+			<element kind="textField" uuid="26d9e6ae-25e1-4da6-9147-0f049b026510" x="107" y="98" width="147" height="12" forecolor="#000000">
+				<expression><![CDATA[$F{own_vat_number}]]></expression>
+			</element>
+			<element kind="textField" uuid="a9502401-bde2-4e43-9039-b5661bc6baac" x="107" y="34" width="146" height="12" forecolor="#000000">
+				<expression><![CDATA[$F{business_name}]]></expression>
+			</element>
+			<element kind="staticText" uuid="6379af85-758d-457c-9eb9-3172c6c22f99" x="107" y="71" width="147" height="12" forecolor="#000000" fontSize="10.0">
+				<text><![CDATA[Belgium]]></text>
+			</element>
+		</element>
+		<element kind="frame" uuid="de21c13b-79e4-497c-8b88-f920f6a5f239" x="13" y="133" width="188" height="48">
+			<element kind="textField" uuid="d838ad69-411d-4b17-9f49-90dbfc464b13" stretchType="ContainerHeight" x="0" y="0" width="188" height="12" fontSize="10.0" textAdjust="StretchHeight">
+				<expression><![CDATA[$F{company_name}]]></expression>
+			</element>
+			<element kind="textField" uuid="a501a44e-2a11-4ed3-bab1-240446a2e5fb" positionType="Float" x="0" y="12" width="188" height="12" fontSize="10.0">
+				<expression><![CDATA[$F{company_street_number}]]></expression>
+			</element>
+			<element kind="textField" uuid="b6bbc569-f2fe-46f8-8be4-2980cd6735ea" positionType="Float" x="0" y="24" width="188" height="12" fontSize="10.0">
+				<expression><![CDATA[$F{company_postal_code_city}]]></expression>
+			</element>
+			<element kind="textField" uuid="db87fd11-2b6e-45ae-90ed-097a75cfd213" positionType="Float" x="0" y="36" width="188" height="12" fontSize="10.0">
+				<expression><![CDATA[$F{company_vat_number}]]></expression>
+			</element>
+		</element>
+		<element kind="image" uuid="9cde5f42-6e33-4855-a13d-d33366cd64dc" x="13" y="7" width="214" height="105" hImageAlign="Left">
+			<expression><![CDATA[$P{LOGO}]]></expression>
+		</element>
+		<element kind="staticText" uuid="6017d37f-ac47-4636-9c71-c9a2310ba368" x="358" y="133" width="57" height="12">
+			<printWhenExpression><![CDATA[$F{invoice_ref} != null]]></printWhenExpression>
+			<text><![CDATA[Reference:]]></text>
+		</element>
+		<element kind="textField" uuid="87a7297e-65c1-4ab5-a5c3-0f5c65b373db" positionType="Float" x="415" y="133" width="139" height="12" fontSize="10.0">
+			<expression><![CDATA[$F{invoice_ref}]]></expression>
+		</element>
+		<element kind="staticText" uuid="852aed72-7d92-4d1f-a5f8-f39eee0ab5e9" x="358" y="145" width="90" height="12">
+			<printWhenExpression><![CDATA[BigDecimal.valueOf(0).equals($F{vat_amount})]]></printWhenExpression>
+			<text><![CDATA[VAT exempt]]></text>
+		</element>
 	</title>
-	<pageHeader>
-		<band height="32">
-			<staticText>
-				<reportElement x="0" y="12" width="100" height="20" uuid="afe4cb5b-9b97-4cb0-9a76-601bb1c58aaf"/>
-				<textElement>
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Invoice]]></text>
-			</staticText>
-		</band>
+	<pageHeader height="32">
+		<element kind="staticText" uuid="afe4cb5b-9b97-4cb0-9a76-601bb1c58aaf" x="0" y="12" width="100" height="20" fontSize="12.0" bold="true">
+			<text><![CDATA[Invoice]]></text>
+		</element>
 	</pageHeader>
 	<detail>
 		<band height="200">
-			<subreport>
-				<reportElement x="0" y="0" width="555" height="70" uuid="f45be966-1e58-400c-a69c-e592ffa3ec9d"/>
-				<subreportParameter name="INVOICE_ID">
-					<subreportParameterExpression><![CDATA[$P{INVOICE_ID}]]></subreportParameterExpression>
-				</subreportParameter>
+			<element kind="subreport" uuid="f45be966-1e58-400c-a69c-e592ffa3ec9d" x="0" y="0" width="555" height="70">
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT}]]></subreportExpression>
-			</subreport>
-			<frame>
-				<reportElement x="200" y="88" width="355" height="50" uuid="4f1f8bca-7332-4766-aaf9-60e920fc08f5"/>
-				<textField pattern="€ ###0.00;€ -###0.00">
-					<reportElement x="215" y="1" width="115" height="12" uuid="d9ee7c5d-3710-44ec-b5e4-dcf7589b7de6"/>
-					<textElement textAlignment="Right">
-						<font size="10"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{total_amount}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement x="101" y="0" width="96" height="12" uuid="26682660-13b5-4a92-959f-b32308b83c22"/>
-					<textElement>
-						<font size="10" isBold="true"/>
-					</textElement>
+				<expression><![CDATA[$P{SUBREPORT}]]></expression>
+				<parameter name="INVOICE_ID">
+					<expression><![CDATA[$P{INVOICE_ID}]]></expression>
+				</parameter>
+			</element>
+			<element kind="frame" uuid="4f1f8bca-7332-4766-aaf9-60e920fc08f5" x="200" y="88" width="355" height="50">
+				<element kind="textField" uuid="d9ee7c5d-3710-44ec-b5e4-dcf7589b7de6" x="215" y="1" width="115" height="12" fontSize="10.0" pattern="€ ###0.00;€ -###0.00" hTextAlign="Right">
+					<expression><![CDATA[$F{total_amount}]]></expression>
+				</element>
+				<element kind="staticText" uuid="26682660-13b5-4a92-959f-b32308b83c22" x="101" y="0" width="96" height="12" fontSize="10.0" bold="true">
 					<text><![CDATA[Subtotal:]]></text>
-				</staticText>
-				<textField>
-					<reportElement x="101" y="13" width="96" height="12" uuid="b68ae264-e629-4964-9fb4-41f3ed72adaf"/>
-					<textElement>
-						<font size="10" isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA["VAT (" + $F{vat_amount} + "%)"]]></textFieldExpression>
-				</textField>
-				<textField pattern="€ ###0.00;€ -###0.00">
-					<reportElement x="215" y="13" width="115" height="12" uuid="97d7004f-c9e0-4435-88c6-a387b9391c05"/>
-					<textElement textAlignment="Right">
-						<font size="10"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{amount_vat}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement x="102" y="26" width="96" height="12" uuid="d26c1855-9f02-4fb9-bb4e-262c15374302"/>
-					<textElement>
-						<font size="10" isBold="true"/>
-					</textElement>
+				</element>
+				<element kind="textField" uuid="b68ae264-e629-4964-9fb4-41f3ed72adaf" x="101" y="13" width="96" height="12" fontSize="10.0" bold="true">
+					<expression><![CDATA["VAT (" + $F{vat_amount} + "%)"]]></expression>
+				</element>
+				<element kind="textField" uuid="97d7004f-c9e0-4435-88c6-a387b9391c05" x="215" y="13" width="115" height="12" fontSize="10.0" pattern="€ ###0.00;€ -###0.00" hTextAlign="Right">
+					<expression><![CDATA[$V{amount_vat}]]></expression>
+				</element>
+				<element kind="staticText" uuid="d26c1855-9f02-4fb9-bb4e-262c15374302" x="102" y="26" width="96" height="12" fontSize="10.0" bold="true">
 					<text><![CDATA[Total]]></text>
-				</staticText>
-				<textField pattern="€ ###0.00;€ -###0.00">
-					<reportElement x="215" y="26" width="115" height="12" uuid="e3d7888a-0ead-4af3-9302-c16b1f5d8a6a"/>
-					<textElement textAlignment="Right">
-						<font size="10" isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{amount_incl_vat}]]></textFieldExpression>
-				</textField>
-				<line>
-					<reportElement x="53" y="12" width="277" height="1" uuid="5daad10e-3a8e-4ba1-b3a7-cbe6ecd68e82"/>
-				</line>
-				<line>
-					<reportElement x="53" y="25" width="277" height="1" uuid="bf974933-c5a9-4e31-be97-8df31eca2cbe"/>
-				</line>
-				<line>
-					<reportElement x="53" y="38" width="277" height="2" uuid="7af7eb91-8ca0-4323-b6cb-1754570fc3f8"/>
-				</line>
-				<line>
-					<reportElement x="197" y="0" width="1" height="40" uuid="2955aa3d-eee5-496b-b9bc-71db7b336c80"/>
-				</line>
-			</frame>
-			<textField>
-				<reportElement x="0" y="180" width="381" height="20" uuid="c0bd6b9a-ca6d-48c7-938f-ea3a6316245d"/>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Payment is due 30 days from the invoice date."]]></textFieldExpression>
-			</textField>
+				</element>
+				<element kind="textField" uuid="e3d7888a-0ead-4af3-9302-c16b1f5d8a6a" x="215" y="26" width="115" height="12" fontSize="10.0" pattern="€ ###0.00;€ -###0.00" bold="true" hTextAlign="Right">
+					<expression><![CDATA[$V{amount_incl_vat}]]></expression>
+				</element>
+				<element kind="line" uuid="5daad10e-3a8e-4ba1-b3a7-cbe6ecd68e82" x="53" y="12" width="277" height="1"/>
+				<element kind="line" uuid="bf974933-c5a9-4e31-be97-8df31eca2cbe" x="53" y="25" width="277" height="1"/>
+				<element kind="line" uuid="7af7eb91-8ca0-4323-b6cb-1754570fc3f8" x="53" y="38" width="277" height="2"/>
+				<element kind="line" uuid="2955aa3d-eee5-496b-b9bc-71db7b336c80" x="197" y="0" width="1" height="40"/>
+			</element>
+			<element kind="textField" uuid="c0bd6b9a-ca6d-48c7-938f-ea3a6316245d" x="0" y="180" width="381" height="20" fontSize="10.0">
+				<expression><![CDATA["Payment is due 40 days from the invoice date."]]></expression>
+			</element>
 		</band>
 	</detail>
-	<pageFooter>
-		<band height="17">
-			<textField>
-				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="cde21450-e765-44e1-89b6-b36de7916f17"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
-			</textField>
-			<textField evaluationTime="Report">
-				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="2a71c68e-89f2-4600-9878-83db098a55de"/>
-				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
-		</band>
+	<pageFooter height="17">
+		<element kind="textField" uuid="cde21450-e765-44e1-89b6-b36de7916f17" mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" hTextAlign="Right">
+			<expression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></expression>
+		</element>
+		<element kind="textField" uuid="2a71c68e-89f2-4600-9878-83db098a55de" mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" evaluationTime="Report">
+			<expression><![CDATA[" " + $V{PAGE_NUMBER}]]></expression>
+		</element>
 	</pageFooter>
-	<summary>
-		<band/>
-	</summary>
+	<summary/>
 </jasperReport>

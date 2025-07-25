@@ -1,14 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Invoices_detail" language="java" pageWidth="555" pageHeight="802" columnWidth="535" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="503939ee-b34a-45e5-b3d5-7bb3bdb1387b">
+<!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
+<jasperReport name="Invoices_detail" language="java" pageWidth="555" pageHeight="802" columnWidth="535" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="503939ee-b34a-45e5-b3d5-7bb3bdb1387b">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<style name="Base" isDefault="true" isBlankWhenNull="true" fontName="DejaVu Sans"/>
+	<style name="Base" default="true" blankWhenNull="true" fontName="DejaVu Sans"/>
 	<parameter name="INVOICE_ID" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
-	<queryString>
-		<![CDATA[select coalesce(ta_jobs_invoices.description, "") as description,
+	<query language="sql"><![CDATA[select coalesce(ta_jobs_invoices.description, "") as description,
        sum(ta_jobs.worked_hours) as total_worked_hours,
        truncate(ta_jobs_invoices.amount, 4) as amount,
        ta_jobs_invoices.time_unit_days as time_unit_days,
@@ -21,115 +20,68 @@ join ta_job_groups
 join ta_company
   on (ta_company.pk_id = ta_job_groups.fk_company_id)
 where ta_jobs_invoices.fk_invoice_id = $P{INVOICE_ID}
-group by ta_job_groups.pk_id, coalesce(ta_jobs_invoices.description, ""), truncate(ta_jobs_invoices.amount, 4), ta_jobs_invoices.time_unit_days, ta_company.daily_payed_hours]]>
-	</queryString>
+group by ta_job_groups.pk_id, coalesce(ta_jobs_invoices.description, ""), truncate(ta_jobs_invoices.amount, 4), ta_jobs_invoices.time_unit_days, ta_company.daily_payed_hours]]></query>
 	<field name="description" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+		<description><![CDATA[]]></description>
 	</field>
 	<field name="total_worked_hours" class="java.math.BigDecimal"/>
 	<field name="amount" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+		<description><![CDATA[]]></description>
 	</field>
 	<field name="time_unit_days" class="java.lang.Boolean">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+		<description><![CDATA[]]></description>
 	</field>
 	<field name="daily_payed_hours" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+		<description><![CDATA[]]></description>
 	</field>
 	<variable name="TOTAL" class="java.math.BigDecimal">
-		<variableExpression><![CDATA[$F{total_worked_hours}.multiply($F{amount})]]></variableExpression>
+		<expression><![CDATA[$F{total_worked_hours}.multiply($F{amount})]]></expression>
 	</variable>
 	<variable name="AANTAL" class="java.math.BigDecimal">
-		<variableExpression><![CDATA[$F{time_unit_days} ? $F{total_worked_hours}.divide( $F{daily_payed_hours}) : $F{total_worked_hours}]]></variableExpression>
+		<expression><![CDATA[$F{time_unit_days} ? $F{total_worked_hours}.divide( $F{daily_payed_hours}) : $F{total_worked_hours}]]></expression>
 	</variable>
 	<variable name="EENHEID" class="java.lang.String">
-		<variableExpression><![CDATA[$F{time_unit_days} ? "Days" : "Hours"]]></variableExpression>
+		<expression><![CDATA[$F{time_unit_days} ? "Days" : "Hours"]]></expression>
 	</variable>
 	<variable name="PRIJS" class="java.math.BigDecimal">
-		<variableExpression><![CDATA[$F{time_unit_days} ? $F{amount}.multiply( $F{daily_payed_hours}) : $F{amount}]]></variableExpression>
+		<expression><![CDATA[$F{time_unit_days} ? $F{amount}.multiply( $F{daily_payed_hours}) : $F{amount}]]></expression>
 	</variable>
-	<background>
-		<band/>
-	</background>
-	<columnHeader>
-		<band height="13">
-			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="196" height="12" forecolor="#FF7F27" backcolor="#E6E6E6" uuid="0f9c1a3c-1fa9-4dc0-ab25-6179296aff70"/>
-				<textElement>
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Description]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="196" y="1" width="63" height="12" forecolor="#FF7F27" backcolor="#E6E6E6" uuid="165addc6-28db-4d25-b49f-7d5899ac2e3b"/>
-				<textElement>
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Quantity]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="259" y="1" width="86" height="12" forecolor="#FF7F27" backcolor="#E6E6E6" uuid="cbdbda4e-a4f1-479c-8491-6d1fc91ebe7d"/>
-				<textElement>
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Unit]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="345" y="1" width="89" height="12" forecolor="#FF7F27" backcolor="#E6E6E6" uuid="0cc84edb-a8b3-440c-bb12-937c3d0f654d"/>
-				<textElement>
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Unit Price]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="434" y="1" width="121" height="12" forecolor="#FF7F27" backcolor="#E6E6E6" uuid="1f77dc15-c4df-485c-8543-f7e5507433ee"/>
-				<textElement>
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Price]]></text>
-			</staticText>
-		</band>
+	<background/>
+	<columnHeader height="13">
+		<element kind="staticText" uuid="0f9c1a3c-1fa9-4dc0-ab25-6179296aff70" mode="Opaque" x="0" y="0" width="196" height="12" forecolor="#FF7F27" backcolor="#E6E6E6" fontSize="10.0" bold="true">
+			<text><![CDATA[Description]]></text>
+		</element>
+		<element kind="staticText" uuid="165addc6-28db-4d25-b49f-7d5899ac2e3b" mode="Opaque" x="196" y="1" width="63" height="12" forecolor="#FF7F27" backcolor="#E6E6E6" fontSize="10.0" bold="true">
+			<text><![CDATA[Quantity]]></text>
+		</element>
+		<element kind="staticText" uuid="cbdbda4e-a4f1-479c-8491-6d1fc91ebe7d" mode="Opaque" x="259" y="1" width="86" height="12" forecolor="#FF7F27" backcolor="#E6E6E6" fontSize="10.0" bold="true">
+			<text><![CDATA[Unit]]></text>
+		</element>
+		<element kind="staticText" uuid="0cc84edb-a8b3-440c-bb12-937c3d0f654d" mode="Opaque" x="345" y="1" width="89" height="12" forecolor="#FF7F27" backcolor="#E6E6E6" fontSize="10.0" bold="true">
+			<text><![CDATA[Unit Price]]></text>
+		</element>
+		<element kind="staticText" uuid="1f77dc15-c4df-485c-8543-f7e5507433ee" mode="Opaque" x="434" y="1" width="121" height="12" forecolor="#FF7F27" backcolor="#E6E6E6" fontSize="10.0" bold="true">
+			<text><![CDATA[Price]]></text>
+		</element>
 	</columnHeader>
 	<detail>
 		<band height="13">
-			<line>
-				<reportElement positionType="FixRelativeToBottom" x="0" y="12" width="555" height="1" uuid="a612a172-83e2-43a9-88d5-2afc738d2d25"/>
-			</line>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="0" y="0" width="196" height="12" uuid="f357c3e8-7fb6-4294-a697-3b459a4742d2"/>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
-			</textField>
-			<textField pattern="###0.0">
-				<reportElement x="196" y="0" width="63" height="12" uuid="5320b622-f6b4-42e4-acaa-8023c1a1a311"/>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{AANTAL}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="259" y="0" width="86" height="12" uuid="cae828d5-7600-46e6-8127-c3aeb67cd0a6"/>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{EENHEID}]]></textFieldExpression>
-			</textField>
-			<textField pattern="€ ###0.00;€ -###0.00">
-				<reportElement x="345" y="0" width="89" height="12" uuid="36c04006-9659-4ff7-b328-d868dbe9e4ba"/>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{PRIJS}]]></textFieldExpression>
-			</textField>
-			<textField pattern="€ ###0.00;€ -###0.00">
-				<reportElement x="434" y="0" width="121" height="12" uuid="6169fa05-0db2-44ae-9056-49775bcf1af9"/>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTAL}]]></textFieldExpression>
-			</textField>
+			<element kind="line" uuid="a612a172-83e2-43a9-88d5-2afc738d2d25" positionType="FixRelativeToBottom" x="0" y="12" width="555" height="1"/>
+			<element kind="textField" uuid="f357c3e8-7fb6-4294-a697-3b459a4742d2" x="0" y="0" width="196" height="12" fontSize="10.0" textAdjust="StretchHeight">
+				<expression><![CDATA[$F{description}]]></expression>
+			</element>
+			<element kind="textField" uuid="5320b622-f6b4-42e4-acaa-8023c1a1a311" x="196" y="0" width="63" height="12" fontSize="10.0" pattern="###0.0">
+				<expression><![CDATA[$V{AANTAL}]]></expression>
+			</element>
+			<element kind="textField" uuid="cae828d5-7600-46e6-8127-c3aeb67cd0a6" x="259" y="0" width="86" height="12" fontSize="10.0">
+				<expression><![CDATA[$V{EENHEID}]]></expression>
+			</element>
+			<element kind="textField" uuid="36c04006-9659-4ff7-b328-d868dbe9e4ba" x="345" y="0" width="89" height="12" fontSize="10.0" pattern="€ ###0.00;€ -###0.00">
+				<expression><![CDATA[$V{PRIJS}]]></expression>
+			</element>
+			<element kind="textField" uuid="6169fa05-0db2-44ae-9056-49775bcf1af9" x="434" y="0" width="121" height="12" fontSize="10.0" pattern="€ ###0.00;€ -###0.00">
+				<expression><![CDATA[$V{TOTAL}]]></expression>
+			</element>
 		</band>
 	</detail>
 </jasperReport>
