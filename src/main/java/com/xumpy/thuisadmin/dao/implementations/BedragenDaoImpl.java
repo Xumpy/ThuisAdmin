@@ -70,14 +70,8 @@ public interface BedragenDaoImpl extends CrudRepository<BedragenDaoPojo, Integer
             + "  and groep.pk_id not in (select groep.pk_id from GroepCodesDaoPojo where codeId = 'INTER_REKENING') "
             + "  and coalesce(managedByAccountant, false) = false "
             + "  and coalesce(courant, false) = false "
-            + "  and (select count(1) from DocumentProviderValidDaoPojo documentProviderValid"
-                + " where (documentProviderValid.dateFrom <= bedragen.datum and coalesce(documentProviderValid.dateUntil, '9999-12-31') >= bedragen.datum)) "
-            + "   > 0 "
             + "  and (select count(1) from DocumentProviderDocumentsDaoPojo documentProviderDocuments "
-                + " where documentProviderDocuments.documenten.bedrag.pk_id = bedragen.pk_id "
-                + "   and (select count(1) from DocumentProviderValidDaoPojo documentProviderValid "
-                        + "where documentProviderValid.documentProvider.pkId = documentProviderDocuments.documentProvider.pkId"
-                        + "  and (documentProviderValid.dateFrom <= bedragen.datum and coalesce(documentProviderValid.dateUntil, '9999-12-31') >= bedragen.datum)) > 0)"
+                + " where documentProviderDocuments.documenten.bedrag.pk_id = bedragen.pk_id) "
                 + " <= 0"
             + "  and (:searchText is null or lower(groep.naam) like :searchText " +
             "  or lower(rekening.naam) like :searchText " +

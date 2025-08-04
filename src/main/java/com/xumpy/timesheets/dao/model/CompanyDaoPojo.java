@@ -51,6 +51,9 @@ public class CompanyDaoPojo implements Company, Serializable{
     @Column(name="TIME_UNIT_DAYS")
     private Boolean timeUnitDays;
 
+    @Column(name="EMAIL")
+    private String email;
+
     public Boolean isTimeUnitDays() {
         return timeUnitDays;
     }
@@ -139,7 +142,16 @@ public class CompanyDaoPojo implements Company, Serializable{
     public BigDecimal getDailyPayedHours() {
         return dailyPayedHours;
     }
-    
+
+    @Override
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public CompanyDaoPojo() { }
     
     public CompanyDaoPojo(Company company){
@@ -153,5 +165,6 @@ public class CompanyDaoPojo implements Company, Serializable{
         this.postalCode = company.getPostalCode();
         this.vatNumber = company.getVatNumber();
         this.timeUnitDays = company.isTimeUnitDays();
+        this.email = company.getEmail();
     }
 }

@@ -2,12 +2,13 @@ package com.xumpy.documenprovider.services.implementations.yuki;
 
 import com.xumpy.documenprovider.services.implementations.yuki.model.UploadReponse;
 import com.xumpy.documenprovider.services.implementations.yuki.model.YukiPojo;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.InputStreamEntity;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.io.entity.InputStreamEntity;
 import org.springframework.stereotype.Service;
 
 import jakarta.xml.bind.JAXBContext;
@@ -38,15 +39,16 @@ public class PostToYuki {
     }
 
     public UploadReponse post(YukiPojo yukiPojo) throws IOException, JAXBException {
-        HttpClient httpclient = HttpClients.createDefault();
+        CloseableHttpClient httpclient = HttpClients.createDefault();
 
         String url = buildUrl(yukiPojo);
         System.out.println(url);
 
         HttpPost httppost = new HttpPost(url);
-        httppost.setEntity(new InputStreamEntity(yukiPojo.getFile()));
 
-        HttpResponse response = httpclient.execute(httppost);
+        httppost.setEntity(new InputStreamEntity(yukiPojo.getFile(), ContentType.DEFAULT_BINARY));
+
+        CloseableHttpResponse response = httpclient.execute(httppost);
         HttpEntity entity = response.getEntity();
 
         UploadReponse uploadReponse = convertToUploadResponse(entity.getContent());

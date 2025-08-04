@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class DocumentProviderDocumentsCtrlPojo implements DocumentProviderDocuments {
     private Integer pkId;
-    private DocumentProviderCtrlPojo documentProvider;
+    private String documentProviderId;
     private DocumentenCtrlPojo documenten;
     private String feedback;
     private Date dateSent;
@@ -22,12 +22,12 @@ public class DocumentProviderDocumentsCtrlPojo implements DocumentProviderDocume
     }
 
     @Override
-    public DocumentProviderCtrlPojo getDocumentProvider() {
-        return documentProvider;
+    public String getDocumentProviderId() {
+        return documentProviderId;
     }
 
-    public void setDocumentProvider(DocumentProviderCtrlPojo documentProvider) {
-        this.documentProvider = documentProvider;
+    public void setDocumentProviderId(String documentProviderId) {
+        this.documentProviderId = documentProviderId;
     }
 
     @Override
@@ -61,7 +61,7 @@ public class DocumentProviderDocumentsCtrlPojo implements DocumentProviderDocume
 
     public DocumentProviderDocumentsCtrlPojo(DocumentProviderDocuments documentProviderDocuments){
         this.pkId = documentProviderDocuments.getPkId();
-        this.documentProvider = documentProviderDocuments.getDocumentProvider() != null ? new DocumentProviderCtrlPojo(documentProviderDocuments.getDocumentProvider()) : null;
+        this.documentProviderId = documentProviderDocuments.getDocumentProviderId();
         this.documenten = documentProviderDocuments.getDocumenten() != null ? new DocumentenCtrlPojo(documentProviderDocuments.getDocumenten()) : null;
         this.feedback = documentProviderDocuments.getFeedback();
         this.dateSent = documentProviderDocuments.getDateSent();

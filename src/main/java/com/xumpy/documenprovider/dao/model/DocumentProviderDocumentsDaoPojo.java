@@ -16,10 +16,9 @@ public class DocumentProviderDocumentsDaoPojo implements DocumentProviderDocumen
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer pkId;
 
-    @ManyToOne
-    @JoinColumn(name="FK_DOCUMENT_PROVIDER_ID")
     @NotNull
-    private DocumentProviderDaoPojo documentProvider;
+    @Column(name="DOCUMENT_PROVIDER_ID")
+    private String documentProviderId;
 
     @ManyToOne
     @JoinColumn(name="FK_BEDRAG_DOCUMENTEN_ID")
@@ -41,15 +40,6 @@ public class DocumentProviderDocumentsDaoPojo implements DocumentProviderDocumen
 
     public void setPkId(Integer pkId) {
         this.pkId = pkId;
-    }
-
-    @Override
-    public DocumentProviderDaoPojo getDocumentProvider() {
-        return documentProvider;
-    }
-
-    public void setDocumentProvider(DocumentProviderDaoPojo documentProvider) {
-        this.documentProvider = documentProvider;
     }
 
     @Override
@@ -79,11 +69,20 @@ public class DocumentProviderDocumentsDaoPojo implements DocumentProviderDocumen
         this.dateSent = dateSent;
     }
 
+    @Override
+    public String getDocumentProviderId() {
+        return documentProviderId;
+    }
+
+    public void setDocumentProviderId(String documentProviderId) {
+        this.documentProviderId = documentProviderId;
+    }
+
     public DocumentProviderDocumentsDaoPojo(){}
 
     public DocumentProviderDocumentsDaoPojo(DocumentProviderDocuments documentProviderDocuments){
         this.pkId = documentProviderDocuments.getPkId();
-        this.documentProvider = documentProviderDocuments.getDocumentProvider() != null ? new DocumentProviderDaoPojo(documentProviderDocuments.getDocumentProvider()) : null;
+        this.documentProviderId = documentProviderDocuments.getDocumentProviderId();
         this.documenten = documentProviderDocuments.getDocumenten() != null ? new DocumentenDaoPojo(documentProviderDocuments.getDocumenten()) : null;
         this.feedback = documentProviderDocuments.getFeedback();
         this.dateSent = documentProviderDocuments.getDateSent();

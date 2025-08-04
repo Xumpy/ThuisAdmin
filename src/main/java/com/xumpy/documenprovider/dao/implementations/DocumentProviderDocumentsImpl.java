@@ -11,15 +11,10 @@ import java.util.List;
 @Repository
 public interface DocumentProviderDocumentsImpl extends CrudRepository<DocumentProviderDocumentsDaoPojo, Integer> {
 
+    @Query("from DocumentProviderDocumentsDaoPojo where documenten.pk_id = :documentId and documentProviderId = :documentProviderId")
+    public List<DocumentProviderDocumentsDaoPojo> getDocumentProviderDocumentsByDocumentIdAndDocumentProviderId(
+            @Param("documentId") Integer documentId, @Param("documentProviderId") String documentProviderId);
+
     @Query("from DocumentProviderDocumentsDaoPojo where documenten.pk_id = :documentId")
     public List<DocumentProviderDocumentsDaoPojo> getDocumentProviderDocumentsByDocumentId(@Param("documentId") Integer documentId);
-
-    @Query("from DocumentProviderDocumentsDaoPojo where feedback like %:feedback%")
-    public List<DocumentProviderDocumentsDaoPojo> getDocumentProviderDocumentsByFeedback(@Param("feedback") String feedback);
-
-    @Query("from DocumentProviderDocumentsDaoPojo documentProviderDocument " +
-            " where documentProviderDocument.feedback like %:feedback%" +
-            "  and (select count(1) from BedragAccountingDaoPojo bedragAccounting " +
-            " where bedragAccounting.bedrag.pk_id = documentProviderDocument.documenten.bedrag.pk_id) = 0")
-    public List<DocumentProviderDocumentsDaoPojo> getDocumentProviderDocumentsByFeedbackNoAccounting(@Param("feedback") String feedback);
 }

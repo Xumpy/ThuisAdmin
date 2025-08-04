@@ -23,6 +23,7 @@ public class CompanySrvPojo implements Company{
     private String city;
     private String vatNumber;
     private Boolean timeUnitDays;
+    private String email;
 
     @Override
     public Boolean isTimeUnitDays() {
@@ -113,7 +114,16 @@ public class CompanySrvPojo implements Company{
     public BigDecimal getDailyPayedHours() {
         return this.dailyPayedHours;
     }
-    
+
+    @Override
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public CompanySrvPojo() { }
     
     public CompanySrvPojo(Company company){
@@ -127,5 +137,6 @@ public class CompanySrvPojo implements Company{
         this.postalCode = company.getPostalCode();
         this.vatNumber = company.getVatNumber();
         this.timeUnitDays = company.isTimeUnitDays();
+        this.email = company.getEmail();
     }
 }

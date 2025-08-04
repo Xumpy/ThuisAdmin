@@ -22,4 +22,5 @@ public interface Company {
     public String getCity();
     public String getVatNumber();
     public Boolean isTimeUnitDays();
+    public String getEmail();
 }

@@ -27,7 +27,7 @@ public class JasperReportsCtrl {
     @ResponseBody
     public void getInvoice(HttpServletResponse response, @PathVariable Integer invoiceId) throws JRException, IOException, SQLException {
         Map<String,Object> params = new HashMap<String, Object>();
-        params.put("INVOICE_ID", invoiceId);
+        params.put("INVOICE_ID", invoiceId.toString());
 
         generateReport(response, params, "Invoice_ " + invoiceId);
     }

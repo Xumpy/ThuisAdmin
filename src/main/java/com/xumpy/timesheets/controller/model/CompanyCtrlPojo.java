@@ -26,6 +26,7 @@ public class CompanyCtrlPojo implements Company, Serializable{
     private String city;
     private String vatNumber;
     private Boolean timeUnitDays;
+    private String email;
 
     @Override
     public Boolean isTimeUnitDays() {
@@ -116,7 +117,16 @@ public class CompanyCtrlPojo implements Company, Serializable{
     public BigDecimal getDailyPayedHours() {
         return dailyPayedHours;
     }
-    
+
+    @Override
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public CompanyCtrlPojo() { }
     
     public CompanyCtrlPojo(Company company) {
@@ -130,6 +140,7 @@ public class CompanyCtrlPojo implements Company, Serializable{
         this.postalCode = company.getPostalCode();
         this.vatNumber = company.getVatNumber();
         this.timeUnitDays = company.isTimeUnitDays();
+        this.email = company.getEmail();
     }
 
     public static List<CompanyCtrlPojo> allCompanies(List<? extends Company> companies){

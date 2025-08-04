@@ -2,12 +2,9 @@ package com.xumpy.finances.controller;
 
 import com.itextpdf.text.DocumentException;
 import com.xumpy.documenprovider.dao.implementations.DocumentProviderDocumentsImpl;
-import com.xumpy.documenprovider.dao.implementations.DocumentProviderValidImpl;
 import com.xumpy.documenprovider.dao.model.DocumentProviderDocumentsDaoPojo;
-import com.xumpy.documenprovider.dao.model.DocumentProviderValidDaoPojo;
 import com.xumpy.documenprovider.services.DocumentProviderSrv;
 import com.xumpy.finances.excelbuilder.ExcelZipBuilder;
-import com.xumpy.finances.services.AccountService;
 import com.xumpy.finances.services.OverviewPDFBuilder;
 import com.xumpy.thuisadmin.controllers.model.OverzichtGroepBedragen;
 import com.xumpy.thuisadmin.dao.model.DocumentenDaoPojo;
@@ -32,9 +29,7 @@ public class AccountController {
     @Autowired ExcelZipBuilder excelZipBuilder;
     @Autowired List<DocumentProviderSrv> documentProviders;
     @Autowired DocumentenSrv documentenSrv;
-    @Autowired DocumentProviderValidImpl documentProviderValidImpl;
     @Autowired DocumentProviderDocumentsImpl documentProviderDocumentsImpl;
-    @Autowired AccountService accountService;
     @Autowired OverviewPDFBuilder overviewPDFBuilder;
 
     private Integer year;
@@ -104,20 +99,17 @@ public class AccountController {
         Documenten document = documentenSrv.fetchDocument(documentId);
 
         for(DocumentProviderSrv documentProvider: documentProviders){
-            for (DocumentProviderValidDaoPojo documentProviderValidDaoPojo: documentProviderValidImpl.findAllValidDocumentProviders(document.getBedrag().getDatum())){
-                if (documentProviderValidDaoPojo.getDocumentProvider().getPkId().equals(documentProvider.getDocumentProviderId()) &&
-                        !accountService.isDocumentSentToDocumentProvider(document, documentProviderValidDaoPojo.getDocumentProvider())){
+                if (documentProvider.shouldBeProcessed(document)){
                     String feedback = documentProvider.process(document);
 
                     DocumentProviderDocumentsDaoPojo documentProviderDocumentsDaoPojo = new DocumentProviderDocumentsDaoPojo();
                     documentProviderDocumentsDaoPojo.setDocumenten(new DocumentenDaoPojo(document));
-                    documentProviderDocumentsDaoPojo.setDocumentProvider(documentProviderValidDaoPojo.getDocumentProvider());
+                    documentProviderDocumentsDaoPojo.setDocumentProviderId(documentProvider.getDocumentProviderId());
                     documentProviderDocumentsDaoPojo.setDateSent(new Date());
                     documentProviderDocumentsDaoPojo.setFeedback(feedback);
 
                     documentProviderDocumentsImpl.save(documentProviderDocumentsDaoPojo);
                 }
-            }
         }
 
         return "redirect:/finances/nieuwBedrag/" + document.getBedrag().getPk_id();

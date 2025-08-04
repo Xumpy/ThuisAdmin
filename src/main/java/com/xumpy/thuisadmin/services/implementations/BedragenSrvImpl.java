@@ -5,9 +5,8 @@
  */
 package com.xumpy.thuisadmin.services.implementations;
 
-import com.xumpy.documenprovider.dao.implementations.DocumentProviderValidImpl;
-import com.xumpy.documenprovider.domain.DocumentProviderValid;
-import com.xumpy.finances.services.AccountService;
+import com.xumpy.documenprovider.dao.implementations.DocumentProviderDocumentsImpl;
+import com.xumpy.documenprovider.dao.model.DocumentProviderDocumentsDaoPojo;
 import com.xumpy.security.model.InvoiceType;
 import com.xumpy.security.model.UserInfo;
 import com.xumpy.thuisadmin.controllers.model.BeheerBedragenInp;
@@ -68,8 +67,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
 
     @Autowired DocumentenDaoImpl documentenDao;
 
-    @Autowired DocumentProviderValidImpl documentProviderValid;
-    @Autowired AccountService accountService;
+    @Autowired DocumentProviderDocumentsImpl documentProviderDocumentsImpl;
 
     static final Logger Log = Logger.getLogger(BedragenSrvImpl.class.getName());
 
@@ -254,7 +252,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         
         Groepen groepenSrv = groepenDao.findById(typeGroepId).get();
         
-        Integer negatief = new Integer(0);
+        Integer negatief;
         
         if (typeGroepKostOpbrengst.equals(1)){
             negatief = 0;
@@ -845,18 +843,15 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
         return allMonths;
     }
 
-    private Boolean isDocumentSentToTheValidDocumentProviders(Documenten document, List<? extends DocumentProviderValid> validDocumentProviders){
-        for(DocumentProviderValid validDocumentProvider: validDocumentProviders){
-            if(!accountService.isDocumentSentToDocumentProvider(document, validDocumentProvider.getDocumentProvider())){
-                return false;
-            }
-        }
-        return true;
+    private Boolean isDocumentSentToTheValidDocumentProviders(Documenten document){
+        List<DocumentProviderDocumentsDaoPojo> documentProviderDocumentsDaoPojos = documentProviderDocumentsImpl.getDocumentProviderDocumentsByDocumentId(document.getPk_id());
+
+        return !documentProviderDocumentsDaoPojos.isEmpty();
     }
 
-    private Boolean isOneDocumentSentToTheValidDocumentProviders(List<? extends Documenten> documenten, List<? extends DocumentProviderValid> validDocumentProviders){
+    private Boolean isOneDocumentSentToTheValidDocumentProviders(List<? extends Documenten> documenten){
         for(Documenten document: documenten){
-            if (isDocumentSentToTheValidDocumentProviders(document, validDocumentProviders)){
+            if (isDocumentSentToTheValidDocumentProviders(document)){
                 return true;
             }
         }
@@ -874,8 +869,7 @@ public class BedragenSrvImpl implements BedragenSrv, Serializable{
             List<? extends Documenten> documenten = documentenDao.fetchDocumentByBedrag(bedrag.getPk_id());
 
             if (documenten.size() > 0){
-                List<? extends DocumentProviderValid> validDocumentProviders = documentProviderValid.findAllValidDocumentProviders(bedrag.getDatum());
-                return isOneDocumentSentToTheValidDocumentProviders(documenten, validDocumentProviders);
+                return isOneDocumentSentToTheValidDocumentProviders(documenten);
             }
             return false;
         }
