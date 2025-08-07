@@ -48,10 +48,30 @@ public class BillitBuilder {
         return jobsPerGroupId;
     }
 
+    private Map<String, Object> createIdentiefier(String identifierType, String identifier, Boolean preferred){
+        Map<String, Object> identifierMap = new HashMap<>();
+
+        identifierMap.put("IdentifierType", identifierType);
+        identifierMap.put("Identifier", identifier);
+        identifierMap.put("Preferred", preferred);
+
+        return identifierMap;
+    }
+
+    private List<Map<String, Object>> createIdentifiers(Company company){
+        List<Map<String, Object>> identifiers = new ArrayList<>();
+
+        if (company.getKvk() != null && !company.getKvk().isEmpty()){
+            identifiers.add(createIdentiefier("KVK", company.getKvk(), false));
+        }
+
+        return identifiers;
+    }
+
     private Map<String, Object> createCustomer(Company company, String vatNumber, BigDecimal vatAmount){
         Map<String, Object> customer = new HashMap<>();
 
-        customer.put("Name", company.getName());
+        customer.put("Name", company.getShortName());
         customer.put("VATNumber",  vatNumber);
         customer.put("PartyType", "Customer");
 
@@ -69,6 +89,13 @@ public class BillitBuilder {
         customer.put("Email", company.getEmail());
         customer.put("DefaultExpiryOffset", "40");
         customer.put("VentilationCode", getVentilationCode(vatAmount));
+        customer.put("SendUBL", false);
+        customer.put("SendPDF", true);
+
+        List<Map<String, Object>> identifiers = createIdentifiers(company);
+        if (!identifiers.isEmpty()){
+            customer.put("Identifiers", identifiers);
+        }
 
         return customer;
     }
@@ -100,8 +127,9 @@ public class BillitBuilder {
     private Map<String, String> createOrderPDF(Documenten document){
         Map<String, String> orderPDF = new HashMap<>();
 
-        orderPDF.put("FileName", document.getDocument_naam());
+        orderPDF.put("MimeType", document.getDocument_mime());
         orderPDF.put("FileContent", new String(Base64.getEncoder().encode(document.getDocument())));
+        orderPDF.put("FileName", document.getDocument_naam());
 
         return orderPDF;
     }

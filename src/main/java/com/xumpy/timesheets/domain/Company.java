@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 public interface Company {
     public Integer getPk_id();
     public String getName();
+    public String getShortName();
     public BigDecimal getDailyPayedHours();
     public String getStreet();
     public String getNumber();
@@ -21,6 +22,7 @@ public interface Company {
     public String getCountry();
     public String getCity();
     public String getVatNumber();
+    public String getKvk();
     public Boolean isTimeUnitDays();
     public String getEmail();
 }

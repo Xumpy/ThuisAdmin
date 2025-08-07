@@ -26,7 +26,10 @@ public class CompanyDaoPojo implements Company, Serializable{
     
     @Column(name="NAME")
     private String name;
-    
+
+    @Column(name="SHORT_NAME")
+    private String shortName;
+
     @Column(name="DAILY_PAYED_HOURS")
     private BigDecimal dailyPayedHours;
 
@@ -48,6 +51,9 @@ public class CompanyDaoPojo implements Company, Serializable{
     @Column(name="VAT_NUMBER")
     private String vatNumber;
 
+    @Column(name="KVK")
+    private String kvk;
+
     @Column(name="TIME_UNIT_DAYS")
     private Boolean timeUnitDays;
 
@@ -68,6 +74,15 @@ public class CompanyDaoPojo implements Company, Serializable{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
     public void setDailyPayedHours(BigDecimal dailyPayedHours) {
@@ -129,6 +144,15 @@ public class CompanyDaoPojo implements Company, Serializable{
     }
 
     @Override
+    public String getKvk() {
+        return kvk;
+    }
+
+    public void setKvk(String kvk) {
+        this.kvk = kvk;
+    }
+
+    @Override
     public Integer getPk_id() {
         return pk_id;
     }
@@ -157,6 +181,7 @@ public class CompanyDaoPojo implements Company, Serializable{
     public CompanyDaoPojo(Company company){
         this.dailyPayedHours = company.getDailyPayedHours();
         this.name = company.getName();
+        this.shortName = company.getShortName();
         this.pk_id = company.getPk_id();
         this.city = company.getCity();
         this.country = company.getCountry();
@@ -164,6 +189,7 @@ public class CompanyDaoPojo implements Company, Serializable{
         this.number = company.getNumber();
         this.postalCode = company.getPostalCode();
         this.vatNumber = company.getVatNumber();
+        this.kvk = company.getKvk();
         this.timeUnitDays = company.isTimeUnitDays();
         this.email = company.getEmail();
     }

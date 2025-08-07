@@ -1,9 +1,11 @@
 package com.xumpy.documenprovider.services.implementations.billit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xumpy.documenprovider.dao.implementations.DocumentProviderDocumentsImpl;
 import com.xumpy.documenprovider.services.DocumentProviderSrv;
 import com.xumpy.thuisadmin.domain.Documenten;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
@@ -11,19 +13,20 @@ import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 @Service
 public class DocumentProviderBillit implements DocumentProviderSrv {
 
     @Autowired BillitBuilder billitBuilder;
+    @Autowired DocumentProviderDocumentsImpl documentProviderDocuments;
 
-    String url = "https://api.sandbox.billit.be/v1/orders";
-    String token = "a766531c-7c4f-4c8a-b7ef-fd36ed557f6a";
+    @Value( "${billit.url}" ) private String url;
+    @Value( "${billit.token}" ) private String token;
 
     @Override
     public String getDocumentProviderId() {
@@ -55,12 +58,11 @@ public class DocumentProviderBillit implements DocumentProviderSrv {
 
         try {
             CloseableHttpResponse response = sendDocumentToBillit(payload);
+            String billitInvoiceId = IOUtils.toString(response.getEntity().getContent());
 
-            System.out.println(response.getCode());
-            System.out.println(response.getEntity().getContentLength());
-            System.out.println(new String(response.getEntity().getContent().readAllBytes(), StandardCharsets.UTF_8));
+            System.out.println(billitInvoiceId);
 
-            return new String(response.getEntity().getContent().readAllBytes(), StandardCharsets.UTF_8);
+            return "Billit ID: " + billitInvoiceId;
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -69,6 +71,9 @@ public class DocumentProviderBillit implements DocumentProviderSrv {
 
     @Override
     public Boolean shouldBeProcessed(Documenten document) {
-        return false;
+        Boolean isDocumentAlreadyProcessed = documentProviderDocuments.getDocumentProviderDocumentsByDocumentIdAndDocumentProviderId(document.getPk_id(), getDocumentProviderId()).isEmpty();
+        Boolean isInvoice = (document.getBedrag().getInvoice() != null);
+
+        return isDocumentAlreadyProcessed && isInvoice;
     }
 }

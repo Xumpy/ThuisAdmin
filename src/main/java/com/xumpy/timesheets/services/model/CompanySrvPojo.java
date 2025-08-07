@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 public class CompanySrvPojo implements Company{
     private Integer pk_id;
     private String name;
+    private String shortName;
     private BigDecimal dailyPayedHours;
     private String street;
     private String number;
@@ -22,6 +23,7 @@ public class CompanySrvPojo implements Company{
     private String country;
     private String city;
     private String vatNumber;
+    private String kvk;
     private Boolean timeUnitDays;
     private String email;
 
@@ -88,6 +90,15 @@ public class CompanySrvPojo implements Company{
         this.vatNumber = vatNumber;
     }
 
+    @Override
+    public String getKvk() {
+        return kvk;
+    }
+
+    public void setKvk(String kvk) {
+        this.kvk = kvk;
+    }
+
     public void setPk_id(Integer pk_id) {
         this.pk_id = pk_id;
     }
@@ -111,6 +122,15 @@ public class CompanySrvPojo implements Company{
     }
 
     @Override
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
+    }
+
+    @Override
     public BigDecimal getDailyPayedHours() {
         return this.dailyPayedHours;
     }
@@ -129,6 +149,7 @@ public class CompanySrvPojo implements Company{
     public CompanySrvPojo(Company company){
         this.dailyPayedHours = company.getDailyPayedHours();
         this.name = company.getName();
+        this.shortName = company.getShortName();
         this.pk_id = company.getPk_id();
         this.city = company.getCity();
         this.country = company.getCountry();
@@ -136,6 +157,7 @@ public class CompanySrvPojo implements Company{
         this.number = company.getNumber();
         this.postalCode = company.getPostalCode();
         this.vatNumber = company.getVatNumber();
+        this.kvk = company.getKvk();
         this.timeUnitDays = company.isTimeUnitDays();
         this.email = company.getEmail();
     }

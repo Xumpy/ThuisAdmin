@@ -18,6 +18,7 @@ import java.util.List;
 public class CompanyCtrlPojo implements Company, Serializable{
     private Integer pk_id;
     private String name;
+    private String shortName;
     private BigDecimal dailyPayedHours;
     private String street;
     private String number;
@@ -25,6 +26,7 @@ public class CompanyCtrlPojo implements Company, Serializable{
     private String country;
     private String city;
     private String vatNumber;
+    private String kvk;
     private Boolean timeUnitDays;
     private String email;
 
@@ -91,12 +93,30 @@ public class CompanyCtrlPojo implements Company, Serializable{
         this.vatNumber = vatNumber;
     }
 
+    @Override
+    public String getKvk() {
+        return kvk;
+    }
+
+    public void setKvk(String kvk) {
+        this.kvk = kvk;
+    }
+
     public void setPk_id(Integer pk_id) {
         this.pk_id = pk_id;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
     public void setDailyPayedHours(BigDecimal dailyPayedHours) {
@@ -132,6 +152,7 @@ public class CompanyCtrlPojo implements Company, Serializable{
     public CompanyCtrlPojo(Company company) {
         this.dailyPayedHours = company.getDailyPayedHours();
         this.name = company.getName();
+        this.shortName = company.getShortName();
         this.pk_id = company.getPk_id();
         this.city = company.getCity();
         this.country = company.getCountry();
@@ -141,6 +162,7 @@ public class CompanyCtrlPojo implements Company, Serializable{
         this.vatNumber = company.getVatNumber();
         this.timeUnitDays = company.isTimeUnitDays();
         this.email = company.getEmail();
+        this.kvk = company.getKvk();
     }
 
     public static List<CompanyCtrlPojo> allCompanies(List<? extends Company> companies){
