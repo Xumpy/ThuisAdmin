@@ -18,6 +18,7 @@
        date_format(ta_invoices.invoice_date, "%d-%m-%y") as invoice_date,
        ta_invoices.invoice_due_date as invoice_due_date,
        ta_invoices.invoice_ref as invoice_ref,
+       ta_invoices.description as description,
        ta_invoices.vat_number as vat_number,
        truncate(ta_invoices.vat_amount, 1) as vat_amount,
        ta_invoices.description as description,
@@ -157,6 +158,9 @@ where ta_invoices.pk_id = $P{INVOICE_ID}]]></query>
 			<printWhenExpression><![CDATA[($F{vat_amount}).compareTo(BigDecimal.ZERO) == 0]]></printWhenExpression>
 			<text><![CDATA[VAT exempt]]></text>
 		</element>
+		<element kind="textField" uuid="c265474b-7e0d-4b4b-bf69-c86325e411e7" stretchType="ContainerHeight" x="358" y="160" width="188" height="12" fontSize="10.0" textAdjust="StretchHeight">
+			<expression><![CDATA[$F{description}]]></expression>
+		</element>
 	</title>
 	<pageHeader height="32">
 		<element kind="staticText" uuid="afe4cb5b-9b97-4cb0-9a76-601bb1c58aaf" x="0" y="12" width="100" height="20" fontSize="12.0" bold="true">
@@ -197,7 +201,7 @@ where ta_invoices.pk_id = $P{INVOICE_ID}]]></query>
 				<element kind="line" uuid="2955aa3d-eee5-496b-b9bc-71db7b336c80" x="197" y="0" width="1" height="40"/>
 			</element>
 			<element kind="textField" uuid="c0bd6b9a-ca6d-48c7-938f-ea3a6316245d" x="0" y="180" width="381" height="20" fontSize="10.0">
-				<expression><![CDATA["Payment is due 40 days from the invoice date."]]></expression>
+				<expression><![CDATA["Payment is due 30 days from the invoice date."]]></expression>
 			</element>
 		</band>
 	</detail>
